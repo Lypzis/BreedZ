@@ -369,6 +369,8 @@ export const messages = {
       overline: 'Settings',
       title: 'Data safety',
       description: 'Export your local records as JSON or import a validated backup into this device.',
+      installTitle: 'Install on this device (optional)',
+      installDescription: 'Open BreedZ like an app from your home screen or app launcher.',
       exportTitle: 'Export local data',
       exportDescription: 'Download animals and events from this device as one JSON file.',
       exportJson: 'Export JSON',
@@ -457,6 +459,83 @@ export const messages = {
         'Export a backup regularly if this device holds your main herd history.',
       ],
     },
+    guideBreedingDates: {
+      meta: {
+        title: 'How to Track Cattle Breeding Dates',
+        description:
+          'Learn how to track cattle breeding dates, expected calving timing, and herd cycles with a simple recordkeeping process that also works offline.',
+      },
+      overline: 'Guide',
+      title: 'How to Track Cattle Breeding Dates (Simple Guide)',
+      description:
+        'Know when breeding happened, when to expect calving, and how to avoid missing critical dates in your herd.',
+      openApp: 'Open BreedZ',
+      openTutorial: 'Open tutorial',
+      problemOverline: 'Why It Matters',
+      problemTitle: 'Why tracking breeding dates matters',
+      problemItems: [
+        'Missing dates leads to missed calving windows.',
+        'It gets harder to know when to rebreed.',
+        'You lose visibility over herd cycles when records stay scattered.',
+      ],
+      logicOverline: 'Basic Logic',
+      logicTitle: 'How breeding tracking works',
+      logicDescription:
+        'The process is simple: record the breeding date, estimate the expected calving date, and keep each animal history updated.',
+      logicSteps: [
+        'Record the breeding date.',
+        'Add about 283 days to estimate calving.',
+        'Review the animal history when you need to check progress.',
+      ],
+      exampleLabel: 'Example:',
+      exampleText: 'Breeding: April 1 -> Expected calving: January 9.',
+      commonWaysOverline: 'Common Methods',
+      commonWaysTitle: 'Common ways farmers track breeding',
+      commonWaysItems: [
+        'Paper notebooks',
+        'Memory and verbal notes',
+        'Simple spreadsheets',
+      ],
+      breaksOverline: 'Where It Fails',
+      breaksTitle: 'Where this starts to fail',
+      breaksItems: [
+        'The herd grows and there are more animals to track.',
+        'Breeding cycles overlap across multiple animals.',
+        'Updates get forgotten during busy farm work.',
+      ],
+      betterWayOverline: 'Better Tracking',
+      betterWayTitle: 'A simpler way to track everything',
+      betterWayDescription:
+        'A herd management app helps you record breeding once, keep history per animal, and check the whole herd faster when decisions need to be made.',
+      betterWayItems: [
+        'Record breeding once and keep it linked to the right animal.',
+        'Review expected calving timing without searching old notes.',
+        'Keep one clear history per animal instead of scattered records.',
+      ],
+      tipsOverline: 'Practical Tips',
+      tipsTitle: 'Practical tips for better tracking',
+      tipsItems: [
+        'Record breeding on the same day whenever possible.',
+        'Use a unique ID or tag for every animal.',
+        'Do not rely only on memory when cycles overlap.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about breeding dates',
+      faqs: [
+        {
+          question: 'How long is cattle gestation usually?',
+          answer: 'A common estimate is about 283 days, but exact timing can vary.',
+        },
+        {
+          question: 'When should I think about rebreeding?',
+          answer: 'That depends on the herd and your management plan, but clear date records make the timing easier to review.',
+        },
+        {
+          question: 'Can I track breeding dates offline?',
+          answer: 'Yes. BreedZ was built so farm records can still be used without a reliable internet connection.',
+        },
+      ],
+    },
     about: {
       meta: {
         title: 'About BreedZ',
@@ -493,7 +572,7 @@ export const messages = {
       overline: 'Contact',
       title: 'Get in touch',
       intro:
-        'BreedZ is still in its early stage. If you want to ask a question, report a problem, or talk about using the app on your farm, reach out through one of the placeholder contacts below.',
+        'BreedZ is still in its early stage. If you want to ask a question, report a problem, or talk about using the app on your farm, reach out through one of the contacts below.',
       items: [
         {
           title: 'General contact',
@@ -959,6 +1038,8 @@ export const messages = {
       overline: 'Configurações',
       title: 'Segurança dos dados',
       description: 'Exporte seus registros locais em JSON ou importe um backup validado para este dispositivo.',
+      installTitle: 'Instalar neste dispositivo (opcional)',
+      installDescription: 'Abra o BreedZ como app pela tela inicial ou pelo inicializador de apps.',
       exportTitle: 'Exportar dados locais',
       exportDescription: 'Baixe animais e eventos deste dispositivo em um único arquivo JSON.',
       exportJson: 'Exportar JSON',
@@ -1045,6 +1126,83 @@ export const messages = {
         'Registre tudo no mesmo dia para não perder datas e detalhes.',
         'Use observações como contexto, não como substituto de linhagem e eventos estruturados.',
         'Exporte um backup com frequência se este dispositivo guarda o principal histórico do rebanho.',
+      ],
+    },
+    guideBreedingDates: {
+      meta: {
+        title: 'Como acompanhar datas de cobertura no gado',
+        description:
+          'Aprenda a acompanhar datas de cobertura no gado, previsão de parto e ciclos do rebanho com um processo simples de registro que também funciona offline.',
+      },
+      overline: 'Guia',
+      title: 'Como acompanhar datas de cobertura no gado (guia simples)',
+      description:
+        'Saiba quando a cobertura aconteceu, quando esperar o parto e como evitar perder datas importantes no rebanho.',
+      openApp: 'Abrir BreedZ',
+      openTutorial: 'Abrir tutorial',
+      problemOverline: 'Por que isso importa',
+      problemTitle: 'Por que acompanhar datas de cobertura importa',
+      problemItems: [
+        'Perder datas atrasa a previsão de parto.',
+        'Fica mais difícil saber quando recobrir.',
+        'Você perde visibilidade sobre os ciclos do rebanho quando os registros ficam espalhados.',
+      ],
+      logicOverline: 'Lógica básica',
+      logicTitle: 'Como funciona o acompanhamento reprodutivo',
+      logicDescription:
+        'O processo é simples: registre a data da cobertura, estime a data esperada do parto e mantenha o histórico de cada animal atualizado.',
+      logicSteps: [
+        'Registre a data da cobertura.',
+        'Some cerca de 283 dias para estimar o parto.',
+        'Revise o histórico do animal quando precisar conferir o andamento.',
+      ],
+      exampleLabel: 'Exemplo:',
+      exampleText: 'Cobertura: 1 de abril -> Parto esperado: 9 de janeiro.',
+      commonWaysOverline: 'Métodos comuns',
+      commonWaysTitle: 'Formas comuns de acompanhar a cobertura',
+      commonWaysItems: [
+        'Cadernos e anotações em papel',
+        'Memória e avisos verbais',
+        'Planilhas simples',
+      ],
+      breaksOverline: 'Onde isso falha',
+      breaksTitle: 'Onde isso começa a falhar',
+      breaksItems: [
+        'O rebanho cresce e há mais animais para acompanhar.',
+        'Os ciclos reprodutivos se sobrepõem entre vários animais.',
+        'As atualizações são esquecidas na correria da fazenda.',
+      ],
+      betterWayOverline: 'Melhor forma',
+      betterWayTitle: 'Uma forma mais simples de acompanhar tudo',
+      betterWayDescription:
+        'Um app de manejo do rebanho ajuda você a registrar a cobertura uma vez, manter o histórico por animal e revisar o rebanho com mais rapidez quando precisa decidir.',
+      betterWayItems: [
+        'Registre a cobertura uma vez e mantenha tudo ligado ao animal certo.',
+        'Confira a previsão do parto sem procurar anotações antigas.',
+        'Mantenha um histórico claro por animal em vez de registros espalhados.',
+      ],
+      tipsOverline: 'Dicas práticas',
+      tipsTitle: 'Dicas práticas para acompanhar melhor',
+      tipsItems: [
+        'Registre a cobertura no mesmo dia sempre que possível.',
+        'Use um ID único ou o brinco em cada animal.',
+        'Não confie só na memória quando os ciclos se sobrepõem.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre datas de cobertura',
+      faqs: [
+        {
+          question: 'Quanto tempo dura a gestação bovina normalmente?',
+          answer: 'Uma estimativa comum é cerca de 283 dias, mas o tempo exato pode variar.',
+        },
+        {
+          question: 'Quando devo pensar em recobrir?',
+          answer: 'Isso depende do rebanho e do seu manejo, mas registrar as datas facilita muito essa revisão.',
+        },
+        {
+          question: 'Posso acompanhar datas de cobertura offline?',
+          answer: 'Sim. O BreedZ foi feito para funcionar mesmo sem internet confiável na fazenda.',
+        },
       ],
     },
     about: {
