@@ -167,7 +167,7 @@ export const messages = {
         {
           question: 'What is the BreedZ app?',
           answer:
-            'BreedZ is a herd management app for cattle breeding records, livestock history, and offline field work.',
+            'BreedZ is a herd management app for tracking cattle breeding records, animal lineage, and farm activity.',
         },
         {
           question: 'Does it work offline?',
@@ -756,7 +756,7 @@ export const messages = {
         {
           question: 'O que é o app BreedZ?',
           answer:
-            'BreedZ é um aplicativo de manejo do rebanho para registros reprodutivos, histórico animal e uso offline no campo.',
+            'BreedZ é um aplicativo de manejo do rebanho para acompanhar registros reprodutivos bovinos, linhagem animal e atividade da fazenda.',
         },
         {
           question: 'Funciona offline?',
