@@ -4,10 +4,10 @@
       <div class="col-12 col-md-10 col-lg-8">
         <q-card flat>
           <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">Settings</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">Data safety</div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('settings.overline') }}</div>
+            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('settings.title') }}</div>
             <div class="text-body1 text-grey-7">
-              Export your local records as JSON or import a validated backup into this device.
+              {{ t('settings.description') }}
             </div>
           </q-card-section>
 
@@ -18,14 +18,14 @@
                   <template #avatar>
                     <q-icon name="download" color="primary" />
                   </template>
-                  <div class="text-subtitle2 text-weight-bold">Export local data</div>
+                  <div class="text-subtitle2 text-weight-bold">{{ t('settings.exportTitle') }}</div>
                   <div class="text-caption text-grey-8 q-mt-xs">
-                    Download animals and events from this device as one JSON file.
+                    {{ t('settings.exportDescription') }}
                   </div>
                   <q-btn
                     unelevated
                     color="primary"
-                    label="Export JSON"
+                    :label="t('settings.exportJson')"
                     icon="download"
                     class="q-mt-md"
                     :loading="isExporting"
@@ -39,9 +39,9 @@
                   <template #avatar>
                     <q-icon name="upload_file" color="primary" />
                   </template>
-                  <div class="text-subtitle2 text-weight-bold text-primary">Import backup</div>
+                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.importTitle') }}</div>
                   <div class="text-caption q-mt-xs">
-                    Import a JSON backup file after validation. This replaces the current local data on this device.
+                    {{ t('settings.importDescription') }}
                   </div>
 
                   <q-file
@@ -50,14 +50,14 @@
                     dense
                     clearable
                     accept=".json,application/json"
-                    label="Backup file"
+                    :label="t('settings.backupFile')"
                     class="q-mt-md"
                   />
 
                   <q-btn
                     unelevated
                     color="primary"
-                    label="Import JSON"
+                    :label="t('settings.importJson')"
                     icon="upload"
                     class="q-mt-md"
                     :disable="!selectedBackupFile"
@@ -76,15 +76,15 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <div class="text-overline text-weight-bold text-accent">What gets backed up</div>
+            <div class="text-overline text-weight-bold text-accent">{{ t('settings.backedUpOverline') }}</div>
             <q-list>
               <q-item>
                 <q-item-section avatar>
                   <q-icon name="pets" color="primary" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>Animals</q-item-label>
-                  <q-item-label caption>Tag, species, sex, status, notes, and lineage fields.</q-item-label>
+                  <q-item-label>{{ t('settings.animalsTitle') }}</q-item-label>
+                  <q-item-label caption>{{ t('settings.animalsDescription') }}</q-item-label>
                 </q-item-section>
               </q-item>
 
@@ -93,8 +93,8 @@
                   <q-icon name="timeline" color="primary" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>Events</q-item-label>
-                  <q-item-label caption>Timeline records linked to animals on this device.</q-item-label>
+                  <q-item-label>{{ t('settings.eventsTitle') }}</q-item-label>
+                  <q-item-label caption>{{ t('settings.eventsDescription') }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -108,11 +108,13 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { buildBackupPayload, importBackupPayload } from 'src/services/backup-service'
 
 const $q = useQuasar()
+const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
 const eventsStore = useEventsStore()
 
@@ -143,10 +145,10 @@ async function handleExport() {
     URL.revokeObjectURL(url)
 
     statusType.value = 'positive'
-    statusMessage.value = 'Backup exported successfully.'
+    statusMessage.value = t('settings.exportSuccess')
   } catch (error) {
     statusType.value = 'negative'
-    statusMessage.value = error instanceof Error ? error.message : 'Failed to export backup.'
+    statusMessage.value = error instanceof Error ? error.message : t('settings.exportFailed')
   } finally {
     isExporting.value = false
   }
@@ -168,17 +170,17 @@ async function handleImport() {
     await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
 
     statusType.value = 'positive'
-    statusMessage.value = 'Backup imported successfully.'
+    statusMessage.value = t('settings.importSuccess')
     selectedBackupFile.value = null
 
     $q.notify({
       color: 'positive',
-      message: 'Local data replaced from backup.',
+      message: t('settings.importReplaced'),
       position: 'top',
     })
   } catch (error) {
     statusType.value = 'negative'
-    statusMessage.value = error instanceof Error ? error.message : 'Failed to import backup.'
+    statusMessage.value = error instanceof Error ? error.message : t('settings.importFailed')
 
     $q.notify({
       color: 'negative',

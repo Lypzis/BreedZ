@@ -1,18 +1,19 @@
 import { getEventTypeMeta } from '../constants/events.js'
+import { normalizeSpeciesLabel } from './species.js'
 
 export function filterAnimalsList(animals, filters = {}) {
   const query = String(filters.searchTerm ?? '')
     .trim()
     .toLowerCase()
   const status = String(filters.status ?? '').trim().toLowerCase()
-  const species = String(filters.species ?? '').trim().toLowerCase()
+  const species = normalizeSpeciesLabel(filters.species).toLowerCase()
 
   return animals.filter((animal) => {
     if (status && String(animal.status ?? '').toLowerCase() !== status) {
       return false
     }
 
-    if (species && String(animal.species ?? '').toLowerCase() !== species) {
+    if (species && normalizeSpeciesLabel(animal.species).toLowerCase() !== species) {
       return false
     }
 

@@ -5,15 +5,15 @@
         <q-card flat>
           <q-card-section class="row items-start justify-between q-col-gutter-md">
             <div class="col-12 col-md">
-              <div class="text-overline text-weight-bold text-primary">Animals</div>
-              <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">Your herd</div>
+              <div class="text-overline text-weight-bold text-primary">{{ t('animals.overline') }}</div>
+              <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('animals.title') }}</div>
               <div class="text-body1 text-grey-7">
-                Create, edit, and manage animals locally on this device.
+                {{ t('animals.description') }}
               </div>
             </div>
 
             <div class="col-12 col-md-auto">
-              <q-btn unelevated color="primary" icon="add" label="Add animal" @click="openCreateDialog" />
+              <q-btn unelevated color="primary" icon="add" :label="t('common.addAnimal')" @click="openCreateDialog" />
             </div>
           </q-card-section>
 
@@ -24,8 +24,8 @@
                 outlined
                 dense
                 clearable
-                label="Search animals"
-                placeholder="Tag, name, or species"
+                :label="t('animals.searchLabel')"
+                :placeholder="t('animals.searchPlaceholder')"
               >
                 <template #prepend>
                   <q-icon name="search" />
@@ -38,7 +38,7 @@
                 outlined
                 dense
                 clearable
-                label="Filter by species"
+                :label="t('animals.speciesFilter')"
                 :options="speciesOptions"
               />
             </div>
@@ -48,7 +48,7 @@
                 outlined
                 dense
                 clearable
-                label="Filter by status"
+                :label="t('animals.statusFilter')"
                 :options="statusOptions"
                 emit-value
                 map-options
@@ -56,10 +56,10 @@
             </div>
             <div class="col-12 col-sm-auto">
               <q-chip square color="green-1" text-color="primary" icon="pets">
-                {{ animals.length }} total
+                {{ t('animals.totalChip', { count: animals.length }) }}
               </q-chip>
               <q-chip square color="green-1" text-color="primary" icon="task_alt">
-                {{ activeAnimals.length }} active
+                {{ t('animals.activeChip', { count: activeAnimals.length }) }}
               </q-chip>
             </div>
           </q-card-section>
@@ -87,12 +87,12 @@
                     outlined
                     emit-value
                     map-options
-                    label="Per page"
+                    :label="t('common.perPage')"
                     :options="pageSizeOptions"
                   />
                 </div>
                 <div class="col-auto text-caption text-grey-7">
-                  Showing {{ displayedAnimalsCount }} of {{ filteredAnimals.length }}
+                  {{ t('animals.showingCount', { shown: displayedAnimalsCount, total: filteredAnimals.length }) }}
                 </div>
               </div>
             </div>
@@ -127,21 +127,21 @@
 
               <q-item-section>
                 <q-item-label class="text-weight-medium">
-                  {{ animalDisplayName(animal) }}
+                    {{ animalDisplayName(animal) }}
                 </q-item-label>
                 <q-item-label caption>
-                  {{ animal.species || 'Species not set' }} • {{ sexLabel(animal.sex) }}
-                  <span v-if="animal.birthDate"> • Born {{ formatDate(animal.birthDate) }}</span>
+                  {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
+                  <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
                 </q-item-label>
                 <q-item-label caption>
-                  Updated {{ formatDateTime(animal.updatedAt) }}
+                  {{ t('animals.updated', { date: formatDateTime(animal.updatedAt) }) }}
                 </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
                 <div class="column items-end q-gutter-sm">
                   <q-chip square dense :color="statusColor(animal.status)" text-color="white">
-                    {{ animal.status }}
+                    {{ statusLabel(animal.status) }}
                   </q-chip>
                   <div class="row q-gutter-xs">
                     <q-btn
@@ -150,8 +150,8 @@
                       dense
                       color="primary"
                       icon="visibility"
-                      aria-label="View animal"
-                      title="View animal"
+                      :aria-label="t('animals.viewAnimal')"
+                      :title="t('animals.viewAnimal')"
                       :to="`/app/animals/${animal.id}`"
                     />
                     <q-btn
@@ -160,8 +160,8 @@
                       dense
                       color="primary"
                       icon="edit"
-                      aria-label="Edit animal"
-                      title="Edit animal"
+                      :aria-label="t('animals.editAnimal')"
+                      :title="t('animals.editAnimal')"
                       @click="openEditDialog(animal)"
                     />
                     <q-btn
@@ -170,8 +170,8 @@
                       dense
                       color="negative"
                       icon="delete"
-                      aria-label="Delete animal"
-                      title="Delete animal"
+                      :aria-label="t('animals.deleteAnimal')"
+                      :title="t('animals.deleteAnimal')"
                       @click="confirmDelete(animal)"
                     />
                   </div>
@@ -198,18 +198,18 @@
                       {{ animalDisplayName(animal) }}
                     </q-item-label>
                     <q-item-label caption>
-                      {{ animal.species || 'Species not set' }} • {{ sexLabel(animal.sex) }}
-                      <span v-if="animal.birthDate"> • Born {{ formatDate(animal.birthDate) }}</span>
+                      {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
+                      <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
                     </q-item-label>
                     <q-item-label caption>
-                      Updated {{ formatDateTime(animal.updatedAt) }}
+                      {{ t('animals.updated', { date: formatDateTime(animal.updatedAt) }) }}
                     </q-item-label>
                   </q-item-section>
 
                   <q-item-section side top>
                     <div class="column items-end q-gutter-sm">
                       <q-chip square dense :color="statusColor(animal.status)" text-color="white">
-                        {{ animal.status }}
+                        {{ statusLabel(animal.status) }}
                       </q-chip>
                       <div class="row q-gutter-xs">
                         <q-btn
@@ -218,8 +218,8 @@
                           dense
                           color="primary"
                           icon="visibility"
-                          aria-label="View animal"
-                          title="View animal"
+                          :aria-label="t('animals.viewAnimal')"
+                          :title="t('animals.viewAnimal')"
                           :to="`/app/animals/${animal.id}`"
                         />
                         <q-btn
@@ -228,8 +228,8 @@
                           dense
                           color="primary"
                           icon="edit"
-                          aria-label="Edit animal"
-                          title="Edit animal"
+                          :aria-label="t('animals.editAnimal')"
+                          :title="t('animals.editAnimal')"
                           @click="openEditDialog(animal)"
                         />
                         <q-btn
@@ -238,8 +238,8 @@
                           dense
                           color="negative"
                           icon="delete"
-                          aria-label="Delete animal"
-                          title="Delete animal"
+                          :aria-label="t('animals.deleteAnimal')"
+                          :title="t('animals.deleteAnimal')"
                           @click="confirmDelete(animal)"
                         />
                       </div>
@@ -280,13 +280,16 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
+import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import { formatDisplayDate, formatDisplayDateTime } from 'src/utils/dates'
 import { filterAnimalsList } from 'src/utils/list-filters'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
+import { normalizeSpeciesLabel } from 'src/utils/species'
 
 const $q = useQuasar()
+const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
 const { activeAnimals, animals, errorMessage, isLoading } = storeToRefs(animalsStore)
 
@@ -304,17 +307,17 @@ const pageSizeOptions = [
   { label: '25', value: 25 },
   { label: '50', value: 50 },
 ]
-const statusOptions = [
-  { label: 'Active', value: 'active' },
-  { label: 'Sold', value: 'sold' },
-  { label: 'Dead', value: 'dead' },
-]
-const listModeOptions = [
-  { label: 'Pages', value: 'paged' },
-  { label: 'View all', value: 'all' },
-]
+const statusOptions = computed(() => [
+  { label: t('common.status.active'), value: 'active' },
+  { label: t('common.status.sold'), value: 'sold' },
+  { label: t('common.status.dead'), value: 'dead' },
+])
+const listModeOptions = computed(() => [
+  { label: t('common.pages'), value: 'paged' },
+  { label: t('common.viewAll'), value: 'all' },
+])
 const speciesOptions = computed(() =>
-  [...new Set(animals.value.map((animal) => animal.species).filter(Boolean))].sort(),
+  [...new Set(animals.value.map((animal) => normalizeSpeciesLabel(animal.species)).filter(Boolean))].sort(),
 )
 
 const filteredAnimals = computed(() => {
@@ -337,8 +340,8 @@ const displayedAnimalsCount = computed(() =>
 
 const emptyStateMessage = computed(() =>
   searchTerm.value || selectedStatus.value || selectedSpecies.value
-    ? 'No animals match that search yet.'
-    : 'No animals saved yet. Add your first animal to start tracking the herd.',
+    ? t('animals.emptyFiltered')
+    : t('animals.emptyInitial'),
 )
 
 function openCreateDialog() {
@@ -357,10 +360,10 @@ async function submitForm(payload) {
   try {
     if (formMode.value === 'create') {
       await animalsStore.addAnimal(payload)
-      $q.notify({ color: 'positive', message: 'Animal added.', position: 'top' })
+      $q.notify({ color: 'positive', message: t('animals.animalAdded'), position: 'top' })
     } else {
       await animalsStore.editAnimal(payload.id, payload)
-      $q.notify({ color: 'positive', message: 'Animal updated.', position: 'top' })
+      $q.notify({ color: 'positive', message: t('animals.animalUpdated'), position: 'top' })
     }
 
     isFormDialogOpen.value = false
@@ -368,7 +371,7 @@ async function submitForm(payload) {
   } catch (error) {
     $q.notify({
       color: 'negative',
-      message: error instanceof Error ? error.message : 'Failed to save animal.',
+      message: error instanceof Error ? error.message : t('animals.animalSaveFailed'),
       position: 'top',
     })
   }
@@ -376,18 +379,18 @@ async function submitForm(payload) {
 
 function confirmDelete(animal) {
   $q.dialog({
-    title: 'Delete animal?',
-    message: `Are you sure? This will remove ${animalDisplayName(animal)}, its timeline events, and any lineage links to it.`,
+    title: t('animals.deleteTitle'),
+    message: t('animals.deleteMessage', { animal: animalDisplayName(animal) }),
     cancel: true,
     persistent: true,
   }).onOk(async () => {
     try {
       await animalsStore.removeAnimal(animal.id)
-      $q.notify({ color: 'positive', message: 'Animal removed.', position: 'top' })
+      $q.notify({ color: 'positive', message: t('animals.animalRemoved'), position: 'top' })
     } catch (error) {
       $q.notify({
         color: 'negative',
-        message: error instanceof Error ? error.message : 'Failed to delete animal.',
+        message: error instanceof Error ? error.message : t('animals.animalDeleteFailed'),
         position: 'top',
       })
     }
@@ -402,6 +405,10 @@ function sexLabel(sex) {
   return formatAnimalSex(sex)
 }
 
+function statusLabel(status) {
+  return t(`common.status.${status}`)
+}
+
 function formatDate(value) {
   if (!value) {
     return ''
@@ -412,7 +419,7 @@ function formatDate(value) {
 
 function formatDateTime(value) {
   if (!value) {
-    return 'just now'
+    return t('common.justNow')
   }
 
   return formatDisplayDateTime(value)

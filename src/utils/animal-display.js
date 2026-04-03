@@ -1,6 +1,8 @@
+import { t } from '../i18n/index.js'
+
 export function formatAnimalDisplayName(animal, options = {}) {
   if (!animal) {
-    return options.missingLabel ?? 'Unknown animal'
+    return options.missingLabel ?? t('common.unknownAnimal')
   }
 
   const tag = animal.tag?.trim() ?? ''
@@ -10,5 +12,5 @@ export function formatAnimalDisplayName(animal, options = {}) {
     return `${name} - ${tag}`
   }
 
-  return tag || name || (options.emptyLabel ?? 'Unnamed animal')
+  return tag || name || (options.emptyLabel ?? t('common.unnamedAnimal'))
 }

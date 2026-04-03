@@ -1,3 +1,5 @@
+import { getCurrentLocaleValue } from '../i18n/index.js'
+
 function parseDateValue(value) {
   if (!value) {
     return null
@@ -20,7 +22,7 @@ export function formatDisplayDate(value) {
     return ''
   }
 
-  return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(date)
+  return new Intl.DateTimeFormat(getCurrentLocaleValue(), { dateStyle: 'medium' }).format(date)
 }
 
 export function formatDisplayDateTime(value) {
@@ -30,7 +32,7 @@ export function formatDisplayDateTime(value) {
     return ''
   }
 
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(getCurrentLocaleValue(), {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date)

@@ -1,4 +1,5 @@
 import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
+import { normalizeSpeciesLabel } from 'src/utils/species'
 
 export async function listAnimals() {
   const animals = (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.getAll())) ?? []
@@ -17,7 +18,7 @@ export async function createAnimal(input) {
     id: createId('animal'),
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
-    species: input.species?.trim() ?? '',
+    species: normalizeSpeciesLabel(input.species),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
     status: input.status ?? 'active',
@@ -44,7 +45,7 @@ export async function updateAnimal(id, input) {
     ...existingAnimal,
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
-    species: input.species?.trim() ?? '',
+    species: normalizeSpeciesLabel(input.species),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
     status: input.status ?? 'active',

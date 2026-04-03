@@ -1,15 +1,16 @@
 import { formatAnimalDisplayName } from './animal-display.js'
+import { t } from '../i18n/index.js'
 
 export function formatAnimalSex(sex) {
   if (sex === 'female') {
-    return 'Female'
+    return t('common.sex.female')
   }
 
   if (sex === 'male') {
-    return 'Male'
+    return t('common.sex.male')
   }
 
-  return 'Unknown'
+  return t('common.sex.unknown')
 }
 
 export function filterAnimalCandidates({

@@ -3,15 +3,15 @@
     <div>
       <div style="font-size: 30vh">404</div>
 
-      <div class="text-h2" style="opacity: 0.4">Oops. Nothing here...</div>
+      <div class="text-h2" style="opacity: 0.4">{{ t('notFound.message') }}</div>
 
       <q-btn
         class="q-mt-xl"
         color="white"
         text-color="blue"
         unelevated
-        to="/"
-        label="Go Home"
+        :to="localizedHomePath"
+        :label="t('notFound.goHome')"
         no-caps
       />
     </div>
@@ -19,5 +19,10 @@
 </template>
 
 <script setup>
-//
+import { useI18nText } from 'src/i18n'
+import { computed } from 'vue'
+import { buildLocalizedPath } from 'src/utils/localeRouting'
+
+const { locale, t } = useI18nText()
+const localizedHomePath = computed(() => buildLocalizedPath(locale.value, '/'))
 </script>
