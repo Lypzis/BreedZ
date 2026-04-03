@@ -8,8 +8,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
-    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "node --test",
     "dev": "quasar dev",
     "dev:pwa": "quasar dev -m pwa",
     "build": "quasar build",
@@ -33,7 +32,6 @@
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
     "postcss": "^8.5.8",
-    "prettier": "^3.8.1",
     "vite-plugin-checker": "^0.12.0",
     "vue-eslint-parser": "^10.4.0",
     "workbox-build": "^7.4.0",
