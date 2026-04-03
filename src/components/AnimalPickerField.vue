@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-input :model-value="selectedAnimalLabel" outlined readonly :label="label">
+    <q-input :model-value="selectedAnimalLabel" outlined readonly :label="resolvedLabel">
       <template #append>
         <q-btn
           v-if="allowClear && modelValue"
@@ -9,8 +9,8 @@
           dense
           icon="close"
           color="grey-7"
-          aria-label="Clear selected animal"
-          title="Clear selected animal"
+          :aria-label="t('animalPicker.clear')"
+          :title="t('animalPicker.clear')"
           @click="emit('update:modelValue', '')"
         />
         <q-btn
@@ -19,8 +19,8 @@
           dense
           icon="search"
           color="primary"
-          aria-label="Search animal"
-          title="Search animal"
+          :aria-label="t('animalPicker.search')"
+          :title="t('animalPicker.search')"
           @click="isPickerOpen = true"
         />
       </template>
@@ -30,16 +30,16 @@
       <q-card style="width: 100%; max-width: 640px">
         <q-card-section class="row items-center justify-between">
           <div>
-            <div class="text-overline text-weight-bold text-primary">Animals</div>
-            <div class="text-h6 text-weight-bold">{{ dialogTitle }}</div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('animalPicker.overline') }}</div>
+            <div class="text-h6 text-weight-bold">{{ resolvedDialogTitle }}</div>
           </div>
           <q-btn
             flat
             round
             dense
             icon="close"
-            aria-label="Close animal picker"
-            title="Close animal picker"
+            :aria-label="t('animalPicker.close')"
+            :title="t('animalPicker.close')"
             @click="isPickerOpen = false"
           />
         </q-card-section>
@@ -50,8 +50,8 @@
             outlined
             dense
             clearable
-            label="Search animal"
-            placeholder="Tag, name, or species"
+            :label="t('animalPicker.searchLabel')"
+            :placeholder="t('animalPicker.searchPlaceholder')"
           >
             <template #prepend>
               <q-icon name="search" />
@@ -62,7 +62,7 @@
             <template #avatar>
               <q-icon name="pets" color="primary" />
             </template>
-            Showing {{ filteredAnimals.length }} animal{{ filteredAnimals.length === 1 ? '' : 's' }}.
+            {{ pickerCountLabel }}
           </q-banner>
         </q-card-section>
 
@@ -79,7 +79,7 @@
             <q-item-section>
               <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
               <q-item-label caption>
-                {{ animal.species || 'Species not set' }} • {{ sexLabel(animal.sex) }}
+                {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -90,7 +90,7 @@
             <template #avatar>
               <q-icon name="search_off" color="primary" />
             </template>
-            No matching animals found.
+            {{ t('animalPicker.empty') }}
           </q-banner>
         </q-card-section>
       </q-card>
@@ -100,6 +100,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useI18nText } from 'src/i18n'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import { filterAnimalCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
 
@@ -114,15 +115,15 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Animal',
+    default: '',
   },
   dialogTitle: {
     type: String,
-    default: 'Pick animal',
+    default: '',
   },
   emptyLabel: {
     type: String,
-    default: 'No animal selected',
+    default: '',
   },
   allowClear: {
     type: Boolean,
@@ -132,6 +133,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+const { t } = useI18nText()
+
 const isPickerOpen = ref(false)
 const searchTerm = ref('')
 
@@ -139,13 +142,21 @@ const selectedAnimal = computed(() =>
   props.animals.find((animal) => animal.id === props.modelValue) ?? null,
 )
 const selectedAnimalLabel = computed(() =>
-  selectedAnimal.value ? animalDisplayName(selectedAnimal.value) : props.emptyLabel,
+  selectedAnimal.value ? animalDisplayName(selectedAnimal.value) : resolvedEmptyLabel.value,
 )
+const resolvedLabel = computed(() => props.label || t('events.pickAnimal'))
+const resolvedDialogTitle = computed(() => props.dialogTitle || t('events.pickAnimal'))
+const resolvedEmptyLabel = computed(() => props.emptyLabel || t('common.noAnimalSelected'))
 const filteredAnimals = computed(() =>
   filterAnimalCandidates({
     animals: props.animals,
     query: searchTerm.value,
   }),
+)
+const pickerCountLabel = computed(() =>
+  filteredAnimals.value.length === 1
+    ? t('animalPicker.showingOne')
+    : t('animalPicker.showingMany', { count: filteredAnimals.value.length }),
 )
 
 function animalDisplayName(animal) {

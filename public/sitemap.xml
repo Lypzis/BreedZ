@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://breedz.app/</loc>
+    <loc>https://breedz.app/en</loc>
   </url>
   <url>
-    <loc>https://breedz.app/app/tutorial</loc>
+    <loc>https://breedz.app/pt-br</loc>
   </url>
   <url>
-    <loc>https://breedz.app/about</loc>
+    <loc>https://breedz.app/en/app/tutorial</loc>
   </url>
   <url>
-    <loc>https://breedz.app/contact</loc>
+    <loc>https://breedz.app/pt-br/app/tutorial</loc>
   </url>
   <url>
-    <loc>https://breedz.app/privacy</loc>
+    <loc>https://breedz.app/en/about</loc>
   </url>
   <url>
-    <loc>https://breedz.app/terms</loc>
+    <loc>https://breedz.app/pt-br/about</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/en/contact</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/pt-br/contact</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/en/privacy</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/pt-br/privacy</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/en/terms</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/pt-br/terms</loc>
   </url>
 </urlset>

@@ -1,21 +1,26 @@
-export const EVENT_TYPE_OPTIONS = [
-  { label: 'Calving', value: 'birth' },
-  { label: 'Breeding', value: 'breeding' },
-  { label: 'Vaccination', value: 'vaccination' },
-  { label: 'Health issue', value: 'health_issue' },
-  { label: 'Death', value: 'death' },
-  { label: 'Custom event', value: 'custom' },
-]
+import { t } from '../i18n/index.js'
 
 const EVENT_TYPE_META = {
-  birth: { label: 'Calving', icon: 'child_friendly', color: 'secondary' },
-  breeding: { label: 'Breeding', icon: 'favorite', color: 'primary' },
-  vaccination: { label: 'Vaccination', icon: 'vaccines', color: 'accent' },
-  health_issue: { label: 'Health issue', icon: 'healing', color: 'negative' },
-  death: { label: 'Death', icon: 'warning', color: 'dark' },
-  custom: { label: 'Custom event', icon: 'assignment', color: 'primary' },
+  birth: { labelKey: 'eventTypes.birth', icon: 'child_friendly', color: 'secondary' },
+  breeding: { labelKey: 'eventTypes.breeding', icon: 'favorite', color: 'primary' },
+  vaccination: { labelKey: 'eventTypes.vaccination', icon: 'vaccines', color: 'accent' },
+  health_issue: { labelKey: 'eventTypes.health_issue', icon: 'healing', color: 'negative' },
+  death: { labelKey: 'eventTypes.death', icon: 'warning', color: 'dark' },
+  custom: { labelKey: 'eventTypes.custom', icon: 'assignment', color: 'primary' },
+}
+
+export function getEventTypeOptions() {
+  return Object.entries(EVENT_TYPE_META).map(([value, meta]) => ({
+    label: t(meta.labelKey),
+    value,
+  }))
 }
 
 export function getEventTypeMeta(type) {
-  return EVENT_TYPE_META[type] ?? EVENT_TYPE_META.custom
+  const meta = EVENT_TYPE_META[type] ?? EVENT_TYPE_META.custom
+
+  return {
+    ...meta,
+    label: t(meta.labelKey),
+  }
 }

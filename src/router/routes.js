@@ -1,6 +1,6 @@
 const routes = [
   {
-    path: '/',
+    path: '/:locale(en|pt-br)?',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },

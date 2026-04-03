@@ -4,56 +4,22 @@
       <div class="col-12 col-md-10 col-lg-7">
         <q-card flat>
           <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">Terms</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">Terms of Use</div>
-            <div class="text-caption text-grey-7 q-mb-lg">Last updated: April 2, 2026</div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('terms.overline') }}</div>
+            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('terms.title') }}</div>
+            <div class="text-caption text-grey-7 q-mb-lg">{{ t('terms.lastUpdated') }}</div>
 
             <div class="column q-gutter-lg">
-              <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Using BreedZ</div>
+              <div v-for="block in termsBlocks" :key="block.title">
+                <div class="text-h6 text-weight-bold q-mb-sm">{{ block.title }}</div>
                 <div class="text-body1 text-grey-8">
-                  BreedZ is provided as a herd management app for recording animals, breeding events, births,
-                  and related farm notes. You may use it only for lawful farm, ranch, or business purposes.
+                  {{ block.body }}
                 </div>
               </div>
 
               <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Your data</div>
+                <div class="text-h6 text-weight-bold q-mb-sm">{{ t('terms.contactTitle') }}</div>
                 <div class="text-body1 text-grey-8">
-                  You are responsible for the accuracy of the records you enter. BreedZ is a recordkeeping
-                  tool and should not be treated as veterinary, legal, or financial advice.
-                </div>
-              </div>
-
-              <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Availability</div>
-                <div class="text-body1 text-grey-8">
-                  We may update, improve, or discontinue parts of the app over time. Some features may still
-                  be in early access while the product is being validated.
-                </div>
-              </div>
-
-              <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Acceptable use</div>
-                <div class="text-body1 text-grey-8">
-                  You agree not to misuse the app, attempt to disrupt service, or use BreedZ for fraudulent,
-                  unlawful, or harmful activity.
-                </div>
-              </div>
-
-              <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Liability</div>
-                <div class="text-body1 text-grey-8">
-                  BreedZ is provided on an as-is basis during this early stage. To the extent allowed by law,
-                  BreedZ and its operator are not liable for business loss, data loss, or decisions made from
-                  incomplete records.
-                </div>
-              </div>
-
-              <div>
-                <div class="text-h6 text-weight-bold q-mb-sm">Contact</div>
-                <div class="text-body1 text-grey-8">
-                  Questions about these terms can be sent to
+                  {{ t('terms.contactBody') }}
                   <a href="mailto:legal@breedz.app" class="text-primary">legal@breedz.app</a>.
                 </div>
               </div>
@@ -67,14 +33,23 @@
 
 <script setup>
 import { useMeta } from 'quasar'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18nText } from 'src/i18n'
 import { buildPageMeta } from 'src/utils/seo-meta'
+import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
-useMeta(
+const { t, tm } = useI18nText()
+const route = useRoute()
+const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
+
+useMeta(() =>
   buildPageMeta({
-    title: 'Terms of Use',
-    description:
-      'Read the BreedZ terms for using the offline herd management app and cattle breeding recordkeeping tools.',
-    path: '/terms',
+    title: t('terms.meta.title'),
+    description: t('terms.meta.description'),
+    path: buildLocalizedPath(routeLocale.value, '/terms'),
   }),
 )
+
+const termsBlocks = computed(() => tm('terms.blocks') ?? [])
 </script>

@@ -4,46 +4,21 @@
       <div class="col-12 col-md-10 col-lg-7">
         <q-card flat>
           <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">Contact</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">Get in touch</div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('contact.overline') }}</div>
+            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('contact.title') }}</div>
             <div class="text-body1 text-grey-8 q-mb-lg">
-              BreedZ is still in its early stage. If you want to ask a question, report a problem, or talk
-              about using the app on your farm, reach out through one of the placeholder contacts below.
+              {{ t('contact.intro') }}
             </div>
 
             <q-list>
-              <q-item>
+              <q-item v-for="(item, index) in contactItems" :key="item.email">
                 <q-item-section avatar>
-                  <q-icon name="mail" color="primary" />
+                  <q-icon :name="contactIcons[index] || 'mail'" color="primary" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label class="text-weight-bold">General contact</q-item-label>
+                  <q-item-label class="text-weight-bold">{{ item.title }}</q-item-label>
                   <q-item-label caption>
-                    <a href="mailto:hello@breedz.app" class="text-primary">hello@breedz.app</a>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item>
-                <q-item-section avatar>
-                  <q-icon name="support_agent" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-weight-bold">Support</q-item-label>
-                  <q-item-label caption>
-                    <a href="mailto:support@breedz.app" class="text-primary">support@breedz.app</a>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-item>
-                <q-item-section avatar>
-                  <q-icon name="privacy_tip" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-weight-bold">Privacy requests</q-item-label>
-                  <q-item-label caption>
-                    <a href="mailto:privacy@breedz.app" class="text-primary">privacy@breedz.app</a>
+                    <a :href="`mailto:${item.email}`" class="text-primary">{{ item.email }}</a>
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -57,14 +32,24 @@
 
 <script setup>
 import { useMeta } from 'quasar'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18nText } from 'src/i18n'
 import { buildPageMeta } from 'src/utils/seo-meta'
+import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
-useMeta(
+const { t, tm } = useI18nText()
+const route = useRoute()
+const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
+
+useMeta(() =>
   buildPageMeta({
-    title: 'Contact',
-    description:
-      'Contact BreedZ about the offline herd management app, cattle breeding records, support, privacy questions, or farm recordkeeping feedback.',
-    path: '/contact',
+    title: t('contact.meta.title'),
+    description: t('contact.meta.description'),
+    path: buildLocalizedPath(routeLocale.value, '/contact'),
   }),
 )
+
+const contactItems = computed(() => tm('contact.items') ?? [])
+const contactIcons = ['mail', 'support_agent', 'privacy_tip']
 </script>

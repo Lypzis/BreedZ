@@ -4,10 +4,10 @@
       <div class="col-12 col-md-10 col-lg-8">
         <q-card flat>
           <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">Tutorial</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">How BreedZ works</div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('tutorial.overline') }}</div>
+            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('tutorial.title') }}</div>
             <div class="text-body1 text-grey-7">
-              Start with the herd, link parents when you know them, and keep each animal history updated in a few simple steps for offline farm recordkeeping.
+              {{ t('tutorial.description') }}
             </div>
           </q-card-section>
 
@@ -45,8 +45,8 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <div class="text-overline text-weight-bold text-accent">Tips</div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">Good habits for local recordkeeping</div>
+            <div class="text-overline text-weight-bold text-accent">{{ t('tutorial.tipsOverline') }}</div>
+            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('tutorial.tipsTitle') }}</div>
 
             <q-list>
               <q-item v-for="tip in tips" :key="tip">
@@ -63,13 +63,13 @@
           <q-card-section class="q-pt-none">
             <div class="row q-col-gutter-sm">
               <div class="col-12 col-sm-auto">
-                <q-btn unelevated color="primary" icon="pets" label="Open animals" to="/app/animals" />
+                <q-btn unelevated color="primary" icon="pets" :label="t('tutorial.openAnimals')" to="/app/animals" />
               </div>
               <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="assignment" label="Open events" to="/app/events" />
+                <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/app/events" />
               </div>
               <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="settings" label="Open settings" to="/app/settings" />
+                <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/app/settings" />
               </div>
             </div>
           </q-card-section>
@@ -80,67 +80,25 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useMeta } from 'quasar'
+import { useRoute } from 'vue-router'
+import { useI18nText } from 'src/i18n'
 import { buildPageMeta } from 'src/utils/seo-meta'
+import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
-useMeta(
+const { t, tm } = useI18nText()
+const route = useRoute()
+const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
+
+useMeta(() =>
   buildPageMeta({
-    title: 'Tutorial',
-    description:
-      'See how BreedZ works for herd management, cattle breeding records, lineage tracking, herd events, and offline farm recordkeeping.',
-    path: '/app/tutorial',
+    title: t('tutorial.meta.title'),
+    description: t('tutorial.meta.description'),
+    path: buildLocalizedPath(routeLocale.value, '/app/tutorial'),
   }),
 )
 
-const steps = [
-  {
-    number: '1',
-    title: 'Add your animals',
-    description: 'Start in the animals page and create one record for each animal you want to track.',
-    hints: [
-      'Use the tag as the required unique identifier.',
-      'Name is optional, but it helps you recognize animals faster.',
-    ],
-  },
-  {
-    number: '2',
-    title: 'Link dam and sire (Optional)',
-    description: 'When parent information is known, connect lineage in the animal form so offspring history stays useful later.',
-    hints: [
-      'Parent picker filters automatically.',
-      'You can leave lineage blank and fill it in later.',
-    ],
-  },
-  {
-    number: '3',
-    title: 'Record events as they happen',
-    description: 'Use the animal timeline or the events page to log breeding, calving, vaccination, health, and custom notes.',
-    hints: [
-      'Use animal page for one animal.',
-      'Use events page for the whole herd.',
-    ],
-  },
-  {
-    number: '4',
-    title: 'Review history per animal',
-    description: 'Open an animal to see its timeline, linked parents, and linked offspring in one place.',
-    hints: [
-      'Use this view to verify lineage and check the latest records before making decisions.',
-    ],
-  },
-  {
-    number: '5',
-    title: 'Back up your records',
-    description: 'Go to settings and export a JSON backup so you can keep a safe copy of your local data.',
-    hints: [
-      'Import replaces existing data — export first to stay safe.',
-    ],
-  },
-]
-
-const tips = [
-  'Add records the same day to avoid losing dates and details.',
-  'Use notes for context, not as a replacement for structured lineage and events.',
-  'Export a backup regularly if this device holds your main herd history.',
-]
+const steps = computed(() => tm('tutorial.steps') ?? [])
+const tips = computed(() => tm('tutorial.tips') ?? [])
 </script>
