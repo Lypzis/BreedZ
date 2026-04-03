@@ -133,9 +133,6 @@
                   {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
                   <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
                 </q-item-label>
-                <q-item-label caption>
-                  {{ t('animals.updated', { date: formatDateTime(animal.updatedAt) }) }}
-                </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
@@ -200,9 +197,6 @@
                     <q-item-label caption>
                       {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
                       <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ t('animals.updated', { date: formatDateTime(animal.updatedAt) }) }}
                     </q-item-label>
                   </q-item-section>
 
@@ -283,7 +277,7 @@ import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
-import { formatDisplayDate, formatDisplayDateTime } from 'src/utils/dates'
+import { formatDisplayDate } from 'src/utils/dates'
 import { filterAnimalsList } from 'src/utils/list-filters'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
 import { normalizeSpeciesLabel } from 'src/utils/species'
@@ -415,14 +409,6 @@ function formatDate(value) {
   }
 
   return formatDisplayDate(value)
-}
-
-function formatDateTime(value) {
-  if (!value) {
-    return t('common.justNow')
-  }
-
-  return formatDisplayDateTime(value)
 }
 
 function statusColor(status) {
