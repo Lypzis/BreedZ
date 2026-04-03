@@ -13,7 +13,9 @@
 
           <q-card-section class="q-pt-none">
             <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6">
+              
+
+              <div class="col-12 col-md-4">
                 <q-banner rounded class="bg-green-1 text-primary">
                   <template #avatar>
                     <q-icon name="download" color="primary" />
@@ -34,7 +36,7 @@
                 </q-banner>
               </div>
 
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-4">
                 <q-banner rounded class="bg-grey-1 text-grey-8">
                   <template #avatar>
                     <q-icon name="upload_file" color="primary" />
@@ -64,6 +66,36 @@
                     :loading="isImporting"
                     @click="handleImport"
                   />
+                </q-banner>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <q-banner rounded class="bg-grey-1 text-grey-8">
+                  <template #avatar>
+                    <q-icon name="download_for_offline" color="primary" />
+                  </template>
+                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.installTitle') }}</div>
+                  <div class="text-caption q-mt-xs">
+                    {{ t('settings.installDescription') }}
+                  </div>
+
+                  <q-btn
+                    unelevated
+                    color="primary"
+                    :label="installButtonLabel"
+                    icon="download"
+                    class="q-mt-md"
+                    :disable="isInstalled"
+                    @click="handleInstallClick"
+                  />
+
+                  <q-banner
+                    v-if="installHintVisible || installStatusMessage"
+                    rounded
+                    class="bg-white text-grey-8 q-mt-md"
+                  >
+                    {{ installStatusMessage || installInstructions }}
+                  </q-banner>
                 </q-banner>
               </div>
             </div>
@@ -108,6 +140,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
@@ -117,6 +150,14 @@ const $q = useQuasar()
 const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
 const eventsStore = useEventsStore()
+const {
+  installButtonLabel,
+  installHintVisible,
+  installInstructions,
+  installStatusMessage,
+  isInstalled,
+  handleInstallClick,
+} = useInstallPrompt()
 
 const isExporting = ref(false)
 const isImporting = ref(false)

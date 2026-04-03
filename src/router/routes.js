@@ -10,6 +10,7 @@ const routes = [
       { path: 'app/animals/:id', component: () => import('pages/AnimalDetailPage.vue') },
       { path: 'app/events', component: () => import('pages/EventsPage.vue') },
       { path: 'app/settings', component: () => import('pages/SettingsPage.vue') },
+      { path: 'guides/track-cattle-breeding-dates', component: () => import('pages/GuideBreedingDatesPage.vue') },
       { path: 'terms', component: () => import('pages/TermsPage.vue') },
       { path: 'privacy', component: () => import('pages/PrivacyPage.vue') },
       { path: 'contact', component: () => import('pages/ContactPage.vue') },

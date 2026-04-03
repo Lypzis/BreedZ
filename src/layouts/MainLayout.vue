@@ -16,7 +16,7 @@
         />
 
         <q-toolbar-title>
-          <router-link :to="localizedHomePath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
+          <router-link :to="localizedDashboardPath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
             <q-avatar rounded size="42px">
               <img :src="logoIcon" :alt="t('brand.iconAlt')" />
             </q-avatar>
@@ -121,7 +121,7 @@ const routeLocale = computed(() =>
     ? routeSegmentToLocale(route.params.locale)
     : locale.value,
 )
-const localizedHomePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
+const localizedDashboardPath = computed(() => buildLocalizedPath(routeLocale.value, '/app'))
 
 const navItems = computed(() => [
   {
@@ -148,11 +148,6 @@ const navItems = computed(() => [
     label: t('nav.tutorial'),
     icon: 'school',
     to: localizedPath('/app/tutorial'),
-  },
-  {
-    label: t('nav.home'),
-    icon: 'home',
-    to: localizedPath('/'),
   },
 ])
 
