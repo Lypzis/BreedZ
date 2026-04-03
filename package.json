@@ -1,7 +1,7 @@
 {
   "name": "breedz",
   "version": "0.0.1",
-  "description": "Offline-first livestock management app",
+  "description": "BreedZ is a herd management app for tracking cattle breeding records, animal lineage, and farm activity.",
   "productName": "BreedZ",
   "author": "lypzis <victor.piccoli@pm.me>",
   "type": "module",
