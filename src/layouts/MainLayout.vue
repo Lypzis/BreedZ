@@ -107,7 +107,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18nText } from 'src/i18n'
-import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedPath, routeSegmentToLocale, stripLocaleFromPath } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
 const logoSmall = '/icons/favicon-32x32.png'
@@ -121,33 +121,33 @@ const routeLocale = computed(() =>
     ? routeSegmentToLocale(route.params.locale)
     : locale.value,
 )
-const localizedDashboardPath = computed(() => buildLocalizedPath(routeLocale.value, '/app'))
+const localizedDashboardPath = computed(() => '/app')
 
 const navItems = computed(() => [
   {
     label: t('nav.dashboard'),
     icon: 'today',
-    to: localizedPath('/app'),
+    to: '/app',
   },
   {
     label: t('nav.animals'),
     icon: 'pets',
-    to: localizedPath('/app/animals'),
+    to: '/app/animals',
   },
   {
     label: t('nav.events'),
     icon: 'assignment',
-    to: localizedPath('/app/events'),
+    to: '/app/events',
   },
   {
     label: t('nav.settings'),
     icon: 'settings',
-    to: localizedPath('/app/settings'),
+    to: '/app/settings',
   },
   {
     label: t('nav.tutorial'),
     icon: 'school',
-    to: localizedPath('/app/tutorial'),
+    to: '/app/tutorial',
   },
 ])
 
@@ -160,6 +160,11 @@ const selectedLocale = computed({
   get: () => routeLocale.value,
   set: async (value) => {
     setLocale(value)
+
+    if (stripLocaleFromPath(route.path).startsWith('/app')) {
+      return
+    }
+
     await router.replace(buildLocalizedPath(value, route.fullPath))
   },
 })

@@ -82,20 +82,16 @@
 <script setup>
 import { computed } from 'vue'
 import { useMeta } from 'quasar'
-import { useRoute } from 'vue-router'
 import { useI18nText } from 'src/i18n'
 import { buildPageMeta } from 'src/utils/seo-meta'
-import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const { t, tm } = useI18nText()
-const route = useRoute()
-const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
 
 useMeta(() =>
   buildPageMeta({
     title: t('tutorial.meta.title'),
     description: t('tutorial.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/app/tutorial'),
+    path: '/app/tutorial',
   }),
 )
 
