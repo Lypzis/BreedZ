@@ -26,7 +26,7 @@ export function stripLocaleFromPath(value = '/') {
 }
 
 export function isAppShellPath(path = '/') {
-  const normalizedPath = stripLocaleFromPath(path)
+  const normalizedPath = String(path || '/')
 
   return (
     normalizedPath === '/'
