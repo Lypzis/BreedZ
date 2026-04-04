@@ -12,6 +12,12 @@ export async function listAnimals() {
   })
 }
 
+export async function hasSavedAnimals() {
+  const count = await withStore(STORE_NAMES.animals, 'readonly', (store) => store.count())
+
+  return Number(count ?? 0) > 0
+}
+
 export async function createAnimal(input) {
   const timestamp = new Date().toISOString()
   const animal = {

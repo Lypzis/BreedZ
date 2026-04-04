@@ -1,4 +1,4 @@
-import { getCurrentLocaleValue } from '../i18n/index.js'
+import { getCurrentLocaleValue, t } from '../i18n/index.js'
 
 function parseDateValue(value) {
   if (!value) {
@@ -36,6 +36,52 @@ export function formatDisplayDateTime(value) {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date)
+}
+
+export function formatAgeLabel(value, referenceDate = new Date()) {
+  const birthDate = parseDateValue(value)
+
+  if (!birthDate) {
+    return ''
+  }
+
+  const comparisonDate = parseDateValue(referenceDate) || new Date()
+
+  if (birthDate > comparisonDate) {
+    return ''
+  }
+
+  let years = comparisonDate.getFullYear() - birthDate.getFullYear()
+  let months = comparisonDate.getMonth() - birthDate.getMonth()
+
+  if (comparisonDate.getDate() < birthDate.getDate()) {
+    months -= 1
+  }
+
+  if (months < 0) {
+    years -= 1
+    months += 12
+  }
+
+  const parts = []
+
+  if (years >= 2) {
+    parts.push(t('common.ageYears', { count: years }))
+  } else if (years === 1) {
+    parts.push(t('common.ageOneYear'))
+  }
+
+  if (months >= 2) {
+    parts.push(t('common.ageMonths', { count: months }))
+  } else if (months === 1) {
+    parts.push(t('common.ageOneMonth'))
+  }
+
+  if (parts.length > 0) {
+    return parts.join(', ')
+  }
+
+  return t('common.ageUnderOneMonth')
 }
 
 export function todayDateString() {

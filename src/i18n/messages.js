@@ -59,6 +59,11 @@ export const messages = {
       dateNotSet: 'Date not set',
       noExtraNotesAdded: 'No extra notes added.',
       justNow: 'just now',
+      ageYears: '{count} years old',
+      ageOneYear: '1 year old',
+      ageMonths: '{count} months old',
+      ageOneMonth: '1 month old',
+      ageUnderOneMonth: 'under 1 month old',
       eventForAnimal: '{eventType} for {animal}',
       status: {
         active: 'Active',
@@ -725,6 +730,11 @@ export const messages = {
       dateNotSet: 'Data não definida',
       noExtraNotesAdded: 'Sem observações extras.',
       justNow: 'agora mesmo',
+      ageYears: '{count} anos',
+      ageOneYear: '1 ano',
+      ageMonths: '{count} meses',
+      ageOneMonth: '1 mês',
+      ageUnderOneMonth: 'menos de 1 mês',
       eventForAnimal: '{eventType} para {animal}',
       status: {
         active: 'Ativo',

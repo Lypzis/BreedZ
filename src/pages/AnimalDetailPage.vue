@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-auto" v-if="animal.birthDate">
                   <q-chip square color="green-1" text-color="primary" icon="cake">
-                    {{ t('animalDetail.bornChip', { date: formatDate(animal.birthDate) }) }}
+                    {{ birthChipLabel(animal.birthDate) }}
                   </q-chip>
                 </div>
               </div>
@@ -159,7 +159,7 @@
                     <q-item-label class="text-weight-medium">{{ animalDisplayName(child) }}</q-item-label>
                     <q-item-label caption>
                       {{ child.species || t('common.speciesNotSet') }} • {{ sexLabel(child.sex) }}
-                      <span v-if="child.birthDate"> • {{ t('animalDetail.bornChip', { date: formatDate(child.birthDate) }) }}</span>
+                      <span v-if="child.birthDate"> • {{ birthChipLabel(child.birthDate) }}</span>
                     </q-item-label>
                     <q-item-label caption>{{ offspringRelationLabel(child) }}</q-item-label>
                   </q-item-section>
@@ -310,7 +310,7 @@ import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
-import { formatDisplayDate, todayDateString } from 'src/utils/dates'
+import { formatAgeLabel, formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
 
 const $q = useQuasar()
@@ -521,6 +521,13 @@ function formatDate(value) {
   }
 
   return formatDisplayDate(value)
+}
+
+function birthChipLabel(value) {
+  const dateLabel = t('animalDetail.bornChip', { date: formatDate(value) })
+  const ageLabel = formatAgeLabel(value)
+
+  return ageLabel ? `${dateLabel} (${ageLabel})` : dateLabel
 }
 
 function statusLabel(status) {

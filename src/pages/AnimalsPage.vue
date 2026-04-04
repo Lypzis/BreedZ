@@ -131,7 +131,7 @@
                 </q-item-label>
                 <q-item-label caption>
                   {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
-                  <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
+                  <span v-if="animal.birthDate"> • {{ birthSummary(animal.birthDate) }}</span>
                 </q-item-label>
               </q-item-section>
 
@@ -196,7 +196,7 @@
                     </q-item-label>
                     <q-item-label caption>
                       {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
-                      <span v-if="animal.birthDate"> • {{ t('animals.born', { date: formatDate(animal.birthDate) }) }}</span>
+                      <span v-if="animal.birthDate"> • {{ birthSummary(animal.birthDate) }}</span>
                     </q-item-label>
                   </q-item-section>
 
@@ -277,7 +277,7 @@ import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
-import { formatDisplayDate } from 'src/utils/dates'
+import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
 import { filterAnimalsList } from 'src/utils/list-filters'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
 import { normalizeSpeciesLabel } from 'src/utils/species'
@@ -409,6 +409,13 @@ function formatDate(value) {
   }
 
   return formatDisplayDate(value)
+}
+
+function birthSummary(value) {
+  const dateLabel = t('animals.born', { date: formatDate(value) })
+  const ageLabel = formatAgeLabel(value)
+
+  return ageLabel ? `${dateLabel} (${ageLabel})` : dateLabel
 }
 
 function statusColor(status) {
