@@ -109,9 +109,12 @@
                   <q-item-section side>
                     <q-btn
                       flat
+                      round
                       dense
                       color="primary"
-                      :label="t('common.view')"
+                      icon="visibility"
+                      :aria-label="t('common.view')"
+                      :title="t('common.view')"
                       :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'dashboard' } }"
                     />
                   </q-item-section>
@@ -159,9 +162,12 @@
                   <q-item-section side>
                     <q-btn
                       flat
+                      round
                       dense
                       color="primary"
-                      :label="t('common.view')"
+                      icon="visibility"
+                      :aria-label="t('common.view')"
+                      :title="t('common.view')"
                       :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'dashboard' } }"
                     />
                   </q-item-section>
@@ -203,7 +209,16 @@
                     </q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-btn flat dense color="primary" :label="t('common.open')" :to="{ path: `/app/animals/${animal.id}`, query: { from: 'dashboard' } }" />
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="primary"
+                      icon="visibility"
+                      :aria-label="t('common.view')"
+                      :title="t('common.view')"
+                      :to="{ path: `/app/animals/${animal.id}`, query: { from: 'dashboard' } }"
+                    />
                   </q-item-section>
                 </q-item>
               </q-list>
