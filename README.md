@@ -45,13 +45,13 @@ This is the current implementation order for the first working BreedZ MVP.
 ### 1. App shell and routes
 
 - Keep the landing page at `/`
-- Add app routes under `/app`
+- Add app routes under `/`
 - First routes:
-  - `/app`
-  - `/app/animals`
-  - `/app/animals/:id`
-  - `/app/events/new`
-  - `/app/settings`
+  - `/`
+  - `/animals`
+  - `/animals/:id`
+  - `/events/new`
+  - `/settings`
 
 ### 2. Data layer
 
