@@ -145,7 +145,9 @@ export default defineConfig((/* ctx */) => {
       // injectPwaMetaTags: false,
       // extendPWACustomSWConf (esbuildConf) {},
       // extendGenerateSWOptions (cfg) {},
-      // extendInjectManifestOptions (cfg) {}
+      extendInjectManifestOptions(cfg) {
+        cfg.globIgnores = [...(cfg.globIgnores || []), '**/_redirects']
+      },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova
