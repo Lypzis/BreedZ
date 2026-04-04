@@ -63,13 +63,13 @@
           <q-card-section class="q-pt-none">
             <div class="row q-col-gutter-sm">
               <div class="col-12 col-sm-auto">
-                <q-btn unelevated color="primary" icon="pets" :label="t('tutorial.openAnimals')" to="/app/animals" />
+                <q-btn unelevated color="primary" icon="pets" :label="t('tutorial.openAnimals')" to="/animals" />
               </div>
               <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/app/events" />
+                <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/events" />
               </div>
               <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/app/settings" />
+                <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/settings" />
               </div>
             </div>
           </q-card-section>
@@ -91,7 +91,7 @@ useMeta(() =>
   buildPageMeta({
     title: t('tutorial.meta.title'),
     description: t('tutorial.meta.description'),
-    path: '/app/tutorial',
+    path: '/tutorial',
   }),
 )
 

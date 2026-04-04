@@ -222,8 +222,8 @@ useMeta(() =>
   }),
 )
 
-const dashboardPath = computed(() => '/app')
-const tutorialPath = computed(() => '/app/tutorial')
+const dashboardPath = computed(() => '/')
+const tutorialPath = computed(() => '/tutorial')
 const problemItems = computed(() => tm('guideBreedingDates.problemItems') ?? [])
 const logicSteps = computed(() => tm('guideBreedingDates.logicSteps') ?? [])
 const commonWaysItems = computed(() => tm('guideBreedingDates.commonWaysItems') ?? [])

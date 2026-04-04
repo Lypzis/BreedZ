@@ -78,7 +78,7 @@
                   <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.todaySectionTitle') }}</div>
                 </div>
                 <div v-if="todayEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/app/events" />
+                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
                 </div>
               </div>
 
@@ -115,7 +115,7 @@
                       icon="visibility"
                       :aria-label="t('common.view')"
                       :title="t('common.view')"
-                      :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'dashboard' } }"
+                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'dashboard' } }"
                     />
                   </q-item-section>
                 </q-item>
@@ -133,7 +133,7 @@
                   <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.upcomingSectionTitle') }}</div>
                 </div>
                 <div v-if="upcomingEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/app/events" />
+                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
                 </div>
               </div>
 
@@ -168,7 +168,7 @@
                       icon="visibility"
                       :aria-label="t('common.view')"
                       :title="t('common.view')"
-                      :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'dashboard' } }"
+                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'dashboard' } }"
                     />
                   </q-item-section>
                 </q-item>
@@ -186,7 +186,7 @@
                   <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.needsSetupTitle') }}</div>
                 </div>
                 <div v-if="animalsWithoutEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllAnimals')" to="/app/animals" />
+                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllAnimals')" to="/animals" />
                 </div>
               </div>
 
@@ -217,7 +217,7 @@
                       icon="visibility"
                       :aria-label="t('common.view')"
                       :title="t('common.view')"
-                      :to="{ path: `/app/animals/${animal.id}`, query: { from: 'dashboard' } }"
+                      :to="{ path: `/animals/${animal.id}`, query: { from: 'dashboard' } }"
                     />
                   </q-item-section>
                 </q-item>

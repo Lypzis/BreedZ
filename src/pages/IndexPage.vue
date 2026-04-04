@@ -21,7 +21,7 @@
                   :disable="isInstalled"
                   @click="handleInstallClick"
                 />
-                <q-btn outline color="primary" :label="t('home.seeHowItWorks')" to="/app/tutorial" />
+                <q-btn outline color="primary" :label="t('home.seeHowItWorks')" to="/tutorial" />
               </q-card-actions>
 
               <q-banner
@@ -71,7 +71,7 @@
                           color="primary"
                           :label="t('home.openDashboard')"
                           icon="dashboard"
-                          to="/app"
+                          to="/"
                           class="full-width q-mt-md"
                         />
                       </q-card-section>
@@ -200,7 +200,7 @@
                     outline
                     color="primary"
                     :label="t('home.seeHowItWorks')"
-                    to="/app/tutorial"
+                    to="/tutorial"
                     class="q-mb-sm"
                   />
                 </div>

@@ -107,7 +107,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18nText } from 'src/i18n'
-import { buildLocalizedPath, routeSegmentToLocale, stripLocaleFromPath } from 'src/utils/localeRouting'
+import { buildLocalizedPath, isAppShellPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
 const logoSmall = '/icons/favicon-32x32.png'
@@ -121,33 +121,33 @@ const routeLocale = computed(() =>
     ? routeSegmentToLocale(route.params.locale)
     : locale.value,
 )
-const dashboardPath = computed(() => '/app')
+const dashboardPath = computed(() => '/')
 
 const navItems = computed(() => [
   {
     label: t('nav.dashboard'),
     icon: 'today',
-    to: '/app',
+    to: '/',
   },
   {
     label: t('nav.animals'),
     icon: 'pets',
-    to: '/app/animals',
+    to: '/animals',
   },
   {
     label: t('nav.events'),
     icon: 'assignment',
-    to: '/app/events',
+    to: '/events',
   },
   {
     label: t('nav.settings'),
     icon: 'settings',
-    to: '/app/settings',
+    to: '/settings',
   },
   {
     label: t('nav.tutorial'),
     icon: 'school',
-    to: '/app/tutorial',
+    to: '/tutorial',
   },
 ])
 
@@ -161,7 +161,7 @@ const selectedLocale = computed({
   set: async (value) => {
     setLocale(value)
 
-    if (stripLocaleFromPath(route.path).startsWith('/app')) {
+    if (isAppShellPath(route.path)) {
       return
     }
 

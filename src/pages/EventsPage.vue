@@ -151,7 +151,7 @@
                       icon="visibility"
                       :aria-label="t('events.viewAnimal')"
                       :title="t('events.viewAnimal')"
-                      :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'events' } }"
+                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'events' } }"
                     />
                     <q-btn
                       flat
@@ -222,7 +222,7 @@
                           icon="visibility"
                           :aria-label="t('events.viewAnimal')"
                           :title="t('events.viewAnimal')"
-                          :to="{ path: `/app/animals/${event.animalId}`, query: { from: 'events' } }"
+                          :to="{ path: `/animals/${event.animalId}`, query: { from: 'events' } }"
                         />
                         <q-btn
                           flat

@@ -166,7 +166,7 @@
                       icon="visibility"
                       :aria-label="t('animals.viewAnimal')"
                       :title="t('animals.viewAnimal')"
-                      :to="`/app/animals/${animal.id}`"
+                      :to="`/animals/${animal.id}`"
                     />
                     <q-btn
                       flat
@@ -240,7 +240,7 @@
                           icon="visibility"
                           :aria-label="t('animals.viewAnimal')"
                           :title="t('animals.viewAnimal')"
-                          :to="`/app/animals/${animal.id}`"
+                          :to="`/animals/${animal.id}`"
                         />
                         <q-btn
                           flat

@@ -16,7 +16,7 @@ import { registerRoute, NavigationRoute } from 'workbox-routing'
 self.skipWaiting()
 clientsClaim()
 
-const APP_START_URL = '/app'
+const APP_START_URL = '/'
 const precacheEntries = [...self.__WB_MANIFEST]
 const indexHtmlEntry = precacheEntries.find((entry) => entry.url === 'index.html')
 

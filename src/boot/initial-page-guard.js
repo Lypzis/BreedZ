@@ -18,6 +18,6 @@ export default boot(({ router }) => {
       return true
     }
 
-    return '/app'
+    return '/'
   })
 })
