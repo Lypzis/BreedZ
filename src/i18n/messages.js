@@ -101,7 +101,8 @@ export const messages = {
       installHintIos: 'On iPhone or iPad, use Share and then Add to Home Screen.',
       installHintFirefox:
         'Firefox may not show a native install prompt. Use the browser menu or create a shortcut manually.',
-      installHintDefault: 'Use Install app here or the install icon in the browser bar when it appears.',
+      installHintDefault:
+        'On mobile, open the browser 3-dot menu and use Install app or Add to Home screen. On desktop, use the install icon in the browser bar when it appears.',
       installStatusInstalled: 'BreedZ is already installed on this device.',
       heroBanner: 'Designed for real farm use: simple, offline, no clutter.',
       appOverline: 'Inside The App',
@@ -185,7 +186,8 @@ export const messages = {
         },
         {
           question: 'How do I install it?',
-          answer: 'Use the install button or the browser install icon. On iPhone or iPad, use Share > Add to Home Screen.',
+          answer:
+            'On Android, open the browser 3-dot menu and use Install app or Add to Home screen. On desktop, use the install icon in the browser bar when it appears. On iPhone or iPad, use Share > Add to Home Screen.',
         },
         {
           question: 'What does installing mean?',
@@ -776,7 +778,7 @@ export const messages = {
       installHintFirefox:
         'O Firefox pode não mostrar um aviso nativo de instalação. Use o menu do navegador ou crie um atalho manualmente.',
       installHintDefault:
-        'Use Instalar app aqui ou o ícone de instalação na barra do navegador quando ele aparecer.',
+        'No celular, abra o menu de 3 pontos do navegador e use Instalar app ou Adicionar à tela inicial. No desktop, use o ícone de instalação na barra do navegador quando ele aparecer.',
       installStatusInstalled: 'O BreedZ já está instalado neste dispositivo.',
       heroBanner: 'Feito para uso real na fazenda: simples, offline e sem bagunça.',
       appOverline: 'Dentro do App',
