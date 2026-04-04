@@ -4,7 +4,7 @@
   "id": "/",
   "description": "Offline-first livestock management for daily field operations",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "/app",
   "scope": "/",
   "orientation": "portrait",
   "background_color": "#f5f3ef",
