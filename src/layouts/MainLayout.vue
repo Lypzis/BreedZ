@@ -16,7 +16,7 @@
         />
 
         <q-toolbar-title>
-          <router-link :to="localizedDashboardPath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
+          <router-link :to="dashboardPath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
             <q-avatar rounded size="42px">
               <img :src="logoIcon" :alt="t('brand.iconAlt')" />
             </q-avatar>
@@ -42,7 +42,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above :width="260" bordered class="bg-white">
-      <q-item class="bg-green-1 q-py-md">
+      <q-item clickable :to="dashboardPath" class="bg-green-1 q-py-md">
         <q-item-section>
           <q-item-label class="text-h6 text-weight-bold text-primary">{{ t('brand.name') }}</q-item-label>
         </q-item-section>
@@ -121,7 +121,7 @@ const routeLocale = computed(() =>
     ? routeSegmentToLocale(route.params.locale)
     : locale.value,
 )
-const localizedDashboardPath = computed(() => '/app')
+const dashboardPath = computed(() => '/app')
 
 const navItems = computed(() => [
   {
