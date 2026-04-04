@@ -57,7 +57,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     const strippedPath = stripLocaleFromPath(to.path)
 
     if (localeParam) {
-      if (isStandaloneAppLaunch() && strippedPath === '/') {
+      if ((isStandaloneAppLaunch() || !window.navigator.onLine) && strippedPath === '/') {
         return '/'
       }
 
