@@ -1,4 +1,6 @@
 import { register } from 'register-service-worker'
+import { Notify } from 'quasar'
+import { t } from 'src/i18n'
 
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
@@ -28,7 +30,28 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   updated(/* registration */) {
-    // console.log('New content is available; please refresh.')
+    Notify.create({
+      group: false,
+      timeout: 0,
+      color: 'primary',
+      textColor: 'white',
+      icon: 'system_update',
+      message: t('common.updateAvailable'),
+      actions: [
+        {
+          label: t('common.refreshNow'),
+          color: 'white',
+          handler: () => {
+            window.location.reload()
+          },
+        },
+        {
+          label: t('common.later'),
+          color: 'white',
+          flat: true,
+        },
+      ],
+    })
   },
 
   offline() {
