@@ -119,7 +119,7 @@
                           icon="visibility"
                           :aria-label="t('animalDetail.openParent')"
                           :title="t('animalDetail.openParent')"
-                          :to="`/app/animals/${damAnimal.id}`"
+                          :to="`/animals/${damAnimal.id}`"
                         />
                       </div>
                     </div>
@@ -148,7 +148,7 @@
                           icon="visibility"
                           :aria-label="t('animalDetail.openParent')"
                           :title="t('animalDetail.openParent')"
-                          :to="`/app/animals/${sireAnimal.id}`"
+                          :to="`/animals/${sireAnimal.id}`"
                         />
                       </div>
                     </div>
@@ -191,7 +191,7 @@
                       icon="visibility"
                       :aria-label="t('common.view')"
                       :title="t('common.view')"
-                      :to="`/app/animals/${child.id}`"
+                      :to="`/animals/${child.id}`"
                     />
                   </q-item-section>
                 </q-item>
@@ -374,14 +374,14 @@ const backLinkTarget = computed(() => {
   const from = String(route.query.from ?? '')
 
   if (from === 'dashboard') {
-    return '/app'
+    return '/'
   }
 
   if (from === 'events') {
-    return '/app/events'
+    return '/events'
   }
 
-  return '/app/animals'
+  return '/animals'
 })
 const backLinkLabel = computed(() => {
   const from = String(route.query.from ?? '')

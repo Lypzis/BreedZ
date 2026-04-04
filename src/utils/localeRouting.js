@@ -25,12 +25,20 @@ export function stripLocaleFromPath(value = '/') {
   return stripped || '/'
 }
 
-export function buildLocalizedPath(locale, path = '/') {
+export function isAppShellPath(path = '/') {
   const normalizedPath = stripLocaleFromPath(path)
 
-  if (normalizedPath.startsWith('/app')) {
-    return normalizedPath
-  }
+  return (
+    normalizedPath === '/'
+    || normalizedPath === '/tutorial'
+    || normalizedPath.startsWith('/animals')
+    || normalizedPath.startsWith('/events')
+    || normalizedPath.startsWith('/settings')
+  )
+}
+
+export function buildLocalizedPath(locale, path = '/') {
+  const normalizedPath = stripLocaleFromPath(path)
 
   const localeSegment = localeToRouteSegment(locale)
 
