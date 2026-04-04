@@ -1,9 +1,11 @@
 {
   "name": "BreedZ",
   "short_name": "BreedZ",
+  "id": "/",
   "description": "Offline-first livestock management for daily field operations",
   "display": "standalone",
-  "start_url": "./",
+  "start_url": "/",
+  "scope": "/",
   "orientation": "portrait",
   "background_color": "#f5f3ef",
   "theme_color": "#2a6438",
