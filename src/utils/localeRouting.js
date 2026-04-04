@@ -27,6 +27,11 @@ export function stripLocaleFromPath(value = '/') {
 
 export function buildLocalizedPath(locale, path = '/') {
   const normalizedPath = stripLocaleFromPath(path)
+
+  if (normalizedPath.startsWith('/app')) {
+    return normalizedPath
+  }
+
   const localeSegment = localeToRouteSegment(locale)
 
   return normalizedPath === '/' ? `/${localeSegment}` : `/${localeSegment}${normalizedPath}`

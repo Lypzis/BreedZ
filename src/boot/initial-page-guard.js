@@ -1,7 +1,6 @@
 import { boot } from 'quasar/wrappers'
-import { getCurrentLocaleValue } from 'src/i18n'
 import { hasSavedAnimals } from 'src/services/animals-db'
-import { buildLocalizedPath, stripLocaleFromPath } from 'src/utils/localeRouting'
+import { stripLocaleFromPath } from 'src/utils/localeRouting'
 
 export default boot(({ router }) => {
   router.beforeEach(async (to) => {
@@ -19,6 +18,6 @@ export default boot(({ router }) => {
       return true
     }
 
-    return buildLocalizedPath(getCurrentLocaleValue(), '/app')
+    return '/app'
   })
 })

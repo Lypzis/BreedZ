@@ -6,7 +6,7 @@ import {
   createWebHashHistory,
 } from 'vue-router'
 import { getCurrentLocaleValue, setLocale } from 'src/i18n'
-import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedPath, routeSegmentToLocale, stripLocaleFromPath } from 'src/utils/localeRouting'
 import routes from './routes'
 
 /*
@@ -44,12 +44,16 @@ export default defineRouter(function (/* { store, ssrContext } */) {
 
     const localeParam = typeof to.params.locale === 'string' ? to.params.locale : ''
 
-    if (!localeParam) {
-      return buildLocalizedPath(getCurrentLocaleValue(), to.fullPath)
+    if (localeParam) {
+      setLocale(routeSegmentToLocale(localeParam), { persist: false })
+      return true
     }
 
-    setLocale(routeSegmentToLocale(localeParam), { persist: false })
-    return true
+    if (stripLocaleFromPath(to.path).startsWith('/app')) {
+      return true
+    }
+
+    return buildLocalizedPath(getCurrentLocaleValue(), to.fullPath)
   })
 
   return Router
