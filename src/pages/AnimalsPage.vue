@@ -55,6 +55,14 @@
               />
             </div>
             <div class="col-12 col-sm-auto">
+              <q-toggle
+                v-model="breedersOnly"
+                color="info"
+                checked-icon="bookmark"
+                :label="t('animals.breedersOnly')"
+              />
+            </div>
+            <div class="col-12 col-sm-auto">
               <q-chip square color="green-1" text-color="primary" icon="pets">
                 {{ t('animals.totalChip', { count: animals.length }) }}
               </q-chip>
@@ -131,12 +139,21 @@
                 </q-item-label>
                 <q-item-label caption>
                   {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
-                  <span v-if="animal.birthDate"> • {{ birthSummary(animal.birthDate) }}</span>
+                  <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
                 </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
                 <div class="column items-end q-gutter-sm">
+                  <q-chip
+                    v-if="animal.isBreeder"
+                    square
+                    dense
+                    color="info"
+                    text-color="white"
+                  >
+                    {{ t('common.reproducer') }}
+                  </q-chip>
                   <q-chip square dense :color="statusColor(animal.status)" text-color="white">
                     {{ statusLabel(animal.status) }}
                   </q-chip>
@@ -196,12 +213,21 @@
                     </q-item-label>
                     <q-item-label caption>
                       {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
-                      <span v-if="animal.birthDate"> • {{ birthSummary(animal.birthDate) }}</span>
+                      <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
                     </q-item-label>
                   </q-item-section>
 
                   <q-item-section side top>
                     <div class="column items-end q-gutter-sm">
+                      <q-chip
+                        v-if="animal.isBreeder"
+                        square
+                        dense
+                        color="info"
+                        text-color="white"
+                      >
+                        {{ t('common.reproducer') }}
+                      </q-chip>
                       <q-chip square dense :color="statusColor(animal.status)" text-color="white">
                         {{ statusLabel(animal.status) }}
                       </q-chip>
@@ -290,6 +316,7 @@ const { activeAnimals, animals, errorMessage, isLoading } = storeToRefs(animalsS
 const searchTerm = ref('')
 const selectedSpecies = ref('')
 const selectedStatus = ref('')
+const breedersOnly = ref(false)
 const listMode = ref('paged')
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -319,6 +346,7 @@ const filteredAnimals = computed(() => {
     searchTerm: searchTerm.value,
     status: selectedStatus.value,
     species: selectedSpecies.value,
+    breedersOnly: breedersOnly.value,
   })
 })
 const pageCount = computed(() =>
@@ -333,7 +361,7 @@ const displayedAnimalsCount = computed(() =>
 )
 
 const emptyStateMessage = computed(() =>
-  searchTerm.value || selectedStatus.value || selectedSpecies.value
+  searchTerm.value || selectedStatus.value || selectedSpecies.value || breedersOnly.value
     ? t('animals.emptyFiltered')
     : t('animals.emptyInitial'),
 )
@@ -411,11 +439,10 @@ function formatDate(value) {
   return formatDisplayDate(value)
 }
 
-function birthSummary(value) {
-  const dateLabel = t('animals.born', { date: formatDate(value) })
+function ageSummary(value) {
   const ageLabel = formatAgeLabel(value)
 
-  return ageLabel ? `${dateLabel} (${ageLabel})` : dateLabel
+  return ageLabel || formatDate(value)
 }
 
 function statusColor(status) {
@@ -430,7 +457,7 @@ function statusColor(status) {
   return 'primary'
 }
 
-watch([searchTerm, selectedStatus, selectedSpecies, listMode, pageSize], () => {
+watch([searchTerm, selectedStatus, selectedSpecies, breedersOnly, listMode, pageSize], () => {
   currentPage.value = 1
 })
 

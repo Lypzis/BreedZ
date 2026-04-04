@@ -1,10 +1,18 @@
 import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
+import { normalizeAnimalBreeder } from 'src/utils/breeder'
 import { normalizeSpeciesLabel } from 'src/utils/species'
+
+function normalizeStoredAnimal(animal) {
+  return {
+    ...animal,
+    isBreeder: normalizeAnimalBreeder(animal?.isBreeder, animal?.purpose),
+  }
+}
 
 export async function listAnimals() {
   const animals = (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.getAll())) ?? []
 
-  return [...animals].sort((left, right) => {
+  return animals.map(normalizeStoredAnimal).sort((left, right) => {
     const leftValue = left.updatedAt ?? left.createdAt ?? ''
     const rightValue = right.updatedAt ?? right.createdAt ?? ''
 
@@ -25,6 +33,7 @@ export async function createAnimal(input) {
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
+    isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
     status: input.status ?? 'active',
@@ -52,6 +61,7 @@ export async function updateAnimal(id, input) {
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
+    isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
     status: input.status ?? 'active',
@@ -71,7 +81,9 @@ export async function getAnimal(id) {
     return null
   }
 
-  return (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.get(id))) ?? null
+  const animal = (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.get(id))) ?? null
+
+  return animal ? normalizeStoredAnimal(animal) : null
 }
 
 export async function deleteAnimal(id) {

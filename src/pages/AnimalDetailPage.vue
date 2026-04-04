@@ -64,6 +64,11 @@
                     {{ sexLabel(animal.sex) }}
                   </q-chip>
                 </div>
+                <div class="col-auto" v-if="animal.isBreeder">
+                  <q-chip square color="info" text-color="white" icon="bookmark">
+                    {{ t('common.reproducer') }}
+                  </q-chip>
+                </div>
                 <div class="col-auto">
                   <q-chip square :color="statusColor(animal.status)" text-color="white" icon="task_alt">
                     {{ statusLabel(animal.status) }}
@@ -94,45 +99,59 @@
               <div class="row q-col-gutter-md">
                 <div class="col-12 col-md-6">
                   <q-banner rounded class="bg-grey-1 text-grey-8">
-                    <template #avatar>
-                      <q-icon name="female" color="primary" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.damTitle') }}</div>
-                    <div v-if="damAnimal" class="q-mt-xs">
-                      {{ animalDisplayName(damAnimal) }}
+                    <div class="row items-start no-wrap q-col-gutter-sm">
+                      <div class="col-auto">
+                        <q-icon name="female" color="primary" size="md" />
+                      </div>
+                      <div class="col">
+                        <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.damTitle') }}</div>
+                        <div v-if="damAnimal" class="q-mt-xs">
+                          {{ animalDisplayName(damAnimal) }}
+                        </div>
+                        <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
+                      </div>
+                      <div v-if="damAnimal" class="col-auto">
+                        <q-btn
+                          flat
+                          round
+                          dense
+                          color="primary"
+                          icon="visibility"
+                          :aria-label="t('animalDetail.openParent')"
+                          :title="t('animalDetail.openParent')"
+                          :to="`/app/animals/${damAnimal.id}`"
+                        />
+                      </div>
                     </div>
-                    <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
-                    <q-btn
-                      v-if="damAnimal"
-                      flat
-                      dense
-                      color="primary"
-                      :label="t('animalDetail.openParent')"
-                      :to="`/app/animals/${damAnimal.id}`"
-                      class="q-mt-sm q-px-none"
-                    />
                   </q-banner>
                 </div>
 
                 <div class="col-12 col-md-6">
                   <q-banner rounded class="bg-grey-1 text-grey-8">
-                    <template #avatar>
-                      <q-icon name="male" color="primary" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.sireTitle') }}</div>
-                    <div v-if="sireAnimal" class="q-mt-xs">
-                      {{ animalDisplayName(sireAnimal) }}
+                    <div class="row items-start no-wrap q-col-gutter-sm">
+                      <div class="col-auto">
+                        <q-icon name="male" color="primary" size="md" />
+                      </div>
+                      <div class="col">
+                        <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.sireTitle') }}</div>
+                        <div v-if="sireAnimal" class="q-mt-xs">
+                          {{ animalDisplayName(sireAnimal) }}
+                        </div>
+                        <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
+                      </div>
+                      <div v-if="sireAnimal" class="col-auto">
+                        <q-btn
+                          flat
+                          round
+                          dense
+                          color="primary"
+                          icon="visibility"
+                          :aria-label="t('animalDetail.openParent')"
+                          :title="t('animalDetail.openParent')"
+                          :to="`/app/animals/${sireAnimal.id}`"
+                        />
+                      </div>
                     </div>
-                    <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
-                    <q-btn
-                      v-if="sireAnimal"
-                      flat
-                      dense
-                      color="primary"
-                      :label="t('animalDetail.openParent')"
-                      :to="`/app/animals/${sireAnimal.id}`"
-                      class="q-mt-sm q-px-none"
-                    />
                   </q-banner>
                 </div>
               </div>
@@ -159,13 +178,21 @@
                     <q-item-label class="text-weight-medium">{{ animalDisplayName(child) }}</q-item-label>
                     <q-item-label caption>
                       {{ child.species || t('common.speciesNotSet') }} • {{ sexLabel(child.sex) }}
-                      <span v-if="child.birthDate"> • {{ birthChipLabel(child.birthDate) }}</span>
+                      <span v-if="child.birthDate"> • {{ ageSummary(child.birthDate) }}</span>
                     </q-item-label>
-                    <q-item-label caption>{{ offspringRelationLabel(child) }}</q-item-label>
                   </q-item-section>
 
                   <q-item-section side>
-                    <q-btn flat dense color="primary" :label="t('common.open')" :to="`/app/animals/${child.id}`" />
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="primary"
+                      icon="visibility"
+                      :aria-label="t('common.view')"
+                      :title="t('common.view')"
+                      :to="`/app/animals/${child.id}`"
+                    />
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -499,22 +526,6 @@ function sexLabel(sex) {
   return formatAnimalSex(sex)
 }
 
-function offspringRelationLabel(child) {
-  if (child.damId === animalId.value && child.sireId === animalId.value) {
-    return t('animalDetail.offspringDamAndSire')
-  }
-
-  if (child.damId === animalId.value) {
-    return t('animalDetail.offspringDam')
-  }
-
-  if (child.sireId === animalId.value) {
-    return t('animalDetail.offspringSire')
-  }
-
-  return t('animalDetail.offspringGeneric')
-}
-
 function formatDate(value) {
   if (!value) {
     return t('common.dateNotSet')
@@ -528,6 +539,10 @@ function birthChipLabel(value) {
   const ageLabel = formatAgeLabel(value)
 
   return ageLabel ? `${dateLabel} (${ageLabel})` : dateLabel
+}
+
+function ageSummary(value) {
+  return formatAgeLabel(value) || formatDate(value)
 }
 
 function statusLabel(status) {
@@ -545,6 +560,7 @@ function statusColor(status) {
 
   return 'primary'
 }
+
 
 onMounted(async () => {
   try {

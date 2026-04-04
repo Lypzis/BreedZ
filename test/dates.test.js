@@ -6,19 +6,19 @@ import { formatAgeLabel } from '../src/utils/dates.js'
 test('formatAgeLabel returns years for whole-year ages', () => {
   setLocale('en', { persist: false })
 
-  assert.equal(formatAgeLabel('2020-04-03', '2026-04-03'), '6 years old')
+  assert.equal(formatAgeLabel('2020-04-03', '2026-04-03'), '6 years')
 })
 
 test('formatAgeLabel returns years and months for mixed ages', () => {
   setLocale('en', { persist: false })
 
-  assert.equal(formatAgeLabel('2024-02-03', '2026-04-03'), '2 years old, 2 months old')
+  assert.equal(formatAgeLabel('2024-02-03', '2026-04-03'), '2 years, 2 months')
 })
 
 test('formatAgeLabel returns months for animals under one year', () => {
   setLocale('en', { persist: false })
 
-  assert.equal(formatAgeLabel('2025-10-03', '2026-04-03'), '6 months old')
+  assert.equal(formatAgeLabel('2025-10-03', '2026-04-03'), '6 months')
 })
 
 test('formatAgeLabel returns empty string for future dates', () => {
