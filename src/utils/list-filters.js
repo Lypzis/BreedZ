@@ -7,6 +7,7 @@ export function filterAnimalsList(animals, filters = {}) {
     .toLowerCase()
   const status = String(filters.status ?? '').trim().toLowerCase()
   const species = normalizeSpeciesLabel(filters.species).toLowerCase()
+  const breedersOnly = Boolean(filters.breedersOnly)
 
   return animals.filter((animal) => {
     if (status && String(animal.status ?? '').toLowerCase() !== status) {
@@ -17,11 +18,15 @@ export function filterAnimalsList(animals, filters = {}) {
       return false
     }
 
+    if (breedersOnly && animal.isBreeder !== true) {
+      return false
+    }
+
     if (!query) {
       return true
     }
 
-    return [animal.tag, animal.name, animal.species, animal.status].some((value) =>
+    return [animal.tag, animal.name, animal.species, animal.status, animal.isBreeder ? 'breeding' : 'cut'].some((value) =>
       String(value ?? '')
         .toLowerCase()
         .includes(query),

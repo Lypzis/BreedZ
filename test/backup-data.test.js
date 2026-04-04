@@ -12,6 +12,7 @@ test('normalizes a valid backup payload', () => {
         tag: 'Cow 001',
         name: 'Bella',
         species: 'Cow',
+        isBreeder: true,
         sex: 'female',
         birthDate: '2024-01-10',
         status: 'active',
@@ -32,6 +33,7 @@ test('normalizes a valid backup payload', () => {
   })
 
   assert.equal(result.animals[0].sex, 'female')
+  assert.equal(result.animals[0].isBreeder, true)
   assert.equal(result.events[0].animalId, 'animal-1')
 })
 

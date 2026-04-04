@@ -21,6 +21,24 @@ function normalizeTimestamp(value) {
   return isNonEmptyString(value) ? value : new Date().toISOString()
 }
 
+function normalizeBreederValue(value, legacyPurpose) {
+  if (typeof value === 'boolean') {
+    return value
+  }
+
+  const normalized = normalizeString(value).toLowerCase()
+
+  if (normalized === 'true' || normalized === '1' || normalized === 'yes') {
+    return true
+  }
+
+  if (normalized === 'false' || normalized === '0' || normalized === 'no') {
+    return false
+  }
+
+  return normalizeString(legacyPurpose).toLowerCase() === 'breeding'
+}
+
 function validateArray(name, value) {
   if (!Array.isArray(value)) {
     throw new Error(`Backup file is invalid: "${name}" must be an array.`)
@@ -55,12 +73,14 @@ export function validateAndNormalizeBackupPayload(payload) {
 
     const status = VALID_STATUSES.has(animal.status) ? animal.status : 'active'
     const sex = VALID_SEXES.has(animal.sex) ? animal.sex : 'unknown'
+    const isBreeder = normalizeBreederValue(animal.isBreeder, animal.purpose)
 
     return {
       id,
       tag: normalizeString(animal.tag),
       name: normalizeString(animal.name),
       species: normalizeString(animal.species),
+      isBreeder,
       sex,
       birthDate: normalizeString(animal.birthDate),
       status,

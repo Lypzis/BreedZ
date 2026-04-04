@@ -3,9 +3,9 @@ import assert from 'node:assert/strict'
 import { filterAnimalsList, filterEventsList } from '../src/utils/list-filters.js'
 
 const animals = [
-  { id: 'animal-1', tag: '001', name: 'Aurora', species: 'Cattle', status: 'active' },
-  { id: 'animal-2', tag: '002', name: 'Titan', species: 'Cattle', status: 'sold' },
-  { id: 'animal-3', tag: '003', name: 'Maple', species: 'Goat', status: 'active' },
+  { id: 'animal-1', tag: '001', name: 'Aurora', species: 'Cattle', status: 'active', isBreeder: true },
+  { id: 'animal-2', tag: '002', name: 'Titan', species: 'Cattle', status: 'sold', isBreeder: false },
+  { id: 'animal-3', tag: '003', name: 'Maple', species: 'Goat', status: 'active', isBreeder: false },
 ]
 
 const events = [
@@ -23,6 +23,7 @@ test('animal filters are optional when empty', () => {
     searchTerm: '',
     status: '',
     species: '',
+    breedersOnly: false,
   })
 
   assert.equal(result.length, animals.length)
@@ -33,6 +34,7 @@ test('animal filters combine search, status, and species', () => {
     searchTerm: 'aur',
     status: 'active',
     species: 'cattle',
+    breedersOnly: false,
   })
 
   assert.deepEqual(result.map((animal) => animal.id), ['animal-1'])
@@ -43,9 +45,21 @@ test('animal species filter excludes non-matching species only when set', () => 
     searchTerm: '',
     status: '',
     species: 'goat',
+    breedersOnly: false,
   })
 
   assert.deepEqual(result.map((animal) => animal.id), ['animal-3'])
+})
+
+test('animal breeders-only filter excludes non-breeders only when set', () => {
+  const result = filterAnimalsList(animals, {
+    searchTerm: '',
+    status: '',
+    species: '',
+    breedersOnly: true,
+  })
+
+  assert.deepEqual(result.map((animal) => animal.id), ['animal-1'])
 })
 
 test('event filters are optional when empty', () => {

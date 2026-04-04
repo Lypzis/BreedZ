@@ -52,6 +52,12 @@
             emit-value
             map-options
           />
+          <q-toggle
+            v-model="form.isBreeder"
+            color="info"
+            checked-icon="bookmark"
+            :label="t('animalForm.isBreeder')"
+          />
 
           <q-input :model-value="selectedDamLabel" outlined readonly :label="t('animalForm.dam')">
             <template #append>
@@ -239,7 +245,6 @@ const sexOptions = computed(() => [
   { label: t('common.sex.male'), value: 'male' },
   { label: t('common.sex.unknown'), value: 'unknown' },
 ])
-
 const form = reactive(defaultForm())
 
 const isOpen = computed({
@@ -311,6 +316,7 @@ function defaultForm() {
     tag: '',
     name: '',
     species: '',
+    isBreeder: false,
     sex: 'unknown',
     birthDate: '',
     status: 'active',
@@ -329,6 +335,7 @@ function loadForm() {
           tag: props.animal.tag,
           name: props.animal.name,
           species: props.animal.species,
+          isBreeder: props.animal.isBreeder === true,
           sex: props.animal.sex ?? 'unknown',
           birthDate: props.animal.birthDate,
           status: props.animal.status,
