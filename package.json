@@ -12,7 +12,8 @@
     "dev": "quasar dev",
     "dev:pwa": "quasar dev -m pwa",
     "build": "quasar build",
-    "build:pwa": "quasar build -m pwa",
+    "build:public-pages": "node scripts/generate-static-public-pages.mjs",
+    "build:pwa": "quasar build -m pwa && npm run build:public-pages",
     "postinstall": "quasar prepare"
   },
   "dependencies": {
