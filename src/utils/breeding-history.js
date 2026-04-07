@@ -7,13 +7,13 @@ export function groupBreedingsByPartner(currentAnimalId, animals, events) {
       continue
     }
 
-    let otherAnimalId = ''
+    const otherAnimalId = event.animalId === currentAnimalId
+      ? event.partnerAnimalId
+      : event.partnerAnimalId === currentAnimalId
+        ? event.animalId
+        : ''
 
-    if (event.animalId === currentAnimalId) {
-      otherAnimalId = event.partnerAnimalId
-    } else if (event.partnerAnimalId === currentAnimalId) {
-      otherAnimalId = event.animalId
-    } else {
+    if (!otherAnimalId) {
       continue
     }
 
