@@ -18,7 +18,7 @@
                 color="primary"
                 icon="add"
                 :label="t('events.addEvent')"
-                :disable="animals.length === 0"
+                :disable="activeAnimalsForEvents.length === 0"
                 @click="openEventDialog"
               />
             </div>
@@ -60,39 +60,20 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="row items-center justify-between q-col-gutter-sm q-pt-none">
-            <div class="col-12 col-md-auto">
-              <q-btn-toggle
-                v-model="listMode"
-                unelevated
-                no-caps
-                color="green-1"
-                text-color="primary"
-                toggle-color="primary"
-                toggle-text-color="white"
-                :options="listModeOptions"
-              />
-            </div>
-
-            <div class="col-12 col-md-auto">
-              <div class="row items-center q-col-gutter-sm">
-                <div v-if="listMode === 'paged'" class="col-auto">
-                  <q-select
-                    v-model="pageSize"
-                    dense
-                    outlined
-                    emit-value
-                    map-options
-                    :label="t('common.perPage')"
-                    :options="pageSizeOptions"
-                  />
-                </div>
-                <div class="col-auto text-caption text-grey-7">
-                  {{ t('events.showingCount', { shown: displayedEventsCount, total: filteredEvents.length }) }}
-                </div>
-              </div>
-            </div>
-          </q-card-section>
+          <PagedListControls
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="t('events.showingCount', { shown: displayedEventsCount, total: filteredEvents.length })"
+            :show-pagination="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
 
           <q-card-section v-if="loadErrorMessage" class="q-pt-none">
             <q-banner rounded class="bg-red-1 text-negative">
@@ -253,16 +234,21 @@
             </template>
           </q-virtual-scroll>
 
-          <q-card-section v-if="listMode === 'paged' && pageCount > 1" class="row justify-center q-pt-md">
-            <q-pagination
-              v-model="currentPage"
-              color="primary"
-              :max="pageCount"
-              :max-pages="6"
-              boundary-links
-              direction-links
-            />
-          </q-card-section>
+          <PagedListControls
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="t('events.showingCount', { shown: displayedEventsCount, total: filteredEvents.length })"
+            :show-header="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
+
         </q-card>
       </div>
     </div>
@@ -289,7 +275,7 @@
             <q-form class="column q-gutter-md" @submit.prevent="submitEvent">
             <AnimalPickerField
               v-model="eventForm.animalId"
-              :animals="animals"
+              :animals="eventPickerAnimals"
               :label="t('events.pickAnimal')"
               :dialog-title="t('events.pickAnimal')"
               :empty-label="t('common.noAnimalSelected')"
@@ -301,6 +287,14 @@
               :options="eventTypeOptions"
               emit-value
               map-options
+            />
+            <AnimalPickerField
+              v-if="eventForm.type === 'breeding'"
+              v-model="eventForm.partnerAnimalId"
+              :animals="breedingPartnerAnimals"
+              :label="t('events.pickPartner')"
+              :dialog-title="t('events.pickPartner')"
+              :empty-label="t('common.noAnimalSelected')"
             />
             <q-input v-model="eventForm.date" outlined type="date" :label="t('events.eventDate')" />
             <q-input v-model="eventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
@@ -321,11 +315,16 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
+import PagedListControls from 'src/components/PagedListControls.vue'
 import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import {
+  filterBreedingPartnerCandidates,
+  validateBreedingPartnerSelection,
+} from 'src/utils/breeding-partners'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { filterEventsList } from 'src/utils/list-filters'
 
@@ -376,6 +375,29 @@ const filteredEvents = computed(() => {
     endDate: endDate.value,
   })
 })
+const activeAnimalsForEvents = computed(() =>
+  animals.value.filter((animal) => animal.status === 'active'),
+)
+const breedingPartnerAnimals = computed(() =>
+  filterBreedingPartnerCandidates({
+    animals: animals.value,
+    animalId: eventForm.animalId,
+    currentPartnerId: eventForm.partnerAnimalId,
+  }),
+)
+const eventPickerAnimals = computed(() => {
+  if (eventFormMode.value !== 'edit') {
+    return activeAnimalsForEvents.value
+  }
+
+  const selectedAnimal = animalById(eventForm.animalId)
+
+  if (!selectedAnimal || selectedAnimal.status === 'active') {
+    return activeAnimalsForEvents.value
+  }
+
+  return [selectedAnimal, ...activeAnimalsForEvents.value.filter((animal) => animal.id !== selectedAnimal.id)]
+})
 const pageCount = computed(() =>
   Math.max(1, Math.ceil(filteredEvents.value.length / pageSize.value)),
 )
@@ -399,6 +421,7 @@ function defaultEventForm() {
   return {
     animalId: '',
     type: 'breeding',
+    partnerAnimalId: '',
     date: todayDateString(),
     notes: '',
   }
@@ -407,15 +430,15 @@ function defaultEventForm() {
 function resetEventForm() {
   Object.assign(eventForm, {
     ...defaultEventForm(),
-    animalId: animals.value[0]?.id ?? '',
+    animalId: activeAnimalsForEvents.value[0]?.id ?? '',
   })
 }
 
 function openEventDialog() {
-  if (animals.value.length === 0) {
+  if (activeAnimalsForEvents.value.length === 0) {
     $q.notify({
       color: 'negative',
-      message: t('events.addAnimalBeforeCreating'),
+      message: t('common.onlyActiveAnimalsForEvents'),
       position: 'top',
     })
     return
@@ -433,6 +456,7 @@ function openEditDialog(event) {
   Object.assign(eventForm, {
     animalId: event.animalId,
     type: event.type,
+    partnerAnimalId: event.partnerAnimalId ?? '',
     date: event.date,
     notes: event.notes ?? '',
   })
@@ -454,6 +478,23 @@ async function submitEvent() {
       position: 'top',
     })
     return
+  }
+
+  if (eventForm.type === 'breeding') {
+    const breedingValidationKey = validateBreedingPartnerSelection({
+      animals: animals.value,
+      animalId: eventForm.animalId,
+      partnerAnimalId: eventForm.partnerAnimalId,
+    })
+
+    if (breedingValidationKey) {
+      $q.notify({
+        color: 'negative',
+        message: t(breedingValidationKey),
+        position: 'top',
+      })
+      return
+    }
   }
 
   try {
@@ -518,6 +559,15 @@ function animalDisplayName(animal) {
 watch([searchTerm, selectedEventType, startDate, endDate, listMode, pageSize], () => {
   currentPage.value = 1
 })
+
+watch(
+  () => eventForm.type,
+  (value) => {
+    if (value !== 'breeding') {
+      eventForm.partnerAnimalId = ''
+    }
+  },
+)
 
 watch(filteredEvents, () => {
   if (currentPage.value > pageCount.value) {

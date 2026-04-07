@@ -124,6 +124,59 @@ This is the current implementation order for the first working BreedZ MVP.
 7. Dashboard
 8. JSON export/import
 
+## Next Features
+
+These are the next medium-sized upgrades planned after the current MVP.
+
+### Breeding Pair History
+
+Goal:
+- Add a real `Breedings` section to the animal page
+- Group breeding history by partner animal
+- Show offspring connected to each pairing
+
+Why:
+- `Linked children` only shows offspring
+- breeders also need to see which pairings happened, how often, and when the last breeding occurred
+
+Planned model changes:
+- extend `breeding` events with `partnerAnimalId`
+- keep offspring derived from lineage:
+  - current animal is one parent
+  - grouped partner is the other parent
+
+Planned validation rules:
+- breeding event cannot point to the same animal twice
+- breeding event should only allow opposite-sex animals when sex is known
+- breeding event should only allow animals from the same species
+
+Implementation steps:
+1. Add `partnerAnimalId` to breeding events in persistence and backup validation
+2. Update breeding event forms on:
+   - animal page
+   - events page
+   - dashboard quick add
+3. Require partner selection for breeding events
+4. Filter partner options by:
+   - opposite sex
+   - same species
+   - active status
+5. Add `Breedings` section to animal detail page
+6. Group breedings by partner and show:
+   - partner name/tag
+   - breeding count
+   - latest breeding date
+   - offspring from that exact pairing
+7. Reevaluate whether `Linked children` should stay as a standalone section or become a simpler fallback summary
+
+Tracking checklist:
+- [x] Add `partnerAnimalId` to breeding events
+- [x] Validate breeding partner rules
+- [x] Update all breeding event entry flows
+- [x] Add grouped `Breedings` section on animal detail
+- [x] Show offspring under each breeding partner
+- [ ] Decide whether to keep or simplify `Linked children`
+
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

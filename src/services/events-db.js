@@ -1,5 +1,20 @@
 import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
-import { touchAnimalUpdatedAt } from 'src/services/animals-db'
+import { applyAnimalStatusFromEvent, touchAnimalUpdatedAt } from 'src/services/animals-db'
+
+function normalizePartnerAnimalId(type, value) {
+  if (type !== 'breeding') {
+    return ''
+  }
+
+  return value?.trim() ?? ''
+}
+
+function normalizeStoredEvent(event) {
+  return {
+    ...event,
+    partnerAnimalId: normalizePartnerAnimalId(event?.type, event?.partnerAnimalId),
+  }
+}
 
 function sortEvents(events) {
   return [...events].sort((left, right) => {
@@ -12,7 +27,7 @@ function sortEvents(events) {
 
 export async function listEvents() {
   const events = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.getAll())) ?? []
-  return sortEvents(events)
+  return sortEvents(events.map(normalizeStoredEvent))
 }
 
 export async function listEventsByAnimalId(animalId) {
@@ -26,6 +41,7 @@ export async function createEvent(input) {
     id: createId('event'),
     animalId: input.animalId,
     type: input.type,
+    partnerAnimalId: normalizePartnerAnimalId(input.type, input.partnerAnimalId),
     date: input.date,
     notes: input.notes?.trim() ?? '',
     createdAt: timestamp,
@@ -33,7 +49,7 @@ export async function createEvent(input) {
   }
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(event))
-  await touchAnimalUpdatedAt(event.animalId)
+  await applyAnimalStatusFromEvent(event.animalId, event.type, event.date)
 
   return event
 }
@@ -49,13 +65,14 @@ export async function updateEvent(id, input) {
     ...existingEvent,
     animalId: input.animalId,
     type: input.type,
+    partnerAnimalId: normalizePartnerAnimalId(input.type, input.partnerAnimalId),
     date: input.date,
     notes: input.notes?.trim() ?? '',
     updatedAt: new Date().toISOString(),
   }
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(updatedEvent))
-  await touchAnimalUpdatedAt(updatedEvent.animalId)
+  await applyAnimalStatusFromEvent(updatedEvent.animalId, updatedEvent.type, updatedEvent.date)
 
   if (existingEvent.animalId && existingEvent.animalId !== updatedEvent.animalId) {
     await touchAnimalUpdatedAt(existingEvent.animalId)
@@ -82,7 +99,9 @@ export async function getEvent(id) {
     return null
   }
 
-  return (await withStore(STORE_NAMES.events, 'readonly', (store) => store.get(id))) ?? null
+  const event = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.get(id))) ?? null
+
+  return event ? normalizeStoredEvent(event) : null
 }
 
 export async function deleteEventsForAnimal(animalId) {

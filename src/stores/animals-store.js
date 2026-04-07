@@ -7,6 +7,7 @@ import {
   listAnimals,
   updateAnimal,
 } from 'src/services/animals-db'
+import { syncAnimalStatusesFromEvents } from 'src/services/animal-status-sync'
 import { deleteEventsForAnimal } from 'src/services/events-db'
 
 export const useAnimalsStore = defineStore('animals', () => {
@@ -22,6 +23,7 @@ export const useAnimalsStore = defineStore('animals', () => {
     errorMessage.value = ''
 
     try {
+      await syncAnimalStatusesFromEvents()
       animals.value = await listAnimals()
       isLoaded.value = true
     } catch (error) {

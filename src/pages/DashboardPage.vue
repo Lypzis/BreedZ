@@ -18,7 +18,7 @@
                 color="primary"
                 icon="add"
                 :label="t('common.addEvent')"
-                :disable="animals.length === 0"
+                :disable="activeAnimals.length === 0"
                 @click="openQuickEventDialog"
               />
             </div>
@@ -255,7 +255,7 @@
           <q-form class="column q-gutter-md" @submit.prevent="submitQuickEvent">
             <AnimalPickerField
               v-model="quickEventForm.animalId"
-              :animals="animals"
+              :animals="activeAnimals"
               :label="t('events.pickAnimal')"
               :dialog-title="t('events.pickAnimal')"
               :empty-label="t('common.noAnimalSelected')"
@@ -267,6 +267,14 @@
               :options="eventTypeOptions"
               emit-value
               map-options
+            />
+            <AnimalPickerField
+              v-if="quickEventForm.type === 'breeding'"
+              v-model="quickEventForm.partnerAnimalId"
+              :animals="quickBreedingPartnerAnimals"
+              :label="t('events.pickPartner')"
+              :dialog-title="t('events.pickPartner')"
+              :empty-label="t('common.noAnimalSelected')"
             />
             <q-input v-model="quickEventForm.date" outlined type="date" :label="t('events.eventDate')" />
             <q-input v-model="quickEventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
@@ -283,7 +291,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
@@ -292,6 +300,10 @@ import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import {
+  filterBreedingPartnerCandidates,
+  validateBreedingPartnerSelection,
+} from 'src/utils/breeding-partners'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 
 const $q = useQuasar()
@@ -301,7 +313,6 @@ const eventsStore = useEventsStore()
 
 const {
   activeAnimals,
-  animals,
   errorMessage: animalsErrorMessage,
   isLoading: animalsLoading,
 } = storeToRefs(animalsStore)
@@ -315,6 +326,13 @@ const isQuickEventDialogOpen = ref(false)
 const quickEventForm = reactive(defaultQuickEventForm())
 const dashboardSectionLimit = 5
 const eventTypeOptions = computed(() => getEventTypeOptions())
+const quickBreedingPartnerAnimals = computed(() =>
+  filterBreedingPartnerCandidates({
+    animals: animalsStore.animals,
+    animalId: quickEventForm.animalId,
+    currentPartnerId: quickEventForm.partnerAnimalId,
+  }),
+)
 
 const today = computed(() => todayDateString())
 const todayLabel = computed(() => formatDisplayDate(today.value))
@@ -338,6 +356,7 @@ function defaultQuickEventForm() {
   return {
     animalId: '',
     type: 'breeding',
+    partnerAnimalId: '',
     date: todayDateString(),
     notes: '',
   }
@@ -346,15 +365,15 @@ function defaultQuickEventForm() {
 function resetQuickEventForm() {
   Object.assign(quickEventForm, {
     ...defaultQuickEventForm(),
-    animalId: animals.value[0]?.id ?? '',
+    animalId: activeAnimals.value[0]?.id ?? '',
   })
 }
 
 function openQuickEventDialog() {
-  if (animals.value.length === 0) {
+  if (activeAnimals.value.length === 0) {
     $q.notify({
       color: 'negative',
-      message: t('dashboard.noAnimalBeforeEvent'),
+      message: t('common.onlyActiveAnimalsForEvents'),
       position: 'top',
     })
     return
@@ -372,6 +391,23 @@ async function submitQuickEvent() {
       position: 'top',
     })
     return
+  }
+
+  if (quickEventForm.type === 'breeding') {
+    const breedingValidationKey = validateBreedingPartnerSelection({
+      animals: animalsStore.animals,
+      animalId: quickEventForm.animalId,
+      partnerAnimalId: quickEventForm.partnerAnimalId,
+    })
+
+    if (breedingValidationKey) {
+      $q.notify({
+        color: 'negative',
+        message: t(breedingValidationKey),
+        position: 'top',
+      })
+      return
+    }
   }
 
   try {
@@ -396,6 +432,15 @@ function animalById(id) {
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
 }
+
+watch(
+  () => quickEventForm.type,
+  (value) => {
+    if (value !== 'breeding') {
+      quickEventForm.partnerAnimalId = ''
+    }
+  },
+)
 
 onMounted(async () => {
   try {
