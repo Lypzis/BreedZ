@@ -72,39 +72,20 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="row items-center justify-between q-col-gutter-sm q-pt-none">
-            <div class="col-12 col-md-auto">
-              <q-btn-toggle
-                v-model="listMode"
-                unelevated
-                no-caps
-                color="green-1"
-                text-color="primary"
-                toggle-color="primary"
-                toggle-text-color="white"
-                :options="listModeOptions"
-              />
-            </div>
-
-            <div class="col-12 col-md-auto">
-              <div class="row items-center q-col-gutter-sm">
-                <div v-if="listMode === 'paged'" class="col-auto">
-                  <q-select
-                    v-model="pageSize"
-                    dense
-                    outlined
-                    emit-value
-                    map-options
-                    :label="t('common.perPage')"
-                    :options="pageSizeOptions"
-                  />
-                </div>
-                <div class="col-auto text-caption text-grey-7">
-                  {{ t('animals.showingCount', { shown: displayedAnimalsCount, total: filteredAnimals.length }) }}
-                </div>
-              </div>
-            </div>
-          </q-card-section>
+          <PagedListControls
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="t('animals.showingCount', { shown: displayedAnimalsCount, total: filteredAnimals.length })"
+            :show-pagination="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
 
           <q-card-section v-if="errorMessage" class="q-pt-none">
             <q-banner rounded class="bg-red-1 text-negative">
@@ -271,16 +252,21 @@
             </template>
           </q-virtual-scroll>
 
-          <q-card-section v-if="listMode === 'paged' && pageCount > 1" class="row justify-center q-pt-md">
-            <q-pagination
-              v-model="currentPage"
-              color="primary"
-              :max="pageCount"
-              :max-pages="6"
-              boundary-links
-              direction-links
-            />
-          </q-card-section>
+          <PagedListControls
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="t('animals.showingCount', { shown: displayedAnimalsCount, total: filteredAnimals.length })"
+            :show-header="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
+
         </q-card>
       </div>
     </div>
@@ -300,6 +286,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
+import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'

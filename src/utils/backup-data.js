@@ -3,6 +3,7 @@ const VALID_SEXES = new Set(['female', 'male', 'unknown'])
 const VALID_EVENT_TYPES = new Set([
   'birth',
   'breeding',
+  'sale',
   'vaccination',
   'health_issue',
   'death',
@@ -129,6 +130,7 @@ export function validateAndNormalizeBackupPayload(payload) {
     seenEventIds.add(id)
 
     const animalId = normalizeString(event.animalId)
+    const partnerAnimalId = normalizeString(event.partnerAnimalId)
 
     if (!animalId || !seenAnimalIds.has(animalId)) {
       throw new Error(`Backup file is invalid: event "${id}" references a missing animal.`)
@@ -140,10 +142,15 @@ export function validateAndNormalizeBackupPayload(payload) {
       throw new Error(`Backup file is invalid: event "${id}" has an unsupported type.`)
     }
 
+    if (partnerAnimalId && !seenAnimalIds.has(partnerAnimalId)) {
+      throw new Error(`Backup file is invalid: event "${id}" references a missing breeding partner.`)
+    }
+
     return {
       id,
       animalId,
       type,
+      partnerAnimalId: type === 'breeding' ? partnerAnimalId : '',
       date: normalizeString(event.date),
       notes: normalizeString(event.notes),
       createdAt: normalizeTimestamp(event.createdAt),

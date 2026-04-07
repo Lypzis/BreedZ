@@ -20,12 +20,26 @@ test('normalizes a valid backup payload', () => {
         sireId: '',
         notes: 'Dam line',
       },
+      {
+        id: 'animal-2',
+        tag: 'Bull 002',
+        name: 'Ranger',
+        species: 'Cow',
+        isBreeder: true,
+        sex: 'male',
+        birthDate: '2023-01-10',
+        status: 'active',
+        damId: '',
+        sireId: '',
+        notes: 'Sire line',
+      },
     ],
     events: [
       {
         id: 'event-1',
         animalId: 'animal-1',
-        type: 'birth',
+        type: 'breeding',
+        partnerAnimalId: 'animal-2',
         date: '2026-04-03',
         notes: 'Healthy calf',
       },
@@ -35,6 +49,7 @@ test('normalizes a valid backup payload', () => {
   assert.equal(result.animals[0].sex, 'female')
   assert.equal(result.animals[0].isBreeder, true)
   assert.equal(result.events[0].animalId, 'animal-1')
+  assert.equal(result.events[0].partnerAnimalId, 'animal-2')
 })
 
 test('rejects an event that references a missing animal', () => {
@@ -52,6 +67,31 @@ test('rejects an event that references a missing animal', () => {
         ],
       }),
     /references a missing animal/,
+  )
+})
+
+test('rejects a breeding event that references a missing partner animal', () => {
+  assert.throws(
+    () =>
+      validateAndNormalizeBackupPayload({
+        animals: [
+          {
+            id: 'animal-1',
+            tag: 'Cow 001',
+            species: 'Cow',
+          },
+        ],
+        events: [
+          {
+            id: 'event-1',
+            animalId: 'animal-1',
+            type: 'breeding',
+            partnerAnimalId: 'missing-animal',
+            date: '2026-04-03',
+          },
+        ],
+      }),
+    /references a missing breeding partner/,
   )
 })
 

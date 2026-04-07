@@ -1,5 +1,6 @@
 import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
 import { normalizeAnimalBreeder } from 'src/utils/breeder'
+import { resolveStatusAfterEvent } from 'src/utils/event-status'
 import { normalizeSpeciesLabel } from 'src/utils/species'
 
 function normalizeStoredAnimal(animal) {
@@ -103,6 +104,30 @@ export async function touchAnimalUpdatedAt(id) {
 
   const updatedAnimal = {
     ...existingAnimal,
+    updatedAt: new Date().toISOString(),
+  }
+
+  await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
+
+  return updatedAnimal
+}
+
+export async function applyAnimalStatusFromEvent(id, eventType, eventDate) {
+  const existingAnimal = await getAnimal(id)
+
+  if (!existingAnimal) {
+    return null
+  }
+
+  const nextStatus = resolveStatusAfterEvent(existingAnimal.status, eventType, eventDate)
+
+  if (nextStatus === existingAnimal.status) {
+    return touchAnimalUpdatedAt(id)
+  }
+
+  const updatedAnimal = {
+    ...existingAnimal,
+    status: nextStatus,
     updatedAt: new Date().toISOString(),
   }
 
