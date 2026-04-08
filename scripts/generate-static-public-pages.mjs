@@ -36,6 +36,7 @@ const localizedPublicPaths = {
   en: {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
+    '/guides/how-to-track-cattle-lineage': '/guides/how-to-track-cattle-lineage',
     '/about': '/about',
     '/contact': '/contact',
     '/privacy': '/privacy',
@@ -44,6 +45,7 @@ const localizedPublicPaths = {
   'pt-BR': {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
+    '/guides/how-to-track-cattle-lineage': '/guias/como-acompanhar-linhagem-no-gado',
     '/about': '/sobre',
     '/contact': '/contato',
     '/privacy': '/privacidade',
@@ -52,6 +54,7 @@ const localizedPublicPaths = {
   es: {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
+    '/guides/how-to-track-cattle-lineage': '/guias/como-rastrear-el-linaje-del-ganado',
     '/about': '/acerca-de',
     '/contact': '/contacto',
     '/privacy': '/privacidad',
@@ -69,6 +72,11 @@ const publicPages = [
     path: '/guides/track-cattle-breeding-dates',
     titleKey: 'guideBreedingDates.meta.title',
     descriptionKey: 'guideBreedingDates.meta.description',
+  },
+  {
+    path: '/guides/how-to-track-cattle-lineage',
+    titleKey: 'guideCattleLineage.meta.title',
+    descriptionKey: 'guideCattleLineage.meta.description',
   },
   {
     path: '/about',

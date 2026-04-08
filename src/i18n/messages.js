@@ -645,6 +645,93 @@ export const messages = {
         },
       ],
     },
+    guideCattleLineage: {
+      meta: {
+        title: 'Track Cattle Lineage and Avoid Breeding Mistakes',
+        description:
+          'Learn how to track cattle lineage step by step, avoid inbreeding, and make better breeding decisions with a simple recordkeeping system.',
+      },
+      overline: 'Guide',
+      title: 'How to Track Cattle Lineage and Avoid Breeding Mistakes',
+      description:
+        'Strong herds are not built only by good animals. They are built by good records that make breeding decisions clearer over time.',
+      openApp: 'Open BreedZ',
+      hookOverline: 'The problem',
+      hookTitle: 'Poor tracking quietly turns into expensive breeding mistakes',
+      hookDescription:
+        'Many farmers do not lose money because of bad animals. They lose it because lineage was never tracked clearly enough to support good breeding decisions.',
+      hookItems: [
+        'Accidental inbreeding',
+        'Loss of genetic quality',
+        'Unreliable records',
+        'Weak breeding decisions',
+      ],
+      realFarmsOverline: 'On real farms',
+      realFarmsTitle: 'What usually goes wrong',
+      realFarmsDescription:
+        'Lineage tracking often starts with good intentions and then falls apart across notebooks, memory, and partial records.',
+      realFarmsItems: [
+        'Notes written in paper notebooks',
+        'Breeding decisions based on memory',
+        'Missing dam or sire records',
+        'No clear connection between parents and offspring',
+        'Related animals being crossed without noticing',
+        'No certainty about which pairings produced the best offspring',
+        'More difficulty proving animal quality at sale time',
+      ],
+      realFarmsTakeaway: 'This is where unclear records start costing real money.',
+      systemOverline: 'A simple system',
+      systemTitle: 'A practical lineage system that actually works',
+      systemDescription:
+        'You do not need a complex spreadsheet or expensive software to start. You just need a system that stays consistent.',
+      systemSteps: [
+        {
+          title: 'Step 1 — Give each animal a unique ID',
+          description: 'Use a name, tag, or number, but keep it consistent across all records.',
+          items: [],
+        },
+        {
+          title: 'Step 2 — Record the parents',
+          description: 'Whenever possible, register both mother and father. This is the base of all lineage tracking.',
+          items: ['Dam / mother', 'Sire / father'],
+        },
+        {
+          title: 'Step 3 — Log every breeding',
+          description: 'Every time animals are paired, record the date and the partner involved.',
+          items: ['Breeding date', 'Breeding partner'],
+        },
+        {
+          title: 'Step 4 — Link the offspring',
+          description: 'When a calf is born, connect it back to both parents so the lineage stays alive and usable.',
+          items: ['Link calf to dam', 'Link calf to sire'],
+        },
+      ],
+      changesOverline: 'What changes',
+      changesTitle: 'What improves once lineage is tracked properly',
+      changesItems: [
+        'You reduce accidental inbreeding',
+        'You improve genetic selection over time',
+        'You see which pairings actually work best',
+        'You raise the value and trustworthiness of your animals',
+      ],
+      changesTakeaway: 'You stop guessing and start managing with evidence.',
+      toolsOverline: 'Making it practical',
+      toolsTitle: 'Where digital tools start helping',
+      toolsDescription:
+        'Paper can work for a while, but it gets fragile fast. Digital tools help keep lineage connected instead of scattered.',
+      toolsItems: [
+        'Link parents and offspring in one place',
+        'Keep breeding history organized per animal',
+        'Review pairings faster before making a decision',
+        'Keep working even when there is no internet in the field',
+      ],
+      takeawayOverline: 'Final takeaway',
+      takeawayTitle: 'Better lineage starts with better records',
+      takeawayDescription:
+        'Tracking cattle lineage does not need to be complicated. But ignoring it is where the real cost shows up later.',
+      takeawayBanner:
+        'If you want better animals, better breeding decisions, and better long-term results, start with clearer records.',
+    },
     about: {
       meta: {
         title: 'About BreedZ',
@@ -1435,6 +1522,93 @@ export const messages = {
           answer: 'Sim. O BreedZ foi feito para funcionar mesmo sem internet confiável na fazenda.',
         },
       ],
+    },
+    guideCattleLineage: {
+      meta: {
+        title: 'Como acompanhar a linhagem do gado e evitar erros de cruzamento',
+        description:
+          'Aprenda como acompanhar a linhagem do gado passo a passo, evitar consanguinidade e tomar decisões reprodutivas melhores com um sistema simples de registro.',
+      },
+      overline: 'Guia',
+      title: 'Como acompanhar a linhagem do gado e evitar erros de cruzamento',
+      description:
+        'Rebanhos fortes não nascem só de bons animais. Eles nascem de bons registros, que deixam as decisões reprodutivas mais claras com o tempo.',
+      openApp: 'Abrir BreedZ',
+      hookOverline: 'O problema',
+      hookTitle: 'Registro ruim vira erro reprodutivo caro sem você perceber',
+      hookDescription:
+        'Muitos produtores não perdem dinheiro por causa de animais ruins. Eles perdem porque a linhagem nunca foi registrada com clareza suficiente para sustentar boas decisões de cruzamento.',
+      hookItems: [
+        'Consanguinidade acidental',
+        'Perda de qualidade genética',
+        'Registros pouco confiáveis',
+        'Decisões reprodutivas fracas',
+      ],
+      realFarmsOverline: 'Na prática da fazenda',
+      realFarmsTitle: 'O que costuma dar errado',
+      realFarmsDescription:
+        'O controle de linhagem costuma começar bem e depois se perder entre cadernos, memória e registros pela metade.',
+      realFarmsItems: [
+        'Anotações espalhadas em cadernos',
+        'Decisões de cruzamento baseadas na memória',
+        'Falta de registro de mãe ou pai',
+        'Sem ligação clara entre pais e descendentes',
+        'Animais aparentados cruzados sem perceber',
+        'Dificuldade para saber quais pares produziram melhor',
+        'Mais dificuldade para comprovar qualidade na hora da venda',
+      ],
+      realFarmsTakeaway: 'É aqui que o registro ruim começa a custar dinheiro de verdade.',
+      systemOverline: 'Um sistema simples',
+      systemTitle: 'Um sistema prático de linhagem que funciona',
+      systemDescription:
+        'Você não precisa de planilha complexa nem de software caro para começar. Precisa só de um sistema consistente.',
+      systemSteps: [
+        {
+          title: 'Passo 1 — Dê um identificador único para cada animal',
+          description: 'Pode ser nome, brinco ou número, desde que seja usado sempre do mesmo jeito.',
+          items: [],
+        },
+        {
+          title: 'Passo 2 — Registre os pais',
+          description: 'Sempre que possível, cadastre mãe e pai. Essa é a base de qualquer controle de linhagem.',
+          items: ['Mãe', 'Pai'],
+        },
+        {
+          title: 'Passo 3 — Registre cada cruzamento',
+          description: 'Toda vez que os animais forem pareados, anote a data e o parceiro envolvido.',
+          items: ['Data do cruzamento', 'Parceiro do cruzamento'],
+        },
+        {
+          title: 'Passo 4 — Vincule os descendentes',
+          description: 'Quando o bezerro nascer, conecte-o aos dois pais para que a linhagem continue viva e útil.',
+          items: ['Vincular bezerro à mãe', 'Vincular bezerro ao pai'],
+        },
+      ],
+      changesOverline: 'O que muda',
+      changesTitle: 'O que melhora quando a linhagem é bem acompanhada',
+      changesItems: [
+        'Você reduz cruzamentos consanguíneos sem querer',
+        'Melhora a seleção genética com o tempo',
+        'Passa a enxergar quais pares realmente funcionam melhor',
+        'Aumenta o valor e a confiabilidade dos seus animais',
+      ],
+      changesTakeaway: 'Você para de adivinhar e começa a gerenciar com base em evidência.',
+      toolsOverline: 'Tornando isso prático',
+      toolsTitle: 'Onde as ferramentas digitais ajudam',
+      toolsDescription:
+        'O papel pode funcionar por um tempo, mas se torna frágil rápido. Ferramentas digitais ajudam a manter a linhagem conectada em vez de espalhada.',
+      toolsItems: [
+        'Vincular pais e descendentes em um só lugar',
+        'Organizar o histórico reprodutivo por animal',
+        'Revisar pares com mais rapidez antes de decidir',
+        'Continuar trabalhando mesmo sem internet no campo',
+      ],
+      takeawayOverline: 'Conclusão',
+      takeawayTitle: 'Linhagem melhor começa com registro melhor',
+      takeawayDescription:
+        'Acompanhar a linhagem do gado não precisa ser complicado. Ignorar isso é que cobra caro depois.',
+      takeawayBanner:
+        'Se você quer animais melhores, decisões reprodutivas melhores e resultados melhores no longo prazo, comece por registros mais claros.',
     },
     about: {
       meta: {
@@ -2236,6 +2410,93 @@ export const messages = {
           answer: 'Sí. BreedZ fue hecho para que los registros de la finca sigan funcionando sin internet confiable.',
         },
       ],
+    },
+    guideCattleLineage: {
+      meta: {
+        title: 'Cómo rastrear el linaje del ganado y evitar errores de reproducción',
+        description:
+          'Aprende a rastrear el linaje del ganado paso a paso, evitar la consanguinidad y tomar mejores decisiones reproductivas con un sistema simple de registros.',
+      },
+      overline: 'Guía',
+      title: 'Cómo rastrear el linaje del ganado y evitar errores de reproducción',
+      description:
+        'Los rebaños fuertes no se construyen solo con buenos animales. También se construyen con buenos registros, que vuelven más claras las decisiones reproductivas con el tiempo.',
+      openApp: 'Abrir BreedZ',
+      hookOverline: 'El problema',
+      hookTitle: 'Un mal seguimiento termina en errores reproductivos costosos',
+      hookDescription:
+        'Muchos productores no pierden dinero por tener animales malos. Lo pierden porque el linaje nunca quedó registrado con suficiente claridad como para sostener buenas decisiones de reproducción.',
+      hookItems: [
+        'Consanguinidad accidental',
+        'Pérdida de calidad genética',
+        'Registros poco confiables',
+        'Malas decisiones reproductivas',
+      ],
+      realFarmsOverline: 'En la práctica',
+      realFarmsTitle: 'Lo que suele salir mal',
+      realFarmsDescription:
+        'El control del linaje suele empezar con buena intención y terminar repartido entre cuadernos, memoria y registros incompletos.',
+      realFarmsItems: [
+        'Notas escritas en cuadernos',
+        'Decisiones de reproducción basadas en la memoria',
+        'Faltan registros de madre o padre',
+        'No hay una conexión clara entre padres y crías',
+        'Se cruzan animales emparentados sin darse cuenta',
+        'No está claro qué parejas produjeron las mejores crías',
+        'Cuesta más demostrar la calidad de los animales al venderlos',
+      ],
+      realFarmsTakeaway: 'Ahí es donde los registros poco claros empiezan a costar dinero real.',
+      systemOverline: 'Un sistema simple',
+      systemTitle: 'Un sistema práctico de linaje que sí funciona',
+      systemDescription:
+        'No necesitas una hoja de cálculo complicada ni un software costoso para empezar. Solo necesitas un sistema constante.',
+      systemSteps: [
+        {
+          title: 'Paso 1 — Dale a cada animal una identificación única',
+          description: 'Puede ser un nombre, número o identificación, pero úsalo siempre de la misma manera.',
+          items: [],
+        },
+        {
+          title: 'Paso 2 — Registra a los padres',
+          description: 'Siempre que sea posible, registra tanto a la madre como al padre. Esa es la base del linaje.',
+          items: ['Madre', 'Padre'],
+        },
+        {
+          title: 'Paso 3 — Registra cada reproducción',
+          description: 'Cada vez que dos animales se crucen, anota la fecha y la pareja involucrada.',
+          items: ['Fecha de reproducción', 'Pareja de reproducción'],
+        },
+        {
+          title: 'Paso 4 — Vincula las crías',
+          description: 'Cuando nazca un ternero, conéctalo con ambos padres para que el linaje siga vivo y útil.',
+          items: ['Vincular ternero con la madre', 'Vincular ternero con el padre'],
+        },
+      ],
+      changesOverline: 'Qué cambia',
+      changesTitle: 'Qué mejora cuando el linaje queda bien registrado',
+      changesItems: [
+        'Reduces la consanguinidad accidental',
+        'Mejoras la selección genética con el tiempo',
+        'Entiendes mejor qué parejas realmente funcionan',
+        'Aumentas el valor y la confianza en tus animales',
+      ],
+      changesTakeaway: 'Dejas de adivinar y empiezas a gestionar con evidencia.',
+      toolsOverline: 'Llevarlo a la práctica',
+      toolsTitle: 'Dónde ayudan las herramientas digitales',
+      toolsDescription:
+        'El papel puede servir por un tiempo, pero se vuelve frágil rápido. Las herramientas digitales ayudan a mantener el linaje conectado en vez de disperso.',
+      toolsItems: [
+        'Vincular padres y crías en un solo lugar',
+        'Organizar el historial reproductivo por animal',
+        'Revisar las parejas más rápido antes de decidir',
+        'Seguir trabajando incluso sin internet en el campo',
+      ],
+      takeawayOverline: 'Conclusión',
+      takeawayTitle: 'Un mejor linaje empieza con mejores registros',
+      takeawayDescription:
+        'Rastrear el linaje del ganado no tiene por qué ser complicado. Ignorarlo es lo que termina saliendo caro.',
+      takeawayBanner:
+        'Si quieres mejores animales, mejores decisiones reproductivas y mejores resultados a largo plazo, empieza con registros más claros.',
     },
     about: {
       meta: {

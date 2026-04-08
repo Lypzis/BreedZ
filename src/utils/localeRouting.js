@@ -16,6 +16,7 @@ const LOCALIZED_PUBLIC_PATHS = {
   en: {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
+    '/guides/how-to-track-cattle-lineage': '/guides/how-to-track-cattle-lineage',
     '/about': '/about',
     '/contact': '/contact',
     '/privacy': '/privacy',
@@ -24,6 +25,7 @@ const LOCALIZED_PUBLIC_PATHS = {
   'pt-BR': {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
+    '/guides/how-to-track-cattle-lineage': '/guias/como-acompanhar-linhagem-no-gado',
     '/about': '/sobre',
     '/contact': '/contato',
     '/privacy': '/privacidade',
@@ -32,6 +34,7 @@ const LOCALIZED_PUBLIC_PATHS = {
   es: {
     '/': '/',
     '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
+    '/guides/how-to-track-cattle-lineage': '/guias/como-rastrear-el-linaje-del-ganado',
     '/about': '/acerca-de',
     '/contact': '/contacto',
     '/privacy': '/privacidad',
