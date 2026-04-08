@@ -16,6 +16,7 @@ export const messages = {
       dashboard: 'Dashboard',
       animals: 'Animals',
       events: 'Events',
+      account: 'Account',
       settings: 'Settings',
       tutorial: 'Tutorial',
       home: 'Home',
@@ -182,6 +183,11 @@ export const messages = {
             'BreedZ is a herd management app for tracking cattle breeding records, animal lineage, and farm activity.',
         },
         {
+          question: 'Is BreedZ free to use?',
+          answer:
+            'Yes. The free plan covers up to 20 animals. Premium is available for larger herds and billing-linked account features.',
+        },
+        {
           question: 'Does it work offline?',
           answer: 'Yes, BreedZ works without an internet connection.',
         },
@@ -267,11 +273,76 @@ export const messages = {
       animalAdded: 'Animal added.',
       animalUpdated: 'Animal updated.',
       animalSaveFailed: 'Failed to save animal.',
+      premiumReminder15:
+        'You’re managing 15 animals. The free plan includes up to 20 — you’re getting close.',
+      premiumReminder18:
+        'Only 2 spots left before the free limit. Most farmers upgrade here to avoid interruptions.',
+      premiumReminder20:
+        'You’ve reached the free limit (20 animals). You can add one more, but premium will be required after that.',
+      premiumReminder21:
+        'This was your last free addition. Upgrade to continue adding animals without limits.',
+      premiumBlocked:
+        'You’ve reached your free limit. Don’t lose track now — upgrade to keep growing your herd.',
       deleteTitle: 'Delete animal?',
       deleteMessage:
         'Are you sure? This will remove {animal}, its timeline events, and any lineage links to it.',
       animalRemoved: 'Animal removed.',
       animalDeleteFailed: 'Failed to delete animal.',
+    },
+    account: {
+      overline: 'Account',
+      title: 'Your account',
+      description: 'Sign in to unlock premium later and keep billing access tied to your user account.',
+      loadingAccount: 'Loading account...',
+      redirectingToCheckout: 'Redirecting to checkout...',
+      finalizingCheckout: 'Finalizing premium access...',
+      signedInTitle: 'Signed in',
+      emailUnavailable: 'No email available.',
+      email: 'Email',
+      password: 'Password',
+      receiveUpdates: 'Would you like to receive news and updates?',
+      togglePassword: 'Show or hide password',
+      signIn: 'Sign in',
+      createAccount: 'Create account',
+      signOut: 'Sign out',
+      signInSuccess: 'Signed in successfully.',
+      signUpSuccess: 'Account created successfully.',
+      signOutSuccess: 'Signed out successfully.',
+      signInFailed: 'Failed to sign in.',
+      signUpFailed: 'Failed to create account.',
+      loadFailed: 'Failed to load account.',
+      signOutFailed: 'Failed to sign out.',
+      authFailed: 'Authentication failed.',
+      offlineAuthError: 'You are offline. Connect to the internet to sign in or create your account.',
+      planTitle: 'Current plan',
+      billingTitle: 'Billing',
+      billingDescription: 'Upgrade and billing management will be connected here in the next premium step.',
+      billingDescriptionSignedOut: 'Sign in first to start a premium subscription.',
+      billingDescriptionPremium: 'Premium is active on this account.',
+      planFree: 'Free plan',
+      planPremium: 'Premium plan',
+      premiumStatusActive: 'Premium is active on the {plan} plan.',
+      premiumStatusInactive: 'Premium is not active yet. Current subscription status: {status}.',
+      monthlyPlanOverline: 'Monthly',
+      monthlyPlanPrice: '$7 / month',
+      monthlyPlanDescription: 'Upgrade for a monthly premium plan and remove the free animal cap.',
+      yearlyPlanOverline: 'Yearly',
+      yearlyPlanPrice: '$70 / year',
+      yearlyPlanDescription: 'Save more with the yearly premium plan and keep the same features unlocked.',
+      yearlyPlanSavings: 'Save 17%.',
+      activeSubscriptionOverline: 'Active subscription',
+      currentMonthlyPlanDescription: 'Your account is currently on the monthly premium plan.',
+      currentYearlyPlanDescription: 'Your account is currently on the yearly premium plan.',
+      subscribeMonthly: 'Subscribe monthly',
+      subscribeYearly: 'Subscribe yearly',
+      signInToSubscribe: 'Sign in first before starting a premium subscription.',
+      alreadyPremium: 'This account already has premium active.',
+      unsubscribe: 'Unsubscribe',
+      unsubscribeSuccess: 'Subscription cancelled.',
+      unsubscribeFailed: 'Failed to cancel subscription.',
+      checkoutStartFailed: 'Failed to start checkout.',
+      checkoutSuccess: 'Checkout completed. Premium access may take a few seconds to update.',
+      checkoutCancelled: 'Checkout was cancelled.',
     },
     animalForm: {
       overline: 'Animals',
@@ -445,6 +516,7 @@ export const messages = {
           hints: [
             'Use the tag as the required unique identifier.',
             'Name is optional, but it helps you recognize animals faster.',
+            'The free plan covers up to 20 animals.',
           ],
         },
         {
@@ -628,7 +700,7 @@ export const messages = {
       },
       overline: 'Privacy',
       title: 'Privacy Policy',
-      lastUpdated: 'Last updated: April 2, 2026',
+      lastUpdated: 'Last updated: April 7, 2026',
       blocks: [
         {
           title: 'What BreedZ stores',
@@ -641,14 +713,19 @@ export const messages = {
             'In the current version, your data is stored locally on your device. That means records stay on the phone, tablet, or computer where you use the app unless you later export or sync them.',
         },
         {
-          title: 'What we collect',
+          title: 'Accounts and email',
           body:
-            'At this stage, BreedZ does not require account creation for basic use. If contact or support channels are added later, any submitted information will be handled only to respond or improve the service.',
+            'BreedZ does not require an account for the local free experience. If you create an account, we store your email address and basic account preferences, such as whether you asked to receive news and updates.',
+        },
+        {
+          title: 'Payments and subscriptions',
+          body:
+            'If you subscribe to premium, billing is handled by Stripe. BreedZ stores subscription status and related identifiers needed to unlock premium access, but full payment details are handled by Stripe and are not stored in the app database.',
         },
         {
           title: 'Sharing',
           body:
-            'We do not sell your herd records. If future sync, backup, or analytics features are added, this policy will be updated before those features are broadly released.',
+            'We do not sell your herd records or account information. Data may be processed by service providers needed to operate the product, such as Firebase for authentication and account storage and Stripe for subscription billing.',
         },
       ],
       contactTitle: 'Contact',
@@ -662,12 +739,22 @@ export const messages = {
       },
       overline: 'Terms',
       title: 'Terms of Use',
-      lastUpdated: 'Last updated: April 2, 2026',
+      lastUpdated: 'Last updated: April 7, 2026',
       blocks: [
         {
           title: 'Using BreedZ',
           body:
             'BreedZ is provided as a herd management app for recording animals, breeding events, births, and related farm notes. You may use it only for lawful farm, ranch, or business purposes.',
+        },
+        {
+          title: 'Free plan and premium',
+          body:
+            'BreedZ offers a free plan that covers up to 20 animals. Premium plans are available for users who need larger herd capacity and account-linked billing features.',
+        },
+        {
+          title: 'Billing and cancellation',
+          body:
+            'Premium subscriptions are billed through Stripe. Pricing, renewal timing, and cancellation options may change over time, and current plan details are shown in the account page when premium is available on your account.',
         },
         {
           title: 'Your data',
@@ -715,6 +802,7 @@ export const messages = {
       dashboard: 'Painel',
       animals: 'Animais',
       events: 'Eventos',
+      account: 'Conta',
       settings: 'Configurações',
       tutorial: 'Tutorial',
       home: 'Início',
@@ -881,6 +969,11 @@ export const messages = {
             'BreedZ é um aplicativo de manejo do rebanho para acompanhar registros reprodutivos bovinos, linhagem animal e atividade da fazenda.',
         },
         {
+          question: 'O BreedZ é gratuito?',
+          answer:
+            'Sim. O plano grátis cobre até 20 animais. O premium está disponível para rebanhos maiores e recursos ligados à conta e cobrança.',
+        },
+        {
           question: 'Funciona offline?',
           answer: 'Sim, o BreedZ funciona sem conexão com a internet.',
         },
@@ -967,11 +1060,76 @@ export const messages = {
       animalAdded: 'Animal adicionado.',
       animalUpdated: 'Animal atualizado.',
       animalSaveFailed: 'Não foi possível salvar o animal.',
+      premiumReminder15:
+        'Você está gerenciando 15 animais. O plano grátis inclui até 20 — você está chegando perto.',
+      premiumReminder18:
+        'Faltam só 2 vagas antes do limite grátis. A maioria dos produtores faz upgrade aqui para evitar interrupções.',
+      premiumReminder20:
+        'Você chegou ao limite grátis de 20 animais. Ainda pode adicionar mais 1, mas depois disso o premium será necessário.',
+      premiumReminder21:
+        'Esta foi sua última adição grátis. Faça upgrade para continuar adicionando animais sem limites.',
+      premiumBlocked:
+        'Você atingiu o limite do plano gratuito. Não perca o controle agora — faça upgrade para continuar expandindo seu rebanho.',
       deleteTitle: 'Excluir animal?',
       deleteMessage:
         'Tem certeza? Isso removerá {animal}, seus eventos da linha do tempo e qualquer vínculo de linhagem com ele.',
       animalRemoved: 'Animal removido.',
       animalDeleteFailed: 'Não foi possível excluir o animal.',
+    },
+    account: {
+      overline: 'Conta',
+      title: 'Sua conta',
+      description: 'Entre para liberar o premium depois e manter o acesso de cobrança vinculado à sua conta.',
+      loadingAccount: 'Carregando conta...',
+      redirectingToCheckout: 'Redirecionando para o checkout...',
+      finalizingCheckout: 'Finalizando o acesso premium...',
+      signedInTitle: 'Conectado',
+      emailUnavailable: 'Nenhum e-mail disponível.',
+      email: 'E-mail',
+      password: 'Senha',
+      receiveUpdates: 'Gostaria de receber novidades e atualizações?',
+      togglePassword: 'Mostrar ou ocultar senha',
+      signIn: 'Entrar',
+      createAccount: 'Criar conta',
+      signOut: 'Sair',
+      signInSuccess: 'Login realizado com sucesso.',
+      signUpSuccess: 'Conta criada com sucesso.',
+      signOutSuccess: 'Sessão encerrada com sucesso.',
+      signInFailed: 'Não foi possível entrar.',
+      signUpFailed: 'Não foi possível criar a conta.',
+      loadFailed: 'Não foi possível carregar a conta.',
+      signOutFailed: 'Não foi possível sair.',
+      authFailed: 'Falha na autenticação.',
+      offlineAuthError: 'Você está offline. Conecte-se à internet para entrar ou criar sua conta.',
+      planTitle: 'Plano atual',
+      billingTitle: 'Cobrança',
+      billingDescription: 'O upgrade e o gerenciamento de cobrança serão conectados aqui no próximo passo do premium.',
+      billingDescriptionSignedOut: 'Faça login primeiro para iniciar uma assinatura premium.',
+      billingDescriptionPremium: 'O premium está ativo nesta conta.',
+      planFree: 'Plano grátis',
+      planPremium: 'Plano premium',
+      premiumStatusActive: 'O premium está ativo no plano {plan}.',
+      premiumStatusInactive: 'O premium ainda não está ativo. Status atual da assinatura: {status}.',
+      monthlyPlanOverline: 'Mensal',
+      monthlyPlanPrice: 'US$7 / mês',
+      monthlyPlanDescription: 'Faça upgrade para o premium mensal e remova o limite grátis de animais.',
+      yearlyPlanOverline: 'Anual',
+      yearlyPlanPrice: 'US$70 / ano',
+      yearlyPlanDescription: 'Economize mais com o premium anual e mantenha os mesmos recursos liberados.',
+      yearlyPlanSavings: 'Desconto de 17%.',
+      activeSubscriptionOverline: 'Assinatura ativa',
+      currentMonthlyPlanDescription: 'Sua conta está atualmente no plano premium mensal.',
+      currentYearlyPlanDescription: 'Sua conta está atualmente no plano premium anual.',
+      subscribeMonthly: 'Assinar mensal',
+      subscribeYearly: 'Assinar anual',
+      signInToSubscribe: 'Faça login antes de iniciar uma assinatura premium.',
+      alreadyPremium: 'Esta conta já tem premium ativo.',
+      unsubscribe: 'Cancelar assinatura',
+      unsubscribeSuccess: 'Assinatura cancelada.',
+      unsubscribeFailed: 'Não foi possível cancelar a assinatura.',
+      checkoutStartFailed: 'Não foi possível iniciar o checkout.',
+      checkoutSuccess: 'Checkout concluído. O acesso premium pode levar alguns segundos para atualizar.',
+      checkoutCancelled: 'O checkout foi cancelado.',
     },
     animalForm: {
       overline: 'Animais',
@@ -1144,6 +1302,7 @@ export const messages = {
           hints: [
             'Use o brinco como identificador único obrigatório.',
             'Nome é opcional, mas ajuda a reconhecer os animais mais rápido.',
+            'O plano grátis cobre até 20 animais.',
           ],
         },
         {
@@ -1327,7 +1486,7 @@ export const messages = {
       },
       overline: 'Privacidade',
       title: 'Política de Privacidade',
-      lastUpdated: 'Última atualização: 2 de abril de 2026',
+      lastUpdated: 'Última atualização: 7 de abril de 2026',
       blocks: [
         {
           title: 'O que o BreedZ armazena',
@@ -1340,14 +1499,19 @@ export const messages = {
             'Na versão atual, seus dados ficam armazenados localmente no seu dispositivo. Isso significa que os registros permanecem no celular, tablet ou computador onde você usa o app, a menos que depois sejam exportados ou sincronizados.',
         },
         {
-          title: 'O que coletamos',
+          title: 'Conta e e-mail',
           body:
-            'Nesta fase, o BreedZ não exige criação de conta para o uso básico. Se canais de contato ou suporte forem adicionados depois, qualquer informação enviada será tratada apenas para responder ou melhorar o serviço.',
+            'O BreedZ não exige conta para a experiência local gratuita. Se você criar uma conta, armazenamos seu e-mail e preferências básicas da conta, como a escolha de receber novidades e atualizações.',
+        },
+        {
+          title: 'Pagamentos e assinaturas',
+          body:
+            'Se você assinar o premium, a cobrança é processada pela Stripe. O BreedZ armazena o status da assinatura e identificadores relacionados para liberar o premium, mas os dados completos de pagamento ficam com a Stripe e não são armazenados no banco de dados do app.',
         },
         {
           title: 'Compartilhamento',
           body:
-            'Nós não vendemos os registros do seu rebanho. Se recursos futuros de sincronização, backup ou análise forem adicionados, esta política será atualizada antes do lançamento amplo desses recursos.',
+            'Nós não vendemos os registros do seu rebanho nem suas informações de conta. Os dados podem ser processados por provedores necessários para operar o produto, como Firebase para autenticação e armazenamento da conta e Stripe para cobrança de assinaturas.',
         },
       ],
       contactTitle: 'Contato',
@@ -1361,12 +1525,22 @@ export const messages = {
       },
       overline: 'Termos',
       title: 'Termos de Uso',
-      lastUpdated: 'Última atualização: 2 de abril de 2026',
+      lastUpdated: 'Última atualização: 7 de abril de 2026',
       blocks: [
         {
           title: 'Uso do BreedZ',
           body:
             'O BreedZ é fornecido como um aplicativo de manejo do rebanho para registrar animais, eventos reprodutivos, nascimentos e observações da fazenda. Você pode usá-lo apenas para fins legais na fazenda, rancho ou atividade comercial.',
+        },
+        {
+          title: 'Plano grátis e premium',
+          body:
+            'O BreedZ oferece um plano grátis que cobre até 20 animais. Planos premium estão disponíveis para usuários que precisam de mais capacidade para o rebanho e recursos de cobrança ligados à conta.',
+        },
+        {
+          title: 'Cobrança e cancelamento',
+          body:
+            'As assinaturas premium são cobradas pela Stripe. Preços, renovação e opções de cancelamento podem mudar com o tempo, e os detalhes atuais do plano aparecem na página da conta quando o premium estiver disponível para você.',
         },
         {
           title: 'Seus dados',

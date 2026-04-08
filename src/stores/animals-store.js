@@ -9,6 +9,7 @@ import {
 } from 'src/services/animals-db'
 import { syncAnimalStatusesFromEvents } from 'src/services/animal-status-sync'
 import { deleteEventsForAnimal } from 'src/services/events-db'
+import { ANIMAL_LIMIT_REACHED_ERROR, canCreateAnimal } from 'src/utils/premium-limits'
 
 export const useAnimalsStore = defineStore('animals', () => {
   const animals = ref([])
@@ -34,7 +35,13 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
   }
 
-  async function addAnimal(payload) {
+  async function addAnimal(payload, options = {}) {
+    if (!canCreateAnimal(animals.value.length, options)) {
+      const error = new Error(ANIMAL_LIMIT_REACHED_ERROR)
+      error.code = ANIMAL_LIMIT_REACHED_ERROR
+      throw error
+    }
+
     const animal = await createAnimal(payload)
     animals.value = [animal, ...animals.value]
     return animal

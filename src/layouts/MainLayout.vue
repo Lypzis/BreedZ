@@ -140,14 +140,19 @@ const navItems = computed(() => [
     to: '/events',
   },
   {
+    label: t('nav.tutorial'),
+    icon: 'school',
+    to: '/tutorial',
+  },
+  {
     label: t('nav.settings'),
     icon: 'settings',
     to: '/settings',
   },
   {
-    label: t('nav.tutorial'),
-    icon: 'school',
-    to: '/tutorial',
+    label: t('nav.account'),
+    icon: 'account_circle',
+    to: '/account',
   },
 ])
 

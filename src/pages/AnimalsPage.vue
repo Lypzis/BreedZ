@@ -288,16 +288,24 @@ import { useQuasar } from 'quasar'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
 import { filterAnimalsList } from 'src/utils/list-filters'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
+import {
+  ANIMAL_LIMIT_REACHED_ERROR,
+  canCreateAnimal,
+  getAnimalLimitReminder,
+} from 'src/utils/premium-limits'
 import { normalizeSpeciesLabel } from 'src/utils/species'
 
 const $q = useQuasar()
 const { t } = useI18nText()
+const authStore = useAuthStore()
 const animalsStore = useAnimalsStore()
+const { isPremium } = storeToRefs(authStore)
 const { activeAnimals, animals, errorMessage, isLoading } = storeToRefs(animalsStore)
 
 const searchTerm = ref('')
@@ -354,6 +362,11 @@ const emptyStateMessage = computed(() =>
 )
 
 function openCreateDialog() {
+  if (!canCreateAnimal(animals.value.length, { isPremium: isPremium.value })) {
+    notifyAnimalLimitBlocked()
+    return
+  }
+
   formMode.value = 'create'
   selectedAnimal.value = null
   isFormDialogOpen.value = true
@@ -368,8 +381,14 @@ function openEditDialog(animal) {
 async function submitForm(payload) {
   try {
     if (formMode.value === 'create') {
-      await animalsStore.addAnimal(payload)
+      if (!canCreateAnimal(animals.value.length, { isPremium: isPremium.value })) {
+        notifyAnimalLimitBlocked()
+        return
+      }
+
+      await animalsStore.addAnimal(payload, { isPremium: isPremium.value })
       $q.notify({ color: 'positive', message: t('animals.animalAdded'), position: 'top' })
+      notifyAnimalLimitReminder(animals.value.length)
     } else {
       await animalsStore.editAnimal(payload.id, payload)
       $q.notify({ color: 'positive', message: t('animals.animalUpdated'), position: 'top' })
@@ -378,6 +397,11 @@ async function submitForm(payload) {
     isFormDialogOpen.value = false
     selectedAnimal.value = null
   } catch (error) {
+    if (error instanceof Error && error.message === ANIMAL_LIMIT_REACHED_ERROR) {
+      notifyAnimalLimitBlocked()
+      return
+    }
+
     $q.notify({
       color: 'negative',
       message: error instanceof Error ? error.message : t('animals.animalSaveFailed'),
@@ -403,6 +427,36 @@ function confirmDelete(animal) {
         position: 'top',
       })
     }
+  })
+}
+
+function notifyAnimalLimitReminder(totalCount) {
+  const reminder = getAnimalLimitReminder(totalCount, { isPremium: isPremium.value })
+
+  if (!reminder) {
+    return
+  }
+
+  $q.notify({
+    group: false,
+    timeout: 7000,
+    color: reminder.color,
+    textColor: 'white',
+    icon: reminder.icon,
+    message: t(reminder.messageKey),
+    position: 'top',
+  })
+}
+
+function notifyAnimalLimitBlocked() {
+  $q.notify({
+    group: false,
+    timeout: 8000,
+    color: 'negative',
+    textColor: 'white',
+    icon: 'workspace_premium',
+    message: t('animals.premiumBlocked'),
+    position: 'top',
   })
 }
 

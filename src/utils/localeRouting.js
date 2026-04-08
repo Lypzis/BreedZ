@@ -33,6 +33,7 @@ export function isAppShellPath(path = '/') {
     || normalizedPath === '/tutorial'
     || normalizedPath.startsWith('/animals')
     || normalizedPath.startsWith('/events')
+    || normalizedPath.startsWith('/account')
     || normalizedPath.startsWith('/settings')
   )
 }
