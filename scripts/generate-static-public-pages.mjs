@@ -26,6 +26,25 @@ const localeConfigs = [
   },
 ]
 
+const localizedPublicPaths = {
+  en: {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
+    '/about': '/about',
+    '/contact': '/contact',
+    '/privacy': '/privacy',
+    '/terms': '/terms',
+  },
+  'pt-BR': {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
+    '/about': '/sobre',
+    '/contact': '/contato',
+    '/privacy': '/privacidade',
+    '/terms': '/termos',
+  },
+}
+
 const publicPages = [
   {
     path: '/',
@@ -59,6 +78,10 @@ const publicPages = [
   },
 ]
 
+function localizePublicPath(locale, pagePath) {
+  return localizedPublicPaths[locale]?.[pagePath] || pagePath
+}
+
 function getPathValue(obj, valuePath) {
   return valuePath.split('.').reduce((current, key) => {
     if (current && typeof current === 'object' && key in current) {
@@ -77,28 +100,32 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
 }
 
-function buildPageUrl(routeSegment, pagePath) {
-  return pagePath === '/'
+function buildPageUrl(locale, routeSegment, pagePath) {
+  const localizedPath = localizePublicPath(locale, pagePath)
+
+  return localizedPath === '/'
     ? `${SITE_URL}/${routeSegment}`
-    : `${SITE_URL}/${routeSegment}${pagePath}`
+    : `${SITE_URL}/${routeSegment}${localizedPath}`
 }
 
-function buildOutputPath(routeSegment, pagePath) {
-  if (pagePath === '/') {
+function buildOutputPath(locale, routeSegment, pagePath) {
+  const localizedPath = localizePublicPath(locale, pagePath)
+
+  if (localizedPath === '/') {
     return path.join(distRoot, routeSegment, 'index.html')
   }
 
-  const segments = pagePath.replace(/^\//, '').split('/')
+  const segments = localizedPath.replace(/^\//, '').split('/')
   return path.join(distRoot, routeSegment, ...segments, 'index.html')
 }
 
 function buildAlternateLinks(pagePath) {
   return localeConfigs
-    .map(({ htmlLang, routeSegment }) =>
-      `<link rel="alternate" hreflang="${htmlLang}" href="${buildPageUrl(routeSegment, pagePath)}">`,
+    .map(({ locale, htmlLang, routeSegment }) =>
+      `<link rel="alternate" hreflang="${htmlLang}" href="${buildPageUrl(locale, routeSegment, pagePath)}">`,
     )
     .concat(
-      `<link rel="alternate" hreflang="x-default" href="${buildPageUrl(localeConfigs[0].routeSegment, pagePath)}">`,
+      `<link rel="alternate" hreflang="x-default" href="${buildPageUrl(localeConfigs[0].locale, localeConfigs[0].routeSegment, pagePath)}">`,
     )
     .join('')
 }
@@ -148,8 +175,8 @@ async function main() {
       }
 
       const fullTitle = `${title} | BreedZ`
-      const url = buildPageUrl(localeConfig.routeSegment, page.path)
-      const outputPath = buildOutputPath(localeConfig.routeSegment, page.path)
+      const url = buildPageUrl(localeConfig.locale, localeConfig.routeSegment, page.path)
+      const outputPath = buildOutputPath(localeConfig.locale, localeConfig.routeSegment, page.path)
       const metaBlock = buildMetaBlock({
         fullTitle,
         description,
