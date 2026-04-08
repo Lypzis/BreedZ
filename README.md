@@ -188,8 +188,8 @@ Not crucial right now:
 - [x] Billing portal / manage subscription page
 - [ ] Email verification before starting checkout
 - [ ] Anti-abuse on signup
-- [ ] CAPTCHA
-- [ ] App Check
+- [x] CAPTCHA
+- [x] App Check
 - [ ] Rate limiting on serverless functions
 - [ ] Webhook event logging / retry diagnostics
 - [ ] Better subscription states in UI:
@@ -199,7 +199,7 @@ Not crucial right now:
 - [ ] Premium badge / lock hints outside the account page
 - [ ] Load premium state into the animals page header more explicitly
 - [ ] Tests for the Netlify functions
-- [ ] Move any remaining real local secrets fully out of tracked `.env`
+- [x] Move any remaining real local secrets fully out of tracked `.env`
 
 Important soon:
 - [x] Add a customer portal or at least switch unsubscribe to cancel at period end
@@ -222,30 +222,30 @@ Approach:
 3. Review terminology carefully before shipping each batch
 
 Phase 1: Public pages
-- [ ] Add `es` to the locale system
-- [ ] Translate landing page copy
-- [ ] Translate guide page copy
-- [ ] Translate legal and contact pages:
+- [x] Add `es` to the locale system
+- [x] Translate landing page copy
+- [x] Translate guide page copy
+- [x] Translate legal and contact pages:
   - about
   - contact
   - privacy
   - terms
-- [ ] Add Spanish localized public slugs where appropriate
-- [ ] Update sitemap and static public page generation
+- [x] Add Spanish localized public slugs where appropriate
+- [x] Update sitemap and static public page generation
 - [ ] Verify canonicals and `hreflang` tags
 
 Phase 2: App UI
-- [ ] Translate dashboard
-- [ ] Translate animals flow
-- [ ] Translate events flow
-- [ ] Translate settings
-- [ ] Translate account and premium flow
-- [ ] Translate premium reminders and billing states
-- [ ] Review button labels, empty states, and warnings for natural Spanish wording
+- [x] Translate dashboard
+- [x] Translate animals flow
+- [x] Translate events flow
+- [x] Translate settings
+- [x] Translate account and premium flow
+- [x] Translate premium reminders and billing states
+- [x] Review button labels, empty states, and warnings for natural Spanish wording
 
 Quality checks:
-- [ ] Review livestock terminology for Spanish-speaking users
-- [ ] Avoid literal Portuguese-to-Spanish carryover
+- [x] Review livestock terminology for Spanish-speaking users
+- [x] Avoid literal Portuguese-to-Spanish carryover
 - [ ] Test locale switching across public and app routes
 - [ ] Validate mobile layout with longer Spanish strings
 - [ ] Recheck SEO snippets after deploy

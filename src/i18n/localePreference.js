@@ -1,6 +1,6 @@
 export const LOCALE_STORAGE_KEY = 'breedz-locale'
 export const DEFAULT_LOCALE = 'en'
-export const SUPPORTED_LOCALES = ['en', 'pt-BR']
+export const SUPPORTED_LOCALES = ['en', 'pt-BR', 'es']
 
 export function normalizeLocale(value) {
   const localeValue = String(value || '').trim()
@@ -13,6 +13,10 @@ export function normalizeLocale(value) {
 
   if (lower.startsWith('pt')) {
     return 'pt-BR'
+  }
+
+  if (lower.startsWith('es')) {
+    return 'es'
   }
 
   return DEFAULT_LOCALE
@@ -32,6 +36,13 @@ export function readNavigatorLocaleSignal() {
   if (lower.startsWith('pt')) {
     return {
       locale: 'pt-BR',
+      isSupported: true,
+    }
+  }
+
+  if (lower.startsWith('es')) {
+    return {
+      locale: 'es',
       isSupported: true,
     }
   }

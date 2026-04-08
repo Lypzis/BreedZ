@@ -7,6 +7,9 @@
     <loc>https://breedz.app/pt-br</loc>
   </url>
   <url>
+    <loc>https://breedz.app/es</loc>
+  </url>
+  <url>
     <loc>https://breedz.app/tutorial</loc>
   </url>
   <url>
@@ -16,10 +19,16 @@
     <loc>https://breedz.app/pt-br/guias/acompanhar-datas-de-cobertura-no-gado</loc>
   </url>
   <url>
+    <loc>https://breedz.app/es/guias/registrar-fechas-de-reproduccion-del-ganado</loc>
+  </url>
+  <url>
     <loc>https://breedz.app/en/about</loc>
   </url>
   <url>
     <loc>https://breedz.app/pt-br/sobre</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/es/acerca-de</loc>
   </url>
   <url>
     <loc>https://breedz.app/en/contact</loc>
@@ -28,15 +37,24 @@
     <loc>https://breedz.app/pt-br/contato</loc>
   </url>
   <url>
+    <loc>https://breedz.app/es/contacto</loc>
+  </url>
+  <url>
     <loc>https://breedz.app/en/privacy</loc>
   </url>
   <url>
     <loc>https://breedz.app/pt-br/privacidade</loc>
   </url>
   <url>
+    <loc>https://breedz.app/es/privacidad</loc>
+  </url>
+  <url>
     <loc>https://breedz.app/en/terms</loc>
   </url>
   <url>
     <loc>https://breedz.app/pt-br/termos</loc>
+  </url>
+  <url>
+    <loc>https://breedz.app/es/terminos</loc>
   </url>
 </urlset>

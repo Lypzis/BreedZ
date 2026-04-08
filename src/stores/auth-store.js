@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth'
@@ -170,6 +171,20 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function requestPasswordReset(email) {
+    isLoading.value = true
+    clearError()
+
+    try {
+      await sendPasswordResetEmail(auth, email)
+    } catch (error) {
+      errorMessage.value = getFriendlyAuthErrorMessage(error, 'account.passwordResetFailed')
+      throw error
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     errorMessage,
     initialize,
@@ -177,6 +192,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     isPremium,
     isSignedIn,
+    requestPasswordReset,
     signIn,
     signOutUser,
     signUp,
