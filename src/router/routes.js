@@ -8,6 +8,7 @@ const routes = [
       { path: 'animals', component: () => import('pages/AnimalsPage.vue') },
       { path: 'animals/:id', component: () => import('pages/AnimalDetailPage.vue') },
       { path: 'events', component: () => import('pages/EventsPage.vue') },
+      { path: 'account', component: () => import('pages/AccountPage.vue') },
       { path: 'settings', component: () => import('pages/SettingsPage.vue') },
     ],
   },
