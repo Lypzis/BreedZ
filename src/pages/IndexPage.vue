@@ -240,15 +240,11 @@ import logoFull from 'src/assets/logo-hero.webp'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { buildPageMeta } from 'src/utils/seo-meta'
-import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const { t, tm } = useI18nText()
 const route = useRoute()
-const routeLocale = computed(() =>
-  typeof route.params.locale === 'string' && route.params.locale
-    ? routeSegmentToLocale(route.params.locale)
-    : localeFromPath(route.path) || 'en',
-)
+const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
 
 useMeta(() =>
   buildPageMeta({

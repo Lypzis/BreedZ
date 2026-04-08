@@ -184,8 +184,8 @@ Status:
 - What remains is mostly polish, hardening, and lifecycle management.
 
 Not crucial right now:
-- [ ] Cancel at period end instead of immediate cancellation
-- [ ] Billing portal / manage subscription page
+- [x] Cancel at period end instead of immediate cancellation
+- [x] Billing portal / manage subscription page
 - [ ] Email verification before starting checkout
 - [ ] Anti-abuse on signup
 - [ ] CAPTCHA
@@ -202,7 +202,7 @@ Not crucial right now:
 - [ ] Move any remaining real local secrets fully out of tracked `.env`
 
 Important soon:
-- [ ] Add a customer portal or at least switch unsubscribe to cancel at period end
+- [x] Add a customer portal or at least switch unsubscribe to cancel at period end
 
 Why this matters:
 - Immediate cancellation is a bit harsh for production billing UX.
@@ -252,7 +252,6 @@ Quality checks:
 
 Guiding rule:
 - Spanish support should ship in steps, but each completed step should feel native enough to be user-facing.
-
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

@@ -32,6 +32,10 @@ export const useAuthStore = defineStore('auth', () => {
       if (error.code === 'auth/network-request-failed') {
         return t('account.offlineAuthError')
       }
+
+      if (error.code === 'auth/invalid-credential') {
+        return t('account.invalidCredentialError')
+      }
     }
 
     return error instanceof Error ? error.message : t(fallbackKey)
