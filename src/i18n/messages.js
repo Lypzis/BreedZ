@@ -874,7 +874,10 @@ export const messages = {
     },
     notFound: {
       message: 'Oops. Nothing here...',
+      title: 'Looks like this page got lost from the herd',
+      subtitle: 'Let’s bring you back where things make sense.',
       goHome: 'Go Home',
+      backToAnimals: '← Take me back to my animals',
     },
   },
   'pt-BR': {
@@ -1752,7 +1755,10 @@ export const messages = {
     },
     notFound: {
       message: 'Ops. Nada por aqui...',
+      title: 'Parece que esta página se perdeu do rebanho',
+      subtitle: 'Vamos levar você de volta para onde tudo faz sentido.',
       goHome: 'Ir para o início',
+      backToAnimals: '← Voltar para meus animais',
     },
   },
   es: {
@@ -2637,6 +2643,13 @@ export const messages = {
       ],
       contactTitle: 'Contacto',
       contactBody: 'Las consultas sobre estos términos pueden enviarse a',
+    },
+    notFound: {
+      message: 'Ups. No hay nada aquí...',
+      title: 'Parece que esta página se perdió del rebaño',
+      subtitle: 'Vamos a llevarte de vuelta a donde todo tiene sentido.',
+      goHome: 'Ir al inicio',
+      backToAnimals: '← Llévame de vuelta a mis animales',
     },
   },
 }
