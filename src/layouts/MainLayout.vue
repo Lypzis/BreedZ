@@ -28,6 +28,7 @@
 
         <q-btn-toggle
           v-model="selectedLocale"
+          class="language-toggle"
           dense
           no-caps
           unelevated
@@ -159,6 +160,7 @@ const navItems = computed(() => [
 const localeOptions = computed(() => [
   { label: t('language.en'), value: 'en' },
   { label: t('language.ptBr'), value: 'pt-BR' },
+  { label: t('language.es'), value: 'es' },
 ])
 
 const selectedLocale = computed({
@@ -184,3 +186,10 @@ function localizedPath(path) {
   return buildLocalizedPath(routeLocale.value, path)
 }
 </script>
+
+<style scoped>
+.language-toggle :deep(.q-btn-item) {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+</style>

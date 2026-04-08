@@ -24,6 +24,12 @@ const localeConfigs = [
     htmlLang: 'pt-BR',
     ogLocale: 'pt_BR',
   },
+  {
+    locale: 'es',
+    routeSegment: 'es',
+    htmlLang: 'es',
+    ogLocale: 'es_ES',
+  },
 ]
 
 const localizedPublicPaths = {
@@ -42,6 +48,14 @@ const localizedPublicPaths = {
     '/contact': '/contato',
     '/privacy': '/privacidade',
     '/terms': '/termos',
+  },
+  es: {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
+    '/about': '/acerca-de',
+    '/contact': '/contacto',
+    '/privacy': '/privacidad',
+    '/terms': '/terminos',
   },
 }
 

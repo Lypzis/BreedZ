@@ -41,6 +41,23 @@ const routes = [
       { path: 'sobre', component: () => import('pages/AboutPage.vue') },
     ],
   },
+  {
+    path: '/es',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'guides/track-cattle-breeding-dates', redirect: '/es/guias/registrar-fechas-de-reproduccion-del-ganado' },
+      { path: 'guias/registrar-fechas-de-reproduccion-del-ganado', component: () => import('pages/GuideBreedingDatesPage.vue') },
+      { path: 'terms', redirect: '/es/terminos' },
+      { path: 'terminos', component: () => import('pages/TermsPage.vue') },
+      { path: 'privacy', redirect: '/es/privacidad' },
+      { path: 'privacidad', component: () => import('pages/PrivacyPage.vue') },
+      { path: 'contact', redirect: '/es/contacto' },
+      { path: 'contacto', component: () => import('pages/ContactPage.vue') },
+      { path: 'about', redirect: '/es/acerca-de' },
+      { path: 'acerca-de', component: () => import('pages/AboutPage.vue') },
+    ],
+  },
 
   // Always leave this as last one,
   // but you can also remove it

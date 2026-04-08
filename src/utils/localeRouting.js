@@ -3,11 +3,13 @@ import { DEFAULT_LOCALE, normalizeLocale } from 'src/i18n/localePreference'
 const ROUTE_SEGMENT_TO_LOCALE = {
   en: 'en',
   'pt-br': 'pt-BR',
+  es: 'es',
 }
 
 const LOCALE_TO_ROUTE_SEGMENT = {
   en: 'en',
   'pt-BR': 'pt-br',
+  es: 'es',
 }
 
 const LOCALIZED_PUBLIC_PATHS = {
@@ -26,6 +28,14 @@ const LOCALIZED_PUBLIC_PATHS = {
     '/contact': '/contato',
     '/privacy': '/privacidade',
     '/terms': '/termos',
+  },
+  es: {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
+    '/about': '/acerca-de',
+    '/contact': '/contacto',
+    '/privacy': '/privacidad',
+    '/terms': '/terminos',
   },
 }
 
@@ -69,7 +79,7 @@ export function routeSegmentToLocale(value) {
 
 export function localeFromPath(value = '/') {
   const { path } = splitPathAndSuffix(value)
-  const localeMatch = path.match(/^\/(en|pt-br)(?=\/|$)/i)
+  const localeMatch = path.match(/^\/(en|pt-br|es)(?=\/|$)/i)
 
   if (!localeMatch) {
     return ''
@@ -85,8 +95,8 @@ export function localeToRouteSegment(value) {
 
 export function stripLocaleFromPath(value = '/') {
   const { path, suffix } = splitPathAndSuffix(value)
-  const localeMatch = path.match(/^\/(en|pt-br)(?=\/|$)/i)
-  const stripped = path.replace(/^\/(en|pt-br)(?=\/|$)/i, '') || '/'
+  const localeMatch = path.match(/^\/(en|pt-br|es)(?=\/|$)/i)
+  const stripped = path.replace(/^\/(en|pt-br|es)(?=\/|$)/i, '') || '/'
 
   if (!localeMatch) {
     return `${stripped}${suffix}`
