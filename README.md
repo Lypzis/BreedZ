@@ -177,6 +177,82 @@ Tracking checklist:
 - [x] Show offspring under each breeding partner
 - [ ] Decide whether to keep or simplify `Linked children`
 
+### Premium Follow-up
+
+Status:
+- The premium foundation is in a good MVP state now.
+- What remains is mostly polish, hardening, and lifecycle management.
+
+Not crucial right now:
+- [ ] Cancel at period end instead of immediate cancellation
+- [ ] Billing portal / manage subscription page
+- [ ] Email verification before starting checkout
+- [ ] Anti-abuse on signup
+- [ ] CAPTCHA
+- [ ] App Check
+- [ ] Rate limiting on serverless functions
+- [ ] Webhook event logging / retry diagnostics
+- [ ] Better subscription states in UI:
+  - `past_due`
+  - `canceled`
+  - `incomplete`
+- [ ] Premium badge / lock hints outside the account page
+- [ ] Load premium state into the animals page header more explicitly
+- [ ] Tests for the Netlify functions
+- [ ] Move any remaining real local secrets fully out of tracked `.env`
+
+Important soon:
+- [ ] Add a customer portal or at least switch unsubscribe to cancel at period end
+
+Why this matters:
+- Immediate cancellation is a bit harsh for production billing UX.
+
+Summary:
+- Nothing critical is obviously missing for a first premium rollout.
+- The main remaining work is reliability, billing UX polish, and abuse protection.
+
+### Spanish Rollout
+
+Goal:
+- Add Spanish support in a deliberate way, with natural copy for farmers and breeders instead of literal or robotic translation.
+
+Approach:
+1. Translate the public marketing pages first
+2. Translate the in-app experience second
+3. Review terminology carefully before shipping each batch
+
+Phase 1: Public pages
+- [ ] Add `es` to the locale system
+- [ ] Translate landing page copy
+- [ ] Translate guide page copy
+- [ ] Translate legal and contact pages:
+  - about
+  - contact
+  - privacy
+  - terms
+- [ ] Add Spanish localized public slugs where appropriate
+- [ ] Update sitemap and static public page generation
+- [ ] Verify canonicals and `hreflang` tags
+
+Phase 2: App UI
+- [ ] Translate dashboard
+- [ ] Translate animals flow
+- [ ] Translate events flow
+- [ ] Translate settings
+- [ ] Translate account and premium flow
+- [ ] Translate premium reminders and billing states
+- [ ] Review button labels, empty states, and warnings for natural Spanish wording
+
+Quality checks:
+- [ ] Review livestock terminology for Spanish-speaking users
+- [ ] Avoid literal Portuguese-to-Spanish carryover
+- [ ] Test locale switching across public and app routes
+- [ ] Validate mobile layout with longer Spanish strings
+- [ ] Recheck SEO snippets after deploy
+
+Guiding rule:
+- Spanish support should ship in steps, but each completed step should feel native enough to be user-facing.
+
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

@@ -207,12 +207,16 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import { useI18nText } from 'src/i18n'
-import { buildLocalizedPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
 
 const { t, tm } = useI18nText()
 const route = useRoute()
-const routeLocale = computed(() => routeSegmentToLocale(route.params.locale))
+const routeLocale = computed(() =>
+  typeof route.params.locale === 'string' && route.params.locale
+    ? routeSegmentToLocale(route.params.locale)
+    : localeFromPath(route.path) || 'en',
+)
 
 useMeta(() =>
   buildPageMeta({
