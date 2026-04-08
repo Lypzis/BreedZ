@@ -43,64 +43,91 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above :width="260" bordered class="bg-white">
-      <q-item clickable :to="dashboardPath" class="bg-green-1 q-py-md">
-        <q-item-section>
-          <q-item-label class="text-h6 text-weight-bold text-primary">{{ t('brand.name') }}</q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-list padding>
-        <q-item
-          v-for="item in navItems"
-          :key="item.label"
-          :clickable="Boolean(item.to)"
-          :disable="!item.to"
-          :to="item.to"
-        >
-          <q-item-section avatar>
-            <q-icon :name="item.icon" color="primary" />
-          </q-item-section>
+      <div class="fit column no-wrap">
+        <q-item clickable :to="dashboardPath" class="bg-green-1 q-py-md">
           <q-item-section>
-            <q-item-label>{{ item.label }}</q-item-label>
+            <q-item-label class="text-h6 text-weight-bold text-primary">{{ t('brand.name') }}</q-item-label>
           </q-item-section>
         </q-item>
-      </q-list>
 
-      <q-card flat class="q-ma-md bg-green-1">
-        <q-card-section>
-          <div class="text-subtitle2 text-weight-bold text-primary">{{ t('layout.localFirstTitle') }}</div>
-          <div class="text-caption text-grey-8">{{ t('layout.localFirstBody') }}</div>
-        </q-card-section>
-      </q-card>
+        <q-list padding>
+          <q-item
+            v-for="item in navItems"
+            :key="item.label"
+            :clickable="Boolean(item.to)"
+            :disable="!item.to"
+            :to="item.to"
+          >
+            <q-item-section avatar>
+              <q-icon :name="item.icon" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ item.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+
+        <q-card flat class="q-ma-md bg-green-1">
+          <q-card-section>
+            <div class="text-subtitle2 text-weight-bold text-primary">{{ t('layout.localFirstTitle') }}</div>
+            <div class="text-caption text-grey-8">{{ t('layout.localFirstBody') }}</div>
+          </q-card-section>
+        </q-card>
+
+        <q-space />
+
+        <div class=" q-pb-sm">
+          <q-separator class="q-mb-sm" />
+
+          <q-list>
+            <q-item clickable :to="localizedPath('/contact')" class="rounded-borders">
+              <q-item-section avatar>
+                <q-icon name="mail" color="primary" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ t('footer.contact') }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable :to="localizedPath('/privacy')" class="rounded-borders">
+              <q-item-section avatar>
+                <q-icon name="privacy_tip" color="primary" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ t('footer.privacy') }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable :to="localizedPath('/terms')" class="rounded-borders">
+              <q-item-section avatar>
+                <q-icon name="gavel" color="primary" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ t('footer.terms') }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable :to="localizedPath('/about')" class="rounded-borders">
+              <q-item-section avatar>
+                <q-icon name="info" color="primary" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ t('footer.about') }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+
+        <div class="row items-center q-gutter-sm q-px-md q-pb-md text-caption text-grey-7">
+          <q-avatar rounded size="24px">
+            <img :src="logoSmall" :alt="t('brand.smallIconAlt')" />
+          </q-avatar>
+          <span v-html="t('footer.copyright')" />
+        </div>
+      </div>
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <q-footer bordered class="bg-white text-grey-8">
-      <q-toolbar class="q-py-sm">
-        <div class="row items-center justify-between full-width q-col-gutter-md">
-          <div class="col-12 col-md-auto">
-            <div class="row items-center q-gutter-md text-caption">
-              <q-btn flat dense no-caps color="grey-8" :label="t('footer.terms')" :to="localizedPath('/terms')" />
-              <q-btn flat dense no-caps color="grey-8" :label="t('footer.privacy')" :to="localizedPath('/privacy')" />
-              <q-btn flat dense no-caps color="grey-8" :label="t('footer.contact')" :to="localizedPath('/contact')" />
-              <q-btn flat dense no-caps color="grey-8" :label="t('footer.about')" :to="localizedPath('/about')" />
-            </div>
-          </div>
-
-          <div class="col-12 col-md-auto">
-            <div class="row items-center q-gutter-sm text-caption">
-              <q-avatar rounded size="24px">
-                <img :src="logoSmall" :alt="t('brand.smallIconAlt')" />
-              </q-avatar>
-              <span v-html="t('footer.copyright')" />
-            </div>
-          </div>
-        </div>
-      </q-toolbar>
-    </q-footer>
   </q-layout>
 </template>
 
