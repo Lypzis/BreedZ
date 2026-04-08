@@ -80,12 +80,12 @@
           <q-separator class="q-mb-sm" />
 
           <q-list>
-            <q-item clickable :to="localizedPath('/terms')" class="rounded-borders">
+            <q-item clickable :to="localizedPath('/contact')" class="rounded-borders">
               <q-item-section avatar>
-                <q-icon name="gavel" color="primary" />
+                <q-icon name="mail" color="primary" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ t('footer.terms') }}</q-item-label>
+                <q-item-label>{{ t('footer.contact') }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item clickable :to="localizedPath('/privacy')" class="rounded-borders">
@@ -96,12 +96,12 @@
                 <q-item-label>{{ t('footer.privacy') }}</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item clickable :to="localizedPath('/contact')" class="rounded-borders">
+            <q-item clickable :to="localizedPath('/terms')" class="rounded-borders">
               <q-item-section avatar>
-                <q-icon name="mail" color="primary" />
+                <q-icon name="gavel" color="primary" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>{{ t('footer.contact') }}</q-item-label>
+                <q-item-label>{{ t('footer.terms') }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item clickable :to="localizedPath('/about')" class="rounded-borders">
