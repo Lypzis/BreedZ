@@ -13,14 +13,24 @@
             </div>
 
             <div class="col-12 col-md-auto">
-              <q-btn
-                unelevated
-                color="primary"
-                icon="add"
-                :label="t('common.addEvent')"
-                :disable="activeAnimals.length === 0"
-                @click="openQuickEventDialog"
-              />
+              <div class="row q-gutter-sm justify-end">
+                <q-btn
+                  v-if="!isSignedIn"
+                  outline
+                  color="primary"
+                  icon="login"
+                  :label="t('account.signIn')"
+                  to="/account"
+                />
+                <q-btn
+                  unelevated
+                  color="primary"
+                  icon="add"
+                  :label="t('common.addEvent')"
+                  :disable="activeAnimals.length === 0"
+                  @click="openQuickEventDialog"
+                />
+              </div>
             </div>
           </q-card-section>
 
@@ -298,6 +308,7 @@ import AnimalPickerField from 'src/components/AnimalPickerField.vue'
 import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import {
@@ -308,6 +319,7 @@ import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 
 const $q = useQuasar()
 const { t } = useI18nText()
+const authStore = useAuthStore()
 const animalsStore = useAnimalsStore()
 const eventsStore = useEventsStore()
 
@@ -321,6 +333,7 @@ const {
   events,
   isLoading: eventsLoading,
 } = storeToRefs(eventsStore)
+const { isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
 const quickEventForm = reactive(defaultQuickEventForm())
