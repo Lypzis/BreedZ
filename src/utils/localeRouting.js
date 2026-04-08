@@ -10,9 +10,72 @@ const LOCALE_TO_ROUTE_SEGMENT = {
   'pt-BR': 'pt-br',
 }
 
+const LOCALIZED_PUBLIC_PATHS = {
+  en: {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
+    '/about': '/about',
+    '/contact': '/contact',
+    '/privacy': '/privacy',
+    '/terms': '/terms',
+  },
+  'pt-BR': {
+    '/': '/',
+    '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
+    '/about': '/sobre',
+    '/contact': '/contato',
+    '/privacy': '/privacidade',
+    '/terms': '/termos',
+  },
+}
+
+const REVERSE_LOCALIZED_PUBLIC_PATHS = Object.fromEntries(
+  Object.entries(LOCALIZED_PUBLIC_PATHS).map(([locale, pathMap]) => [
+    locale,
+    Object.fromEntries(Object.entries(pathMap).map(([internalPath, localizedPath]) => [localizedPath, internalPath])),
+  ]),
+)
+
+function splitPathAndSuffix(value = '/') {
+  const rawValue = String(value || '/')
+  const suffixIndex = rawValue.search(/[?#]/)
+
+  if (suffixIndex === -1) {
+    return { path: rawValue || '/', suffix: '' }
+  }
+
+  return {
+    path: rawValue.slice(0, suffixIndex) || '/',
+    suffix: rawValue.slice(suffixIndex),
+  }
+}
+
+function normalizeLocalizedPublicPath(locale, path) {
+  const normalizedLocale = normalizeLocale(locale)
+  const reversePathMap = REVERSE_LOCALIZED_PUBLIC_PATHS[normalizedLocale] || {}
+  return reversePathMap[path] || path
+}
+
+function localizePublicPath(locale, path) {
+  const normalizedLocale = normalizeLocale(locale)
+  const localizedPathMap = LOCALIZED_PUBLIC_PATHS[normalizedLocale] || {}
+  return localizedPathMap[path] || path
+}
+
 export function routeSegmentToLocale(value) {
   const segment = String(value || '').trim().toLowerCase()
   return ROUTE_SEGMENT_TO_LOCALE[segment] || DEFAULT_LOCALE
+}
+
+export function localeFromPath(value = '/') {
+  const { path } = splitPathAndSuffix(value)
+  const localeMatch = path.match(/^\/(en|pt-br)(?=\/|$)/i)
+
+  if (!localeMatch) {
+    return ''
+  }
+
+  return routeSegmentToLocale(localeMatch[1])
 }
 
 export function localeToRouteSegment(value) {
@@ -21,8 +84,17 @@ export function localeToRouteSegment(value) {
 }
 
 export function stripLocaleFromPath(value = '/') {
-  const stripped = String(value || '/').replace(/^\/(en|pt-br)(?=\/|$)/i, '')
-  return stripped || '/'
+  const { path, suffix } = splitPathAndSuffix(value)
+  const localeMatch = path.match(/^\/(en|pt-br)(?=\/|$)/i)
+  const stripped = path.replace(/^\/(en|pt-br)(?=\/|$)/i, '') || '/'
+
+  if (!localeMatch) {
+    return `${stripped}${suffix}`
+  }
+
+  const routeLocale = routeSegmentToLocale(localeMatch[1])
+  const normalizedPath = normalizeLocalizedPublicPath(routeLocale, stripped)
+  return `${normalizedPath}${suffix}`
 }
 
 export function isAppShellPath(path = '/') {
@@ -39,9 +111,13 @@ export function isAppShellPath(path = '/') {
 }
 
 export function buildLocalizedPath(locale, path = '/') {
-  const normalizedPath = stripLocaleFromPath(path)
+  const { path: normalizedPathWithNoLocale, suffix } = splitPathAndSuffix(stripLocaleFromPath(path))
+  const normalizedPath = normalizedPathWithNoLocale || '/'
 
   const localeSegment = localeToRouteSegment(locale)
+  const localizedPath = localizePublicPath(locale, normalizedPath)
 
-  return normalizedPath === '/' ? `/${localeSegment}` : `/${localeSegment}${normalizedPath}`
+  return localizedPath === '/'
+    ? `/${localeSegment}${suffix}`
+    : `/${localeSegment}${localizedPath}${suffix}`
 }

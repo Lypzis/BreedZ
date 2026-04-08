@@ -13,7 +13,7 @@ const routes = [
     ],
   },
   {
-    path: '/:locale(en|pt-br)',
+    path: '/en',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
@@ -22,6 +22,23 @@ const routes = [
       { path: 'privacy', component: () => import('pages/PrivacyPage.vue') },
       { path: 'contact', component: () => import('pages/ContactPage.vue') },
       { path: 'about', component: () => import('pages/AboutPage.vue') },
+    ],
+  },
+  {
+    path: '/pt-br',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'guides/track-cattle-breeding-dates', redirect: '/pt-br/guias/acompanhar-datas-de-cobertura-no-gado' },
+      { path: 'guias/acompanhar-datas-de-cobertura-no-gado', component: () => import('pages/GuideBreedingDatesPage.vue') },
+      { path: 'terms', redirect: '/pt-br/termos' },
+      { path: 'termos', component: () => import('pages/TermsPage.vue') },
+      { path: 'privacy', redirect: '/pt-br/privacidade' },
+      { path: 'privacidade', component: () => import('pages/PrivacyPage.vue') },
+      { path: 'contact', redirect: '/pt-br/contato' },
+      { path: 'contato', component: () => import('pages/ContactPage.vue') },
+      { path: 'about', redirect: '/pt-br/sobre' },
+      { path: 'sobre', component: () => import('pages/AboutPage.vue') },
     ],
   },
 
