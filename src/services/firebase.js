@@ -1,5 +1,6 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getAnalytics, isSupported } from 'firebase/analytics'
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
@@ -18,6 +19,30 @@ export const auth = getAuth(firebaseApp)
 export const db = getFirestore(firebaseApp)
 
 let firebaseAnalytics = null
+let firebaseAppCheck = null
+
+export function initFirebaseAppCheck() {
+  if (firebaseAppCheck || typeof window === 'undefined') {
+    return firebaseAppCheck
+  }
+
+  const siteKey = import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY
+
+  if (!siteKey) {
+    return null
+  }
+
+  try {
+    firebaseAppCheck = initializeAppCheck(firebaseApp, {
+      provider: new ReCaptchaEnterpriseProvider(siteKey),
+      isTokenAutoRefreshEnabled: true,
+    })
+  } catch {
+    return firebaseAppCheck
+  }
+
+  return firebaseAppCheck
+}
 
 export async function initFirebaseAnalytics() {
   if (firebaseAnalytics || typeof window === 'undefined') {
@@ -34,4 +59,4 @@ export async function initFirebaseAnalytics() {
   return firebaseAnalytics
 }
 
-export { firebaseConfig, firebaseAnalytics }
+export { firebaseConfig, firebaseAnalytics, firebaseAppCheck }

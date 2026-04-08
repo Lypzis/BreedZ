@@ -161,11 +161,10 @@
                   <q-card-actions align="right">
                     <q-btn
                       unelevated
-                      color="negative"
-                      text-color="white"
-                      :loading="cancelLoading"
-                      :label="t('account.unsubscribe')"
-                      @click="cancelSubscription"
+                      color="primary"
+                      :loading="portalLoading"
+                      :label="t('account.manageSubscription')"
+                      @click="openCustomerPortal"
                     />
                   </q-card-actions>
                 </q-card>
@@ -274,7 +273,7 @@ const password = ref('')
 const receiveUpdates = ref(false)
 const showPassword = ref(false)
 const checkoutLoading = ref('')
-const cancelLoading = ref(false)
+const portalLoading = ref(false)
 const awaitingCheckoutSync = ref(false)
 let checkoutSyncTimeout = null
 
@@ -426,16 +425,16 @@ async function startCheckout(plan) {
   }
 }
 
-async function cancelSubscription() {
+async function openCustomerPortal() {
   if (!user.value) {
     return
   }
 
-  cancelLoading.value = true
+  portalLoading.value = true
 
   try {
     const idToken = await user.value.getIdToken()
-    const response = await fetch('/.netlify/functions/cancel-subscription', {
+    const response = await fetch('/.netlify/functions/create-customer-portal-session', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${idToken}`,
@@ -444,23 +443,19 @@ async function cancelSubscription() {
 
     const payload = await response.json().catch(() => ({}))
 
-    if (!response.ok) {
-      throw new Error(payload.error || t('account.unsubscribeFailed'))
+    if (!response.ok || !payload.url) {
+      throw new Error(payload.error || t('account.manageSubscriptionFailed'))
     }
 
-    $q.notify({
-      color: 'positive',
-      message: t('account.unsubscribeSuccess'),
-      position: 'top',
-    })
+    window.location.assign(payload.url)
   } catch (error) {
     $q.notify({
       color: 'negative',
-      message: error instanceof Error ? error.message : t('account.unsubscribeFailed'),
+      message: error instanceof Error ? error.message : t('account.manageSubscriptionFailed'),
       position: 'top',
     })
   } finally {
-    cancelLoading.value = false
+    portalLoading.value = false
   }
 }
 
