@@ -107,7 +107,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18nText } from 'src/i18n'
-import { buildLocalizedPath, isAppShellPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedPath, isAppShellPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
 const logoSmall = '/icons/favicon-32x32.png'
@@ -119,7 +119,7 @@ const router = useRouter()
 const routeLocale = computed(() =>
   typeof route.params.locale === 'string' && route.params.locale
     ? routeSegmentToLocale(route.params.locale)
-    : locale.value,
+    : localeFromPath(route.path) || locale.value,
 )
 const dashboardPath = computed(() => '/')
 
