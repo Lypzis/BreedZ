@@ -15,7 +15,7 @@
             <div class="col-12 col-md-auto">
               <div class="row q-gutter-sm justify-end">
                 <q-btn
-                  v-if="!isSignedIn"
+                  v-if="isAuthLoaded && !isSignedIn"
                   outline
                   color="primary"
                   icon="login"
@@ -27,7 +27,6 @@
                   color="primary"
                   icon="add"
                   :label="t('common.addEvent')"
-                  :disable="activeAnimals.length === 0"
                   @click="openQuickEventDialog"
                 />
               </div>
@@ -297,6 +296,40 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="isMissingAnimalsDialogOpen">
+      <q-card style="width: 100%; max-width: 420px">
+        <q-card-section class="row items-center justify-between">
+          <div class="text-h6 text-weight-bold">{{ t('common.addEvent') }}</div>
+          <q-btn
+            flat
+            round
+            dense
+            icon="close"
+            :aria-label="t('common.closeDialog')"
+            :title="t('common.closeDialog')"
+            v-close-popup
+          />
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="text-body1 text-grey-8">
+            {{ t('dashboard.noAnimalBeforeEvent') }}
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat color="grey-7" :label="t('common.cancel')" v-close-popup />
+          <q-btn
+            unelevated
+            color="primary"
+            :label="t('common.addAnimal')"
+            to="/animals"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -333,9 +366,10 @@ const {
   events,
   isLoading: eventsLoading,
 } = storeToRefs(eventsStore)
-const { isSignedIn } = storeToRefs(authStore)
+const { isLoaded: isAuthLoaded, isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
+const isMissingAnimalsDialogOpen = ref(false)
 const quickEventForm = reactive(defaultQuickEventForm())
 const dashboardSectionLimit = 5
 const eventTypeOptions = computed(() => getEventTypeOptions())
@@ -384,11 +418,7 @@ function resetQuickEventForm() {
 
 function openQuickEventDialog() {
   if (activeAnimals.value.length === 0) {
-    $q.notify({
-      color: 'negative',
-      message: t('common.onlyActiveAnimalsForEvents'),
-      position: 'top',
-    })
+    isMissingAnimalsDialogOpen.value = true
     return
   }
 
