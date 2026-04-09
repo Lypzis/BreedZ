@@ -37,6 +37,22 @@ export const useAuthStore = defineStore('auth', () => {
       if (error.code === 'auth/invalid-credential') {
         return t('account.invalidCredentialError')
       }
+
+      if (error.code === 'auth/email-already-in-use') {
+        return t('account.emailAlreadyInUseError')
+      }
+
+      if (error.code === 'auth/invalid-email') {
+        return t('account.invalidEmailError')
+      }
+
+      if (error.code === 'auth/missing-password') {
+        return t('account.missingPasswordError')
+      }
+
+      if (error.code === 'auth/weak-password') {
+        return t('account.weakPasswordError')
+      }
     }
 
     return error instanceof Error ? error.message : t(fallbackKey)
