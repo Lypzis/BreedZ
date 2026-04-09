@@ -175,7 +175,7 @@ Tracking checklist:
 - [x] Update all breeding event entry flows
 - [x] Add grouped `Breedings` section on animal detail
 - [x] Show offspring under each breeding partner
-- [ ] Decide whether to keep or simplify `Linked children`
+- [x] Decide whether to keep or simplify `Linked children`
 
 ### Premium Follow-up
 
@@ -232,7 +232,7 @@ Phase 1: Public pages
   - terms
 - [x] Add Spanish localized public slugs where appropriate
 - [x] Update sitemap and static public page generation
-- [ ] Verify canonicals and `hreflang` tags
+- [x] Verify canonicals and `hreflang` tags
 
 Phase 2: App UI
 - [x] Translate dashboard
@@ -246,8 +246,8 @@ Phase 2: App UI
 Quality checks:
 - [x] Review livestock terminology for Spanish-speaking users
 - [x] Avoid literal Portuguese-to-Spanish carryover
-- [ ] Test locale switching across public and app routes
-- [ ] Validate mobile layout with longer Spanish strings
+- [x] Test locale switching across public and app routes
+- [x] Validate mobile layout with longer Spanish strings
 - [ ] Recheck SEO snippets after deploy
 
 Guiding rule:

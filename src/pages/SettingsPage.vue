@@ -17,19 +17,23 @@
 
               <div class="col-12 col-md-4">
                 <q-banner rounded class="bg-green-1 text-primary">
-                  <template #avatar>
-                    <q-icon name="download" color="primary" />
-                  </template>
-                  <div class="text-subtitle2 text-weight-bold">{{ t('settings.exportTitle') }}</div>
-                  <div class="text-caption text-grey-8 q-mt-xs">
-                    {{ t('settings.exportDescription') }}
+                  <div class="row no-wrap items-start q-col-gutter-sm">
+                    <div class="col-auto">
+                      <q-icon name="download" color="primary" size="md" />
+                    </div>
+                    <div class="col">
+                      <div class="text-subtitle2 text-weight-bold">{{ t('settings.exportTitle') }}</div>
+                      <div class="text-caption text-grey-8 q-mt-xs">
+                        {{ t('settings.exportDescription') }}
+                      </div>
+                    </div>
                   </div>
                   <q-btn
                     unelevated
                     color="primary"
-                    :label="t('settings.exportJson')"
+                    :label="t('settings.exportExcel')"
                     icon="download"
-                    class="q-mt-md"
+                    class="q-mt-md full-width"
                     :loading="isExporting"
                     @click="handleExport"
                   />
@@ -38,12 +42,16 @@
 
               <div class="col-12 col-md-4">
                 <q-banner rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="upload_file" color="primary" />
-                  </template>
-                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.importTitle') }}</div>
-                  <div class="text-caption q-mt-xs">
-                    {{ t('settings.importDescription') }}
+                  <div class="row no-wrap items-start q-col-gutter-sm">
+                    <div class="col-auto">
+                      <q-icon name="upload_file" color="primary" size="md" />
+                    </div>
+                    <div class="col">
+                      <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.importTitle') }}</div>
+                      <div class="text-caption q-mt-xs">
+                        {{ t('settings.importDescription') }}
+                      </div>
+                    </div>
                   </div>
 
                   <q-file
@@ -51,7 +59,7 @@
                     outlined
                     dense
                     clearable
-                    accept=".json,application/json"
+                    accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     :label="t('settings.backupFile')"
                     class="q-mt-md"
                   />
@@ -59,24 +67,32 @@
                   <q-btn
                     unelevated
                     color="primary"
-                    :label="t('settings.importJson')"
+                    :label="t('settings.importExcel')"
                     icon="upload"
-                    class="q-mt-md"
+                    class="q-mt-md full-width"
                     :disable="!selectedBackupFile"
                     :loading="isImporting"
                     @click="handleImport"
                   />
+
+                  <div class="text-caption text-grey-7 q-mt-sm">
+                    {{ t('settings.excelHint') }}
+                  </div>
                 </q-banner>
               </div>
 
               <div class="col-12 col-md-4">
                 <q-banner rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="download_for_offline" color="primary" />
-                  </template>
-                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.installTitle') }}</div>
-                  <div class="text-caption q-mt-xs">
-                    {{ t('settings.installDescription') }}
+                  <div class="row no-wrap items-start q-col-gutter-sm">
+                    <div class="col-auto">
+                      <q-icon name="download_for_offline" color="primary" size="md" />
+                    </div>
+                    <div class="col">
+                      <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.installTitle') }}</div>
+                      <div class="text-caption q-mt-xs">
+                        {{ t('settings.installDescription') }}
+                      </div>
+                    </div>
                   </div>
 
                   <q-btn
@@ -84,7 +100,7 @@
                     color="primary"
                     :label="installButtonLabel"
                     icon="download"
-                    class="q-mt-md"
+                    class="q-mt-md full-width"
                     :disable="isInstalled"
                     @click="handleInstallClick"
                   />
@@ -138,13 +154,12 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { buildBackupPayload, importBackupPayload } from 'src/services/backup-service'
 
 const $q = useQuasar()
 const { t } = useI18nText()
@@ -169,19 +184,33 @@ const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
 )
 
+let backupServicePromise
+
+function loadBackupService() {
+  backupServicePromise ??= import('src/services/backup-service')
+  return backupServicePromise
+}
+
+onMounted(() => {
+  void loadBackupService()
+})
+
 async function handleExport() {
   isExporting.value = true
   statusMessage.value = ''
 
   try {
-    const payload = await buildBackupPayload()
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+    const { buildBackupWorkbookArray } = await loadBackupService()
+    const workbookArray = await buildBackupWorkbookArray()
+    const blob = new Blob([workbookArray], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     const timestamp = new Date().toISOString().replaceAll(':', '-')
 
     link.href = url
-    link.download = `breedz-backup-${timestamp}.json`
+    link.download = `breedz-backup-${timestamp}.xlsx`
     link.click()
     URL.revokeObjectURL(url)
 
@@ -204,10 +233,9 @@ async function handleImport() {
   statusMessage.value = ''
 
   try {
-    const fileText = await selectedBackupFile.value.text()
-    const parsedPayload = JSON.parse(fileText)
-
-    await importBackupPayload(parsedPayload)
+    const { importBackupWorkbookArrayBuffer } = await loadBackupService()
+    const arrayBuffer = await selectedBackupFile.value.arrayBuffer()
+    await importBackupWorkbookArrayBuffer(arrayBuffer)
     await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
 
     statusType.value = 'positive'
