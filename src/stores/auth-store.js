@@ -8,7 +8,7 @@ import {
   signOut,
 } from 'firebase/auth'
 import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
-import { t } from 'src/i18n'
+import { getCurrentLocaleValue, t } from 'src/i18n'
 import { auth, db } from 'src/services/firebase'
 import { createDefaultSubscription, isPremiumSubscription } from 'src/utils/subscription'
 
@@ -176,7 +176,13 @@ export const useAuthStore = defineStore('auth', () => {
     clearError()
 
     try {
-      await sendPasswordResetEmail(auth, email)
+      auth.languageCode = getCurrentLocaleValue()
+
+      await sendPasswordResetEmail(auth, email, {
+        url: typeof window === 'undefined'
+          ? 'https://breedz.app/account'
+          : `${window.location.origin}/account`,
+      })
     } catch (error) {
       errorMessage.value = getFriendlyAuthErrorMessage(error, 'account.passwordResetFailed')
       throw error
