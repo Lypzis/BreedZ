@@ -99,9 +99,9 @@ export const messages = {
           'BreedZ is an offline herd management app for cattle breeding records, animal history, lineage tracking, and farm recordkeeping in the field.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Track your herd. Even offline.',
+      heroTitle: 'Track cattle breeding, lineage, and herd records. Even offline.',
       heroSubtitle:
-        'Track breeding, births, and herd history with less paperwork and less guesswork for daily farm recordkeeping.',
+        'Keep breeding history, parents, offspring, and daily records in one offline-first app built for real field use.',
       installApp: 'Install app',
       installed: 'Installed',
       seeHowItWorks: 'See how it works',
@@ -111,7 +111,7 @@ export const messages = {
       installHintDefault:
         'On mobile, open the browser 3-dot menu and use Install app or Add to Home screen. On desktop, use the install icon in the browser bar when it appears.',
       installStatusInstalled: 'BreedZ is already installed on this device.',
-      heroBanner: 'Designed for real farm use: simple, offline, no clutter.',
+      heroBanner: 'Designed for real farm use: simple, offline, and built to keep lineage and breeding history organized.',
       appOverline: 'Inside The App',
       appTitle: 'What BreedZ already helps you do',
       appItems: [
@@ -151,9 +151,9 @@ export const messages = {
         'Notes end up scattered across paper, chat, and memory',
       ],
       featuresOverline: 'What You Get',
-      featuresTitle: 'Keep every animal and breeding record organized',
+      featuresTitle: 'Keep the whole herd organized without spreadsheet cleanup',
       featuresDescription:
-        'Built for cattle breeding records, livestock history, and simple herd record keeping on the farm.',
+        'Built for cattle breeding records, lineage tracking, offspring history, and practical herd management on the farm.',
       featuresItems: [
         'Track each animal',
         'Record breeding events',
@@ -172,9 +172,30 @@ export const messages = {
       offlineItems: [
         'Works fully offline',
         'Data saved on your device',
+        'Export to Excel anytime',
       ],
+      premiumOverline: 'Free And Premium',
+      premiumTitle: 'Start free, upgrade only when the herd outgrows it',
+      premiumDescription:
+        'BreedZ stays useful from the first records onward. Free use covers up to 20 animals, and premium unlocks unlimited animal registration with account-linked billing access.',
+      premiumItems: [
+        'Free plan for herds up to 20 animals',
+        'Premium unlocks unlimited animal registration',
+        'Secure billing access tied to your account',
+      ],
+      guidesOverline: 'Guides',
+      guidesTitle: 'Learn the recordkeeping side of better breeding',
+      guidesDescription:
+        'Use the guides below to tighten breeding dates, lineage records, and day-to-day decisions in the herd.',
+      breedingGuideDescription:
+        'Learn a simple process for tracking breeding dates, expected calving timing, and herd follow-up without scattered notes.',
+      openBreedingGuide: 'Read the breeding dates guide',
+      lineageGuideTitle: 'How to track cattle lineage and avoid breeding mistakes',
+      lineageGuideDescription:
+        'See a practical lineage workflow for linking parents, offspring, and breeding pairs without losing history over time.',
+      openLineageGuide: 'Read the lineage guide',
       ctaOverline: 'Get Started',
-      ctaTitle: 'Start managing your herd today',
+      ctaTitle: 'Open BreedZ and start recording the herd today',
       faqOverline: 'FAQ',
       faqTitle: 'Frequently asked questions',
       faqs: [
@@ -337,7 +358,7 @@ export const messages = {
       invalidCredentialError: 'Incorrect email or password.',
       planTitle: 'Current plan',
       billingTitle: 'Billing',
-      billingDescription: 'Secure payment management via Stripe.',
+      billingDescription: 'Secure payment management via <strong>Stripe</strong>.',
       billingDescriptionSignedOut: 'Sign in first to start a premium subscription.',
       billingDescriptionPremium: 'Premium is active on this account.',
       planFree: 'Free plan',
@@ -996,9 +1017,9 @@ export const messages = {
           'BreedZ é um aplicativo offline de manejo do rebanho para registros reprodutivos, histórico animal, linhagem e anotações no campo.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Controle seu rebanho. Mesmo offline.',
+      heroTitle: 'Controle reprodução, linhagem e registros do rebanho. Mesmo offline.',
       heroSubtitle:
-        'Acompanhe reprodução, nascimentos e histórico do rebanho com menos papelada e menos adivinhação no dia a dia da fazenda.',
+        'Mantenha histórico reprodutivo, pais, descendentes e registros do dia a dia em um app offline-first feito para uso real no campo.',
       installApp: 'Instalar app',
       installed: 'Instalado',
       seeHowItWorks: 'Ver como funciona',
@@ -1008,7 +1029,7 @@ export const messages = {
       installHintDefault:
         'No celular, abra o menu de 3 pontos do navegador e use Instalar app ou Adicionar à tela inicial. No desktop, use o ícone de instalação na barra do navegador quando ele aparecer.',
       installStatusInstalled: 'O BreedZ já está instalado neste dispositivo.',
-      heroBanner: 'Feito para uso real na fazenda: simples, offline e sem bagunça.',
+      heroBanner: 'Feito para uso real na fazenda: simples, offline e com linhagem e histórico reprodutivo organizados.',
       appOverline: 'Dentro do App',
       appTitle: 'O que o BreedZ já ajuda você a fazer',
       appItems: [
@@ -1048,9 +1069,9 @@ export const messages = {
         'As anotações acabam espalhadas entre papel, conversa e memória',
       ],
       featuresOverline: 'O Que Você Ganha',
-      featuresTitle: 'Mantenha cada animal e registro reprodutivo organizados',
+      featuresTitle: 'Mantenha o rebanho organizado sem depender de planilhas confusas',
       featuresDescription:
-        'Feito para registros reprodutivos, histórico do rebanho e controle simples dos animais na fazenda.',
+        'Feito para registros reprodutivos, linhagem, histórico de descendentes e manejo prático do rebanho na fazenda.',
       featuresItems: [
         'Acompanhe cada animal',
         'Registre eventos reprodutivos',
@@ -1069,9 +1090,30 @@ export const messages = {
       offlineItems: [
         'Funciona totalmente offline',
         'Os dados ficam salvos no seu dispositivo',
+        'Exporte para Excel quando quiser',
       ],
+      premiumOverline: 'Grátis E Premium',
+      premiumTitle: 'Comece grátis e faça upgrade só quando o rebanho pedir',
+      premiumDescription:
+        'O BreedZ já é útil desde os primeiros registros. O uso grátis cobre até 20 animais, e o premium libera cadastro ilimitado com cobrança vinculada à conta.',
+      premiumItems: [
+        'Plano grátis para rebanhos de até 20 animais',
+        'Premium libera cadastro ilimitado de animais',
+        'Acesso de cobrança seguro e vinculado à sua conta',
+      ],
+      guidesOverline: 'Guias',
+      guidesTitle: 'Aprenda a parte do registro que melhora a reprodução',
+      guidesDescription:
+        'Use os guias abaixo para organizar melhor datas de cobertura, linhagem e decisões do dia a dia no rebanho.',
+      breedingGuideDescription:
+        'Aprenda um processo simples para acompanhar datas de cobertura, previsão de parto e seguimento do rebanho sem anotações espalhadas.',
+      openBreedingGuide: 'Ler o guia de datas de cobertura',
+      lineageGuideTitle: 'Como acompanhar a linhagem no gado e evitar erros de reprodução',
+      lineageGuideDescription:
+        'Veja um fluxo prático para ligar pais, descendentes e pares reprodutivos sem perder o histórico com o tempo.',
+      openLineageGuide: 'Ler o guia de linhagem',
       ctaOverline: 'Comece Agora',
-      ctaTitle: 'Comece a gerenciar seu rebanho hoje',
+      ctaTitle: 'Abra o BreedZ e comece a registrar o rebanho hoje',
       faqOverline: 'FAQ',
       faqTitle: 'Perguntas frequentes',
       faqs: [
@@ -1235,7 +1277,7 @@ export const messages = {
       invalidCredentialError: 'E-mail ou senha incorretos.',
       planTitle: 'Plano atual',
       billingTitle: 'Cobrança',
-      billingDescription: 'Gerenciamento de pagamento seguro via Stripe.',
+      billingDescription: 'Gerenciamento de pagamento seguro via <strong>Stripe</strong>.',
       billingDescriptionSignedOut: 'Faça login primeiro para iniciar uma assinatura premium.',
       billingDescriptionPremium: 'O premium está ativo nesta conta.',
       planFree: 'Plano grátis',
@@ -2016,7 +2058,7 @@ export const messages = {
       invalidCredentialError: 'Correo o contraseña incorrectos.',
       planTitle: 'Plan actual',
       billingTitle: 'Pagos',
-      billingDescription: 'Gestión segura de pagos a través de Stripe.',
+      billingDescription: 'Gestión segura de pagos a través de <strong>Stripe</strong>.',
       billingDescriptionSignedOut: 'Inicia sesión primero para comenzar una suscripción premium.',
       billingDescriptionPremium: 'Premium está activo en esta cuenta.',
       planFree: 'Plan gratuito',
@@ -2276,9 +2318,9 @@ export const messages = {
           'BreedZ es una app offline para manejo del ganado con registros reproductivos, historial animal, trazabilidad de linaje y control de campo.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Controla tu ganado. Incluso sin conexión.',
+      heroTitle: 'Controla reproducción, linaje y registros del ganado. Incluso sin conexión.',
       heroSubtitle:
-        'Registra reproducción, partos e historial del rebaño con menos papeles y menos adivinanzas en el trabajo diario de la finca.',
+        'Mantén historial reproductivo, padres, descendencia y registros diarios en una app offline-first pensada para el trabajo real en la finca.',
       installApp: 'Instalar app',
       installed: 'Instalada',
       seeHowItWorks: 'Ver cómo funciona',
@@ -2288,7 +2330,7 @@ export const messages = {
       installHintDefault:
         'En el celular, abre el menú de 3 puntos del navegador y usa Instalar app o Añadir a pantalla de inicio. En escritorio, usa el ícono de instalación en la barra del navegador cuando aparezca.',
       installStatusInstalled: 'BreedZ ya está instalado en este dispositivo.',
-      heroBanner: 'Hecho para uso real en la finca: simple, offline y sin desorden.',
+      heroBanner: 'Hecho para uso real en la finca: simple, offline y con linaje e historial reproductivo bien organizados.',
       appOverline: 'Dentro de la app',
       appTitle: 'Lo que BreedZ ya te ayuda a hacer',
       appItems: [
@@ -2328,9 +2370,9 @@ export const messages = {
         'Las notas terminan repartidas entre papel, chat y memoria.',
       ],
       featuresOverline: 'Lo que obtienes',
-      featuresTitle: 'Mantén organizado cada animal y cada registro reproductivo',
+      featuresTitle: 'Mantén el rebaño organizado sin depender de hojas caóticas',
       featuresDescription:
-        'Pensado para registros reproductivos bovinos, historial animal y control simple del ganado en la finca.',
+        'Pensado para registros reproductivos bovinos, linaje, historial de descendencia y manejo práctico del ganado en la finca.',
       featuresItems: [
         'Registrar cada animal',
         'Anotar eventos reproductivos',
@@ -2349,9 +2391,30 @@ export const messages = {
       offlineItems: [
         'Funciona completamente offline',
         'Los datos se guardan en tu dispositivo',
+        'Exporta a Excel cuando quieras',
       ],
+      premiumOverline: 'Gratis Y Premium',
+      premiumTitle: 'Empieza gratis y pásate a premium solo cuando el rebaño lo pida',
+      premiumDescription:
+        'BreedZ ya sirve desde los primeros registros. El uso gratuito cubre hasta 20 animales, y premium desbloquea el registro ilimitado con acceso de pago ligado a la cuenta.',
+      premiumItems: [
+        'Plan gratuito para rebaños de hasta 20 animales',
+        'Premium desbloquea registro ilimitado de animales',
+        'Acceso de pagos seguro y vinculado a tu cuenta',
+      ],
+      guidesOverline: 'Guías',
+      guidesTitle: 'Aprende la parte del registro que mejora la reproducción',
+      guidesDescription:
+        'Usa las guías de abajo para ordenar mejor fechas reproductivas, linaje y decisiones diarias dentro del rebaño.',
+      breedingGuideDescription:
+        'Aprende un proceso simple para registrar fechas de reproducción, estimar partos y hacer seguimiento del rebaño sin notas dispersas.',
+      openBreedingGuide: 'Leer la guía de fechas reproductivas',
+      lineageGuideTitle: 'Cómo rastrear el linaje del ganado y evitar errores de reproducción',
+      lineageGuideDescription:
+        'Mira un flujo práctico para vincular padres, descendencia y parejas reproductivas sin perder historial con el tiempo.',
+      openLineageGuide: 'Leer la guía de linaje',
       ctaOverline: 'Comienza ahora',
-      ctaTitle: 'Empieza a manejar tu ganado hoy',
+      ctaTitle: 'Abre BreedZ y empieza a registrar tu rebaño hoy',
       faqOverline: 'FAQ',
       faqTitle: 'Preguntas frecuentes',
       faqs: [

@@ -146,9 +146,7 @@
                     <q-icon name="credit_card" color="primary" />
                   </template>
                   <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.billingTitle') }}</div>
-                  <div class="text-caption q-mt-xs">
-                    {{ billingDescriptionLabel }}
-                  </div>
+                  <div class="text-caption q-mt-xs" v-html="billingDescriptionLabel" />
                 </q-banner>
               </div>
             </div>
