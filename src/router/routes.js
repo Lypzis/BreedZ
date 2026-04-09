@@ -9,6 +9,7 @@ const routes = [
       { path: 'animals/:id', component: () => import('pages/AnimalDetailPage.vue') },
       { path: 'events', component: () => import('pages/EventsPage.vue') },
       { path: 'account', component: () => import('pages/AccountPage.vue') },
+      { path: 'account/reset-password', component: () => import('pages/ResetPasswordPage.vue') },
       { path: 'settings', component: () => import('pages/SettingsPage.vue') },
     ],
   },
