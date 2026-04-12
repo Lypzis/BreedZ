@@ -1,8 +1,20 @@
 const SITE_URL = 'https://breedz.app'
 const DEFAULT_IMAGE = `${SITE_URL}/icons/icon-512x512.png`
 
-export function buildPageMeta({ title, description, path }) {
-  const url = `${SITE_URL}${path}`
+function normalizeCanonicalPath(path, trailingSlash) {
+  if (!trailingSlash) {
+    return path
+  }
+
+  if (path === '/') {
+    return path
+  }
+
+  return path.endsWith('/') ? path : `${path}/`
+}
+
+export function buildPageMeta({ title, description, path, trailingSlash = false }) {
+  const url = `${SITE_URL}${normalizeCanonicalPath(path, trailingSlash)}`
   const fullTitle = `${title} | BreedZ`
 
   return {

@@ -337,6 +337,7 @@ useMeta(() =>
     title: t('home.meta.title'),
     description: t('home.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/'),
+    trailingSlash: true,
   }),
 )
 
