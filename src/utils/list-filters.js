@@ -1,5 +1,5 @@
 import { getEventTypeMeta } from '../constants/events.js'
-import { normalizeSpeciesLabel } from './species.js'
+import { normalizeBreedLabel, normalizeSpeciesLabel } from './species.js'
 
 export function filterAnimalsList(animals, filters = {}) {
   const query = String(filters.searchTerm ?? '')
@@ -7,6 +7,7 @@ export function filterAnimalsList(animals, filters = {}) {
     .toLowerCase()
   const status = String(filters.status ?? '').trim().toLowerCase()
   const species = normalizeSpeciesLabel(filters.species).toLowerCase()
+  const breed = normalizeBreedLabel(filters.breed).toLowerCase()
   const breedersOnly = Boolean(filters.breedersOnly)
 
   return animals.filter((animal) => {
@@ -15,6 +16,10 @@ export function filterAnimalsList(animals, filters = {}) {
     }
 
     if (species && normalizeSpeciesLabel(animal.species).toLowerCase() !== species) {
+      return false
+    }
+
+    if (breed && normalizeBreedLabel(animal.breed).toLowerCase() !== breed) {
       return false
     }
 

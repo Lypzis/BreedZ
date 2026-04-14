@@ -44,6 +44,16 @@
             </div>
             <div class="col-12 col-sm-4">
               <q-select
+                v-model="selectedBreed"
+                outlined
+                dense
+                clearable
+                :label="t('animals.breedFilter')"
+                :options="breedOptions"
+              />
+            </div>
+            <div class="col-12 col-sm-4">
+              <q-select
                 v-model="selectedStatus"
                 outlined
                 dense
@@ -300,7 +310,7 @@ import {
   canCreateAnimal,
   getAnimalLimitReminder,
 } from 'src/utils/premium-limits'
-import { normalizeSpeciesLabel } from 'src/utils/species'
+import { normalizeBreedLabel, normalizeSpeciesLabel } from 'src/utils/species'
 
 const $q = useQuasar()
 const { t } = useI18nText()
@@ -312,6 +322,7 @@ const { activeAnimals, animals, errorMessage, isLoading } = storeToRefs(animalsS
 
 const searchTerm = ref('')
 const selectedSpecies = ref('')
+const selectedBreed = ref('')
 const selectedStatus = ref('')
 const breedersOnly = ref(false)
 const listMode = ref('paged')
@@ -337,12 +348,16 @@ const listModeOptions = computed(() => [
 const speciesOptions = computed(() =>
   [...new Set(animals.value.map((animal) => normalizeSpeciesLabel(animal.species)).filter(Boolean))].sort(),
 )
+const breedOptions = computed(() =>
+  [...new Set(animals.value.map((animal) => normalizeBreedLabel(animal.breed)).filter(Boolean))].sort(),
+)
 
 const filteredAnimals = computed(() => {
   return filterAnimalsList(animals.value, {
     searchTerm: searchTerm.value,
     status: selectedStatus.value,
     species: selectedSpecies.value,
+    breed: selectedBreed.value,
     breedersOnly: breedersOnly.value,
   })
 })
@@ -358,7 +373,7 @@ const displayedAnimalsCount = computed(() =>
 )
 
 const emptyStateMessage = computed(() =>
-  searchTerm.value || selectedStatus.value || selectedSpecies.value || breedersOnly.value
+  searchTerm.value || selectedStatus.value || selectedSpecies.value || selectedBreed.value || breedersOnly.value
     ? t('animals.emptyFiltered')
     : t('animals.emptyInitial'),
 )
@@ -512,7 +527,7 @@ function statusColor(status) {
   return 'primary'
 }
 
-watch([searchTerm, selectedStatus, selectedSpecies, breedersOnly, listMode, pageSize], () => {
+watch([searchTerm, selectedStatus, selectedSpecies, selectedBreed, breedersOnly, listMode, pageSize], () => {
   currentPage.value = 1
 })
 
