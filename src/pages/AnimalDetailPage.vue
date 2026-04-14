@@ -96,8 +96,8 @@
                     {{ t('animalDetail.offspringChip', { count: offspringAnimals.length }) }}
                   </q-chip>
                 </div>
-                <div class="col-auto" v-if="animal.birthDate">
-                  <q-chip square color="green-1" text-color="primary" icon="cake">
+                <div class="col-12 col-sm-auto" v-if="animal.birthDate">
+                  <q-chip square color="green-1" text-color="primary" icon="cake" class="detail-wrap-chip">
                     {{ birthChipLabel(animal.birthDate) }}
                   </q-chip>
                 </div>
@@ -942,3 +942,15 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.detail-wrap-chip {
+  max-width: 100%;
+  height: auto;
+}
+
+.detail-wrap-chip :deep(.q-chip__content) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+</style>
