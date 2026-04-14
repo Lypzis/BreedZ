@@ -4,6 +4,7 @@ export function useNetworkStatus() {
   const isOnline = ref(true)
   const isReady = ref(false)
   let offlineRetryTimer = null
+  let verificationTimer = null
   let verificationRequestId = 0
 
   async function verifyReachability() {
@@ -46,6 +47,16 @@ export function useNetworkStatus() {
     }
   }
 
+  function startVerificationTimer() {
+    if (verificationTimer !== null) {
+      window.clearInterval(verificationTimer)
+    }
+
+    verificationTimer = window.setInterval(() => {
+      void verifyReachability()
+    }, 15000)
+  }
+
   function syncNetworkStatus() {
     if (!window.navigator.onLine) {
       isOnline.value = false
@@ -65,6 +76,7 @@ export function useNetworkStatus() {
   onMounted(() => {
     syncNetworkStatus()
     isReady.value = true
+    startVerificationTimer()
 
     window.addEventListener('online', syncNetworkStatus)
     window.addEventListener('offline', syncNetworkStatus)
@@ -82,6 +94,10 @@ export function useNetworkStatus() {
 
     if (offlineRetryTimer !== null) {
       window.clearInterval(offlineRetryTimer)
+    }
+
+    if (verificationTimer !== null) {
+      window.clearInterval(verificationTimer)
     }
   })
 
