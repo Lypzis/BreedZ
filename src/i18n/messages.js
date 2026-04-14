@@ -32,6 +32,8 @@ export const messages = {
     layout: {
       localFirstTitle: 'Local-first',
       localFirstBody: 'Your records stay on this device.',
+      online: 'Online',
+      offline: 'Offline',
     },
     common: {
       cancel: 'Cancel',
@@ -954,6 +956,8 @@ export const messages = {
     layout: {
       localFirstTitle: 'Local first',
       localFirstBody: 'Seus registros ficam neste dispositivo.',
+      online: 'Online',
+      offline: 'Offline',
     },
     common: {
       cancel: 'Cancelar',
@@ -1935,6 +1939,8 @@ export const messages = {
     layout: {
       localFirstTitle: 'Local primero',
       localFirstBody: 'Tus registros permanecen en este dispositivo.',
+      online: 'En línea',
+      offline: 'Sin conexión',
     },
     dashboard: {
       overline: 'Panel',
