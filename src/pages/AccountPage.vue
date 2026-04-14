@@ -110,6 +110,17 @@
                     :loading="isLoading"
                     :label="authMode === 'sign-in' ? t('account.signIn') : t('account.createAccount')"
                   />
+
+                  <q-btn
+                    v-if="authMode === 'sign-in'"
+                    flat
+                    no-caps
+                    color="primary"
+                    class="self-end q-px-sm"
+                    :disable="isLoading"
+                    :label="t('account.forgotPassword')"
+                    @click="handlePasswordReset"
+                  />
                 </q-form>
               </q-card-section>
             </q-card>
@@ -135,9 +146,7 @@
                     <q-icon name="credit_card" color="primary" />
                   </template>
                   <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.billingTitle') }}</div>
-                  <div class="text-caption q-mt-xs">
-                    {{ billingDescriptionLabel }}
-                  </div>
+                  <div class="text-caption q-mt-xs" v-html="billingDescriptionLabel" />
                 </q-banner>
               </div>
             </div>
@@ -377,6 +386,32 @@ async function handleSignOut() {
     $q.notify({
       color: 'negative',
       message: errorMessage.value || t('account.signOutFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function handlePasswordReset() {
+  if (!email.value.trim()) {
+    $q.notify({
+      color: 'warning',
+      message: t('account.passwordResetMissingEmail'),
+      position: 'top',
+    })
+    return
+  }
+
+  try {
+    await authStore.requestPasswordReset(email.value.trim())
+    $q.notify({
+      color: 'positive',
+      message: t('account.passwordResetSent'),
+      position: 'top',
+    })
+  } catch {
+    $q.notify({
+      color: 'negative',
+      message: errorMessage.value || t('account.passwordResetFailed'),
       position: 'top',
     })
   }

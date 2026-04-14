@@ -205,6 +205,7 @@ useMeta(() =>
     title: t('guideCattleLineage.meta.title'),
     description: t('guideCattleLineage.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/guides/how-to-track-cattle-lineage'),
+    trailingSlash: true,
   }),
 )
 

@@ -8,7 +8,7 @@ import {
   signOut,
 } from 'firebase/auth'
 import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
-import { t } from 'src/i18n'
+import { getCurrentLocaleValue, t } from 'src/i18n'
 import { auth, db } from 'src/services/firebase'
 import { createDefaultSubscription, isPremiumSubscription } from 'src/utils/subscription'
 
@@ -36,6 +36,22 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (error.code === 'auth/invalid-credential') {
         return t('account.invalidCredentialError')
+      }
+
+      if (error.code === 'auth/email-already-in-use') {
+        return t('account.emailAlreadyInUseError')
+      }
+
+      if (error.code === 'auth/invalid-email') {
+        return t('account.invalidEmailError')
+      }
+
+      if (error.code === 'auth/missing-password') {
+        return t('account.missingPasswordError')
+      }
+
+      if (error.code === 'auth/weak-password') {
+        return t('account.weakPasswordError')
       }
     }
 
@@ -176,7 +192,13 @@ export const useAuthStore = defineStore('auth', () => {
     clearError()
 
     try {
-      await sendPasswordResetEmail(auth, email)
+      auth.languageCode = getCurrentLocaleValue()
+
+      await sendPasswordResetEmail(auth, email, {
+        url: typeof window === 'undefined'
+          ? 'https://breedz.app/account'
+          : `${window.location.origin}/account`,
+      })
     } catch (error) {
       errorMessage.value = getFriendlyAuthErrorMessage(error, 'account.passwordResetFailed')
       throw error

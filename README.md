@@ -175,7 +175,7 @@ Tracking checklist:
 - [x] Update all breeding event entry flows
 - [x] Add grouped `Breedings` section on animal detail
 - [x] Show offspring under each breeding partner
-- [ ] Decide whether to keep or simplify `Linked children`
+- [x] Decide whether to keep or simplify `Linked children`
 
 ### Premium Follow-up
 
@@ -232,7 +232,7 @@ Phase 1: Public pages
   - terms
 - [x] Add Spanish localized public slugs where appropriate
 - [x] Update sitemap and static public page generation
-- [ ] Verify canonicals and `hreflang` tags
+- [x] Verify canonicals and `hreflang` tags
 
 Phase 2: App UI
 - [x] Translate dashboard
@@ -246,12 +246,87 @@ Phase 2: App UI
 Quality checks:
 - [x] Review livestock terminology for Spanish-speaking users
 - [x] Avoid literal Portuguese-to-Spanish carryover
-- [ ] Test locale switching across public and app routes
-- [ ] Validate mobile layout with longer Spanish strings
+- [x] Test locale switching across public and app routes
+- [x] Validate mobile layout with longer Spanish strings
 - [ ] Recheck SEO snippets after deploy
 
 Guiding rule:
 - Spanish support should ship in steps, but each completed step should feel native enough to be user-facing.
+
+### SEO Guides Roadmap
+
+Goal:
+- Build a cattle-first content cluster that compounds search traffic around real breeding and recordkeeping problems.
+- Keep guides practical and tied to actual BreedZ workflows instead of publishing generic filler.
+
+Why:
+- Cattle-related search demand is stronger than broader livestock terms.
+- BreedZ already has credible product depth in:
+  - breeding dates
+  - lineage
+  - offspring tracking
+  - offline field use
+  - record organization
+
+Content rules:
+- Start with cattle queries first
+- Focus on high-intent operational searches, not vague educational topics
+- Each guide should:
+  - open with a real farm problem
+  - give a practical process
+  - naturally connect to BreedZ
+  - end with a soft CTA
+- Avoid:
+  - thin pages
+  - repetitive variants of the same guide
+  - generic AI-style writing
+
+Current live guides:
+- [x] `track-cattle-breeding-dates`
+- [x] `how-to-track-cattle-lineage`
+
+Cluster 1: Breeding tracking
+- [ ] `how-long-is-cow-pregnancy`
+- [ ] `cattle-gestation-calculator`
+- [ ] `when-will-my-cow-calve`
+- [ ] `how-to-avoid-missing-calving-dates`
+- [ ] `signs-cow-is-ready-to-calve`
+
+Cluster 2: Lineage and record keeping
+- [ ] `how-to-track-cattle-pedigree`
+- [ ] `best-cattle-record-keeping-methods`
+- [ ] `cattle-record-keeping-system`
+- [ ] `herd-management-spreadsheet-vs-app`
+- [ ] `best-way-to-track-cattle-records`
+
+Cluster 3: Offline farm reality
+- [ ] `cattle-app-offline`
+- [ ] `farm-management-app-without-internet`
+- [ ] `how-to-manage-cattle-without-internet`
+- [ ] `best-offline-farm-apps`
+
+Cluster 4: Pain-driven searches
+- [ ] `lost-breeding-records-what-to-do`
+- [ ] `forgot-cow-breeding-date`
+- [ ] `cattle-record-mistakes`
+- [ ] `how-to-fix-messy-herd-records`
+
+Suggested publishing order:
+1. `how-long-is-cow-pregnancy`
+2. `how-to-avoid-missing-calving-dates`
+3. `how-to-track-cattle-pedigree`
+4. `best-cattle-record-keeping-methods`
+5. `cattle-app-offline`
+6. `forgot-cow-breeding-date`
+
+Execution checklist for each new guide:
+- [ ] Write the guide in English first
+- [ ] Add localized PT-BR and ES versions
+- [ ] Add route and localized slugs
+- [ ] Add sitemap entries
+- [ ] Add static public page generation
+- [ ] Add internal links from the landing page or other guides
+- [ ] Recheck title, meta description, canonical, and `hreflang`
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

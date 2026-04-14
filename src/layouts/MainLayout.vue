@@ -20,11 +20,23 @@
             <q-avatar rounded size="42px">
               <img :src="logoIcon" :alt="t('brand.iconAlt')" />
             </q-avatar>
-            <div>
+            <div class="brand-name">
               <div class="text-h6 text-weight-bold">{{ t('brand.name') }}</div>
             </div>
           </router-link>
         </q-toolbar-title>
+
+        <q-chip
+          v-if="showNetworkStatusChip"
+          dense
+          square
+          :icon="isOnline ? 'wifi' : 'wifi_off'"
+          :color="isOnline ? 'green-1' : 'brown-1'"
+          :text-color="isOnline ? 'primary' : 'brown-10'"
+          class="q-chip q-pr-xs q-mr-md"
+        >
+          {{ isOnline ? t('layout.online') : t('layout.offline') }}
+        </q-chip>
 
         <q-btn-toggle
           v-model="selectedLocale"
@@ -134,6 +146,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useNetworkStatus } from 'src/composables/useNetworkStatus'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, isAppShellPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
@@ -143,12 +156,14 @@ const logoSmall = '/icons/favicon-48x48.png'
 const { locale, setLocale, t } = useI18nText()
 const route = useRoute()
 const router = useRouter()
+const { isOnline, isReady: networkStatusReady } = useNetworkStatus()
 
 const routeLocale = computed(() =>
   typeof route.params.locale === 'string' && route.params.locale
     ? routeSegmentToLocale(route.params.locale)
     : localeFromPath(route.path) || locale.value,
 )
+const showNetworkStatusChip = computed(() => networkStatusReady.value && isAppShellPath(route.path))
 const dashboardPath = computed(() => '/')
 
 const navItems = computed(() => [
@@ -218,5 +233,11 @@ function localizedPath(path) {
 .language-toggle :deep(.q-btn-item) {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+@media (max-width: 415px) {
+  .brand-name {
+    display: none;
+  }
 }
 </style>
