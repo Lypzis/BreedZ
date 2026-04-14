@@ -138,7 +138,7 @@ import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, isAppShellPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
-const logoSmall = '/icons/favicon-32x32.png'
+const logoSmall = '/icons/favicon-48x48.png'
 
 const { locale, setLocale, t } = useI18nText()
 const route = useRoute()
