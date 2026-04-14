@@ -66,6 +66,11 @@
                     {{ animal.species || t('common.speciesNotSet') }}
                   </q-chip>
                 </div>
+                <div class="col-auto" v-if="animal.breed">
+                  <q-chip square color="green-1" text-color="primary" icon="sell">
+                    {{ animal.breed }}
+                  </q-chip>
+                </div>
                 <div class="col-auto">
                   <q-chip square color="green-1" text-color="primary" icon="wc">
                     {{ sexLabel(animal.sex) }}
@@ -208,8 +213,7 @@
                         {{ animalDisplayName(group.partnerAnimal) }}
                       </div>
                       <div class="text-body2 text-grey-7">
-                        {{ sexLabel(group.partnerAnimal?.sex) }}
-                        <span v-if="group.partnerAnimal?.species"> • {{ group.partnerAnimal.species }}</span>
+                        {{ sexLabel(group.partnerAnimal?.sex) }} • {{ animalSpeciesBreed(group.partnerAnimal) }}
                       </div>
                       <div class="text-body2 text-grey-7">
                         {{ breedingCountLabel(group.count) }}
@@ -256,7 +260,7 @@
                             {{ animalDisplayName(child) }}
                           </q-item-label>
                           <q-item-label caption>
-                            {{ child.species || t('common.speciesNotSet') }} • {{ sexLabel(child.sex) }}
+                            {{ animalSpeciesBreed(child) }} • {{ sexLabel(child.sex) }}
                             <span v-if="child.birthDate"> • {{ ageSummary(child.birthDate) }}</span>
                           </q-item-label>
                         </q-item-section>
@@ -477,7 +481,7 @@
                   {{ animalDisplayName(child) }}
                 </q-item-label>
                 <q-item-label caption>
-                  {{ child.species || t('common.speciesNotSet') }} • {{ sexLabel(child.sex) }}
+                  {{ animalSpeciesBreed(child) }} • {{ sexLabel(child.sex) }}
                   <span v-if="child.birthDate"> • {{ ageSummary(child.birthDate) }}</span>
                 </q-item-label>
               </q-item-section>
@@ -538,7 +542,7 @@ import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { groupBreedingsByPartner } from 'src/utils/breeding-history'
 import {
   filterBreedingPartnerCandidates,
@@ -838,6 +842,10 @@ function confirmDeleteEvent(event) {
 
 function animalDisplayName(currentAnimal) {
   return formatAnimalDisplayName(currentAnimal)
+}
+
+function animalSpeciesBreed(currentAnimal, options) {
+  return formatAnimalSpeciesBreed(currentAnimal, options)
 }
 
 function sexLabel(sex) {

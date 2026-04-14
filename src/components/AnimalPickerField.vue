@@ -79,7 +79,7 @@
             <q-item-section>
               <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
               <q-item-label caption>
-                {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
+                {{ animalSpeciesBreed(animal) }} • {{ sexLabel(animal.sex) }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -101,7 +101,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useI18nText } from 'src/i18n'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { filterAnimalCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
 
 const props = defineProps({
@@ -161,6 +161,10 @@ const pickerCountLabel = computed(() =>
 
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
+}
+
+function animalSpeciesBreed(animal) {
+  return formatAnimalSpeciesBreed(animal)
 }
 
 function sexLabel(sex) {

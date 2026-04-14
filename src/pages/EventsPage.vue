@@ -112,8 +112,8 @@
                 </q-item-label>
                 <q-item-label caption>
                   {{ formatDisplayDate(event.date) }}
-                  <span v-if="animalById(event.animalId)?.species">
-                    • {{ animalById(event.animalId)?.species }}
+                  <span v-if="animalById(event.animalId)">
+                    • {{ animalSpeciesBreed(animalById(event.animalId), { includeFallback: false }) }}
                   </span>
                 </q-item-label>
                 <q-item-label v-if="event.notes" caption class="text-grey-7">
@@ -183,8 +183,8 @@
                     </q-item-label>
                     <q-item-label caption>
                       {{ formatDisplayDate(event.date) }}
-                      <span v-if="animalById(event.animalId)?.species">
-                        • {{ animalById(event.animalId)?.species }}
+                      <span v-if="animalById(event.animalId)">
+                        • {{ animalSpeciesBreed(animalById(event.animalId), { includeFallback: false }) }}
                       </span>
                     </q-item-label>
                     <q-item-label v-if="event.notes" caption class="text-grey-7">
@@ -320,7 +320,7 @@ import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import {
   filterBreedingPartnerCandidates,
   validateBreedingPartnerSelection,
@@ -554,6 +554,10 @@ function animalById(id) {
 
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
+}
+
+function animalSpeciesBreed(animal, options) {
+  return formatAnimalSpeciesBreed(animal, options)
 }
 
 watch([searchTerm, selectedEventType, startDate, endDate, listMode, pageSize], () => {

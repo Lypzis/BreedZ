@@ -19,6 +19,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         tag: '001',
         name: 'Bella',
         species: 'Cattle',
+        breed: 'Nellore',
         isBreeder: true,
         sex: 'female',
         birthDate: '2024-01-10',
@@ -34,6 +35,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         tag: '002',
         name: 'Ranger',
         species: 'Cattle',
+        breed: 'Angus',
         isBreeder: true,
         sex: 'male',
         birthDate: '2023-01-10',
@@ -65,6 +67,7 @@ test('round-trips backup data through the Excel workbook format', () => {
   assert.equal(normalizedPayload.animals.length, 2)
   assert.equal(normalizedPayload.animals[0].isBreeder, true)
   assert.equal(normalizedPayload.animals[0].name, 'Bella')
+  assert.equal(normalizedPayload.animals[0].breed, 'Nellore')
   assert.equal(normalizedPayload.events.length, 1)
   assert.equal(normalizedPayload.events[0].partnerAnimalId, 'animal-2')
   assert.equal(normalizedPayload.events[0].type, 'breeding')

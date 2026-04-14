@@ -214,7 +214,7 @@
                   <q-item-section>
                     <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
                     <q-item-label caption>
-                      {{ animal.species || t('common.speciesNotSet') }} • {{ t('dashboard.needsSetupCaption') }}
+                      {{ animalSpeciesBreed(animal) }} • {{ t('dashboard.needsSetupCaption') }}
                     </q-item-label>
                   </q-item-section>
                   <q-item-section side>
@@ -343,7 +343,7 @@ import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import {
   filterBreedingPartnerCandidates,
   validateBreedingPartnerSelection,
@@ -474,6 +474,10 @@ function animalById(id) {
 
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
+}
+
+function animalSpeciesBreed(animal) {
+  return formatAnimalSpeciesBreed(animal)
 }
 
 watch(

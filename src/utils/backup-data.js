@@ -81,6 +81,7 @@ export function validateAndNormalizeBackupPayload(payload) {
       tag: normalizeString(animal.tag),
       name: normalizeString(animal.name),
       species: normalizeString(animal.species),
+      breed: normalizeString(animal.breed),
       isBreeder,
       sex,
       birthDate: normalizeString(animal.birthDate),

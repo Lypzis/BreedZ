@@ -39,8 +39,28 @@
             :label="t('animalForm.species')"
             :placeholder="t('animalForm.speciesPlaceholder')"
             :options="filteredSpeciesOptions"
+            :input-value="speciesInputValue"
             @filter="filterSpeciesOptions"
+            @input-value="updateSpeciesInputValue"
             @new-value="createSpeciesValue"
+            @blur="commitSpeciesInput"
+          />
+          <q-select
+            v-model="form.breed"
+            outlined
+            clearable
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="0"
+            :label="t('animalForm.breed')"
+            :placeholder="t('animalForm.breedPlaceholder')"
+            :options="filteredBreedOptions"
+            :input-value="breedInputValue"
+            @filter="filterBreedOptions"
+            @input-value="updateBreedInputValue"
+            @new-value="createBreedValue"
+            @blur="commitBreedInput"
           />
           <q-select v-model="form.sex" outlined :label="t('animalForm.sex')" :options="sexOptions" emit-value map-options />
           <q-input v-model="form.birthDate" outlined type="date" :label="t('animalForm.birthDate')" />
@@ -180,7 +200,7 @@
           <q-item-section>
             <q-item-label class="text-weight-medium">{{ animalDisplayName(candidate) }}</q-item-label>
             <q-item-label caption>
-              {{ candidate.species || t('common.speciesNotSet') }} • {{ sexLabel(candidate.sex) }}
+              {{ animalSpeciesBreed(candidate) }} • {{ sexLabel(candidate.sex) }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -202,9 +222,9 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { useI18nText } from 'src/i18n'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { filterParentCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
-import { normalizeSpeciesLabel } from 'src/utils/species'
+import { normalizeBreedLabel, normalizeSpeciesLabel } from 'src/utils/species'
 
 const props = defineProps({
   modelValue: {
@@ -233,7 +253,10 @@ const { t } = useI18nText()
 const isParentPickerOpen = ref(false)
 const parentPickerType = ref('dam')
 const parentSearchTerm = ref('')
+const speciesInputValue = ref('')
+const breedInputValue = ref('')
 const filteredSpeciesOptions = ref([])
+const filteredBreedOptions = ref([])
 
 const statusOptions = computed(() => [
   { label: t('common.status.active'), value: 'active' },
@@ -271,6 +294,15 @@ const speciesOptions = computed(() => {
   )
 
   return [...uniqueSpecies].sort((left, right) => left.localeCompare(right))
+})
+const breedOptions = computed(() => {
+  const uniqueBreeds = new Set(
+    props.animals
+      .map((animal) => normalizeBreedLabel(animal.breed))
+      .filter(Boolean),
+  )
+
+  return [...uniqueBreeds].sort((left, right) => left.localeCompare(right))
 })
 const parentCandidateBanner = computed(() => {
   const speciesPart = form.species
@@ -310,12 +342,35 @@ watch(
   { immediate: true },
 )
 
+watch(
+  breedOptions,
+  (options) => {
+    filteredBreedOptions.value = options
+  },
+  { immediate: true },
+)
+
+watch(
+  () => form.species,
+  (value) => {
+    speciesInputValue.value = value ?? ''
+  },
+)
+
+watch(
+  () => form.breed,
+  (value) => {
+    breedInputValue.value = value ?? ''
+  },
+)
+
 function defaultForm() {
   return {
     id: '',
     tag: '',
     name: '',
     species: '',
+    breed: '',
     isBreeder: false,
     sex: 'unknown',
     birthDate: '',
@@ -335,6 +390,7 @@ function loadForm() {
           tag: props.animal.tag,
           name: props.animal.name,
           species: props.animal.species,
+          breed: props.animal.breed ?? '',
           isBreeder: props.animal.isBreeder === true,
           sex: props.animal.sex ?? 'unknown',
           birthDate: props.animal.birthDate,
@@ -347,7 +403,10 @@ function loadForm() {
   )
 
   parentSearchTerm.value = ''
+  speciesInputValue.value = form.species
+  breedInputValue.value = form.breed
   filteredSpeciesOptions.value = speciesOptions.value
+  filteredBreedOptions.value = breedOptions.value
 }
 
 function closeDialog() {
@@ -389,11 +448,54 @@ function filterSpeciesOptions(value, update) {
   })
 }
 
+function updateSpeciesInputValue(value) {
+  speciesInputValue.value = value
+}
+
 function createSpeciesValue(value, done) {
-  done(normalizeSpeciesLabel(value))
+  const normalizedValue = normalizeSpeciesLabel(value)
+  form.species = normalizedValue
+  speciesInputValue.value = normalizedValue
+  done(normalizedValue, 'add-unique')
+}
+
+function commitSpeciesInput() {
+  const normalizedValue = normalizeSpeciesLabel(speciesInputValue.value)
+  form.species = normalizedValue
+  speciesInputValue.value = normalizedValue
+}
+
+function filterBreedOptions(value, update) {
+  update(() => {
+    const normalizedQuery = String(value || '').trim().toLowerCase()
+
+    filteredBreedOptions.value = breedOptions.value.filter((breed) =>
+      normalizedQuery ? breed.toLowerCase().includes(normalizedQuery) : true,
+    )
+  })
+}
+
+function updateBreedInputValue(value) {
+  breedInputValue.value = value
+}
+
+function createBreedValue(value, done) {
+  const normalizedValue = normalizeBreedLabel(value)
+  form.breed = normalizedValue
+  breedInputValue.value = normalizedValue
+  done(normalizedValue, 'add-unique')
+}
+
+function commitBreedInput() {
+  const normalizedValue = normalizeBreedLabel(breedInputValue.value)
+  form.breed = normalizedValue
+  breedInputValue.value = normalizedValue
 }
 
 async function submitForm() {
+  commitSpeciesInput()
+  commitBreedInput()
+
   if (!form.tag.trim() && !form.name.trim()) {
     $q.notify({
       color: 'negative',
@@ -419,13 +521,18 @@ function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
 }
 
+function animalSpeciesBreed(animal) {
+  return formatAnimalSpeciesBreed(animal)
+}
+
 function parentLabel(animal, emptyLabel = 'Not linked') {
   if (!animal) {
     return emptyLabel
   }
 
   const primary = animalDisplayName(animal)
-  const secondary = animal.species ? ` • ${animal.species}` : ''
+  const secondaryParts = [animal.species, animal.breed].filter(Boolean)
+  const secondary = secondaryParts.length > 0 ? ` • ${secondaryParts.join(' • ')}` : ''
   const sex = ` • ${sexLabel(animal.sex)}`
 
   return `${primary}${secondary}${sex}`

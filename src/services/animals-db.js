@@ -1,7 +1,7 @@
 import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
 import { normalizeAnimalBreeder } from 'src/utils/breeder'
 import { resolveStatusAfterEvent } from 'src/utils/event-status'
-import { normalizeSpeciesLabel } from 'src/utils/species'
+import { normalizeBreedLabel, normalizeSpeciesLabel } from 'src/utils/species'
 
 function normalizeStoredAnimal(animal) {
   return {
@@ -34,6 +34,7 @@ export async function createAnimal(input) {
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
+    breed: normalizeBreedLabel(input.breed),
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
@@ -62,6 +63,7 @@ export async function updateAnimal(id, input) {
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
+    breed: normalizeBreedLabel(input.breed),
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',

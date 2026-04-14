@@ -119,7 +119,7 @@
                     {{ animalDisplayName(animal) }}
                 </q-item-label>
                 <q-item-label caption>
-                  {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
+                  {{ animalSummary(animal) }} • {{ sexLabel(animal.sex) }}
                   <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
                 </q-item-label>
               </q-item-section>
@@ -193,7 +193,7 @@
                       {{ animalDisplayName(animal) }}
                     </q-item-label>
                     <q-item-label caption>
-                      {{ animal.species || t('common.speciesNotSet') }} • {{ sexLabel(animal.sex) }}
+                      {{ animalSummary(animal) }} • {{ sexLabel(animal.sex) }}
                       <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
                     </q-item-label>
                   </q-item-section>
@@ -285,12 +285,13 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useAnimalsStore } from 'src/stores/animals-store'
-import { formatAnimalDisplayName } from 'src/utils/animal-display'
+import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
 import { filterAnimalsList } from 'src/utils/list-filters'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
@@ -303,6 +304,7 @@ import { normalizeSpeciesLabel } from 'src/utils/species'
 
 const $q = useQuasar()
 const { t } = useI18nText()
+const router = useRouter()
 const authStore = useAuthStore()
 const animalsStore = useAnimalsStore()
 const { isPremium } = storeToRefs(authStore)
@@ -449,19 +451,31 @@ function notifyAnimalLimitReminder(totalCount) {
 }
 
 function notifyAnimalLimitBlocked() {
-  $q.notify({
-    group: false,
-    timeout: 8000,
-    color: 'negative',
-    textColor: 'white',
-    icon: 'workspace_premium',
+  $q.dialog({
+    title: t('animals.premiumBlockedTitle'),
     message: t('animals.premiumBlocked'),
-    position: 'top',
+    ok: {
+      label: t('animals.goToAccount'),
+      color: 'primary',
+      unelevated: true,
+    },
+    cancel: {
+      label: t('common.close'),
+      flat: true,
+      color: 'grey-7',
+    },
+    persistent: true,
+  }).onOk(() => {
+    void router.push('/account')
   })
 }
 
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
+}
+
+function animalSummary(animal) {
+  return formatAnimalSpeciesBreed(animal)
 }
 
 function sexLabel(sex) {
