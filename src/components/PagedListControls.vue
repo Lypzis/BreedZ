@@ -22,6 +22,7 @@
         <div class="row items-center q-col-gutter-sm">
           <div v-if="listMode === 'paged'" class="col-auto">
             <q-select
+              class="paged-list-per-page-select"
               :model-value="pageSize"
               dense
               outlined
@@ -102,3 +103,9 @@ defineProps({
 
 const emit = defineEmits(['update:currentPage', 'update:listMode', 'update:pageSize'])
 </script>
+
+<style scoped>
+.paged-list-per-page-select {
+  min-width: 112px;
+}
+</style>
