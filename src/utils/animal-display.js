@@ -14,3 +14,19 @@ export function formatAnimalDisplayName(animal, options = {}) {
 
   return tag || name || (options.emptyLabel ?? t('common.unnamedAnimal'))
 }
+
+export function formatAnimalSpeciesBreed(animal, options = {}) {
+  const parts = []
+
+  if (animal?.species) {
+    parts.push(animal.species)
+  } else if (options.includeFallback !== false) {
+    parts.push(options.missingSpeciesLabel ?? t('common.speciesNotSet'))
+  }
+
+  if (animal?.breed) {
+    parts.push(animal.breed)
+  }
+
+  return parts.join(' • ')
+}

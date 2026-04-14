@@ -305,8 +305,10 @@ export const messages = {
         'You’ve reached the free limit (20 animals). You can add one more, but premium will be required after that.',
       premiumReminder21:
         'This was your last free addition. Upgrade to continue adding animals without limits.',
+      premiumBlockedTitle: 'Free limit reached',
       premiumBlocked:
         'You’ve reached your free limit. Don’t lose track now — upgrade to keep growing your herd.',
+      goToAccount: 'Go to account',
       deleteTitle: 'Delete animal?',
       deleteMessage:
         'Are you sure? This will remove {animal}, its timeline events, and any lineage links to it.',
@@ -399,7 +401,9 @@ export const messages = {
       name: 'Name',
       namePlaceholder: 'Name (optional)',
       species: 'Species',
-      speciesPlaceholder: 'Cow, pig, goat...',
+      speciesPlaceholder: 'Cattle, sheep, goat...',
+      breed: 'Breed',
+      breedPlaceholder: 'Nellore, Angus, Boer...',
       sex: 'Sex',
       isBreeder: 'Reproducer',
       birthDate: 'Birth date',
@@ -1230,8 +1234,10 @@ export const messages = {
         'Você chegou ao limite grátis de 20 animais. Ainda pode adicionar mais 1, mas depois disso o premium será necessário.',
       premiumReminder21:
         'Esta foi sua última adição grátis. Faça upgrade para continuar adicionando animais sem limites.',
+      premiumBlockedTitle: 'Limite gratuito atingido',
       premiumBlocked:
         'Você atingiu o limite do plano gratuito. Não perca o controle agora — faça upgrade para continuar expandindo seu rebanho.',
+      goToAccount: 'Ir para a conta',
       deleteTitle: 'Excluir animal?',
       deleteMessage:
         'Tem certeza? Isso removerá {animal}, seus eventos da linha do tempo e qualquer vínculo de linhagem com ele.',
@@ -1324,7 +1330,9 @@ export const messages = {
       name: 'Nome',
       namePlaceholder: 'Nome (opcional)',
       species: 'Espécie',
-      speciesPlaceholder: 'Boi, porco, cabra...',
+      speciesPlaceholder: 'Bovino, ovino, caprino...',
+      breed: 'Raça',
+      breedPlaceholder: 'Nelore, Angus, Boer...',
       sex: 'Sexo',
       isBreeder: 'Reprodutor',
       birthDate: 'Data de nascimento',
@@ -2014,8 +2022,10 @@ export const messages = {
         'Ya alcanzaste el límite gratuito de 20 animales. Aún puedes agregar uno más, pero después necesitarás premium.',
       premiumReminder21:
         'Esta fue tu última alta gratuita. Pásate a premium para seguir agregando animales sin límites.',
+      premiumBlockedTitle: 'Límite gratuito alcanzado',
       premiumBlocked:
         'Ya alcanzaste el límite de tu plan gratuito. No pierdas el control ahora: pásate a premium para seguir ampliando tu rebaño.',
+      goToAccount: 'Ir a la cuenta',
       deleteTitle: '¿Eliminar animal?',
       deleteMessage:
         '¿Seguro? Esto eliminará a {animal}, sus eventos de la línea de tiempo y cualquier vínculo de linaje con él.',
@@ -2111,7 +2121,9 @@ export const messages = {
       name: 'Nombre',
       namePlaceholder: 'Nombre (opcional)',
       species: 'Especie',
-      speciesPlaceholder: 'Vaca, cerdo, cabra...',
+      speciesPlaceholder: 'Bovino, oveja, cabra...',
+      breed: 'Raza',
+      breedPlaceholder: 'Nelore, Angus, Boer...',
       sex: 'Sexo',
       isBreeder: 'De cría',
       birthDate: 'Fecha de nacimiento',

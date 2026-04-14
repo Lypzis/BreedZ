@@ -26,7 +26,7 @@ export function filterAnimalsList(animals, filters = {}) {
       return true
     }
 
-    return [animal.tag, animal.name, animal.species, animal.status, animal.isBreeder ? 'breeding' : 'cut'].some((value) =>
+    return [animal.tag, animal.name, animal.species, animal.breed, animal.status, animal.isBreeder ? 'breeding' : 'cut'].some((value) =>
       String(value ?? '')
         .toLowerCase()
         .includes(query),
@@ -66,6 +66,7 @@ export function filterEventsList(events, resolveAnimalById, filters = {}) {
       animal?.tag,
       animal?.name,
       animal?.species,
+      animal?.breed,
     ]
       .filter(Boolean)
       .join(' ')
