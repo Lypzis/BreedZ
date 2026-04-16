@@ -1,7 +1,7 @@
 <template>
   <AppPageShell>
         <q-card flat>
-          <q-card-section>
+          <q-card-section class="q-pb-none">
             <div class="text-overline text-weight-bold text-primary">{{ t('tutorial.overline') }}</div>
             <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('tutorial.title') }}</div>
             <div class="text-body1 text-grey-7">
@@ -9,9 +9,9 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            <q-list separator>
-              <q-item v-for="step in steps" :key="step.title">
+          <q-card-section class="q-px-none">
+            <q-list >
+              <q-item v-for="step in steps" :key="step.title" :class="{ 'q-pt-lg': step !== 0 }">
                 <q-item-section avatar top>
                   <q-avatar color="primary" text-color="white">{{ step.number }}</q-avatar>
                 </q-item-section>
@@ -42,7 +42,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section >
             <div class="text-overline text-weight-bold text-accent">{{ t('tutorial.tipsOverline') }}</div>
             <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('tutorial.tipsTitle') }}</div>
 

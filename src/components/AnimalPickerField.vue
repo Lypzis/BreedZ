@@ -1,6 +1,13 @@
 <template>
   <div>
-    <q-input :model-value="selectedAnimalLabel" outlined readonly :label="resolvedLabel">
+    <q-input
+      :model-value="selectedAnimalLabel"
+      outlined
+      readonly
+      :label="resolvedLabel"
+      class="animal-picker-trigger"
+      @click="openPicker"
+    >
       <template #append>
         <q-btn
           v-if="allowClear && modelValue"
@@ -11,7 +18,7 @@
           color="grey-7"
           :aria-label="t('animalPicker.clear')"
           :title="t('animalPicker.clear')"
-          @click="emit('update:modelValue', '')"
+          @click.stop="clearSelection"
         />
         <q-btn
           flat
@@ -21,7 +28,7 @@
           color="primary"
           :aria-label="t('animalPicker.search')"
           :title="t('animalPicker.search')"
-          @click="isPickerOpen = true"
+          @click.stop="openPicker"
         />
       </template>
     </q-input>
@@ -171,9 +178,29 @@ function sexLabel(sex) {
   return formatAnimalSex(sex)
 }
 
+function openPicker() {
+  isPickerOpen.value = true
+}
+
+function clearSelection() {
+  emit('update:modelValue', '')
+}
+
 function selectAnimal(animal) {
   emit('update:modelValue', animal.id)
   isPickerOpen.value = false
   searchTerm.value = ''
 }
 </script>
+
+<style scoped>
+.animal-picker-trigger {
+  cursor: pointer;
+}
+
+.animal-picker-trigger :deep(.q-field__control),
+.animal-picker-trigger :deep(.q-field__native),
+.animal-picker-trigger :deep(.q-field__label) {
+  cursor: pointer;
+}
+</style>

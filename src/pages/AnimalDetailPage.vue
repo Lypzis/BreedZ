@@ -31,34 +31,25 @@
           </q-card-section>
 
           <template v-else>
-            <q-card-section class="row items-start justify-between q-col-gutter-md">
-              <div class="col-12 col-md">
-                <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.timelineOverline') }}</div>
+            <q-card-section>
+              <div>
+                <!-- <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.timelineOverline') }}</div> -->
+                <div class="row q-gutter-xs q-mt-xs">
+                  <q-chip square dense :color="statusColor(animal.status)" text-color="white" icon="task_alt">
+                    {{ statusLabel(animal.status) }}
+                  </q-chip>
+                  <q-chip v-if="animal.isBreeder" square dense color="info" text-color="white" icon="bookmark">
+                    {{ t('common.reproducer') }}
+                  </q-chip>
+                </div>
                 <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
                   {{ animalDisplayName(animal) }}
-                </div>
-                <div class="text-body1 text-grey-7">
-                  {{ t('animalDetail.description') }}
-                </div>
-              </div>
-
-              <div class="col-12 col-md-auto">
-                <div class="row q-gutter-sm">
-                  <q-btn outline color="primary" icon="edit" :label="t('common.editAnimal')" @click="openEditDialog" />
-                  <q-btn
-                    unelevated
-                    color="primary"
-                    icon="add"
-                    :label="t('common.addEvent')"
-                    :disable="animal.status !== 'active'"
-                    @click="openEventDialog"
-                  />
                 </div>
               </div>
             </q-card-section>
 
             <q-card-section class="q-pt-none">
-              <div class="row q-col-gutter-sm">
+              <div class="row q-col-gutter-xs">
                 <div class="col-auto">
                   <q-chip square color="green-1" text-color="primary" icon="pets">
                     {{ animal.species || t('common.speciesNotSet') }}
@@ -74,35 +65,44 @@
                     {{ sexLabel(animal.sex) }}
                   </q-chip>
                 </div>
-                <div class="col-auto" v-if="animal.isBreeder">
-                  <q-chip square color="info" text-color="white" icon="bookmark">
-                    {{ t('common.reproducer') }}
+                <div class="col-auto">
+                  <q-chip square color="green-1" text-color="primary" icon="cake" class="detail-wrap-chip">
+                    {{ birthChipLabel(animal.birthDate) }}
                   </q-chip>
                 </div>
                 <div class="col-auto">
-                  <q-chip square :color="statusColor(animal.status)" text-color="white" icon="task_alt">
-                    {{ statusLabel(animal.status) }}
+                  <q-chip square color="green-1" text-color="primary" icon="calendar_today" class="detail-wrap-chip">
+                    {{ ageSummary(animal.birthDate) }}
                   </q-chip>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto" v-if="animalEvents.length">
                   <q-chip square color="green-1" text-color="primary" icon="timeline">
                     {{ t('animalDetail.eventsChip', { count: animalEvents.length }) }}
                   </q-chip>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto" v-if="offspringAnimals.length">
                   <q-chip square color="green-1" text-color="primary" icon="group">
                     {{ t('animalDetail.offspringChip', { count: offspringAnimals.length }) }}
-                  </q-chip>
-                </div>
-                <div class="col-12 col-sm-auto" v-if="animal.birthDate">
-                  <q-chip square color="green-1" text-color="primary" icon="cake" class="detail-wrap-chip">
-                    {{ birthChipLabel(animal.birthDate) }}
                   </q-chip>
                 </div>
               </div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
+              <div class="row q-gutter-sm">
+                <q-btn
+                  unelevated
+                  color="primary"
+                  icon="add"
+                  :label="t('common.addEvent')"
+                  :disable="animal.status !== 'active'"
+                  @click="openEventDialog"
+                />
+                <q-btn outline color="primary" icon="edit" :label="t('common.editAnimal')" @click="openEditDialog" />
+              </div>
+            </q-card-section>
+
+            <q-card-section >
               <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.lineageOverline') }}</div>
               <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('animalDetail.lineageTitle') }}</div>
 
@@ -858,9 +858,8 @@ function formatDate(value) {
 
 function birthChipLabel(value) {
   const dateLabel = t('animalDetail.bornChip', { date: formatDate(value) })
-  const ageLabel = formatAgeLabel(value)
 
-  return ageLabel ? `${dateLabel} (${ageLabel})` : dateLabel
+  return dateLabel;
 }
 
 function ageSummary(value) {
@@ -942,11 +941,12 @@ onMounted(async () => {
 <style scoped>
 .detail-wrap-chip {
   max-width: 100%;
-  height: auto;
+  /* height: auto; */
 }
 
 .detail-wrap-chip :deep(.q-chip__content) {
   white-space: normal;
   overflow-wrap: anywhere;
+  
 }
 </style>

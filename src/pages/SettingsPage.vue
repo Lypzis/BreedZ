@@ -9,7 +9,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section >
             <div class="row q-col-gutter-md">
               
 
