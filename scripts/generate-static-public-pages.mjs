@@ -67,38 +67,243 @@ const publicPages = [
     path: '/',
     titleKey: 'home.meta.title',
     descriptionKey: 'home.meta.description',
+    renderBody: renderHomePage,
   },
   {
     path: '/guides/track-cattle-breeding-dates',
     titleKey: 'guideBreedingDates.meta.title',
     descriptionKey: 'guideBreedingDates.meta.description',
+    renderBody: renderGuideBreedingDatesPage,
   },
   {
     path: '/guides/how-to-track-cattle-lineage',
     titleKey: 'guideCattleLineage.meta.title',
     descriptionKey: 'guideCattleLineage.meta.description',
+    renderBody: renderGuideCattleLineagePage,
   },
   {
     path: '/about',
     titleKey: 'about.meta.title',
     descriptionKey: 'about.meta.description',
+    renderBody: renderAboutPage,
   },
   {
     path: '/contact',
     titleKey: 'contact.meta.title',
     descriptionKey: 'contact.meta.description',
+    renderBody: renderContactPage,
   },
   {
     path: '/privacy',
     titleKey: 'privacy.meta.title',
     descriptionKey: 'privacy.meta.description',
+    renderBody: renderPrivacyPage,
   },
   {
     path: '/terms',
     titleKey: 'terms.meta.title',
     descriptionKey: 'terms.meta.description',
+    renderBody: renderTermsPage,
   },
 ]
+
+const staticStyles = `
+<style id="breedz-static-public-styles">
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f6f8f5;
+    color: #213127;
+  }
+
+  .breedz-static-shell {
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+  }
+
+  .breedz-static-wrap {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .breedz-static-card {
+    padding: 0;
+  }
+
+  .breedz-static-overline {
+    margin: 0 0 10px;
+    color: #2a6438;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .breedz-static-title {
+    margin: 0 0 14px;
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .breedz-static-subtitle,
+  .breedz-static-copy,
+  .breedz-static-block p,
+  .breedz-static-faq-answer,
+  .breedz-static-list li {
+    margin: 0;
+    color: #4f5d53;
+    line-height: 1.7;
+  }
+
+  .breedz-static-subtitle {
+    font-size: 1.05rem;
+  }
+
+  .breedz-static-block + .breedz-static-block,
+  .breedz-static-grid + .breedz-static-block,
+  .breedz-static-banner + .breedz-static-block,
+  .breedz-static-cta + .breedz-static-block {
+    margin-top: 28px;
+  }
+
+  .breedz-static-block-title {
+    margin: 0 0 10px;
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .breedz-static-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .breedz-static-grid--two {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .breedz-static-panel {
+    padding: 18px;
+    border: 1px solid #e3e8e2;
+    border-radius: 14px;
+    background: #fbfcfb;
+  }
+
+  .breedz-static-panel-title {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #213127;
+  }
+
+  .breedz-static-list,
+  .breedz-static-faq-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .breedz-static-list li + li,
+  .breedz-static-faq-item + .breedz-static-faq-item {
+    margin-top: 10px;
+  }
+
+  .breedz-static-banner {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: #eef6ef;
+    color: #2a6438;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .breedz-static-banner--accent {
+    background: #fff2e7;
+    color: #7b4d2a;
+  }
+
+  .breedz-static-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .breedz-static-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    border: 1px solid #2a6438;
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .breedz-static-button--primary {
+    background: #2a6438;
+    color: #ffffff;
+  }
+
+  .breedz-static-button--secondary {
+    background: #ffffff;
+    color: #2a6438;
+  }
+
+  .breedz-static-faq-question {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #213127;
+  }
+
+  .breedz-static-meta {
+    margin: 0 0 22px;
+    color: #6f7a72;
+    font-size: 0.95rem;
+  }
+
+  .breedz-static-contact-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .breedz-static-contact-item {
+    padding: 16px 18px;
+    border: 1px solid #e3e8e2;
+    border-radius: 14px;
+    background: #fbfcfb;
+  }
+
+  .breedz-static-contact-item strong,
+  .breedz-static-contact-item a {
+    display: block;
+  }
+
+  .breedz-static-contact-item a {
+    margin-top: 4px;
+    color: #2a6438;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .breedz-static-contact-item a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .breedz-static-shell {
+      padding: 16px 12px 28px;
+    }
+  }
+</style>
+`.trim()
 
 function localizePublicPath(locale, pagePath) {
   return localizedPublicPaths[locale]?.[pagePath] || pagePath
@@ -120,6 +325,10 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
+}
+
+function escapeAttribute(value) {
+  return escapeHtml(value).replaceAll("'", '&#39;')
 }
 
 function buildPageUrl(locale, routeSegment, pagePath) {
@@ -167,10 +376,331 @@ function buildMetaBlock({ fullTitle, description, url, ogLocale, pagePath }) {
     `<meta name="twitter:image" content="${DEFAULT_IMAGE}">`,
     `<link rel="canonical" href="${url}">`,
     buildAlternateLinks(pagePath),
+    staticStyles,
   ].join('')
 }
 
-function renderStaticPage(template, { htmlLang, fullTitle, description, metaBlock }) {
+function renderList(items) {
+  return `<ul class="breedz-static-list">${items
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join('')}</ul>`
+}
+
+function renderFaqs(faqs) {
+  return `<div class="breedz-static-faq-list">${faqs
+    .map(
+      (faq) => `
+        <article class="breedz-static-faq-item">
+          <h3 class="breedz-static-faq-question">${escapeHtml(faq.question)}</h3>
+          <p class="breedz-static-faq-answer">${escapeHtml(faq.answer)}</p>
+        </article>
+      `,
+    )
+    .join('')}</div>`
+}
+
+function renderActions(actions) {
+  return `<div class="breedz-static-actions">${actions
+    .map(
+      ({ href, label, primary = false }) =>
+        `<a class="breedz-static-button ${primary ? 'breedz-static-button--primary' : 'breedz-static-button--secondary'}" href="${escapeAttribute(href)}">${escapeHtml(label)}</a>`,
+    )
+    .join('')}</div>`
+}
+
+function renderPanels(items) {
+  return `<div class="breedz-static-grid breedz-static-grid--two">${items
+    .map(
+      (item) => `
+        <section class="breedz-static-panel">
+          <h3 class="breedz-static-panel-title">${escapeHtml(item.title)}</h3>
+          <p class="breedz-static-copy">${escapeHtml(item.description)}</p>
+          <div class="breedz-static-banner">${escapeHtml(item.chip)}</div>
+        </section>
+      `,
+    )
+    .join('')}</div>`
+}
+
+function renderBlocks(blocks) {
+  return blocks
+    .map(
+      (block) => `
+        <section class="breedz-static-block">
+          <h2 class="breedz-static-block-title">${escapeHtml(block.title)}</h2>
+          <p>${escapeHtml(block.body)}</p>
+        </section>
+      `,
+    )
+    .join('')
+}
+
+function wrapContent({ overline, title, description, innerHtml, meta }) {
+  return `
+    <div class="breedz-static-shell">
+      <main class="breedz-static-wrap">
+        <article class="breedz-static-card">
+          ${overline ? `<p class="breedz-static-overline">${escapeHtml(overline)}</p>` : ''}
+          <h1 class="breedz-static-title">${escapeHtml(title)}</h1>
+          ${meta ? `<p class="breedz-static-meta">${escapeHtml(meta)}</p>` : ''}
+          ${description ? `<p class="breedz-static-subtitle">${escapeHtml(description)}</p>` : ''}
+          ${innerHtml}
+        </article>
+      </main>
+    </div>
+  `.trim()
+}
+
+function renderHomePage(localeConfig, pagePath, localeMessages) {
+  const home = localeMessages.home
+
+  return wrapContent({
+    overline: home.overline,
+    title: home.heroTitle,
+    description: home.heroSubtitle,
+    innerHtml: [
+      `<div class="breedz-static-banner">${escapeHtml(home.heroBanner)}</div>`,
+      renderActions([
+        { href: '/', label: home.openDashboard, primary: true },
+        { href: '/tutorial', label: home.seeHowItWorks },
+      ]),
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.appTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(home.featuresDescription)}</p>
+        ${renderPanels(home.appItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.problemTitle)}</h2>
+        ${renderList(home.problemItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.featuresTitle)}</h2>
+        ${renderList(home.featuresItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.howItWorksTitle)}</h2>
+        ${renderList(home.howItWorksItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.offlineTitle)}</h2>
+        ${renderList(home.offlineItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.premiumTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(home.premiumDescription)}</p>
+        ${renderList(home.premiumItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.guidesTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(home.guidesDescription)}</p>
+        <div class="breedz-static-grid breedz-static-grid--two">
+          <section class="breedz-static-panel">
+            <h3 class="breedz-static-panel-title">${escapeHtml(localeMessages.guideBreedingDates.title)}</h3>
+            <p class="breedz-static-copy">${escapeHtml(home.breedingGuideDescription)}</p>
+            ${renderActions([
+              {
+                href: buildPageUrl(localeConfig.locale, localeConfig.routeSegment, '/guides/track-cattle-breeding-dates'),
+                label: home.openBreedingGuide,
+                primary: false,
+              },
+            ])}
+          </section>
+          <section class="breedz-static-panel">
+            <h3 class="breedz-static-panel-title">${escapeHtml(home.lineageGuideTitle)}</h3>
+            <p class="breedz-static-copy">${escapeHtml(home.lineageGuideDescription)}</p>
+            ${renderActions([
+              {
+                href: buildPageUrl(localeConfig.locale, localeConfig.routeSegment, '/guides/how-to-track-cattle-lineage'),
+                label: home.openLineageGuide,
+                primary: false,
+              },
+            ])}
+          </section>
+        </div>
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.faqTitle)}</h2>
+        ${renderFaqs(home.faqs)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(home.ctaTitle)}</h2>
+        ${renderActions([{ href: '/', label: home.openDashboard, primary: true }])}
+      </section>`,
+    ].join(''),
+  })
+}
+
+function renderGuideBreedingDatesPage(localeConfig, pagePath, localeMessages) {
+  const guide = localeMessages.guideBreedingDates
+
+  return wrapContent({
+    overline: guide.overline,
+    title: guide.title,
+    description: guide.description,
+    innerHtml: [
+      renderActions([
+        { href: '/', label: guide.openApp, primary: true },
+        { href: '/tutorial', label: guide.openTutorial },
+      ]),
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.problemTitle)}</h2>
+        ${renderList(guide.problemItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.logicTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.logicDescription)}</p>
+        ${renderList(guide.logicSteps)}
+        <div class="breedz-static-banner">${escapeHtml(`${guide.exampleLabel} ${guide.exampleText}`)}</div>
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.commonWaysTitle)}</h2>
+        ${renderList(guide.commonWaysItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.breaksTitle)}</h2>
+        ${renderList(guide.breaksItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.betterWayTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.betterWayDescription)}</p>
+        ${renderList(guide.betterWayItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.tipsTitle)}</h2>
+        ${renderList(guide.tipsItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.faqTitle)}</h2>
+        ${renderFaqs(guide.faqs)}
+      </section>`,
+    ].join(''),
+  })
+}
+
+function renderGuideCattleLineagePage(localeConfig, pagePath, localeMessages) {
+  const guide = localeMessages.guideCattleLineage
+
+  return wrapContent({
+    overline: guide.overline,
+    title: guide.title,
+    description: guide.description,
+    innerHtml: [
+      renderActions([{ href: '/', label: guide.openApp, primary: true }]),
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.hookTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.hookDescription)}</p>
+        ${renderList(guide.hookItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.realFarmsTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.realFarmsDescription)}</p>
+        ${renderList(guide.realFarmsItems)}
+        <div class="breedz-static-banner breedz-static-banner--accent">${escapeHtml(guide.realFarmsTakeaway)}</div>
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.systemTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.systemDescription)}</p>
+        <div class="breedz-static-grid">${guide.systemSteps
+          .map(
+            (step) => `
+              <section class="breedz-static-panel">
+                <h3 class="breedz-static-panel-title">${escapeHtml(step.title)}</h3>
+                <p class="breedz-static-copy">${escapeHtml(step.description)}</p>
+                ${Array.isArray(step.items) && step.items.length ? renderList(step.items) : ''}
+              </section>
+            `,
+          )
+          .join('')}</div>
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.changesTitle)}</h2>
+        ${renderList(guide.changesItems)}
+        <div class="breedz-static-banner">${escapeHtml(guide.changesTakeaway)}</div>
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.toolsTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.toolsDescription)}</p>
+        ${renderList(guide.toolsItems)}
+      </section>`,
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(guide.takeawayTitle)}</h2>
+        <p class="breedz-static-copy">${escapeHtml(guide.takeawayDescription)}</p>
+        <div class="breedz-static-banner">${escapeHtml(guide.takeawayBanner)}</div>
+      </section>`,
+    ].join(''),
+  })
+}
+
+function renderAboutPage(localeConfig, pagePath, localeMessages) {
+  const about = localeMessages.about
+
+  return wrapContent({
+    overline: about.overline,
+    title: about.title,
+    description: about.intro,
+    innerHtml: renderBlocks(about.blocks),
+  })
+}
+
+function renderContactPage(localeConfig, pagePath, localeMessages) {
+  const contact = localeMessages.contact
+
+  return wrapContent({
+    overline: contact.overline,
+    title: contact.title,
+    description: contact.intro,
+    innerHtml: `
+      <div class="breedz-static-contact-list">
+        ${contact.items
+          .map(
+            (item) => `
+              <section class="breedz-static-contact-item">
+                <strong>${escapeHtml(item.title)}</strong>
+                <a href="mailto:${escapeAttribute(item.email)}">${escapeHtml(item.email)}</a>
+              </section>
+            `,
+          )
+          .join('')}
+      </div>
+    `,
+  })
+}
+
+function renderPrivacyPage(localeConfig, pagePath, localeMessages) {
+  const privacy = localeMessages.privacy
+
+  return wrapContent({
+    overline: privacy.overline,
+    title: privacy.title,
+    meta: privacy.lastUpdated,
+    innerHtml: [
+      renderBlocks(privacy.blocks),
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(privacy.contactTitle)}</h2>
+        <p>${escapeHtml(privacy.contactBody)} <a href="mailto:privacy@breedz.app">privacy@breedz.app</a>.</p>
+      </section>`,
+    ].join(''),
+  })
+}
+
+function renderTermsPage(localeConfig, pagePath, localeMessages) {
+  const terms = localeMessages.terms
+
+  return wrapContent({
+    overline: terms.overline,
+    title: terms.title,
+    meta: terms.lastUpdated,
+    innerHtml: [
+      renderBlocks(terms.blocks),
+      `<section class="breedz-static-block">
+        <h2 class="breedz-static-block-title">${escapeHtml(terms.contactTitle)}</h2>
+        <p>${escapeHtml(terms.contactBody)} <a href="mailto:legal@breedz.app">legal@breedz.app</a>.</p>
+      </section>`,
+    ].join(''),
+  })
+}
+
+function renderStaticPage(template, { htmlLang, fullTitle, description, metaBlock, bodyContent }) {
   return template
     .replace('<html>', `<html lang="${htmlLang}">`)
     .replace(/<title>.*?<\/title>/, `<title>${escapeHtml(fullTitle)}</title>`)
@@ -179,6 +709,7 @@ function renderStaticPage(template, { htmlLang, fullTitle, description, metaBloc
       `<meta name=description content="${escapeHtml(description)}">`,
     )
     .replace('</head>', `${metaBlock}</head>`)
+    .replace('<div id=q-app></div>', `<div id=q-app>${bodyContent}</div>`)
 }
 
 async function main() {
@@ -206,12 +737,14 @@ async function main() {
         ogLocale: localeConfig.ogLocale,
         pagePath: page.path,
       })
+      const bodyContent = page.renderBody(localeConfig, page.path, localeMessages)
 
       const html = renderStaticPage(template, {
         htmlLang: localeConfig.htmlLang,
         fullTitle,
         description,
         metaBlock,
+        bodyContent,
       })
 
       await mkdir(path.dirname(outputPath), { recursive: true })
