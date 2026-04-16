@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat>
           <q-card-section class="row items-start justify-between q-col-gutter-md">
             <div class="col-12 col-md">
@@ -239,9 +237,6 @@
 
           </template>
         </q-card>
-      </div>
-    </div>
-
     <q-dialog v-model="isQuickEventDialogOpen">
       <q-card style="width: 100%; max-width: 640px">
         <q-card-section class="row items-center justify-between">
@@ -330,13 +325,14 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
 import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'

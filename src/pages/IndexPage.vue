@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat>
           <q-card-section>
             <div class="text-overline text-weight-bold text-primary">{{ t('home.overline') }}</div>
@@ -309,15 +307,14 @@
             <div class="text-caption text-grey-7 q-mt-sm">{{ t('common.noSignupRequired') }}</div>
           </q-card-section>
         </q-card>
-      </div>
-    </div>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import logoFull from 'src/assets/logo-hero.webp'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'

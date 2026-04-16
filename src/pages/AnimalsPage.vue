@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat>
           <q-card-section class="row items-start justify-between q-col-gutter-md">
             <div class="col-12 col-md">
@@ -278,9 +276,7 @@
           />
 
         </q-card>
-      </div>
-    </div>
-
+  </AppPageShell>
     <AnimalFormDialog
       v-model="isFormDialogOpen"
       :animal="selectedAnimal"
@@ -288,7 +284,6 @@
       :mode="formMode"
       @submit="submitForm"
     />
-  </q-page>
 </template>
 
 <script setup>
@@ -296,6 +291,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'

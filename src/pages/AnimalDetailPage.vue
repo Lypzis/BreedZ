@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <div class="q-mb-md">
           <div class="row items-center justify-between q-col-gutter-sm">
             <div class="col-auto">
@@ -384,9 +382,6 @@
             </q-list>
           </template>
         </q-card>
-      </div>
-    </div>
-
     <q-dialog v-model="isEventDialogOpen">
       <q-card style="width: 100%; max-width: 640px">
         <q-card-section class="row items-center justify-between">
@@ -527,7 +522,7 @@
       mode="edit"
       @submit="submitAnimalEdit"
     />
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
@@ -535,6 +530,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useQuasar } from 'quasar'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'

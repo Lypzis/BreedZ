@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-8 col-lg-6">
+  <AppPageShell :md="8" :lg="6">
         <q-card flat bordered>
           <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
@@ -127,9 +125,7 @@
             </q-form>
           </q-card-section>
         </q-card>
-      </div>
-    </div>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
@@ -137,6 +133,7 @@ import { onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import { setLocale, useI18nText } from 'src/i18n'
 import { auth } from 'src/services/firebase'
 
