@@ -79,7 +79,14 @@
             :label="t('animalForm.isBreeder')"
           />
 
-          <q-input :model-value="selectedDamLabel" outlined readonly :label="t('animalForm.dam')">
+          <q-input
+            :model-value="selectedDamLabel"
+            outlined
+            readonly
+            :label="t('animalForm.dam')"
+            class="parent-picker-trigger"
+            @click="openParentPicker('dam')"
+          >
             <template #append>
               <q-btn
                 v-if="form.damId"
@@ -90,7 +97,7 @@
                 color="grey-7"
                 :aria-label="t('animalForm.clearDam')"
                 :title="t('animalForm.clearDam')"
-                @click="clearParentSelection('dam')"
+                @click.stop="clearParentSelection('dam')"
               />
               <q-btn
                 flat
@@ -100,12 +107,19 @@
                 color="primary"
                 :aria-label="t('animalForm.searchDam')"
                 :title="t('animalForm.searchDam')"
-                @click="openParentPicker('dam')"
+                @click.stop="openParentPicker('dam')"
               />
             </template>
           </q-input>
 
-          <q-input :model-value="selectedSireLabel" outlined readonly :label="t('animalForm.sire')">
+          <q-input
+            :model-value="selectedSireLabel"
+            outlined
+            readonly
+            :label="t('animalForm.sire')"
+            class="parent-picker-trigger"
+            @click="openParentPicker('sire')"
+          >
             <template #append>
               <q-btn
                 v-if="form.sireId"
@@ -116,7 +130,7 @@
                 color="grey-7"
                 :aria-label="t('animalForm.clearSire')"
                 :title="t('animalForm.clearSire')"
-                @click="clearParentSelection('sire')"
+                @click.stop="clearParentSelection('sire')"
               />
               <q-btn
                 flat
@@ -126,7 +140,7 @@
                 color="primary"
                 :aria-label="t('animalForm.searchSire')"
                 :title="t('animalForm.searchSire')"
-                @click="openParentPicker('sire')"
+                @click.stop="openParentPicker('sire')"
               />
             </template>
           </q-input>
@@ -542,3 +556,15 @@ function sexLabel(sex) {
   return formatAnimalSex(sex)
 }
 </script>
+
+<style scoped>
+.parent-picker-trigger {
+  cursor: pointer;
+}
+
+.parent-picker-trigger :deep(.q-field__control),
+.parent-picker-trigger :deep(.q-field__native),
+.parent-picker-trigger :deep(.q-field__label) {
+  cursor: pointer;
+}
+</style>

@@ -11,13 +11,13 @@
             </div>
           </q-card-section>
 
-          <q-card-section v-if="errorMessage" class="q-pt-none">
+          <q-card-section v-if="errorMessage" class="q-pb-none">
             <q-banner rounded class="bg-red-1 text-negative">
               {{ errorMessage }}
             </q-banner>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section >
             <q-card v-if="!isLoaded" flat bordered>
               <q-card-section class="row items-center q-gutter-sm">
                 <q-spinner color="primary" size="24px" />
@@ -124,7 +124,7 @@
             </q-card>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section >
             <div class="row q-col-gutter-md">
               <div class="col-12 col-md-6">
                 <q-banner rounded class="bg-grey-1 text-grey-8">

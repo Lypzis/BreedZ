@@ -13,19 +13,19 @@
             <div class="col-12 col-md-auto">
               <div class="row q-gutter-sm justify-end">
                 <q-btn
+                  unelevated
+                  color="primary"
+                  icon="add"
+                  :label="t('common.addEvent')"
+                  @click="openQuickEventDialog"
+                />
+                <q-btn
                   v-if="isAuthLoaded && !isSignedIn"
                   outline
                   color="primary"
                   icon="login"
                   :label="t('account.signIn')"
                   to="/account"
-                />
-                <q-btn
-                  unelevated
-                  color="primary"
-                  icon="add"
-                  :label="t('common.addEvent')"
-                  @click="openQuickEventDialog"
                 />
               </div>
             </div>
@@ -44,7 +44,7 @@
           </q-card-section>
 
           <template v-else>
-            <q-card-section class="q-pt-none">
+            <q-card-section>
               <div class="row q-col-gutter-md">
                 <div class="col-12 col-sm-4">
                   <q-banner rounded class="bg-green-1 text-primary">
@@ -78,7 +78,7 @@
               </div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
               <div class="row items-center justify-between q-col-gutter-sm">
                 <div class="col">
                   <div class="text-overline text-weight-bold text-accent">{{ t('dashboard.todayOverline') }}</div>
@@ -97,7 +97,7 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="event in todayEventsPreview" :key="event.id">
+                <q-item v-for="event in todayEventsPreview" :key="event.id" class="q-py-md">
                   <q-item-section avatar>
                     <q-avatar
                       :color="getEventTypeMeta(event.type).color"
@@ -133,7 +133,7 @@
               </div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
               <div class="row items-center justify-between q-col-gutter-sm">
                 <div class="col">
                   <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.upcomingOverline') }}</div>
@@ -152,7 +152,7 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="event in upcomingEventsPreview" :key="event.id">
+                <q-item v-for="event in upcomingEventsPreview" :key="event.id" class="q-py-md">
                   <q-item-section avatar>
                     <q-avatar
                       :color="getEventTypeMeta(event.type).color"
@@ -186,7 +186,7 @@
               </div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
               <div class="row items-center justify-between q-col-gutter-sm">
                 <div class="col">
                   <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.needsSetupOverline') }}</div>
@@ -205,7 +205,7 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="animal in animalsWithoutEventsPreview" :key="animal.id">
+                <q-item v-for="animal in animalsWithoutEventsPreview" :key="animal.id" class="q-py-md">
                   <q-item-section avatar>
                     <q-avatar color="primary" text-color="white" icon="pets" />
                   </q-item-section>
@@ -257,13 +257,6 @@
 
         <q-card-section class="q-pt-none">
           <q-form class="column q-gutter-md" @submit.prevent="submitQuickEvent">
-            <AnimalPickerField
-              v-model="quickEventForm.animalId"
-              :animals="activeAnimals"
-              :label="t('events.pickAnimal')"
-              :dialog-title="t('events.pickAnimal')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
             <q-select
               v-model="quickEventForm.type"
               outlined
@@ -272,6 +265,15 @@
               emit-value
               map-options
             />
+            
+            <AnimalPickerField
+              v-model="quickEventForm.animalId"
+              :animals="activeAnimals"
+              :label="t('events.pickAnimal')"
+              :dialog-title="t('events.pickAnimal')"
+              :empty-label="t('common.noAnimalSelected')"
+            />
+            
             <AnimalPickerField
               v-if="quickEventForm.type === 'breeding'"
               v-model="quickEventForm.partnerAnimalId"

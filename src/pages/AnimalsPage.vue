@@ -15,7 +15,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="row q-col-gutter-sm q-pt-none">
+          <q-card-section class="row q-col-gutter-sm">
             <div class="col-12 col-sm">
               <q-input
                 v-model="searchTerm"
@@ -72,10 +72,10 @@
             </div>
             <div class="col-12 col-sm-auto">
               <q-chip square color="green-1" text-color="primary" icon="pets">
-                {{ t('animals.totalChip', { count: animals.length }) }}
+                {{ t('animals.totalChip', { count: filteredAnimals.length }) }}
               </q-chip>
               <q-chip square color="green-1" text-color="primary" icon="task_alt">
-                {{ t('animals.activeChip', { count: activeAnimals.length }) }}
+                {{ t('animals.activeChip', { count: filteredActiveAnimalsCount }) }}
               </q-chip>
             </div>
           </q-card-section>
@@ -117,7 +117,7 @@
           </q-card-section>
 
           <q-list v-else-if="listMode === 'paged'" separator>
-            <q-item v-for="animal in paginatedAnimals" :key="animal.id">
+            <q-item v-for="animal in paginatedAnimals" :key="animal.id" class="q-py-md">
               <q-item-section avatar>
                 <q-avatar color="primary" text-color="white" icon="pets" />
               </q-item-section>
@@ -314,7 +314,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const animalsStore = useAnimalsStore()
 const { isPremium } = storeToRefs(authStore)
-const { activeAnimals, animals, errorMessage, isLoading } = storeToRefs(animalsStore)
+const { animals, errorMessage, isLoading } = storeToRefs(animalsStore)
 
 const searchTerm = ref('')
 const selectedSpecies = ref('')
@@ -357,6 +357,9 @@ const filteredAnimals = computed(() => {
     breedersOnly: breedersOnly.value,
   })
 })
+const filteredActiveAnimalsCount = computed(() =>
+  filteredAnimals.value.filter((animal) => animal.status === 'active').length,
+)
 const pageCount = computed(() =>
   Math.max(1, Math.ceil(filteredAnimals.value.length / pageSize.value)),
 )

@@ -2,9 +2,9 @@
   <div>
     <q-card-section
       v-if="showHeader"
-      class="row items-center justify-between q-col-gutter-sm q-pt-none"
+      class="row items-center no-wrap q-col-gutter-sm"
     >
-      <div class="col-12 col-md-auto">
+      <div class="col-auto">
         <q-btn-toggle
           :model-value="listMode"
           unelevated
@@ -18,25 +18,18 @@
         />
       </div>
 
-      <div class="col-12 col-md-auto">
-        <div class="row items-center q-col-gutter-sm">
-          <div v-if="listMode === 'paged'" class="col-auto">
-            <q-select
-              class="paged-list-per-page-select"
-              :model-value="pageSize"
-              dense
-              outlined
-              emit-value
-              map-options
-              :label="perPageLabel"
-              :options="pageSizeOptions"
-              @update:model-value="emit('update:pageSize', $event)"
-            />
-          </div>
-          <div class="col-auto text-caption text-grey-7">
-            {{ showingText }}
-          </div>
-        </div>
+      <div v-if="listMode === 'paged'" class="col-auto">
+        <q-select
+          class="paged-list-per-page-select"
+          :model-value="pageSize"
+          dense
+          outlined
+          emit-value
+          map-options
+          :label="perPageLabel"
+          :options="pageSizeOptions"
+          @update:model-value="emit('update:pageSize', $event)"
+        />
       </div>
     </q-card-section>
 

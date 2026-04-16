@@ -22,7 +22,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="row q-col-gutter-sm q-pt-none">
+          <q-card-section class="row q-col-gutter-sm">
             <div class="col-12 col-md">
               <q-input
                 v-model="searchTerm"
@@ -94,8 +94,8 @@
             </q-banner>
           </q-card-section>
 
-          <q-list v-else-if="listMode === 'paged'" separator>
-            <q-item v-for="event in paginatedEvents" :key="event.id">
+          <q-list v-else-if="listMode === 'paged'" separator >
+            <q-item v-for="event in paginatedEvents" :key="event.id" class="q-py-md">
               <q-item-section avatar>
                 <q-avatar
                   :color="getEventTypeMeta(event.type).color"
