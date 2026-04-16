@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat>
           <q-card-section>
             <div class="text-overline text-weight-bold text-primary">{{ t('guideBreedingDates.overline') }}</div>
@@ -197,15 +195,14 @@
             </q-list>
           </q-card-section>
         </q-card>
-      </div>
-    </div>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'

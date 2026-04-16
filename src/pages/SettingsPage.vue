@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat>
           <q-card-section>
             <div class="text-overline text-weight-bold text-primary">{{ t('settings.overline') }}</div>
@@ -148,14 +146,13 @@
             </q-list>
           </q-card-section>
         </q-card>
-      </div>
-    </div>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'

@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row justify-center">
-      <div class="col-12 col-md-10 col-lg-8">
+  <AppPageShell>
         <q-card flat class="account-card">
           <q-card-section class="row items-start justify-between q-col-gutter-md">
             <div class="col-12 col-md">
@@ -255,9 +253,7 @@
             </div>
           </q-inner-loading>
         </q-card>
-      </div>
-    </div>
-  </q-page>
+  </AppPageShell>
 </template>
 
 <script setup>
@@ -265,6 +261,7 @@ import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
+import AppPageShell from 'src/components/AppPageShell.vue'
 import { useI18nText } from 'src/i18n'
 import { useAuthStore } from 'src/stores/auth-store'
 
