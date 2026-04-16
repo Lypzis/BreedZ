@@ -131,10 +131,7 @@ const staticStyles = `
   }
 
   .breedz-static-card {
-    background: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 8px 28px rgba(35, 58, 42, 0.08);
-    padding: 24px;
+    padding: 0;
   }
 
   .breedz-static-overline {
@@ -301,10 +298,6 @@ const staticStyles = `
   }
 
   @media (max-width: 640px) {
-    .breedz-static-card {
-      padding: 20px 18px;
-    }
-
     .breedz-static-shell {
       padding: 16px 12px 28px;
     }
