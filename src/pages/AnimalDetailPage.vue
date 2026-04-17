@@ -31,9 +31,9 @@
           </q-card-section>
 
           <template v-else>
-            <q-card-section>
+            <q-card-section class="q-pt-none">
               <div>
-                <!-- <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.timelineOverline') }}</div> -->
+                <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.timelineOverline') }}</div> 
                 <div class="row q-gutter-xs q-mt-xs">
                   <q-chip square dense :color="statusColor(animal.status)" text-color="white" icon="task_alt">
                     {{ statusLabel(animal.status) }}
@@ -66,12 +66,12 @@
                   </q-chip>
                 </div>
                 <div class="col-auto">
-                  <q-chip square color="green-1" text-color="primary" icon="cake" class="detail-wrap-chip">
+                  <q-chip square color="green-1" text-color="primary" icon="event" class="detail-wrap-chip">
                     {{ birthChipLabel(animal.birthDate) }}
                   </q-chip>
                 </div>
                 <div class="col-auto">
-                  <q-chip square color="green-1" text-color="primary" icon="calendar_today" class="detail-wrap-chip">
+                  <q-chip square color="green-1" text-color="primary" icon="calendar_month" class="detail-wrap-chip">
                     {{ ageSummary(animal.birthDate) }}
                   </q-chip>
                 </div>
@@ -167,7 +167,7 @@
               </div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
               <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.breedingsOverline') }}</div>
               <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('animalDetail.breedingsTitle') }}</div>
 
@@ -322,7 +322,7 @@
               </q-banner>
             </q-card-section>
 
-            <q-card-section class="q-pt-none">
+            <q-card-section >
               <div class="text-overline text-weight-bold text-accent">{{ t('animalDetail.timelineSectionOverline') }}</div>
               <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('animalDetail.timelineSectionTitle') }}</div>
             </q-card-section>

@@ -430,7 +430,7 @@ export const messages = {
       sameParentError: 'Dam and sire should not point to the same animal.',
     },
     animalDetail: {
-      timelineOverline: 'Animal Timeline',
+      timelineOverline: 'Animal',
       description: 'Full local history for this animal, including breeding, health, and birth records.',
       backToDashboard: 'Back to dashboard',
       backToEvents: 'Back to events',
@@ -1359,7 +1359,7 @@ export const messages = {
       sameParentError: 'Mãe e pai não devem apontar para o mesmo animal.',
     },
     animalDetail: {
-      timelineOverline: 'Linha do tempo do animal',
+      timelineOverline: 'Animal',
       description: 'Histórico local completo deste animal, incluindo reprodução, saúde e registros de nascimento.',
       backToDashboard: 'Voltar ao painel',
       backToEvents: 'Voltar aos eventos',
@@ -2151,7 +2151,7 @@ export const messages = {
       sameParentError: 'Madre y padre no deben apuntar al mismo animal.',
     },
     animalDetail: {
-      timelineOverline: 'Línea de tiempo del animal',
+      timelineOverline: 'Animal',
       description:
         'Historial local completo de este animal, incluida reproducción, salud y registros de nacimiento.',
       backToDashboard: 'Volver al panel',

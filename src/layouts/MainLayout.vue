@@ -235,7 +235,7 @@ function localizedPath(path) {
   padding-right: 10px;
 }
 
-@media (max-width: 415px) {
+@media (max-width: 440px) {
   .brand-name {
     display: none;
   }
