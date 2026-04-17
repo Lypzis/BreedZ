@@ -11,7 +11,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="row q-col-gutter-sm">
               <div class="col-12 col-sm-auto">
                 <q-btn
@@ -44,7 +44,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <q-banner rounded class="bg-grey-1 text-grey-8">
               <template #avatar>
                 <q-icon name="task_alt" color="primary" />
@@ -61,7 +61,7 @@
             </q-banner>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="row items-center q-col-gutter-lg">
               <div class="col-12 col-md-5">
                 <q-img
@@ -98,7 +98,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-accent">
               {{ t('home.problemOverline') }}
             </div>
@@ -118,7 +118,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.featuresOverline') }}
             </div>
@@ -141,7 +141,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.howItWorksOverline') }}
             </div>
@@ -161,7 +161,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.offlineOverline') }}
             </div>
@@ -181,7 +181,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.premiumOverline') }}
             </div>
@@ -204,7 +204,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.guidesOverline') }}
             </div>
@@ -258,7 +258,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-accent">
               {{ t('home.faqOverline') }}
             </div>
@@ -276,7 +276,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section  >
             <div class="text-overline text-weight-bold text-primary">
               {{ t('home.ctaOverline') }}
             </div>

@@ -11,7 +11,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideCattleLineage.hookOverline') }}
             </div>
@@ -34,7 +34,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideCattleLineage.realFarmsOverline') }}
             </div>
@@ -64,7 +64,7 @@
             </q-banner>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideCattleLineage.systemOverline') }}
             </div>
@@ -100,7 +100,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideCattleLineage.changesOverline') }}
             </div>
@@ -127,7 +127,7 @@
             </q-banner>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideCattleLineage.toolsOverline') }}
             </div>
@@ -159,7 +159,7 @@
             />
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideCattleLineage.takeawayOverline') }}
             </div>

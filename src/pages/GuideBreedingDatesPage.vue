@@ -11,7 +11,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="row q-col-gutter-sm">
               <div class="col-12 col-sm-auto">
                 <q-btn
@@ -34,7 +34,7 @@
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideBreedingDates.problemOverline') }}
             </div>
@@ -54,7 +54,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideBreedingDates.logicOverline') }}
             </div>
@@ -85,7 +85,7 @@
             </q-banner>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideBreedingDates.commonWaysOverline') }}
             </div>
@@ -105,7 +105,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideBreedingDates.breaksOverline') }}
             </div>
@@ -125,7 +125,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideBreedingDates.betterWayOverline') }}
             </div>
@@ -157,7 +157,7 @@
             />
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-primary">
               {{ t('guideBreedingDates.tipsOverline') }}
             </div>
@@ -177,7 +177,7 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section>
             <div class="text-overline text-weight-bold text-accent">
               {{ t('guideBreedingDates.faqOverline') }}
             </div>
