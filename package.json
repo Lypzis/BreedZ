@@ -15,7 +15,7 @@
     "build": "quasar build",
     "build:public-pages": "node scripts/generate-static-public-pages.mjs",
     "build:ssr": "quasar build -m ssr",
-    "build:netlify": "npm run build:ssr && npm install --prefix dist/ssr --omit=dev --no-fund --no-audit && node scripts/prepare-netlify-ssr-redirects.mjs",
+    "build:netlify": "npm run build:ssr && rm -rf dist/ssr/node_modules && node scripts/prepare-netlify-ssr-redirects.mjs",
     "dev:netlify": "npm run build:netlify && netlify dev -d dist/ssr/client -f netlify/functions --framework '#custom'",
     "postinstall": "quasar prepare"
   },

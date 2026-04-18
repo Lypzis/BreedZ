@@ -5,7 +5,26 @@
 
 [functions]
   node_bundler = "esbuild"
-  included_files = ["dist/ssr/**"]
+
+[functions.ssr]
+  external_node_modules = [
+    "compression",
+    "express",
+    "firebase",
+    "pinia",
+    "quasar",
+    "serialize-javascript",
+    "serverless-http",
+    "vue",
+    "vue-router",
+    "xlsx",
+  ]
+  included_files = [
+    "dist/ssr/index.js",
+    "dist/ssr/quasar.manifest.json",
+    "dist/ssr/render-template.js",
+    "dist/ssr/server/**",
+  ]
 
 [[redirects]]
   from = "/*"
