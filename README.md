@@ -133,7 +133,7 @@ This is a repo-specific review of what would change if BreedZ moves from the cur
 ### Local Netlify commands
 
 - `npm run build:netlify`
-  - Builds `dist/ssr`, removes any copied `dist/ssr/node_modules`, and prepares Netlify-safe redirects.
+  - Builds `dist/ssr`, removes any copied `dist/ssr/node_modules`, generates a Netlify-only `dist/netlify-ssr` runtime with `.mjs` server files, and prepares Netlify-safe redirects.
   - Netlify now bundles SSR runtime dependencies only into the `ssr` function instead of attaching the whole `dist/ssr` tree to every function.
 - `npm run dev:netlify`
   - Runs a production-like Netlify local preview using `dist/ssr/client` plus Netlify Functions.

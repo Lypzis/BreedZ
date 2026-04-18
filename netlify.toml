@@ -19,12 +19,7 @@
     "vue-router",
     "xlsx",
   ]
-  included_files = [
-    "dist/ssr/index.js",
-    "dist/ssr/quasar.manifest.json",
-    "dist/ssr/render-template.js",
-    "dist/ssr/server/**",
-  ]
+  included_files = ["dist/netlify-ssr/**"]
 
 [[redirects]]
   from = "/*"
