@@ -37,10 +37,10 @@
       "purpose": "any"
     },
     {
-      "purpose": "maskable",
+      "src": "icons/maskable_icon.png",
       "sizes": "602.3529411764706x602.3529411764706",
-      "src": "maskable_icon.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
