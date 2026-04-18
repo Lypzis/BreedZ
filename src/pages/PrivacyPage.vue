@@ -49,7 +49,6 @@ useMeta(() =>
     title: t('privacy.meta.title'),
     description: t('privacy.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/privacy'),
-    trailingSlash: true,
   }),
 )
 

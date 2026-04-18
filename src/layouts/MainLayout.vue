@@ -30,12 +30,21 @@
           v-if="showNetworkStatusChip"
           dense
           square
-          :icon="isOnline ? 'wifi' : 'wifi_off'"
           :color="isOnline ? 'green-1' : 'brown-1'"
           :text-color="isOnline ? 'primary' : 'brown-10'"
-          class="q-chip q-pr-xs q-mr-md"
+          class="q-mr-md"
         >
-          {{ isOnline ? t('layout.online') : t('layout.offline') }}
+          <template v-if="$q.screen.width > 365">
+            <q-icon
+              :name="isOnline ? 'wifi' : 'wifi_off'"
+              class="q-mr-xs"
+            />
+            {{ isOnline ? t('layout.online') : t('layout.offline') }}
+          </template>
+
+          <template v-else>
+            <q-icon :name="isOnline ? 'wifi' : 'wifi_off'" />
+          </template>
         </q-chip>
 
         <q-btn-toggle

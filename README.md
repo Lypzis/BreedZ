@@ -14,10 +14,10 @@ npm install
 npm run dev
 ```
 
-## Start the app in PWA development mode
+## Start the app in SSR development mode
 
 ```bash
-npm run dev:pwa
+npm run dev:ssr
 ```
 
 ## Lint the files
@@ -32,11 +32,128 @@ npm run lint
 npm run build
 ```
 
-## Build the PWA for production
+## Build the SSR app for production
 
 ```bash
-npm run build:pwa
+npm run build:ssr
 ```
+
+## Build the Netlify SSR deploy locally
+
+```bash
+npm run build:netlify
+```
+
+## Preview the Netlify SSR deploy locally
+
+```bash
+npm run dev:netlify
+```
+
+## Start the Stripe webhook listener locally
+
+```bash
+npm run dev:stripe
+```
+
+## SSR + PWA Migration Review
+
+This is a repo-specific review of what would change if BreedZ moves from the current static PWA build to Quasar `SSR + PWA`.
+
+### Current state
+
+- The repo now has a Netlify-ready SSR build via `npm run build:netlify`.
+- `netlify.toml` is now configured to publish `dist/ssr/client` and route page requests through a dedicated SSR function.
+- Public SEO pages are now truly server-rendered in the SSR path instead of relying only on head-tag rewriting.
+- Existing installed users should keep the same installed app identity only if the origin, manifest identity, and app scope stay stable during the migration.
+
+### Progress so far
+
+- [x] Step 1: Public SEO pages now use a dedicated `PublicLayout` instead of the app shell.
+- [x] Step 2: The main router is SSR-safe and no longer relies on browser globals on the server path.
+- [x] Step 3 local prep: Quasar SSR mode has been added and `src-ssr/` is now present.
+- [x] Step 4 local prep: Quasar `SSR + PWA` takeover is enabled in `quasar.config.js`.
+- [x] Local SSR commands are available:
+  - `npm run dev:ssr`
+  - `npm run build:ssr`
+- [x] Browser-only boot files are marked `server: false` so they do not run during server render.
+- [x] `npm run build:ssr` completes successfully and outputs `dist/ssr`.
+- [x] SSR builds are now configured for PWA client takeover (`ssr.pwa: true`).
+- [x] Local Netlify hosting config now targets the SSR build.
+  - `netlify.toml` now publishes `dist/ssr/client`.
+  - Netlify rewrites page requests into a dedicated SSR function while keeping `/.netlify/functions/*` available for Stripe/API routes.
+  - The Quasar SSR server can still run as a normal Node server outside Netlify, and switches to serverless handler mode only for the Netlify wrapper.
+
+### What should be safe for existing installed users
+
+- Switching to `SSR + PWA` should not create a second app install by itself if `breedz.app` stays the same origin and the web app manifest keeps the same identity.
+- Users will still update through the service worker lifecycle, not through a native app-store style reinstall.
+- This repo already shows an update prompt when a new service worker is ready, so users are not forced into a silent reload.
+
+### Main migration findings for this repo
+
+- Hosting config is now prepared for Netlify SSR.
+  - `netlify.toml` points at `dist/ssr/client` for static assets.
+  - A new `netlify/functions/ssr.mjs` wrapper loads the built Quasar SSR server as a Netlify function.
+  - Catch-all page requests are rewritten to the SSR function, while existing `/.netlify/functions/*` endpoints remain available.
+- SSR scaffolding is now in place locally.
+  - `src-ssr/server.js` and `src-ssr/middlewares/render.js` are present.
+  - Enabling `ssr.pwa: true` is still deferred until the runtime/deploy target is chosen.
+- Router SSR-safety work is in place.
+  - The main router no longer relies on browser globals on the server render path.
+  - Offline and standalone launch behavior now lives in client-only boot logic instead of the universal router layer.
+- Browser-only initialization needs an SSR audit.
+  - `src/boot/app-check-init.js` and `src/boot/auth-init.js` run as global boot files.
+  - `src/services/firebase.js` already guards App Check and Analytics with `typeof window === 'undefined'`, which is good.
+  - Even so, auth and Firestore initialization should be rechecked under SSR so server render does not accidentally depend on browser-only assumptions.
+- Public SEO pages are already split from the app shell.
+  - Localized public routes now use a dedicated `PublicLayout.vue`.
+  - This removes the earlier app-shell coupling that made full prerender and SSR riskier.
+- Service worker migration risk looks manageable.
+  - `src-pwa/custom-service-worker.js` already accounts for SSR fallback behavior through `process.env.PWA_FALLBACK_HTML`.
+  - That is a good sign, but it still needs end-to-end testing after the hosting change.
+
+### Recommended migration order
+
+1. Split public SEO pages from the app shell.
+   - Create a dedicated public layout for `/en`, `/pt-br`, `/es`, guides, and legal pages.
+   - Keep the offline app shell isolated to the actual app routes.
+2. Make the router SSR-safe.
+   - Remove or guard all direct `window`, `document`, and `navigator` access on code paths that can run during server render.
+3. Prepare SSR mode properly.
+   - Add the Quasar SSR server files and verify local SSR builds.
+   - Keep the current static deploy untouched until the production SSR hosting target is chosen.
+4. Enable `SSR + PWA`.
+   - Turn on `ssr.pwa: true` only after the server/runtime path is ready.
+5. Keep install identity stable.
+   - Do not change origin, manifest identity, or app scope unless intentionally migrating users.
+6. Validate service worker takeover and offline fallback.
+   - Confirm that SSR first load, cached navigation, offline launch, and update prompts all still behave correctly.
+
+### Local Netlify commands
+
+- `npm run build:netlify`
+  - Builds `dist/ssr`, removes any copied `dist/ssr/node_modules`, generates a Netlify-only `dist/netlify-ssr` runtime with `.mjs` server files, and prepares Netlify-safe redirects.
+  - Netlify now bundles SSR runtime dependencies only into the `ssr` function instead of attaching the whole `dist/ssr` tree to every function.
+- `npm run dev:netlify`
+  - Runs a production-like Netlify local preview using `dist/ssr/client` plus Netlify Functions.
+
+### Post-migration checks
+
+- [ ] Opening the installed app still launches BreedZ from the same home-screen icon
+- [ ] Existing installed users receive an update instead of a second install identity
+- [ ] Public pages return HTML body content from the server, not only client shell markup
+- [ ] The route guard does not crash on server render
+- [ ] Service worker update prompt still appears and reload works cleanly
+- [ ] Offline launch still opens the app shell correctly
+- [ ] Localized public routes still preserve canonical and `hreflang` behavior
+- [ ] Public SEO pages no longer inherit unwanted app-shell styling
+
+### Recommendation
+
+- Short term: split public layout from app layout and keep the current PWA deploy stable.
+- Medium term: migrate only the public SEO pages to `SSR + PWA` once hosting and SSR-safety are ready.
+- Avoid treating this as a one-line config flip. In this repo, the real work is deployment, route/layout separation, and SSR-safe browser API usage.
 
 ## MVP Todo
 
@@ -326,6 +443,7 @@ Execution checklist for each new guide:
 - [ ] Add sitemap entries
 - [ ] Add static public page generation
 - [ ] Add internal links from the landing page or other guides
+- [ ] Add a dedicated localized guides hub later (`/en/guides/`, `/pt-br/guias/`, `/es/guias/`) once the guide library is large enough
 - [ ] Recheck title, meta description, canonical, and `hreflang`
 ## Configuration
 

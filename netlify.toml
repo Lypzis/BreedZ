@@ -1,4 +1,27 @@
 [build]
-  command = "npm run build:pwa"
-  publish = "dist/pwa"
+  command = "npm run build:netlify"
+  publish = "dist/ssr/client"
   functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions.ssr]
+  external_node_modules = [
+    "compression",
+    "express",
+    "firebase",
+    "pinia",
+    "quasar",
+    "serialize-javascript",
+    "serverless-http",
+    "vue",
+    "vue-router",
+    "xlsx",
+  ]
+  included_files = ["dist/netlify-ssr/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/ssr"
+  status = 200

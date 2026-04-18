@@ -19,11 +19,13 @@ clientsClaim()
 const APP_START_URL = '/'
 const precacheEntries = [...self.__WB_MANIFEST]
 const indexHtmlEntry = precacheEntries.find((entry) => entry.url === 'index.html')
+const fallbackHtmlEntry = precacheEntries.find((entry) => entry.url === process.env.PWA_FALLBACK_HTML)
+const appStartEntry = indexHtmlEntry || fallbackHtmlEntry
 
-if (indexHtmlEntry) {
+if (appStartEntry) {
   precacheEntries.push({
     url: APP_START_URL,
-    revision: indexHtmlEntry.revision,
+    revision: appStartEntry.revision,
   })
 }
 

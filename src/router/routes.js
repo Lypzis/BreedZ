@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: '/en',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', component: () => import('pages/GuideBreedingDatesPage.vue') },
@@ -28,7 +28,7 @@ const routes = [
   },
   {
     path: '/pt-br',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', redirect: '/pt-br/guias/acompanhar-datas-de-cobertura-no-gado' },
@@ -47,7 +47,7 @@ const routes = [
   },
   {
     path: '/es',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', redirect: '/es/guias/registrar-fechas-de-reproduccion-del-ganado' },

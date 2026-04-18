@@ -48,7 +48,6 @@ useMeta(() =>
     title: t('contact.meta.title'),
     description: t('contact.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/contact'),
-    trailingSlash: true,
   }),
 )
 

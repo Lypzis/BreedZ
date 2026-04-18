@@ -220,7 +220,6 @@ useMeta(() =>
     title: t('guideBreedingDates.meta.title'),
     description: t('guideBreedingDates.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
-    trailingSlash: true,
   }),
 )
 
