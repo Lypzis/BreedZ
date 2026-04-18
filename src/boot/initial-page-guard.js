@@ -1,5 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import { hasSavedAnimals } from 'src/services/animals-db'
+import { setLocale } from 'src/i18n'
+import { readStoredLocale } from 'src/i18n/localePreference'
 import { stripLocaleFromPath } from 'src/utils/localeRouting'
 
 function isStandaloneAppLaunch() {
@@ -41,6 +43,9 @@ export default boot(({ router }) => {
       return true
     }
 
+    // When the installed/offline app reopens from a localized marketing URL,
+    // return to the app shell using the user's saved in-app language.
+    setLocale(readStoredLocale(), { persist: false })
     return '/'
   })
 })

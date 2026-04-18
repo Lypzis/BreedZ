@@ -60,6 +60,17 @@ export function readNavigatorLocaleSignal() {
   }
 }
 
+export function readLocaleFromPath(pathname = '') {
+  const path = String(pathname || '').trim()
+  const localeMatch = path.match(/^\/(en|pt-br|es)(?=\/|$)/i)
+
+  if (!localeMatch) {
+    return ''
+  }
+
+  return normalizeLocale(localeMatch[1])
+}
+
 export function readStoredLocale() {
   if (typeof window === 'undefined') {
     return DEFAULT_LOCALE
@@ -72,6 +83,20 @@ export function readStoredLocale() {
   }
 
   return readNavigatorLocaleSignal().locale
+}
+
+export function readInitialLocale() {
+  if (typeof window === 'undefined') {
+    return DEFAULT_LOCALE
+  }
+
+  const pathLocale = readLocaleFromPath(window.location.pathname)
+
+  if (pathLocale) {
+    return pathLocale
+  }
+
+  return readStoredLocale()
 }
 
 export function persistLocale(value) {

@@ -4,8 +4,8 @@ import {
   DEFAULT_LOCALE,
   SUPPORTED_LOCALES,
   normalizeLocale,
+  readInitialLocale,
   persistLocale,
-  readStoredLocale,
 } from './localePreference.js'
 
 function getPathValue(obj, path) {
@@ -28,7 +28,7 @@ function interpolate(template, params) {
   })
 }
 
-const locale = ref(readStoredLocale())
+const locale = ref(readInitialLocale())
 
 function applyHtmlLang(value) {
   if (typeof document === 'undefined') {
