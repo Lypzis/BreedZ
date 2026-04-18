@@ -11,7 +11,12 @@ export default defineConfig((/* ctx */) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['app-check-init', 'auth-init', 'prime-offline-shell'],
+    boot: [
+      { path: 'initial-page-guard', server: false },
+      { path: 'app-check-init', server: false },
+      { path: 'auth-init', server: false },
+      { path: 'prime-offline-shell', server: false },
+    ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.scss'],
@@ -91,7 +96,7 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog', 'Notify'],
+      plugins: ['Dialog', 'Notify', 'Meta'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -128,8 +133,8 @@ export default defineConfig((/* ctx */) => {
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
 
-      pwa: false,
-      // pwaOfflineHtmlFilename: 'offline.html', // do NOT use index.html as name!
+      pwa: true,
+      pwaOfflineHtmlFilename: 'offline.html',
 
       // pwaExtendGenerateSWOptions (cfg) {},
       // pwaExtendInjectManifestOptions (cfg) {}

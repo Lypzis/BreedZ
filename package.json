@@ -10,10 +10,13 @@
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
     "test": "node --test",
     "dev": "quasar dev",
-    "dev:pwa": "quasar dev -m pwa",
+    "dev:ssr": "quasar dev -m ssr",
+    "dev:stripe": "stripe listen --forward-to http://localhost:8888/.netlify/functions/stripe-webhook",
     "build": "quasar build",
     "build:public-pages": "node scripts/generate-static-public-pages.mjs",
-    "build:pwa": "quasar build -m pwa && npm run build:public-pages",
+    "build:ssr": "quasar build -m ssr",
+    "build:netlify": "npm run build:ssr && npm install --prefix dist/ssr --omit=dev --no-fund --no-audit && node scripts/prepare-netlify-ssr-redirects.mjs",
+    "dev:netlify": "npm run build:netlify && netlify dev -d dist/ssr/client -f netlify/functions --framework '#custom'",
     "postinstall": "quasar prepare"
   },
   "dependencies": {
@@ -23,6 +26,7 @@
     "pinia": "^3.0.1",
     "quasar": "^2.16.0",
     "register-service-worker": "^1.7.2",
+    "serverless-http": "^4.0.0",
     "stripe": "^18.4.0",
     "vue": "^3.5.32",
     "vue-router": "^5.0.3",

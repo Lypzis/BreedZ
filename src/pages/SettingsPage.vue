@@ -150,11 +150,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
+import { buildBackupWorkbookArray, importBackupWorkbookArrayBuffer } from 'src/services/backup-service'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 
@@ -181,23 +182,11 @@ const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
 )
 
-let backupServicePromise
-
-function loadBackupService() {
-  backupServicePromise ??= import('src/services/backup-service')
-  return backupServicePromise
-}
-
-onMounted(() => {
-  void loadBackupService()
-})
-
 async function handleExport() {
   isExporting.value = true
   statusMessage.value = ''
 
   try {
-    const { buildBackupWorkbookArray } = await loadBackupService()
     const workbookArray = await buildBackupWorkbookArray()
     const blob = new Blob([workbookArray], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -230,7 +219,6 @@ async function handleImport() {
   statusMessage.value = ''
 
   try {
-    const { importBackupWorkbookArrayBuffer } = await loadBackupService()
     const arrayBuffer = await selectedBackupFile.value.arrayBuffer()
     await importBackupWorkbookArrayBuffer(arrayBuffer)
     await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])

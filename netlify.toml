@@ -1,4 +1,13 @@
 [build]
-  command = "npm run build:pwa"
-  publish = "dist/pwa"
+  command = "npm run build:netlify"
+  publish = "dist/ssr/client"
   functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["dist/ssr/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/ssr"
+  status = 200

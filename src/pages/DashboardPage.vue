@@ -20,7 +20,7 @@
                   @click="openQuickEventDialog"
                 />
                 <q-btn
-                  v-if="isAuthLoaded && !isSignedIn"
+                  v-if="canShowSignInButton"
                   outline
                   color="primary"
                   icon="login"
@@ -368,6 +368,7 @@ const { isLoaded: isAuthLoaded, isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
 const isMissingAnimalsDialogOpen = ref(false)
+const hasHydrated = ref(false)
 const quickEventForm = reactive(defaultQuickEventForm())
 const dashboardSectionLimit = 5
 const eventTypeOptions = computed(() => getEventTypeOptions())
@@ -383,6 +384,9 @@ const today = computed(() => todayDateString())
 const todayLabel = computed(() => formatDisplayDate(today.value))
 const isBusy = computed(() => animalsLoading.value || eventsLoading.value)
 const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsErrorMessage.value)
+const canShowSignInButton = computed(() =>
+  hasHydrated.value && isAuthLoaded.value && !isSignedIn.value,
+)
 
 const todayEvents = computed(() => events.value.filter((event) => event.date === today.value))
 const todayEventsPreview = computed(() => todayEvents.value.slice(0, dashboardSectionLimit))
@@ -488,6 +492,8 @@ watch(
 )
 
 onMounted(async () => {
+  hasHydrated.value = true
+
   try {
     if (!animalsStore.isLoaded) {
       await animalsStore.loadAnimals()

@@ -126,8 +126,8 @@ function buildPageUrl(locale, routeSegment, pagePath) {
   const localizedPath = localizePublicPath(locale, pagePath)
 
   return localizedPath === '/'
-    ? `${SITE_URL}/${routeSegment}/`
-    : `${SITE_URL}/${routeSegment}${localizedPath}/`
+    ? `${SITE_URL}/${routeSegment}`
+    : `${SITE_URL}/${routeSegment}${localizedPath}`
 }
 
 function buildOutputPath(locale, routeSegment, pagePath) {
