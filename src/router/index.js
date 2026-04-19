@@ -6,6 +6,7 @@ import {
   createWebHashHistory,
 } from 'vue-router'
 import { getCurrentLocaleValue, setLocale } from 'src/i18n'
+import { readLocaleFromCookieHeader } from 'src/i18n/localePreference'
 import { buildLocalizedPath, isAppShellPath, localeFromPath } from 'src/utils/localeRouting'
 import routes from './routes'
 
@@ -18,7 +19,15 @@ import routes from './routes'
  * with the Router instance.
  */
 
-export default defineRouter(function (/* { store, ssrContext } */) {
+export default defineRouter(function ({ ssrContext }) {
+  if (process.env.SERVER) {
+    const cookieLocale = readLocaleFromCookieHeader(ssrContext?.req?.headers?.cookie)
+
+    if (cookieLocale) {
+      setLocale(cookieLocale, { persist: false })
+    }
+  }
+
   const createHistory = process.env.SERVER
     ? createMemoryHistory
     : process.env.VUE_ROUTER_MODE === 'history'

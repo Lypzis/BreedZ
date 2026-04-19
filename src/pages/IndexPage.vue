@@ -66,7 +66,7 @@
               <div class="col-12 col-md-5">
                 <q-img
                   :src="logoFull"
-                  :alt="t('brand.logoAlt')"
+                  :alt="t('brand.name')"
                   fit="contain"
                   no-spinner
                   class="landing-hero-image"

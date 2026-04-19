@@ -841,7 +841,7 @@ export const messages = {
       },
       overline: 'Privacy',
       title: 'Privacy Policy',
-      lastUpdated: 'Last updated: April 7, 2026',
+      lastUpdated: 'Last updated: April 18, 2026',
       blocks: [
         {
           title: 'What BreedZ stores',
@@ -852,6 +852,11 @@ export const messages = {
           title: 'Where data is stored',
           body:
             'In the current version, your data is stored locally on your device. That means records stay on the phone, tablet, or computer where you use the app unless you later export or sync them.',
+        },
+        {
+          title: 'Language preference cookie',
+          body:
+            'BreedZ uses a first-party preference cookie to remember your selected language and render the app in that language on future visits. This cookie is not used for advertising or cross-site tracking.',
         },
         {
           title: 'Accounts and email',
@@ -1771,7 +1776,7 @@ export const messages = {
       },
       overline: 'Privacidade',
       title: 'Política de Privacidade',
-      lastUpdated: 'Última atualização: 7 de abril de 2026',
+      lastUpdated: 'Última atualização: 18 de abril de 2026',
       blocks: [
         {
           title: 'O que o BreedZ armazena',
@@ -1782,6 +1787,11 @@ export const messages = {
           title: 'Onde os dados ficam',
           body:
             'Na versão atual, seus dados ficam armazenados localmente no seu dispositivo. Isso significa que os registros permanecem no celular, tablet ou computador onde você usa o app, a menos que depois sejam exportados ou sincronizados.',
+        },
+        {
+          title: 'Cookie de preferência de idioma',
+          body:
+            'O BreedZ usa um cookie próprio de preferência para lembrar o idioma selecionado e renderizar o app nesse idioma nas visitas futuras. Esse cookie não é usado para publicidade nem para rastreamento entre sites.',
         },
         {
           title: 'Conta e e-mail',
@@ -2711,7 +2721,7 @@ export const messages = {
       },
       overline: 'Privacidad',
       title: 'Política de privacidad',
-      lastUpdated: 'Última actualización: 8 de abril de 2026',
+      lastUpdated: 'Última actualización: 18 de abril de 2026',
       blocks: [
         {
           title: 'Qué almacena BreedZ',
@@ -2722,6 +2732,11 @@ export const messages = {
           title: 'Dónde se almacenan los datos',
           body:
             'En la versión actual, tus datos se almacenan localmente en tu dispositivo. Eso significa que los registros permanecen en el celular, tableta o computadora donde usas la app, salvo que más adelante los exportes o sincronices.',
+        },
+        {
+          title: 'Cookie de preferencia de idioma',
+          body:
+            'BreedZ usa una cookie propia de preferencia para recordar el idioma seleccionado y renderizar la app en ese idioma en visitas futuras. Esta cookie no se usa para publicidad ni para rastreo entre sitios.',
         },
         {
           title: 'Cuenta y correo electrónico',

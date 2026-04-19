@@ -18,7 +18,7 @@
         <q-toolbar-title>
           <router-link :to="dashboardPath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
             <q-avatar rounded size="42px">
-              <img :src="logoIcon" :alt="t('brand.iconAlt')" />
+              <img :src="logoIcon" :alt="t('brand.name')" />
             </q-avatar>
             <div class="brand-name">
               <div class="text-h6 text-weight-bold">{{ t('brand.name') }}</div>
@@ -48,7 +48,9 @@
         </q-chip>
 
         <q-btn-toggle
-          v-model="selectedLocale"
+          v-if="hasHydrated"
+          :model-value="selectedLocale"
+          @update:model-value="onLocaleChange"
           class="language-toggle"
           dense
           no-caps
@@ -74,7 +76,7 @@
         <q-list padding>
           <q-item
             v-for="item in navItems"
-            :key="item.label"
+            :key="item.key"
             :clickable="Boolean(item.to)"
             :disable="!item.to"
             :to="item.to"
@@ -138,7 +140,7 @@
 
         <div class="row items-center q-gutter-sm q-px-md q-pb-md text-caption text-grey-7">
           <q-avatar rounded size="24px">
-            <img :src="logoSmall" :alt="t('brand.smallIconAlt')" />
+            <img :src="logoSmall" :alt="t('brand.name')" />
           </q-avatar>
           <span v-html="t('footer.copyright')" />
         </div>
@@ -153,7 +155,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useNetworkStatus } from 'src/composables/useNetworkStatus'
 import { useI18nText } from 'src/i18n'
@@ -177,31 +179,37 @@ const dashboardPath = computed(() => '/')
 
 const navItems = computed(() => [
   {
+    key: 'dashboard',
     label: t('nav.dashboard'),
     icon: 'today',
     to: '/',
   },
   {
+    key: 'animals',
     label: t('nav.animals'),
     icon: 'pets',
     to: '/animals',
   },
   {
+    key: 'events',
     label: t('nav.events'),
     icon: 'assignment',
     to: '/events',
   },
   {
+    key: 'tutorial',
     label: t('nav.tutorial'),
     icon: 'school',
     to: '/tutorial',
   },
   {
+    key: 'settings',
     label: t('nav.settings'),
     icon: 'settings',
     to: '/settings',
   },
   {
+    key: 'account',
     label: t('nav.account'),
     icon: 'account_circle',
     to: '/account',
@@ -214,20 +222,36 @@ const localeOptions = computed(() => [
   { label: t('language.es'), value: 'es' },
 ])
 
-const selectedLocale = computed({
-  get: () => routeLocale.value,
-  set: async (value) => {
-    setLocale(value)
+const selectedLocale = ref(routeLocale.value)
+const hasHydrated = ref(false)
 
-    if (isAppShellPath(route.path)) {
-      return
-    }
+watch(routeLocale, (value) => {
+  if (selectedLocale.value !== value) {
+    selectedLocale.value = value
+  }
+})
 
-    await router.replace(buildLocalizedPath(value, route.fullPath))
-  },
+onMounted(() => {
+  hasHydrated.value = true
 })
 
 const leftDrawerOpen = ref(false)
+
+async function onLocaleChange(value) {
+  if (!value || value === routeLocale.value) {
+    selectedLocale.value = routeLocale.value
+    return
+  }
+
+  selectedLocale.value = value
+  setLocale(value)
+
+  if (isAppShellPath(route.path)) {
+    return
+  }
+
+  await router.replace(buildLocalizedPath(value, route.fullPath))
+}
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
