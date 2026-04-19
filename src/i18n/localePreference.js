@@ -103,6 +103,14 @@ function writeLocaleCookie(value) {
   window.document.cookie = `${LOCALE_COOKIE_KEY}=${encodeURIComponent(normalized)}; Max-Age=${LOCALE_COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`
 }
 
+function writeLocaleStorage(value) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(LOCALE_STORAGE_KEY, normalizeLocale(value))
+}
+
 export function readStoredLocale() {
   if (typeof window === 'undefined') {
     return DEFAULT_LOCALE
@@ -135,8 +143,15 @@ export function readInitialLocale() {
   }
 
   const pathLocale = readLocaleFromPath(window.location.pathname)
+  const storedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY)
+  const cookieLocale = readLocaleFromCookieHeader(window.document.cookie)
 
   if (pathLocale) {
+    if (!storedLocale && !cookieLocale) {
+      writeLocaleStorage(pathLocale)
+      writeLocaleCookie(pathLocale)
+    }
+
     return pathLocale
   }
 
@@ -150,6 +165,6 @@ export function persistLocale(value) {
 
   const normalized = normalizeLocale(value)
 
-  window.localStorage.setItem(LOCALE_STORAGE_KEY, normalized)
+  writeLocaleStorage(normalized)
   writeLocaleCookie(normalized)
 }
