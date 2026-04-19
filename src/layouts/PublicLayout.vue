@@ -4,7 +4,7 @@
       <q-toolbar class="q-px-sm q-py-sm">
         <router-link :to="homePath" class="brand-link row items-center no-wrap q-gutter-sm">
           <q-avatar rounded size="42px">
-            <img :src="logoIcon" :alt="t('brand.iconAlt')" />
+            <img :src="logoIcon" :alt="t('brand.name')" />
           </q-avatar>
           <div class="brand-name">
             <div class="text-h6 text-weight-bold">{{ t('brand.name') }}</div>
@@ -26,7 +26,8 @@
         />
 
         <q-btn-toggle
-          v-model="selectedLocale"
+          :model-value="selectedLocale"
+          @update:model-value="onLocaleChange"
           class="language-toggle"
           dense
           no-caps
@@ -56,7 +57,7 @@
 
         <div class="col-12 col-md-auto row items-center q-gutter-sm text-caption">
           <q-avatar rounded size="24px">
-            <img :src="logoSmall" :alt="t('brand.smallIconAlt')" />
+            <img :src="logoSmall" :alt="t('brand.name')" />
           </q-avatar>
           <span v-html="t('footer.copyright')" />
         </div>
@@ -66,7 +67,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
@@ -74,14 +75,14 @@ import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/ut
 const logoIcon = '/icons/favicon-96x96.png'
 const logoSmall = '/icons/favicon-48x48.png'
 
-const { t, setLocale } = useI18nText()
+const { locale, t, setLocale } = useI18nText()
 const route = useRoute()
 const router = useRouter()
 
 const routeLocale = computed(() =>
   typeof route.params.locale === 'string' && route.params.locale
     ? routeSegmentToLocale(route.params.locale)
-    : localeFromPath(route.path) || 'en',
+    : localeFromPath(route.path) || locale.value,
 )
 
 const localeOptions = computed(() => [
@@ -92,16 +93,27 @@ const localeOptions = computed(() => [
 
 const homePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
 
-const selectedLocale = computed({
-  get: () => routeLocale.value,
-  set: async (value) => {
-    setLocale(value)
-    await router.replace(buildLocalizedPath(value, route.fullPath))
-  },
+const selectedLocale = ref(routeLocale.value)
+
+watch(routeLocale, (value) => {
+  if (selectedLocale.value !== value) {
+    selectedLocale.value = value
+  }
 })
 
 function localizedPath(path) {
   return buildLocalizedPath(routeLocale.value, path)
+}
+
+async function onLocaleChange(value) {
+  if (!value || value === routeLocale.value) {
+    selectedLocale.value = routeLocale.value
+    return
+  }
+
+  selectedLocale.value = value
+  setLocale(value)
+  await router.replace(buildLocalizedPath(value, route.fullPath))
 }
 
 async function openApp() {
