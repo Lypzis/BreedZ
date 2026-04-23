@@ -97,35 +97,19 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="event in todayEventsPreview" :key="event.id" class="q-py-md">
-                  <q-item-section avatar>
-                    <q-avatar
-                      :color="getEventTypeMeta(event.type).color"
-                      text-color="white"
-                      :icon="getEventTypeMeta(event.type).icon"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">
-                      {{ t('common.eventForAnimal', { eventType: getEventTypeMeta(event.type).label, animal: animalDisplayName(animalById(event.animalId)) }) }}
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ event.notes || 'No extra notes added.' }}
-                    </q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="visibility"
-                      :aria-label="t('common.view')"
-                      :title="t('common.view')"
-                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'dashboard' } }"
-                    />
-                  </q-item-section>
-                </q-item>
+                <EventListItem
+                  v-for="event in todayEventsPreview"
+                  :key="event.id"
+                  :event="event"
+                  :animal-resolver="animalById"
+                  :detail-target="eventDetailTarget(event)"
+                  :notes-fallback="t('common.noExtraNotesAdded')"
+                  :show-animal-meta="false"
+                  :show-date="false"
+                  item-class="q-py-md"
+                  :side-top="false"
+                  @open="openEventDetail"
+                />
               </q-list>
 
               <div v-if="todayEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
@@ -152,33 +136,18 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="event in upcomingEventsPreview" :key="event.id" class="q-py-md">
-                  <q-item-section avatar>
-                    <q-avatar
-                      :color="getEventTypeMeta(event.type).color"
-                      text-color="white"
-                      :icon="getEventTypeMeta(event.type).icon"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">
-                      {{ t('common.eventForAnimal', { eventType: getEventTypeMeta(event.type).label, animal: animalDisplayName(animalById(event.animalId)) }) }}
-                    </q-item-label>
-                    <q-item-label caption>{{ formatDisplayDate(event.date) }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="visibility"
-                      :aria-label="t('common.view')"
-                      :title="t('common.view')"
-                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'dashboard' } }"
-                    />
-                  </q-item-section>
-                </q-item>
+                <EventListItem
+                  v-for="event in upcomingEventsPreview"
+                  :key="event.id"
+                  :event="event"
+                  :animal-resolver="animalById"
+                  :detail-target="eventDetailTarget(event)"
+                  :show-animal-meta="false"
+                  :show-notes="false"
+                  item-class="q-py-md"
+                  :side-top="false"
+                  @open="openEventDetail"
+                />
               </q-list>
 
               <div v-if="upcomingEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
@@ -205,29 +174,20 @@
                 </q-banner>
 
               <q-list v-else separator>
-                <q-item v-for="animal in animalsWithoutEventsPreview" :key="animal.id" class="q-py-md">
-                  <q-item-section avatar>
-                    <q-avatar color="primary" text-color="white" icon="pets" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
-                    <q-item-label caption>
-                      {{ animalSpeciesBreed(animal) }} • {{ t('dashboard.needsSetupCaption') }}
-                    </q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="visibility"
-                      :aria-label="t('common.view')"
-                      :title="t('common.view')"
-                      :to="{ path: `/animals/${animal.id}`, query: { from: 'dashboard' } }"
-                    />
-                  </q-item-section>
-                </q-item>
+                <AnimalListItem
+                  v-for="animal in animalsWithoutEventsPreview"
+                  :key="animal.id"
+                  :animal="animal"
+                  :caption-suffix="t('dashboard.needsSetupCaption')"
+                  :detail-target="animalDetailTarget(animal)"
+                  :show-age="false"
+                  :show-breeder="false"
+                  :show-sex="false"
+                  :show-status="false"
+                  item-class="q-py-md"
+                  :side-top="false"
+                  @open="openAnimalDetail"
+                />
               </q-list>
 
               <div v-if="animalsWithoutEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
@@ -237,62 +197,22 @@
 
           </template>
         </q-card>
-    <q-dialog v-model="isQuickEventDialogOpen">
-      <q-card style="width: 100%; max-width: 640px">
-        <q-card-section class="row items-center justify-between">
-          <div>
-            <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.overline') }}</div>
-            <div class="text-h6 text-weight-bold">{{ t('dashboard.quickAddTitle') }}</div>
-          </div>
-          <q-btn
-            flat
-            round
-            dense
-            icon="close"
-            :aria-label="t('common.closeDialog')"
-            :title="t('common.closeDialog')"
-            v-close-popup
-          />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <q-form class="column q-gutter-md" @submit.prevent="submitQuickEvent">
-            <q-select
-              v-model="quickEventForm.type"
-              outlined
-              :label="t('events.eventType')"
-              :options="eventTypeOptions"
-              emit-value
-              map-options
-            />
-            
-            <AnimalPickerField
-              v-model="quickEventForm.animalId"
-              :animals="activeAnimals"
-              :label="t('events.pickAnimal')"
-              :dialog-title="t('events.pickAnimal')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
-            
-            <AnimalPickerField
-              v-if="quickEventForm.type === 'breeding'"
-              v-model="quickEventForm.partnerAnimalId"
-              :animals="quickBreedingPartnerAnimals"
-              :label="t('events.pickPartner')"
-              :dialog-title="t('events.pickPartner')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
-            <q-input v-model="quickEventForm.date" outlined type="date" :label="t('events.eventDate')" />
-            <q-input v-model="quickEventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
-
-            <div class="row justify-end q-gutter-sm">
-              <q-btn flat color="grey-7" :label="t('common.cancel')" v-close-popup />
-              <q-btn unelevated color="primary" :label="t('common.saveEvent')" type="submit" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <EventFormDialog
+      v-model="isQuickEventDialogOpen"
+      :animals="activeAnimals"
+      :overline="t('dashboard.overline')"
+      :title="t('dashboard.quickAddTitle')"
+      @purchase-selected="openPurchaseDialog"
+      @submit="submitQuickEvent"
+    />
+    <PurchaseEventDialog
+      v-model="isPurchaseDialogOpen"
+      :animals="animals"
+      :current-animal-count="animals.length"
+      :initial-animal-ids="initialPurchaseAnimalIds"
+      :is-premium="isPremium"
+      @submit="submitPurchaseEvent"
+    />
 
     <q-dialog v-model="isMissingAnimalsDialogOpen">
       <q-card style="width: 100%; max-width: 420px">
@@ -331,23 +251,22 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
-import AnimalPickerField from 'src/components/AnimalPickerField.vue'
-import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
+import AnimalListItem from 'src/components/AnimalListItem.vue'
+import EventListItem from 'src/components/EventListItem.vue'
+import EventFormDialog from 'src/components/EventFormDialog.vue'
+import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
-import {
-  filterBreedingPartnerCandidates,
-  validateBreedingPartnerSelection,
-} from 'src/utils/breeding-partners'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 
+const router = useRouter()
 const $q = useQuasar()
 const { t } = useI18nText()
 const authStore = useAuthStore()
@@ -356,6 +275,7 @@ const eventsStore = useEventsStore()
 
 const {
   activeAnimals,
+  animals,
   errorMessage: animalsErrorMessage,
   isLoading: animalsLoading,
 } = storeToRefs(animalsStore)
@@ -364,21 +284,14 @@ const {
   events,
   isLoading: eventsLoading,
 } = storeToRefs(eventsStore)
-const { isLoaded: isAuthLoaded, isSignedIn } = storeToRefs(authStore)
+const { isLoaded: isAuthLoaded, isPremium, isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
+const isPurchaseDialogOpen = ref(false)
 const isMissingAnimalsDialogOpen = ref(false)
+const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
-const quickEventForm = reactive(defaultQuickEventForm())
 const dashboardSectionLimit = 5
-const eventTypeOptions = computed(() => getEventTypeOptions())
-const quickBreedingPartnerAnimals = computed(() =>
-  filterBreedingPartnerCandidates({
-    animals: animalsStore.animals,
-    animalId: quickEventForm.animalId,
-    currentPartnerId: quickEventForm.partnerAnimalId,
-  }),
-)
 
 const today = computed(() => todayDateString())
 const todayLabel = computed(() => formatDisplayDate(today.value))
@@ -393,7 +306,9 @@ const todayEventsPreview = computed(() => todayEvents.value.slice(0, dashboardSe
 const upcomingEvents = computed(() => events.value.filter((event) => event.date > today.value))
 const upcomingEventsPreview = computed(() => upcomingEvents.value.slice(0, dashboardSectionLimit))
 const animalsWithoutEvents = computed(() => {
-  const animalIdsWithEvents = new Set(events.value.map((event) => event.animalId))
+  const animalIdsWithEvents = new Set(
+    events.value.flatMap((event) => event.animalIds ?? [event.animalId]),
+  )
 
   return activeAnimals.value.filter((animal) => !animalIdsWithEvents.has(animal.id))
 })
@@ -401,65 +316,36 @@ const animalsWithoutEventsPreview = computed(() =>
   animalsWithoutEvents.value.slice(0, dashboardSectionLimit),
 )
 
-function defaultQuickEventForm() {
-  return {
-    animalId: '',
-    type: 'breeding',
-    partnerAnimalId: '',
-    date: todayDateString(),
-    notes: '',
-  }
-}
-
-function resetQuickEventForm() {
-  Object.assign(quickEventForm, {
-    ...defaultQuickEventForm(),
-    animalId: activeAnimals.value[0]?.id ?? '',
-  })
-}
-
 function openQuickEventDialog() {
-  if (activeAnimals.value.length === 0) {
-    isMissingAnimalsDialogOpen.value = true
-    return
-  }
-
-  resetQuickEventForm()
   isQuickEventDialogOpen.value = true
 }
 
-async function submitQuickEvent() {
-  if (!quickEventForm.animalId) {
-    $q.notify({
-      color: 'negative',
-      message: t('dashboard.selectAnimalBeforeSaving'),
-      position: 'top',
-    })
-    return
-  }
-
-  if (quickEventForm.type === 'breeding') {
-    const breedingValidationKey = validateBreedingPartnerSelection({
-      animals: animalsStore.animals,
-      animalId: quickEventForm.animalId,
-      partnerAnimalId: quickEventForm.partnerAnimalId,
-    })
-
-    if (breedingValidationKey) {
-      $q.notify({
-        color: 'negative',
-        message: t(breedingValidationKey),
-        position: 'top',
-      })
-      return
-    }
-  }
-
+async function submitQuickEvent(payload) {
   try {
-    await eventsStore.addEvent(quickEventForm)
+    await eventsStore.addEvent(payload)
     await animalsStore.loadAnimals()
     isQuickEventDialogOpen.value = false
-    resetQuickEventForm()
+    $q.notify({ color: 'positive', message: t('dashboard.eventAdded'), position: 'top' })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('dashboard.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+function openPurchaseDialog(payload = {}) {
+  initialPurchaseAnimalIds.value = payload.animalIds ?? []
+  isPurchaseDialogOpen.value = true
+}
+
+async function submitPurchaseEvent(payload) {
+  try {
+    await eventsStore.addPurchaseEvent(payload)
+    await animalsStore.loadAnimals()
+    isPurchaseDialogOpen.value = false
+    initialPurchaseAnimalIds.value = []
     $q.notify({ color: 'positive', message: t('dashboard.eventAdded'), position: 'top' })
   } catch (error) {
     $q.notify({
@@ -474,22 +360,21 @@ function animalById(id) {
   return animalsStore.getAnimalById(id)
 }
 
-function animalDisplayName(animal) {
-  return formatAnimalDisplayName(animal)
+function eventDetailTarget(event) {
+  return { path: `/events/${event.id}`, query: { from: 'dashboard' } }
 }
 
-function animalSpeciesBreed(animal) {
-  return formatAnimalSpeciesBreed(animal)
+function openEventDetail(event) {
+  void router.push(eventDetailTarget(event))
 }
 
-watch(
-  () => quickEventForm.type,
-  (value) => {
-    if (value !== 'breeding') {
-      quickEventForm.partnerAnimalId = ''
-    }
-  },
-)
+function animalDetailTarget(animal) {
+  return { path: `/animals/${animal.id}`, query: { from: 'dashboard' } }
+}
+
+function openAnimalDetail(animal) {
+  void router.push(animalDetailTarget(animal))
+}
 
 onMounted(async () => {
   hasHydrated.value = true
@@ -505,7 +390,5 @@ onMounted(async () => {
   } catch {
     // store error messages are already exposed to the UI
   }
-
-  resetQuickEventForm()
 })
 </script>

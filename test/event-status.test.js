@@ -1,6 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { resolveStatusAfterEvent, resolveStatusFromTimeline } from '../src/utils/event-status.js'
+import {
+  resolveBaseStatus,
+  resolveStatusAfterEvent,
+  resolveStatusFromTimeline,
+} from '../src/utils/event-status.js'
 
 test('marks the animal as dead for death events', () => {
   assert.equal(resolveStatusAfterEvent('active', 'death', '2026-04-06'), 'dead')
@@ -44,5 +48,41 @@ test('timeline reconciliation does not apply future sale events early', () => {
   assert.equal(
     resolveStatusFromTimeline('active', [{ type: 'sale', date: '2026-04-07' }], '2026-04-06'),
     'active',
+  )
+})
+
+test('resolves a missing base status back to active when legacy sold status is fully explained by sale events', () => {
+  assert.equal(
+    resolveBaseStatus(
+      '',
+      'sold',
+      [{ type: 'sale', date: '2026-04-05' }],
+      '2026-04-06',
+    ),
+    'active',
+  )
+})
+
+test('resolves a missing base status back to active when legacy dead status is fully explained by death events', () => {
+  assert.equal(
+    resolveBaseStatus(
+      '',
+      'dead',
+      [{ type: 'death', date: '2026-04-05' }],
+      '2026-04-06',
+    ),
+    'active',
+  )
+})
+
+test('keeps explicit base status when it is already persisted', () => {
+  assert.equal(
+    resolveBaseStatus(
+      'sold',
+      'sold',
+      [],
+      '2026-04-06',
+    ),
+    'sold',
   )
 })

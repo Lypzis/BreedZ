@@ -56,6 +56,14 @@ npm run dev:netlify
 npm run dev:stripe
 ```
 
+## Tests
+
+```bash
+npm test
+```
+
+Current automated coverage is strongest at the pure logic/model layer. We have regression tests for event normalization, backup compatibility, filtering, and status reconciliation, but we do not yet have a dedicated IndexedDB test harness for service-level transaction simulation.
+
 ## SSR + PWA Migration Review
 
 This is a repo-specific review of what would change if BreedZ moves from the current static PWA build to Quasar `SSR + PWA`.

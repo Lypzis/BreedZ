@@ -408,7 +408,7 @@ function loadForm() {
           isBreeder: props.animal.isBreeder === true,
           sex: props.animal.sex ?? 'unknown',
           birthDate: props.animal.birthDate,
-          status: props.animal.status,
+          status: props.animal.baseStatus ?? props.animal.status,
           damId: props.animal.damId ?? '',
           sireId: props.animal.sireId ?? '',
           notes: props.animal.notes,

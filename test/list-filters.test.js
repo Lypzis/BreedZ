@@ -12,6 +12,15 @@ const events = [
   { id: 'event-1', animalId: 'animal-1', type: 'breeding', date: '2026-04-01', notes: 'Morning pen' },
   { id: 'event-2', animalId: 'animal-2', type: 'vaccination', date: '2026-04-10', notes: 'Booster shot' },
   { id: 'event-3', animalId: 'animal-3', type: 'custom', date: '2026-04-20', notes: 'Moved paddock' },
+  {
+    id: 'event-4',
+    animalId: 'animal-1',
+    animalIds: ['animal-1', 'animal-3'],
+    type: 'sale',
+    amount: 1500,
+    date: '2026-04-15',
+    notes: 'Shared batch sale',
+  },
 ]
 
 function resolveAnimalById(id) {
@@ -81,7 +90,7 @@ test('event date range is inclusive on both boundaries', () => {
     endDate: '2026-04-20',
   })
 
-  assert.deepEqual(result.map((event) => event.id), ['event-2', 'event-3'])
+  assert.deepEqual(result.map((event) => event.id), ['event-2', 'event-3', 'event-4'])
 })
 
 test('event filters combine type, search, and date range', () => {
@@ -104,4 +113,23 @@ test('event filters return no results for an inverted date range', () => {
   })
 
   assert.equal(result.length, 0)
+})
+
+test('event filters match shared events by any attached animal and amount', () => {
+  const byAnimal = filterEventsList(events, resolveAnimalById, {
+    searchTerm: 'shared batch',
+    eventType: '',
+    startDate: '',
+    endDate: '',
+  })
+
+  const byAmount = filterEventsList(events, resolveAnimalById, {
+    searchTerm: '1500',
+    eventType: '',
+    startDate: '',
+    endDate: '',
+  })
+
+  assert.deepEqual(byAnimal.map((event) => event.id), ['event-4'])
+  assert.deepEqual(byAmount.map((event) => event.id), ['event-4'])
 })

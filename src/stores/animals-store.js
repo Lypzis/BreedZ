@@ -43,15 +43,14 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
 
     const animal = await createAnimal(payload)
-    animals.value = [animal, ...animals.value]
-    return animal
+    await loadAnimals()
+    return getAnimalById(animal.id) ?? animal
   }
 
   async function editAnimal(id, payload) {
     const animal = await updateAnimal(id, payload)
-    animals.value = animals.value.map((item) => (item.id === id ? animal : item))
-    animals.value.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
-    return animal
+    await loadAnimals()
+    return getAnimalById(id) ?? animal
   }
 
   async function removeAnimal(id) {

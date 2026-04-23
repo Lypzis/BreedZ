@@ -11,6 +11,7 @@ const ANIMAL_COLUMNS = [
   ['species', 'Species'],
   ['breed', 'Breed'],
   ['sex', 'Sex'],
+  ['baseStatus', 'Base Status'],
   ['status', 'Status'],
   ['birthDate', 'Birth Date'],
   ['damId', 'Dam ID'],
@@ -23,8 +24,10 @@ const ANIMAL_COLUMNS = [
 
 const EVENT_COLUMNS = [
   ['id', 'ID'],
+  ['animalIds', 'Animal IDs'],
   ['animalId', 'Animal ID'],
   ['type', 'Type'],
+  ['amount', 'Amount'],
   ['date', 'Date'],
   ['partnerAnimalId', 'Partner Animal ID'],
   ['notes', 'Notes'],
@@ -39,6 +42,8 @@ function toSheetRows(items, columns) {
         label,
         key === 'isBreeder'
           ? (item[key] === true ? 'yes' : 'no')
+          : key === 'animalIds'
+            ? Array.isArray(item[key]) ? item[key].join(', ') : (item[key] ?? '')
           : (item[key] ?? ''),
       ]),
     ),
@@ -89,7 +94,7 @@ export function parseBackupWorkbook(workbook) {
   const eventRows = XLSX.utils.sheet_to_json(eventsSheet, { defval: '', raw: false })
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 3,
     exportedAt: new Date().toISOString(),
     animals: fromSheetRows(animalRows, ANIMAL_COLUMNS),
     events: fromSheetRows(eventRows, EVENT_COLUMNS),
