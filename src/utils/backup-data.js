@@ -9,8 +9,22 @@ const VALID_EVENT_TYPES = new Set([
   'sale',
   'vaccination',
   'health_issue',
+  'feed_cost',
+  'labor_cost',
+  'supply_cost',
+  'maintenance_cost',
+  'other_expense',
+  'other_income',
   'death',
   'custom',
+])
+const HERD_SCOPE_EVENT_TYPES = new Set([
+  'feed_cost',
+  'labor_cost',
+  'supply_cost',
+  'maintenance_cost',
+  'other_expense',
+  'other_income',
 ])
 
 function isNonEmptyString(value) {
@@ -135,23 +149,24 @@ export function validateAndNormalizeBackupPayload(payload) {
 
     seenEventIds.add(id)
 
+    const type = VALID_EVENT_TYPES.has(event.type) ? event.type : null
+
+    if (!type) {
+      throw new Error(`Backup file is invalid: event "${id}" has an unsupported type.`)
+    }
+
+    const scope = event.scope === 'herd' && HERD_SCOPE_EVENT_TYPES.has(type) ? 'herd' : 'animals'
     const animalId = normalizeString(event.animalId)
     const partnerAnimalId = normalizeString(event.partnerAnimalId)
     const animalIds = deriveEventAnimalIds({
-      type: event.type,
+      type,
       animalIds: event.animalIds,
       animalId,
       partnerAnimalId,
     })
 
-    if (animalIds.length === 0) {
+    if (scope !== 'herd' && animalIds.length === 0) {
       throw new Error(`Backup file is invalid: event "${id}" references a missing animal.`)
-    }
-
-    const type = VALID_EVENT_TYPES.has(event.type) ? event.type : null
-
-    if (!type) {
-      throw new Error(`Backup file is invalid: event "${id}" has an unsupported type.`)
     }
 
     for (const relatedAnimalId of animalIds) {
@@ -168,6 +183,7 @@ export function validateAndNormalizeBackupPayload(payload) {
       id,
       animalId,
       animalIds,
+      scope,
       type,
       partnerAnimalId: type === 'breeding' ? partnerAnimalId : '',
       amount: event.amount,

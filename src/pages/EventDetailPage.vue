@@ -43,6 +43,11 @@
                 {{ amountLabel }}: {{ amountDisplay }}
               </q-chip>
             </div>
+            <div v-if="event.scope === 'herd' && affectedAnimals.length === 0" class="col-auto">
+              <q-chip square color="green-1" text-color="primary" icon="groups">
+                {{ t('events.wholeHerd') }}
+              </q-chip>
+            </div>
           </template>
 
           <template #actions>
@@ -74,7 +79,17 @@
             <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('events.affectedAnimals') }}</div>
         </q-card-section>
 
+        <q-card-section v-if="event.scope === 'herd' && affectedAnimals.length === 0" class="q-pt-none">
+          <q-banner rounded class="bg-green-1 text-primary">
+            <template #avatar>
+              <q-icon name="groups" color="primary" />
+            </template>
+            {{ t('events.wholeHerd') }}
+          </q-banner>
+        </q-card-section>
+
         <PagedListControls
+          v-else
           :current-page="affectedAnimalsPage"
           :list-mode="affectedAnimalsListMode"
           :list-mode-options="listModeOptions"
@@ -89,7 +104,7 @@
           @update:page-size="affectedAnimalsPageSize = $event"
         />
 
-        <q-list separator>
+        <q-list v-if="!(event.scope === 'herd' && affectedAnimals.length === 0)" separator>
           <template v-for="{ id, animal } in displayedAffectedAnimals" :key="id">
             <AnimalListItem
               v-if="animal"
@@ -115,6 +130,7 @@
         </q-list>
 
         <PagedListControls
+          v-if="!(event.scope === 'herd' && affectedAnimals.length === 0)"
           :current-page="affectedAnimalsPage"
           :list-mode="affectedAnimalsListMode"
           :list-mode-options="listModeOptions"

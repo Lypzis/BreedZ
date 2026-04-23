@@ -2,6 +2,20 @@ function normalizeString(value, fallback = '') {
   return typeof value === 'string' ? value.trim() : fallback
 }
 
+function normalizeScopeValue(value, animalIds = []) {
+  const normalizedValue = normalizeString(value).toLowerCase()
+
+  if (normalizedValue === 'herd') {
+    return 'herd'
+  }
+
+  if (normalizedValue === 'animals') {
+    return 'animals'
+  }
+
+  return animalIds.length === 0 ? 'herd' : 'animals'
+}
+
 function uniqueStrings(values = []) {
   const seen = new Set()
   const normalized = []
@@ -117,6 +131,7 @@ export function deriveEventAnimalIds(event = {}) {
 export function normalizeEventRecord(event = {}) {
   const type = normalizeString(event.type)
   const animalIds = deriveEventAnimalIds(event)
+  const scope = normalizeScopeValue(event.scope, animalIds)
   const animalId = animalIds[0] ?? normalizeString(event.animalId)
   const partnerAnimalId = type === 'breeding'
     ? normalizeString(event.partnerAnimalId) || animalIds[1] || ''
@@ -124,6 +139,7 @@ export function normalizeEventRecord(event = {}) {
 
   return {
     ...event,
+    scope,
     animalIds,
     animalId,
     partnerAnimalId,

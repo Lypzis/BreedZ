@@ -1,3 +1,12 @@
+const HERD_SCOPE_EVENT_TYPES = new Set([
+  'feed_cost',
+  'labor_cost',
+  'supply_cost',
+  'maintenance_cost',
+  'other_expense',
+  'other_income',
+])
+
 function uniqueIds(values = []) {
   const seen = new Set()
   const normalized = []
@@ -17,6 +26,10 @@ function uniqueIds(values = []) {
 }
 
 export function getEventSelectionMode(type) {
+  if (HERD_SCOPE_EVENT_TYPES.has(type)) {
+    return 'optionalMulti'
+  }
+
   if (type === 'breeding') {
     return 'breeding'
   }
@@ -37,6 +50,13 @@ export function buildEventAnimalIds({
 } = {}) {
   const selectionMode = getEventSelectionMode(type)
 
+  if (selectionMode === 'optionalMulti') {
+    return uniqueIds([
+      fixedAnimalId,
+      ...animalIds,
+    ])
+  }
+
   if (selectionMode === 'breeding') {
     return uniqueIds([fixedAnimalId || animalId, partnerAnimalId])
   }
@@ -56,7 +76,15 @@ export function getEventAmountLabelKey(type) {
     return 'events.price'
   }
 
-  if (type === 'vaccination' || type === 'health_issue') {
+  if (
+    type === 'vaccination'
+    || type === 'health_issue'
+    || type === 'feed_cost'
+    || type === 'labor_cost'
+    || type === 'supply_cost'
+    || type === 'maintenance_cost'
+    || type === 'other_expense'
+  ) {
     return 'events.cost'
   }
 

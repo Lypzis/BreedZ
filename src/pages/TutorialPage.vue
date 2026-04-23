@@ -67,6 +67,9 @@
                 <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/events" />
               </div>
               <div class="col-12 col-sm-auto">
+                <q-btn outline color="primary" icon="insights" :label="t('tutorial.openOverview')" to="/overview" />
+              </div>
+              <div class="col-12 col-sm-auto">
                 <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/settings" />
               </div>
             </div>

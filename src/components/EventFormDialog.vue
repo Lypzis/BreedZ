@@ -28,7 +28,7 @@
             map-options
           />
           <AnimalPickerField
-            v-if="!hasFixedAnimal && eventSelectionMode !== 'multi'"
+            v-if="!hasFixedAnimal && (eventSelectionMode === 'single' || eventSelectionMode === 'breeding')"
             v-model="eventForm.animalId"
             :animals="singleEventPickerAnimals"
             :label="t('events.pickAnimal')"
@@ -36,11 +36,11 @@
             :empty-label="t('common.noAnimalSelected')"
           />
           <AnimalMultiPickerField
-            v-if="eventSelectionMode === 'multi'"
+            v-if="eventSelectionMode === 'multi' || eventSelectionMode === 'optionalMulti'"
             v-model="eventForm.animalIds"
             :animals="multiEventPickerAnimals"
-            :label="hasFixedAnimal ? t('events.pickAdditionalAnimals') : t('events.pickAnimals')"
-            :dialog-title="hasFixedAnimal ? t('events.pickAdditionalAnimals') : t('events.pickAnimals')"
+            :label="multiAnimalPickerLabel"
+            :dialog-title="multiAnimalPickerLabel"
             :empty-label="t('common.noAnimalsSelected')"
           />
           <AnimalPickerField
@@ -148,6 +148,14 @@ const submitLabel = computed(() =>
 )
 const eventSelectionMode = computed(() => getEventSelectionMode(eventForm.type))
 const eventAmountLabel = computed(() => t(getEventAmountLabelKey(eventForm.type)))
+const isHerdScopedEvent = computed(() => eventSelectionMode.value === 'optionalMulti')
+const multiAnimalPickerLabel = computed(() => {
+  if (isHerdScopedEvent.value) {
+    return t('events.pickAnimalsOptional')
+  }
+
+  return hasFixedAnimal.value ? t('events.pickAdditionalAnimals') : t('events.pickAnimals')
+})
 const singleEventPickerAnimals = computed(() => buildSelectableEventAnimals([eventForm.animalId]))
 const multiEventPickerAnimals = computed(() => buildSelectableEventAnimals(eventForm.animalIds))
 const breedingPartnerAnimals = computed(() =>
@@ -267,6 +275,7 @@ function submitForm() {
   emit('submit', {
     animalId: eventAnimalIds[0] ?? eventForm.animalId,
     animalIds: eventAnimalIds,
+    scope: eventAnimalIds.length === 0 ? 'herd' : 'animals',
     type: eventForm.type,
     partnerAnimalId: eventForm.partnerAnimalId,
     amount: eventForm.amount,
@@ -331,7 +340,7 @@ watch(
       eventForm.partnerAnimalId = ''
     }
 
-    if (getEventSelectionMode(value) === 'multi') {
+    if (getEventSelectionMode(value) === 'multi' || getEventSelectionMode(value) === 'optionalMulti') {
       eventForm.animalIds = hasFixedAnimal.value
         ? currentAnimalIds.filter((id) => id !== props.fixedAnimalId)
         : currentAnimalIds

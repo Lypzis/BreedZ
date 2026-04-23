@@ -109,6 +109,27 @@ The stored field should stay neutral as `amount`, while UI labels can vary by co
 
 ## Event Rules By Type
 
+### Herd-scoped operational events
+
+Some financial/operational event types may affect the whole herd instead of specific animals.
+
+These event types can be saved with no attached animals:
+
+- `feed_cost`
+- `labor_cost`
+- `supply_cost`
+- `maintenance_cost`
+- `other_expense`
+- `other_income`
+
+Rules:
+
+- zero attached animals means the event is herd-scoped
+- attached animals are optional for these event types
+- if animals are attached, the event can appear in those animal timelines
+- if no animals are attached, the event appears in Events and Overview only
+- UI labels should mark animal attachment as optional for these types
+
 ### Purchase
 
 - can affect 1 or more animals

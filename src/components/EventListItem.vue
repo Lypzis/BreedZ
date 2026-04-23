@@ -120,7 +120,10 @@ const { t } = useI18nText()
 
 const eventMeta = computed(() => getEventTypeMeta(props.event.type))
 const animalSummary = computed(() =>
-  formatEventAnimalsSummary(props.event, props.animalResolver, { maxNames: props.maxAnimalNames }),
+  formatEventAnimalsSummary(props.event, props.animalResolver, {
+    herdLabel: t('events.wholeHerd'),
+    maxNames: props.maxAnimalNames,
+  }),
 )
 const eventAmountText = computed(() => {
   const amount = formatEventAmount(props.event.amount)

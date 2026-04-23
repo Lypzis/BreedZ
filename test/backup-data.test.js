@@ -119,6 +119,25 @@ test('accepts purchase events in backup payloads', () => {
   assert.equal(result.events[0].amount, 2500)
 })
 
+test('accepts herd-scoped financial events without animals in backup payloads', () => {
+  const result = validateAndNormalizeBackupPayload({
+    animals: [],
+    events: [
+      {
+        id: 'event-1',
+        scope: 'herd',
+        type: 'feed_cost',
+        amount: '800',
+        date: '2026-04-03',
+      },
+    ],
+  })
+
+  assert.equal(result.events[0].scope, 'herd')
+  assert.deepEqual(result.events[0].animalIds, [])
+  assert.equal(result.events[0].amount, 800)
+})
+
 test('rejects an event that references a missing animal', () => {
   assert.throws(
     () =>

@@ -47,6 +47,17 @@ test('formats shared event animal summaries compactly', () => {
   )
 })
 
+test('formats herd-scoped event summaries without animals', () => {
+  assert.equal(
+    formatEventAnimalsSummary(
+      { type: 'feed_cost', scope: 'herd', animalIds: [] },
+      animalById,
+      { herdLabel: 'Whole herd' },
+    ),
+    'Whole herd',
+  )
+})
+
 test('formats unique species and breed labels for affected animals', () => {
   assert.equal(
     formatEventSpeciesBreedSummary(

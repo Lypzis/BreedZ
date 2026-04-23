@@ -9,6 +9,7 @@ import {
 
 test('uses breeding mode only for breeding events', () => {
   assert.equal(getEventSelectionMode('breeding'), 'breeding')
+  assert.equal(getEventSelectionMode('feed_cost'), 'optionalMulti')
   assert.equal(getEventSelectionMode('birth'), 'single')
   assert.equal(getEventSelectionMode('sale'), 'multi')
 })
@@ -54,6 +55,7 @@ test('builds animal ids with a fixed animal for animal detail flows', () => {
 test('returns contextual amount labels by event type', () => {
   assert.equal(getEventAmountLabelKey('purchase'), 'events.price')
   assert.equal(getEventAmountLabelKey('sale'), 'events.price')
+  assert.equal(getEventAmountLabelKey('feed_cost'), 'events.cost')
   assert.equal(getEventAmountLabelKey('vaccination'), 'events.cost')
   assert.equal(getEventAmountLabelKey('custom'), 'events.amount')
 })

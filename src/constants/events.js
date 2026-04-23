@@ -7,8 +7,27 @@ const EVENT_TYPE_META = {
   sale: { labelKey: 'eventTypes.sale', icon: 'sell', color: 'info' },
   vaccination: { labelKey: 'eventTypes.vaccination', icon: 'vaccines', color: 'accent' },
   health_issue: { labelKey: 'eventTypes.health_issue', icon: 'healing', color: 'negative' },
+  feed_cost: { labelKey: 'eventTypes.feed_cost', icon: 'grass', color: 'warning' },
+  labor_cost: { labelKey: 'eventTypes.labor_cost', icon: 'engineering', color: 'warning' },
+  supply_cost: { labelKey: 'eventTypes.supply_cost', icon: 'inventory_2', color: 'warning' },
+  maintenance_cost: { labelKey: 'eventTypes.maintenance_cost', icon: 'build', color: 'warning' },
+  other_expense: { labelKey: 'eventTypes.other_expense', icon: 'receipt_long', color: 'warning' },
+  other_income: { labelKey: 'eventTypes.other_income', icon: 'payments', color: 'positive' },
   death: { labelKey: 'eventTypes.death', icon: 'warning', color: 'dark' },
   custom: { labelKey: 'eventTypes.custom', icon: 'assignment', color: 'primary' },
+}
+
+export const HERD_SCOPE_EVENT_TYPES = new Set([
+  'feed_cost',
+  'labor_cost',
+  'supply_cost',
+  'maintenance_cost',
+  'other_expense',
+  'other_income',
+])
+
+export function canEventUseHerdScope(type) {
+  return HERD_SCOPE_EVENT_TYPES.has(type)
 }
 
 export function getEventTypeOptions() {
