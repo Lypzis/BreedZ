@@ -408,10 +408,11 @@ Content rules:
 
 Current live guides:
 - [x] `track-cattle-breeding-dates`
+- [x] `how-long-is-cow-pregnancy`
 - [x] `how-to-track-cattle-lineage`
 
 Cluster 1: Breeding tracking
-- [ ] `how-long-is-cow-pregnancy`
+- [x] `how-long-is-cow-pregnancy`
 - [ ] `cattle-gestation-calculator`
 - [ ] `when-will-my-cow-calve`
 - [ ] `how-to-avoid-missing-calving-dates`
@@ -453,6 +454,12 @@ Execution checklist for each new guide:
 - [ ] Add internal links from the landing page or other guides
 - [ ] Add a dedicated localized guides hub later (`/en/guides/`, `/pt-br/guias/`, `/es/guias/`) once the guide library is large enough
 - [ ] Recheck title, meta description, canonical, and `hreflang`
+
+I18n maintenance TODO:
+- [ ] Split the growing `src/i18n/messages.js` into per-locale files before adding many more guide pages.
+  - Suggested shape: `src/i18n/messages/en.js`, `pt-BR.js`, `es.js`, plus a small `index.js`.
+  - Keep this as a maintenance step, not an urgent blocker for the next guide.
+
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
