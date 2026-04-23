@@ -204,6 +204,10 @@ export const messages = {
       breedingGuideDescription:
         'Learn a simple process for tracking breeding dates, expected calving timing, and herd follow-up without scattered notes.',
       openBreedingGuide: 'Read the breeding dates guide',
+      cowPregnancyGuideTitle: 'How long is a cow pregnant?',
+      cowPregnancyGuideDescription:
+        'Learn the common 283-day estimate, why calving dates vary, and how to track pregnancy timing with better records.',
+      openCowPregnancyGuide: 'Read the cow pregnancy guide',
       lineageGuideTitle: 'How to track cattle lineage and avoid breeding mistakes',
       lineageGuideDescription:
         'See a practical lineage workflow for linking parents, offspring, and breeding pairs without losing history over time.',
@@ -757,6 +761,101 @@ export const messages = {
         },
       ],
     },
+    guideCowPregnancy: {
+      meta: {
+        title: 'How Long Is a Cow Pregnant?',
+        description:
+          'Learn how long cow pregnancy usually lasts, how to estimate calving dates, and why clear breeding records make herd planning easier.',
+      },
+      overline: 'Guide',
+      title: 'How Long Is a Cow Pregnant? Cow Gestation Explained',
+      description:
+        'Most cow pregnancies are estimated around 283 days, but real calving dates can vary. The useful answer is not just the number; it is knowing which date to track.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'A cow is usually pregnant for about 283 days, or roughly nine months and one week.',
+      openApp: 'Open BreedZ',
+      openBreedingDatesGuide: 'Read breeding dates guide',
+      timelineOverline: 'Pregnancy Timeline',
+      timelineTitle: 'The basic cow pregnancy timeline',
+      timelineDescription:
+        'The 283-day estimate is a planning tool. It helps you prepare for calving, but it should not be treated as an exact promise for every cow.',
+      timelineItems: [
+        'Record the breeding date as soon as it happens.',
+        'Add about 283 days to estimate the expected calving date.',
+        'Start watching more closely as the expected date gets near.',
+        'Keep the actual calving date in the animal history after birth.',
+      ],
+      variationOverline: 'Why Dates Vary',
+      variationTitle: 'Why not every cow calves on the exact expected day',
+      variationItems: [
+        'Breed and genetics can shift the average gestation length.',
+        'Calf sex, cow age, and individual variation can affect timing.',
+        'Natural service can make the exact breeding date less certain.',
+        'Nutrition, health, and farm conditions can influence what you observe near calving.',
+      ],
+      trackingOverline: 'Practical Tracking',
+      trackingTitle: 'How to track cow pregnancy without guessing later',
+      trackingDescription:
+        'The goal is to keep enough structure that you can act quickly when you need to review the herd.',
+      trackingSteps: [
+        {
+          title: '1. Save the breeding date',
+          description:
+            'Use the date you saw breeding, insemination, or the most reliable exposure date you have.',
+        },
+        {
+          title: '2. Estimate the calving window',
+          description:
+            'Use 283 days as the center point, then treat the nearby days as a window to watch.',
+        },
+        {
+          title: '3. Link the record to the animal',
+          description:
+            'A date by itself is easy to lose. A date linked to the cow keeps the pregnancy history useful.',
+        },
+        {
+          title: '4. Record the birth when it happens',
+          description:
+            'After calving, save the birth event and connect the calf to dam and sire when known.',
+        },
+      ],
+      mistakesOverline: 'Common Mistakes',
+      mistakesTitle: 'What usually goes wrong with pregnancy records',
+      mistakeItems: [
+        'Only writing dates in a notebook without the animal ID.',
+        'Using the expected date as if it were guaranteed.',
+        'Forgetting to record the actual calving date after birth.',
+        'Tracking the calf but not linking it back to dam and sire.',
+      ],
+      breedzOverline: 'Using BreedZ',
+      breedzTitle: 'How BreedZ helps with cow pregnancy tracking',
+      breedzDescription:
+        'BreedZ is not a veterinary tool, but it helps keep the recordkeeping side organized so breeding, pregnancy, birth, and lineage stay connected.',
+      breedzItems: [
+        'Record breeding events in each animal timeline.',
+        'Keep expected calving follow-up tied to the cow instead of scattered notes.',
+        'Record births and connect calves to lineage later.',
+        'Use offline access when the farm does not have reliable internet.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about cow pregnancy length',
+      faqs: [
+        {
+          question: 'How many months is a cow pregnant?',
+          answer: 'A practical estimate is about nine months and one week, or around 283 days.',
+        },
+        {
+          question: 'Can a cow calve before or after 283 days?',
+          answer: 'Yes. The 283-day number is an average estimate, and individual cows can calve earlier or later.',
+        },
+        {
+          question: 'What date should I record if I am not sure when breeding happened?',
+          answer:
+            'Use the most reliable date you have and add a note explaining the uncertainty. A clear note is better than pretending the date is exact.',
+        },
+      ],
+    },
     guideCattleLineage: {
       meta: {
         title: 'Track Cattle Lineage and Avoid Breeding Mistakes',
@@ -1202,6 +1301,10 @@ export const messages = {
       breedingGuideDescription:
         'Aprenda um processo simples para acompanhar datas de cobertura, previsão de parto e seguimento do rebanho sem anotações espalhadas.',
       openBreedingGuide: 'Ler o guia de datas de cobertura',
+      cowPregnancyGuideTitle: 'Quanto tempo dura a gestação da vaca?',
+      cowPregnancyGuideDescription:
+        'Entenda a estimativa comum de 283 dias, por que a data do parto varia e como acompanhar melhor a gestação.',
+      openCowPregnancyGuide: 'Ler o guia de gestação da vaca',
       lineageGuideTitle: 'Como acompanhar a linhagem no gado e evitar erros de reprodução',
       lineageGuideDescription:
         'Veja um fluxo prático para ligar pais, descendentes e pares reprodutivos sem perder o histórico com o tempo.',
@@ -1752,6 +1855,101 @@ export const messages = {
         {
           question: 'Posso acompanhar datas de cobertura offline?',
           answer: 'Sim. O BreedZ foi feito para funcionar mesmo sem internet confiável na fazenda.',
+        },
+      ],
+    },
+    guideCowPregnancy: {
+      meta: {
+        title: 'Quanto tempo dura a gestação da vaca?',
+        description:
+          'Entenda quanto tempo dura a gestação da vaca, como estimar a data do parto e por que bons registros de cobertura ajudam no manejo.',
+      },
+      overline: 'Guia',
+      title: 'Quanto tempo dura a gestação da vaca? Entenda a previsão do parto',
+      description:
+        'A gestação da vaca costuma ser estimada em cerca de 283 dias, mas a data real do parto pode variar. O mais importante é saber qual data registrar e acompanhar.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'A vaca geralmente fica prenhe por cerca de 283 dias, ou aproximadamente nove meses e uma semana.',
+      openApp: 'Abrir BreedZ',
+      openBreedingDatesGuide: 'Ler guia de datas de cobertura',
+      timelineOverline: 'Linha do tempo',
+      timelineTitle: 'A linha do tempo básica da gestação bovina',
+      timelineDescription:
+        'A estimativa de 283 dias serve para planejar o manejo. Ela ajuda a preparar o parto, mas não deve ser tratada como promessa exata para toda vaca.',
+      timelineItems: [
+        'Registre a data da cobertura assim que ela acontecer.',
+        'Some cerca de 283 dias para estimar a data provável do parto.',
+        'Observe com mais atenção quando a data esperada estiver próxima.',
+        'Registre a data real do parto no histórico do animal depois do nascimento.',
+      ],
+      variationOverline: 'Por que varia',
+      variationTitle: 'Por que nem toda vaca pare exatamente no dia esperado',
+      variationItems: [
+        'Raça e genética podem mudar a média de duração da gestação.',
+        'Sexo do bezerro, idade da vaca e variação individual podem afetar o tempo.',
+        'Monta natural pode deixar a data exata da cobertura menos certa.',
+        'Nutrição, saúde e condições da fazenda influenciam o que você observa perto do parto.',
+      ],
+      trackingOverline: 'Acompanhamento prático',
+      trackingTitle: 'Como acompanhar a gestação da vaca sem depender de chute depois',
+      trackingDescription:
+        'O objetivo é manter estrutura suficiente para agir rápido quando precisar revisar o rebanho.',
+      trackingSteps: [
+        {
+          title: '1. Salve a data da cobertura',
+          description:
+            'Use a data em que viu a cobertura, a inseminação ou a data de exposição mais confiável que tiver.',
+        },
+        {
+          title: '2. Estime a janela do parto',
+          description:
+            'Use 283 dias como ponto central e trate os dias ao redor como uma janela de atenção.',
+        },
+        {
+          title: '3. Vincule o registro ao animal',
+          description:
+            'Uma data solta se perde fácil. Uma data ligada à vaca mantém o histórico da gestação útil.',
+        },
+        {
+          title: '4. Registre o nascimento quando acontecer',
+          description:
+            'Depois do parto, salve o evento de nascimento e conecte o bezerro à mãe e ao pai quando souber.',
+        },
+      ],
+      mistakesOverline: 'Erros comuns',
+      mistakesTitle: 'O que costuma dar errado nos registros de gestação',
+      mistakeItems: [
+        'Anotar datas em caderno sem o brinco ou ID do animal.',
+        'Tratar a data prevista como se fosse garantida.',
+        'Esquecer de registrar a data real do parto depois do nascimento.',
+        'Registrar o bezerro sem ligar depois à mãe e ao pai.',
+      ],
+      breedzOverline: 'Usando o BreedZ',
+      breedzTitle: 'Como o BreedZ ajuda a acompanhar a gestação da vaca',
+      breedzDescription:
+        'O BreedZ não é ferramenta veterinária, mas ajuda a organizar os registros para que cobertura, gestação, nascimento e linhagem fiquem conectados.',
+      breedzItems: [
+        'Registre eventos de cobertura na linha do tempo de cada animal.',
+        'Mantenha o acompanhamento do parto esperado ligado à vaca, não a anotações espalhadas.',
+        'Registre nascimentos e conecte os bezerros à linhagem depois.',
+        'Use offline quando a fazenda não tiver internet confiável.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre duração da gestação da vaca',
+      faqs: [
+        {
+          question: 'Quantos meses dura a gestação da vaca?',
+          answer: 'Uma estimativa prática é cerca de nove meses e uma semana, ou em torno de 283 dias.',
+        },
+        {
+          question: 'A vaca pode parir antes ou depois de 283 dias?',
+          answer: 'Sim. O número de 283 dias é uma média, e cada vaca pode parir um pouco antes ou depois.',
+        },
+        {
+          question: 'Que data devo registrar se não tenho certeza de quando aconteceu a cobertura?',
+          answer:
+            'Use a data mais confiável que tiver e acrescente uma observação explicando a incerteza. Uma nota clara é melhor do que fingir que a data é exata.',
         },
       ],
     },
@@ -2644,6 +2842,10 @@ export const messages = {
       breedingGuideDescription:
         'Aprende un proceso simple para registrar fechas de reproducción, estimar partos y hacer seguimiento del rebaño sin notas dispersas.',
       openBreedingGuide: 'Leer la guía de fechas reproductivas',
+      cowPregnancyGuideTitle: '¿Cuánto dura la gestación de una vaca?',
+      cowPregnancyGuideDescription:
+        'Aprende la estimación común de 283 días, por qué la fecha de parto varía y cómo seguir mejor la gestación.',
+      openCowPregnancyGuide: 'Leer la guía de gestación',
       lineageGuideTitle: 'Cómo rastrear el linaje del ganado y evitar errores de reproducción',
       lineageGuideDescription:
         'Mira un flujo práctico para vincular padres, descendencia y parejas reproductivas sin perder historial con el tiempo.',
@@ -2760,6 +2962,101 @@ export const messages = {
         {
           question: '¿Puedo registrar estas fechas offline?',
           answer: 'Sí. BreedZ fue hecho para que los registros de la finca sigan funcionando sin internet confiable.',
+        },
+      ],
+    },
+    guideCowPregnancy: {
+      meta: {
+        title: 'Cuánto dura la gestación de una vaca',
+        description:
+          'Aprende cuánto dura la gestación de una vaca, cómo estimar la fecha de parto y por qué los registros reproductivos claros ayudan al manejo.',
+      },
+      overline: 'Guía',
+      title: '¿Cuánto dura la gestación de una vaca? Guía para estimar el parto',
+      description:
+        'La gestación de una vaca suele estimarse en unos 283 días, pero la fecha real de parto puede variar. Lo importante es saber qué fecha registrar y seguir.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Una vaca suele estar preñada alrededor de 283 días, o aproximadamente nueve meses y una semana.',
+      openApp: 'Abrir BreedZ',
+      openBreedingDatesGuide: 'Leer guía de fechas reproductivas',
+      timelineOverline: 'Línea de tiempo',
+      timelineTitle: 'La línea de tiempo básica de la gestación bovina',
+      timelineDescription:
+        'La estimación de 283 días sirve para planificar. Ayuda a prepararte para el parto, pero no debe tratarse como una promesa exacta para cada vaca.',
+      timelineItems: [
+        'Registra la fecha de reproducción tan pronto como ocurra.',
+        'Suma unos 283 días para estimar la fecha probable de parto.',
+        'Observa con más atención cuando se acerque la fecha esperada.',
+        'Registra la fecha real del parto en el historial del animal después del nacimiento.',
+      ],
+      variationOverline: 'Por qué varía',
+      variationTitle: 'Por qué no todas las vacas paren exactamente el día esperado',
+      variationItems: [
+        'La raza y la genética pueden mover el promedio de duración de la gestación.',
+        'El sexo del ternero, la edad de la vaca y la variación individual pueden afectar el tiempo.',
+        'La monta natural puede hacer menos cierta la fecha exacta de reproducción.',
+        'Nutrición, salud y condiciones de la finca influyen en lo que observas cerca del parto.',
+      ],
+      trackingOverline: 'Seguimiento práctico',
+      trackingTitle: 'Cómo seguir la gestación de una vaca sin adivinar después',
+      trackingDescription:
+        'El objetivo es mantener suficiente estructura para actuar rápido cuando necesites revisar el rebaño.',
+      trackingSteps: [
+        {
+          title: '1. Guarda la fecha de reproducción',
+          description:
+            'Usa la fecha en que viste la monta, la inseminación o la fecha de exposición más confiable que tengas.',
+        },
+        {
+          title: '2. Estima la ventana de parto',
+          description:
+            'Usa 283 días como punto central y trata los días cercanos como una ventana para observar.',
+        },
+        {
+          title: '3. Vincula el registro al animal',
+          description:
+            'Una fecha suelta se pierde fácil. Una fecha vinculada a la vaca mantiene útil el historial de gestación.',
+        },
+        {
+          title: '4. Registra el nacimiento cuando ocurra',
+          description:
+            'Después del parto, guarda el evento de nacimiento y conecta el ternero con madre y padre cuando los conozcas.',
+        },
+      ],
+      mistakesOverline: 'Errores comunes',
+      mistakesTitle: 'Qué suele fallar en los registros de gestación',
+      mistakeItems: [
+        'Anotar fechas en un cuaderno sin la identificación del animal.',
+        'Usar la fecha esperada como si estuviera garantizada.',
+        'Olvidar registrar la fecha real de parto después del nacimiento.',
+        'Registrar el ternero sin conectarlo después con madre y padre.',
+      ],
+      breedzOverline: 'Usando BreedZ',
+      breedzTitle: 'Cómo BreedZ ayuda a seguir la gestación de una vaca',
+      breedzDescription:
+        'BreedZ no es una herramienta veterinaria, pero ayuda a organizar los registros para que reproducción, gestación, nacimiento y linaje queden conectados.',
+      breedzItems: [
+        'Registra eventos reproductivos en la línea de tiempo de cada animal.',
+        'Mantén el seguimiento del parto esperado vinculado a la vaca, no a notas dispersas.',
+        'Registra nacimientos y conecta terneros al linaje después.',
+        'Usa acceso offline cuando la finca no tenga internet confiable.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre la duración de la gestación de una vaca',
+      faqs: [
+        {
+          question: '¿Cuántos meses dura la gestación de una vaca?',
+          answer: 'Una estimación práctica es unos nueve meses y una semana, o alrededor de 283 días.',
+        },
+        {
+          question: '¿Una vaca puede parir antes o después de 283 días?',
+          answer: 'Sí. El número de 283 días es una media, y cada vaca puede parir antes o después.',
+        },
+        {
+          question: '¿Qué fecha debo registrar si no sé exactamente cuándo ocurrió la reproducción?',
+          answer:
+            'Usa la fecha más confiable que tengas y agrega una nota explicando la incertidumbre. Una nota clara es mejor que fingir que la fecha es exacta.',
         },
       ],
     },

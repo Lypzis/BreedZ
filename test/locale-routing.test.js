@@ -9,4 +9,8 @@ test('overview is treated as an app shell route', () => {
 
 test('localized public paths remain localized', () => {
   assert.equal(buildLocalizedPath('pt-BR', '/contact'), '/pt-br/contato')
+  assert.equal(
+    buildLocalizedPath('es', '/guides/how-long-is-cow-pregnancy'),
+    '/es/guias/cuanto-dura-la-gestacion-de-una-vaca',
+  )
 })
