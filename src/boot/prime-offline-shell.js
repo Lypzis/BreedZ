@@ -8,6 +8,7 @@ const offlineResourceLoaders = [
   () => import('pages/AnimalsPage.vue'),
   () => import('pages/AnimalDetailPage.vue'),
   () => import('pages/EventsPage.vue'),
+  () => import('pages/EventDetailPage.vue'),
   () => import('pages/SettingsPage.vue'),
   () => import('pages/AccountPage.vue'),
   () => import('pages/ResetPasswordPage.vue'),

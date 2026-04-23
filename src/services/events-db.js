@@ -1,20 +1,12 @@
-import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
-import { applyAnimalStatusFromEvent, touchAnimalUpdatedAt } from 'src/services/animals-db'
-
-function normalizePartnerAnimalId(type, value) {
-  if (type !== 'breeding') {
-    return ''
-  }
-
-  return value?.trim() ?? ''
-}
-
-function normalizeStoredEvent(event) {
-  return {
-    ...event,
-    partnerAnimalId: normalizePartnerAnimalId(event?.type, event?.partnerAnimalId),
-  }
-}
+import {
+  createId,
+  migrateStoredEventsToCanonicalShape,
+  STORE_NAMES,
+  withStore,
+} from 'src/services/app-db'
+import { getAnimal, touchAnimalUpdatedAt } from 'src/services/animals-db'
+import { resolveBaseStatus, resolveStatusFromTimeline } from 'src/utils/event-status'
+import { eventIncludesAnimal, normalizeEventRecord } from 'src/utils/event-records'
 
 function sortEvents(events) {
   return [...events].sort((left, right) => {
@@ -26,30 +18,68 @@ function sortEvents(events) {
 }
 
 export async function listEvents() {
+  await migrateStoredEventsToCanonicalShape()
   const events = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.getAll())) ?? []
-  return sortEvents(events.map(normalizeStoredEvent))
+  return sortEvents(events.map(normalizeEventRecord))
 }
 
 export async function listEventsByAnimalId(animalId) {
   const events = await listEvents()
-  return events.filter((event) => event.animalId === animalId)
+  return events.filter((event) => eventIncludesAnimal(event, animalId))
+}
+
+async function syncAnimalStatusFromTimeline(animalId) {
+  const existingAnimal = await getAnimal(animalId)
+
+  if (!existingAnimal) {
+    return null
+  }
+
+  const relatedEvents = await listEventsByAnimalId(animalId)
+  const baseStatus = resolveBaseStatus(existingAnimal.baseStatus, existingAnimal.status, relatedEvents)
+  const nextStatus = resolveStatusFromTimeline(baseStatus, relatedEvents)
+
+  if (nextStatus === existingAnimal.status && baseStatus === existingAnimal.baseStatus) {
+    return touchAnimalUpdatedAt(animalId)
+  }
+
+  const updatedAnimal = {
+    ...existingAnimal,
+    baseStatus,
+    status: nextStatus,
+    updatedAt: new Date().toISOString(),
+  }
+
+  await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
+
+  return updatedAnimal
+}
+
+async function syncAnimalStatusesByIds(ids = []) {
+  const uniqueIds = [...new Set(ids.filter(Boolean))]
+
+  for (const animalId of uniqueIds) {
+    await syncAnimalStatusFromTimeline(animalId)
+  }
 }
 
 export async function createEvent(input) {
   const timestamp = new Date().toISOString()
-  const event = {
+  const event = normalizeEventRecord({
     id: createId('event'),
     animalId: input.animalId,
+    animalIds: input.animalIds,
     type: input.type,
-    partnerAnimalId: normalizePartnerAnimalId(input.type, input.partnerAnimalId),
+    partnerAnimalId: input.partnerAnimalId,
+    amount: input.amount,
     date: input.date,
     notes: input.notes?.trim() ?? '',
     createdAt: timestamp,
     updatedAt: timestamp,
-  }
+  })
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(event))
-  await applyAnimalStatusFromEvent(event.animalId, event.type, event.date)
+  await syncAnimalStatusesByIds(event.animalIds)
 
   return event
 }
@@ -61,22 +91,20 @@ export async function updateEvent(id, input) {
     throw new Error('Event not found.')
   }
 
-  const updatedEvent = {
+  const updatedEvent = normalizeEventRecord({
     ...existingEvent,
-    animalId: input.animalId,
-    type: input.type,
-    partnerAnimalId: normalizePartnerAnimalId(input.type, input.partnerAnimalId),
-    date: input.date,
+    animalId: input.animalId ?? existingEvent.animalId,
+    animalIds: input.animalIds ?? existingEvent.animalIds,
+    type: input.type ?? existingEvent.type,
+    partnerAnimalId: input.partnerAnimalId ?? existingEvent.partnerAnimalId,
+    amount: input.amount ?? existingEvent.amount,
+    date: input.date ?? existingEvent.date,
     notes: input.notes?.trim() ?? '',
     updatedAt: new Date().toISOString(),
-  }
+  })
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(updatedEvent))
-  await applyAnimalStatusFromEvent(updatedEvent.animalId, updatedEvent.type, updatedEvent.date)
-
-  if (existingEvent.animalId && existingEvent.animalId !== updatedEvent.animalId) {
-    await touchAnimalUpdatedAt(existingEvent.animalId)
-  }
+  await syncAnimalStatusesByIds([...existingEvent.animalIds, ...updatedEvent.animalIds])
 
   return updatedEvent
 }
@@ -89,7 +117,7 @@ export async function deleteEvent(id) {
   }
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(id))
-  await touchAnimalUpdatedAt(event.animalId)
+  await syncAnimalStatusesByIds(event.animalIds)
 
   return event
 }
@@ -101,13 +129,36 @@ export async function getEvent(id) {
 
   const event = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.get(id))) ?? null
 
-  return event ? normalizeStoredEvent(event) : null
+  return event ? normalizeEventRecord(event) : null
 }
 
 export async function deleteEventsForAnimal(animalId) {
   const events = await listEventsByAnimalId(animalId)
+  const affectedAnimalIds = new Set()
 
   for (const event of events) {
-    await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.id))
+    for (const relatedAnimalId of event.animalIds) {
+      if (relatedAnimalId !== animalId) {
+        affectedAnimalIds.add(relatedAnimalId)
+      }
+    }
+
+    const remainingAnimalIds = event.animalIds.filter((id) => id !== animalId)
+    const shouldDeleteEvent = event.type === 'breeding' || remainingAnimalIds.length === 0
+
+    if (shouldDeleteEvent) {
+      await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.id))
+      continue
+    }
+
+    const updatedEvent = normalizeEventRecord({
+      ...event,
+      animalIds: remainingAnimalIds,
+      updatedAt: new Date().toISOString(),
+    })
+
+    await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(updatedEvent))
   }
+
+  await syncAnimalStatusesByIds([...affectedAnimalIds])
 }

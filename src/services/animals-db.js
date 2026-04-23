@@ -1,12 +1,23 @@
-import { createId, STORE_NAMES, withStore } from 'src/services/app-db'
-import { normalizeAnimalBreeder } from 'src/utils/breeder'
-import { resolveStatusAfterEvent } from 'src/utils/event-status'
-import { normalizeBreedLabel, normalizeSpeciesLabel } from 'src/utils/species'
+import { createId, STORE_NAMES, withStore } from './app-db.js'
+import { normalizeAnimalBreeder } from '../utils/breeder.js'
+import { normalizeBreedLabel, normalizeSpeciesLabel } from '../utils/species.js'
+
+function normalizeStatusValue(value) {
+  const normalizedValue = String(value || '').trim().toLowerCase()
+
+  if (normalizedValue === 'sold' || normalizedValue === 'dead' || normalizedValue === 'active') {
+    return normalizedValue
+  }
+
+  return 'active'
+}
 
 function normalizeStoredAnimal(animal) {
   return {
     ...animal,
     isBreeder: normalizeAnimalBreeder(animal?.isBreeder, animal?.purpose),
+    baseStatus: normalizeStatusValue(animal?.baseStatus ?? animal?.status),
+    status: normalizeStatusValue(animal?.status ?? animal?.baseStatus),
   }
 }
 
@@ -27,10 +38,11 @@ export async function hasSavedAnimals() {
   return Number(count ?? 0) > 0
 }
 
-export async function createAnimal(input) {
-  const timestamp = new Date().toISOString()
-  const animal = {
-    id: createId('animal'),
+export function buildAnimalRecord(input, options = {}) {
+  const timestamp = options.timestamp ?? new Date().toISOString()
+
+  return {
+    id: options.id ?? createId('animal'),
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
@@ -38,13 +50,18 @@ export async function createAnimal(input) {
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
-    status: input.status ?? 'active',
+    baseStatus: normalizeStatusValue(input.status),
+    status: normalizeStatusValue(input.status),
     damId: input.damId || '',
     sireId: input.sireId || '',
     notes: input.notes?.trim() ?? '',
     createdAt: timestamp,
     updatedAt: timestamp,
   }
+}
+
+export async function createAnimal(input) {
+  const animal = buildAnimalRecord(input)
 
   await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(animal))
 
@@ -67,7 +84,8 @@ export async function updateAnimal(id, input) {
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
-    status: input.status ?? 'active',
+    baseStatus: normalizeStatusValue(input.status ?? existingAnimal.baseStatus),
+    status: normalizeStatusValue(input.status ?? existingAnimal.baseStatus),
     damId: input.damId || '',
     sireId: input.sireId || '',
     notes: input.notes?.trim() ?? '',
@@ -106,30 +124,6 @@ export async function touchAnimalUpdatedAt(id) {
 
   const updatedAnimal = {
     ...existingAnimal,
-    updatedAt: new Date().toISOString(),
-  }
-
-  await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
-
-  return updatedAnimal
-}
-
-export async function applyAnimalStatusFromEvent(id, eventType, eventDate) {
-  const existingAnimal = await getAnimal(id)
-
-  if (!existingAnimal) {
-    return null
-  }
-
-  const nextStatus = resolveStatusAfterEvent(existingAnimal.status, eventType, eventDate)
-
-  if (nextStatus === existingAnimal.status) {
-    return touchAnimalUpdatedAt(id)
-  }
-
-  const updatedAnimal = {
-    ...existingAnimal,
-    status: nextStatus,
     updatedAt: new Date().toISOString(),
   }
 

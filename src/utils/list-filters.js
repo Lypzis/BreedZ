@@ -64,14 +64,20 @@ export function filterEventsList(events, resolveAnimalById, filters = {}) {
       return true
     }
 
-    const animal = resolveAnimalById(event.animalId)
+    const relatedAnimals = (event.animalIds ?? [event.animalId])
+      .map((animalId) => resolveAnimalById(animalId))
+      .filter(Boolean)
+
     const haystack = [
       event.notes,
+      event.amount,
       getEventTypeMeta(event.type).label,
-      animal?.tag,
-      animal?.name,
-      animal?.species,
-      animal?.breed,
+      ...relatedAnimals.flatMap((animal) => [
+        animal?.tag,
+        animal?.name,
+        animal?.species,
+        animal?.breed,
+      ]),
     ]
       .filter(Boolean)
       .join(' ')

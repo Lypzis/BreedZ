@@ -4,7 +4,7 @@ import { validateAndNormalizeBackupPayload } from '../src/utils/backup-data.js'
 
 test('normalizes a valid backup payload', () => {
   const result = validateAndNormalizeBackupPayload({
-    schemaVersion: 1,
+    schemaVersion: 3,
     exportedAt: '2026-04-03T12:00:00.000Z',
     animals: [
       {
@@ -15,6 +15,7 @@ test('normalizes a valid backup payload', () => {
         isBreeder: true,
         sex: 'female',
         birthDate: '2024-01-10',
+        baseStatus: 'active',
         status: 'active',
         damId: '',
         sireId: '',
@@ -28,6 +29,7 @@ test('normalizes a valid backup payload', () => {
         isBreeder: true,
         sex: 'male',
         birthDate: '2023-01-10',
+        baseStatus: 'active',
         status: 'active',
         damId: '',
         sireId: '',
@@ -38,8 +40,10 @@ test('normalizes a valid backup payload', () => {
       {
         id: 'event-1',
         animalId: 'animal-1',
+        animalIds: ['animal-1', 'animal-2'],
         type: 'breeding',
         partnerAnimalId: 'animal-2',
+        amount: '1.250,50',
         date: '2026-04-03',
         notes: 'Healthy calf',
       },
@@ -48,8 +52,71 @@ test('normalizes a valid backup payload', () => {
 
   assert.equal(result.animals[0].sex, 'female')
   assert.equal(result.animals[0].isBreeder, true)
+  assert.equal(result.animals[0].baseStatus, 'active')
   assert.equal(result.events[0].animalId, 'animal-1')
+  assert.deepEqual(result.events[0].animalIds, ['animal-1', 'animal-2'])
   assert.equal(result.events[0].partnerAnimalId, 'animal-2')
+  assert.equal(result.events[0].amount, 1250.5)
+})
+
+test('normalizes multi-animal non-breeding events and baseStatus in backup payloads', () => {
+  const result = validateAndNormalizeBackupPayload({
+    animals: [
+      {
+        id: 'animal-1',
+        tag: 'Cow 001',
+        species: 'Cow',
+        baseStatus: 'active',
+        status: 'sold',
+      },
+      {
+        id: 'animal-2',
+        tag: 'Cow 002',
+        species: 'Cow',
+        baseStatus: 'active',
+        status: 'active',
+      },
+    ],
+    events: [
+      {
+        id: 'event-1',
+        animalIds: ['animal-1', 'animal-2'],
+        type: 'sale',
+        amount: '1000.00',
+        date: '2026-04-03',
+      },
+    ],
+  })
+
+  assert.deepEqual(result.events[0].animalIds, ['animal-1', 'animal-2'])
+  assert.equal(result.events[0].animalId, 'animal-1')
+  assert.equal(result.events[0].amount, 1000)
+  assert.equal(result.animals[0].baseStatus, 'active')
+})
+
+test('accepts purchase events in backup payloads', () => {
+  const result = validateAndNormalizeBackupPayload({
+    animals: [
+      {
+        id: 'animal-1',
+        tag: 'Cow 001',
+        status: 'active',
+      },
+    ],
+    events: [
+      {
+        id: 'event-1',
+        animalIds: ['animal-1'],
+        type: 'purchase',
+        amount: '2500',
+        date: '2026-04-03',
+      },
+    ],
+  })
+
+  assert.equal(result.events[0].type, 'purchase')
+  assert.deepEqual(result.events[0].animalIds, ['animal-1'])
+  assert.equal(result.events[0].amount, 2500)
 })
 
 test('rejects an event that references a missing animal', () => {
@@ -91,7 +158,7 @@ test('rejects a breeding event that references a missing partner animal', () => 
           },
         ],
       }),
-    /references a missing breeding partner/,
+    /references a missing animal/,
   )
 })
 

@@ -1,5 +1,7 @@
-const DB_NAME = 'breedz-db'
-const DB_VERSION = 2
+import { normalizeEventRecord } from '../utils/event-records.js'
+
+export const DB_NAME = 'breedz-db'
+const DB_VERSION = 3
 
 export const STORE_NAMES = {
   animals: 'animals',
@@ -8,21 +10,36 @@ export const STORE_NAMES = {
 
 let dbPromise
 
-function ensureIndex(store, name, keyPath) {
+function getIndexedDB() {
+  return globalThis.indexedDB ?? globalThis.window?.indexedDB
+}
+
+function isEventCanonicallyStored(event, normalizedEvent) {
+  return (
+    JSON.stringify(event.animalIds ?? []) === JSON.stringify(normalizedEvent.animalIds) &&
+    (event.animalId ?? '') === normalizedEvent.animalId &&
+    (event.partnerAnimalId ?? '') === normalizedEvent.partnerAnimalId &&
+    (event.amount ?? null) === normalizedEvent.amount
+  )
+}
+
+function ensureIndex(store, name, keyPath, options) {
   if (!store.indexNames.contains(name)) {
-    store.createIndex(name, keyPath)
+    store.createIndex(name, keyPath, options)
   }
 }
 
 export function openAppDatabase() {
   if (!dbPromise) {
     dbPromise = new Promise((resolve, reject) => {
-      if (typeof window === 'undefined' || !window.indexedDB) {
+      const indexedDB = getIndexedDB()
+
+      if (!indexedDB) {
         reject(new Error('IndexedDB is not available in this environment.'))
         return
       }
 
-      const request = window.indexedDB.open(DB_NAME, DB_VERSION)
+      const request = indexedDB.open(DB_NAME, DB_VERSION)
 
       request.onupgradeneeded = () => {
         const db = request.result
@@ -47,6 +64,7 @@ export function openAppDatabase() {
         }
 
         ensureIndex(eventsStore, 'animalId', 'animalId')
+        ensureIndex(eventsStore, 'animalIds', 'animalIds', { multiEntry: true })
         ensureIndex(eventsStore, 'date', 'date')
         ensureIndex(eventsStore, 'updatedAt', 'updatedAt')
       }
@@ -57,6 +75,13 @@ export function openAppDatabase() {
   }
 
   return dbPromise
+}
+
+export async function closeAppDatabase() {
+  const db = await dbPromise?.catch(() => null)
+
+  db?.close()
+  dbPromise = undefined
 }
 
 export function withStore(storeName, mode, callback) {
@@ -104,6 +129,40 @@ export function replaceAppData({ animals, events }) {
         transaction.oncomplete = () => resolve()
         transaction.onerror = () => reject(transaction.error ?? new Error('Failed to replace app data.'))
         transaction.onabort = () => reject(transaction.error ?? new Error('App data replacement was aborted.'))
+      }),
+  )
+}
+
+export function migrateStoredEventsToCanonicalShape() {
+  return openAppDatabase().then(
+    (db) =>
+      new Promise((resolve, reject) => {
+        const transaction = db.transaction(STORE_NAMES.events, 'readwrite')
+        const eventsStore = transaction.objectStore(STORE_NAMES.events)
+        const request = eventsStore.getAll()
+        let checked = 0
+        let migrated = 0
+
+        request.onsuccess = () => {
+          const events = request.result ?? []
+          checked = events.length
+
+          for (const event of events) {
+            const normalizedEvent = normalizeEventRecord(event)
+
+            if (isEventCanonicallyStored(event, normalizedEvent)) {
+              continue
+            }
+
+            eventsStore.put(normalizedEvent)
+            migrated += 1
+          }
+        }
+
+        request.onerror = () => reject(request.error ?? new Error('Failed to read stored events.'))
+        transaction.oncomplete = () => resolve({ checked, migrated })
+        transaction.onerror = () => reject(transaction.error ?? new Error('Failed to migrate stored events.'))
+        transaction.onabort = () => reject(transaction.error ?? new Error('Stored event migration was aborted.'))
       }),
   )
 }

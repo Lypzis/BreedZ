@@ -31,25 +31,21 @@
           </q-card-section>
 
           <template v-else>
-            <q-card-section class="q-pt-none">
-              <div>
-                <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.timelineOverline') }}</div> 
-                <div class="row q-gutter-xs q-mt-xs">
-                  <q-chip square dense :color="statusColor(animal.status)" text-color="white" icon="task_alt">
-                    {{ statusLabel(animal.status) }}
-                  </q-chip>
-                  <q-chip v-if="animal.isBreeder" square dense color="info" text-color="white" icon="bookmark">
-                    {{ t('common.reproducer') }}
-                  </q-chip>
-                </div>
-                <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
-                  {{ animalDisplayName(animal) }}
-                </div>
-              </div>
-            </q-card-section>
+            <DetailHeader
+              :title="animalDisplayName(animal)"
+              avatar-color="primary"
+              avatar-icon="pets"
+            >
+              <template #badges>
+                <q-chip square dense :color="statusColor(animal.status)" text-color="white" icon="task_alt">
+                  {{ statusLabel(animal.status) }}
+                </q-chip>
+                <q-chip v-if="animal.isBreeder" square dense color="info" text-color="white" icon="bookmark">
+                  {{ t('common.reproducer') }}
+                </q-chip>
+              </template>
 
-            <q-card-section class="q-pt-none">
-              <div class="row q-col-gutter-xs">
+              <template #chips>
                 <div class="col-auto">
                   <q-chip square color="green-1" text-color="primary" icon="pets">
                     {{ animal.species || t('common.speciesNotSet') }}
@@ -85,11 +81,9 @@
                     {{ t('animalDetail.offspringChip', { count: offspringAnimals.length }) }}
                   </q-chip>
                 </div>
-              </div>
-            </q-card-section>
+              </template>
 
-            <q-card-section >
-              <div class="row q-gutter-sm">
+              <template #actions>
                 <q-btn
                   unelevated
                   color="primary"
@@ -99,8 +93,8 @@
                   @click="openEventDialog"
                 />
                 <q-btn outline color="primary" icon="edit" :label="t('common.editAnimal')" @click="openEditDialog" />
-              </div>
-            </q-card-section>
+              </template>
+            </DetailHeader>
 
             <q-card-section >
               <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.lineageOverline') }}</div>
@@ -337,98 +331,63 @@
             </q-card-section>
 
             <q-list v-else separator>
-              <q-item v-for="event in animalEvents" :key="event.id">
-                <q-item-section avatar>
-                  <q-avatar
-                    :color="getEventTypeMeta(event.type).color"
-                    text-color="white"
-                    :icon="getEventTypeMeta(event.type).icon"
+              <EventListItem
+                v-for="event in animalEvents"
+                :key="event.id"
+                :event="event"
+                :animal-resolver="animalById"
+                :detail-target="eventDetailTarget(event)"
+                title-mode="type"
+                :show-animal-meta="false"
+                show-affected-animals
+                :max-animal-names="3"
+                @open="openEventDetail"
+              >
+                <template #actions="{ event: itemEvent }">
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    color="primary"
+                    icon="edit"
+                    :aria-label="t('animalDetail.editEvent')"
+                    :title="t('animalDetail.editEvent')"
+                    @click.stop="openEditEventDialog(itemEvent)"
                   />
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label class="text-weight-medium">{{ getEventTypeMeta(event.type).label }}</q-item-label>
-                  <q-item-label caption>{{ formatDate(event.date) }}</q-item-label>
-                  <q-item-label v-if="event.notes" caption class="text-grey-7">
-                    {{ event.notes }}
-                  </q-item-label>
-                </q-item-section>
-
-                <q-item-section side>
-                  <div class="row q-gutter-xs">
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="edit"
-                      :aria-label="t('animalDetail.editEvent')"
-                      :title="t('animalDetail.editEvent')"
-                      @click="openEditEventDialog(event)"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="negative"
-                      icon="delete"
-                      :aria-label="t('animalDetail.deleteEvent')"
-                      :title="t('animalDetail.deleteEvent')"
-                      @click="confirmDeleteEvent(event)"
-                    />
-                  </div>
-                </q-item-section>
-              </q-item>
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    color="negative"
+                    icon="delete"
+                    :aria-label="t('animalDetail.deleteEvent')"
+                    :title="t('animalDetail.deleteEvent')"
+                    @click.stop="confirmDeleteEvent(itemEvent)"
+                  />
+                </template>
+              </EventListItem>
             </q-list>
           </template>
         </q-card>
-    <q-dialog v-model="isEventDialogOpen">
-      <q-card style="width: 100%; max-width: 640px">
-        <q-card-section class="row items-center justify-between">
-          <div>
-            <div class="text-overline text-weight-bold text-primary">{{ t('animalDetail.eventDialogOverline') }}</div>
-            <div class="text-h6 text-weight-bold">{{ eventDialogTitle }}</div>
-          </div>
-          <q-btn
-            flat
-            round
-            dense
-            icon="close"
-            :aria-label="t('common.closeDialog')"
-            :title="t('common.closeDialog')"
-            @click="closeEventDialog"
-          />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <q-form class="column q-gutter-md" @submit.prevent="submitEvent">
-            <q-select
-              v-model="eventForm.type"
-              outlined
-              :label="t('events.eventType')"
-              :options="eventTypeOptions"
-              emit-value
-              map-options
-            />
-            <AnimalPickerField
-              v-if="eventForm.type === 'breeding'"
-              v-model="eventForm.partnerAnimalId"
-              :animals="animalBreedingPartnerAnimals"
-              :label="t('events.pickPartner')"
-              :dialog-title="t('events.pickPartner')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
-            <q-input v-model="eventForm.date" outlined type="date" :label="t('events.eventDate')" />
-            <q-input v-model="eventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
-
-            <div class="row justify-end q-gutter-sm">
-              <q-btn flat color="grey-7" :label="t('common.cancel')" @click="closeEventDialog" />
-              <q-btn unelevated color="primary" :label="eventSubmitLabel" type="submit" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <EventFormDialog
+      v-model="isEventDialogOpen"
+      :animals="animals"
+      :event="selectedEvent"
+      :fixed-animal-id="animalId"
+      :mode="eventFormMode"
+      :overline="t('animalDetail.eventDialogOverline')"
+      :title="eventDialogTitle"
+      @purchase-selected="openPurchaseDialog"
+      @submit="submitEvent"
+    />
+    <PurchaseEventDialog
+      v-model="isPurchaseDialogOpen"
+      :animals="animals"
+      :current-animal-count="animals.length"
+      :initial-animal-ids="initialPurchaseAnimalIds"
+      :is-premium="isPremium"
+      @submit="submitPurchaseEvent"
+    />
 
     <q-dialog v-model="isBreedingOffspringDialogOpen">
       <q-card style="width: 100%; max-width: 720px">
@@ -526,44 +485,47 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
-import AnimalPickerField from 'src/components/AnimalPickerField.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
+import DetailHeader from 'src/components/DetailHeader.vue'
+import EventFormDialog from 'src/components/EventFormDialog.vue'
+import EventListItem from 'src/components/EventListItem.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
-import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
+import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
+import { getEventTypeMeta } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { groupBreedingsByPartner } from 'src/utils/breeding-history'
-import {
-  filterBreedingPartnerCandidates,
-  validateBreedingPartnerSelection,
-} from 'src/utils/breeding-partners'
-import { formatAgeLabel, formatDisplayDate, todayDateString } from 'src/utils/dates'
+import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
 
 const $q = useQuasar()
 const { t } = useI18nText()
 const route = useRoute()
+const router = useRouter()
 const animalsStore = useAnimalsStore()
+const authStore = useAuthStore()
 const eventsStore = useEventsStore()
 
 const { animals, errorMessage: animalsErrorMessage, isLoading: animalsLoading } = storeToRefs(animalsStore)
+const { isPremium } = storeToRefs(authStore)
 const { errorMessage: eventsErrorMessage, isLoading: eventsLoading, events } = storeToRefs(eventsStore)
 
 const isAnimalDialogOpen = ref(false)
 const isEventDialogOpen = ref(false)
+const isPurchaseDialogOpen = ref(false)
 const isBreedingOffspringDialogOpen = ref(false)
+const initialPurchaseAnimalIds = ref([])
 const eventFormMode = ref('create')
 const selectedEventId = ref('')
 const selectedBreedingPartnerId = ref('')
-const eventForm = reactive(defaultEventForm())
-const eventTypeOptions = computed(() => getEventTypeOptions())
 const breedingOffspringPreviewSize = 2
 const pageSizeOptions = [
   { label: '5', value: 5 },
@@ -603,15 +565,11 @@ const displayedBreedingGroupCount = computed(() => displayedBreedingGroups.value
 const selectedBreedingGroup = computed(() =>
   breedingGroups.value.find((group) => group.partnerAnimalId === selectedBreedingPartnerId.value) ?? null,
 )
+const selectedEvent = computed(() =>
+  events.value.find((event) => event.id === selectedEventId.value) ?? null,
+)
 const selectedBreedingOffspringAnimals = computed(() => selectedBreedingGroup.value?.offspringAnimals ?? [])
 const offspringAnimals = computed(() => animalsStore.getOffspringForAnimal(animalId.value))
-const animalBreedingPartnerAnimals = computed(() =>
-  filterBreedingPartnerCandidates({
-    animals: animals.value,
-    animalId: animalId.value,
-    currentPartnerId: eventForm.partnerAnimalId,
-  }),
-)
 const breedingOffspringPageCount = computed(() =>
   Math.max(1, Math.ceil(selectedBreedingOffspringAnimals.value.length / breedingOffspringPageSize.value)),
 )
@@ -629,9 +587,6 @@ const isBusy = computed(() => animalsLoading.value || eventsLoading.value)
 const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsErrorMessage.value)
 const eventDialogTitle = computed(() =>
   eventFormMode.value === 'edit' ? t('animalDetail.eventEditTitle') : t('animalDetail.eventAddTitle'),
-)
-const eventSubmitLabel = computed(() =>
-  eventFormMode.value === 'edit' ? t('common.saveChanges') : t('common.saveEvent'),
 )
 const breedingOffspringDialogTitle = computed(() => {
   const group = selectedBreedingGroup.value
@@ -671,19 +626,6 @@ const backLinkLabel = computed(() => {
   return t('animalDetail.backToAnimals')
 })
 
-function defaultEventForm() {
-  return {
-    type: 'breeding',
-    partnerAnimalId: '',
-    date: todayDateString(),
-    notes: '',
-  }
-}
-
-function resetEventForm() {
-  Object.assign(eventForm, defaultEventForm())
-}
-
 function openEventDialog() {
   if (animal.value?.status !== 'active') {
     $q.notify({
@@ -696,27 +638,13 @@ function openEventDialog() {
 
   eventFormMode.value = 'create'
   selectedEventId.value = ''
-  resetEventForm()
   isEventDialogOpen.value = true
 }
 
 function openEditEventDialog(event) {
   eventFormMode.value = 'edit'
   selectedEventId.value = event.id
-  Object.assign(eventForm, {
-    type: event.type,
-    partnerAnimalId: event.partnerAnimalId ?? '',
-    date: event.date,
-    notes: event.notes ?? '',
-  })
   isEventDialogOpen.value = true
-}
-
-function closeEventDialog() {
-  isEventDialogOpen.value = false
-  eventFormMode.value = 'create'
-  selectedEventId.value = ''
-  resetEventForm()
 }
 
 function openEditDialog() {
@@ -756,54 +684,55 @@ async function submitAnimalEdit(payload) {
   }
 }
 
-async function submitEvent() {
+async function submitEvent(payload) {
   if (!animal.value) {
     return
-  }
-
-  if (eventForm.type === 'breeding') {
-    const breedingValidationKey = validateBreedingPartnerSelection({
-      animals: animals.value,
-      animalId: animal.value.id,
-      partnerAnimalId: eventForm.partnerAnimalId,
-    })
-
-    if (breedingValidationKey) {
-      $q.notify({
-        color: 'negative',
-        message: t(breedingValidationKey),
-        position: 'top',
-      })
-      return
-    }
   }
 
   try {
     const isEditing = eventFormMode.value === 'edit'
 
     if (isEditing) {
-      await eventsStore.editEvent(selectedEventId.value, {
-        animalId: animal.value.id,
-        type: eventForm.type,
-        partnerAnimalId: eventForm.partnerAnimalId,
-        date: eventForm.date,
-        notes: eventForm.notes,
-      })
+      await eventsStore.editEvent(selectedEventId.value, payload)
     } else {
-      await eventsStore.addEvent({
-        animalId: animal.value.id,
-        type: eventForm.type,
-        partnerAnimalId: eventForm.partnerAnimalId,
-        date: eventForm.date,
-        notes: eventForm.notes,
-      })
+      await eventsStore.addEvent(payload)
     }
 
     await animalsStore.loadAnimals()
-    closeEventDialog()
+    isEventDialogOpen.value = false
+    eventFormMode.value = 'create'
+    selectedEventId.value = ''
     $q.notify({
       color: 'positive',
       message: isEditing ? t('animalDetail.eventUpdated') : t('animalDetail.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('animalDetail.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+function openPurchaseDialog(payload = {}) {
+  initialPurchaseAnimalIds.value = payload.animalIds?.length ? payload.animalIds : [animalId.value]
+  eventFormMode.value = 'create'
+  selectedEventId.value = ''
+  isPurchaseDialogOpen.value = true
+}
+
+async function submitPurchaseEvent(payload) {
+  try {
+    await eventsStore.addPurchaseEvent(payload)
+    await animalsStore.loadAnimals()
+    isPurchaseDialogOpen.value = false
+    initialPurchaseAnimalIds.value = []
+
+    $q.notify({
+      color: 'positive',
+      message: t('animalDetail.eventAdded'),
       position: 'top',
     })
   } catch (error) {
@@ -842,6 +771,18 @@ function animalDisplayName(currentAnimal) {
 
 function animalSpeciesBreed(currentAnimal, options) {
   return formatAnimalSpeciesBreed(currentAnimal, options)
+}
+
+function animalById(id) {
+  return animalsStore.getAnimalById(id)
+}
+
+function eventDetailTarget(event) {
+  return { path: `/events/${event.id}`, query: { from: 'animal', animal: animalId.value } }
+}
+
+function openEventDetail(event) {
+  void router.push(eventDetailTarget(event))
 }
 
 function sexLabel(sex) {
@@ -913,15 +854,6 @@ watch(selectedBreedingPartnerId, () => {
   breedingOffspringPage.value = 1
   breedingOffspringPageSize.value = 5
 })
-
-watch(
-  () => eventForm.type,
-  (value) => {
-    if (value !== 'breeding') {
-      eventForm.partnerAnimalId = ''
-    }
-  },
-)
 
 onMounted(async () => {
   try {

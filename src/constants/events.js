@@ -3,6 +3,7 @@ import { t } from '../i18n/index.js'
 const EVENT_TYPE_META = {
   birth: { labelKey: 'eventTypes.birth', icon: 'child_friendly', color: 'secondary' },
   breeding: { labelKey: 'eventTypes.breeding', icon: 'favorite', color: 'primary' },
+  purchase: { labelKey: 'eventTypes.purchase', icon: 'shopping_cart', color: 'positive' },
   sale: { labelKey: 'eventTypes.sale', icon: 'sell', color: 'info' },
   vaccination: { labelKey: 'eventTypes.vaccination', icon: 'vaccines', color: 'accent' },
   health_issue: { labelKey: 'eventTypes.health_issue', icon: 'healing', color: 'negative' },

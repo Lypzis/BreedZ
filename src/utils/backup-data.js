@@ -1,8 +1,11 @@
+import { deriveEventAnimalIds, normalizeEventRecord } from './event-records.js'
+
 const VALID_STATUSES = new Set(['active', 'sold', 'dead'])
 const VALID_SEXES = new Set(['female', 'male', 'unknown'])
 const VALID_EVENT_TYPES = new Set([
   'birth',
   'breeding',
+  'purchase',
   'sale',
   'vaccination',
   'health_issue',
@@ -73,6 +76,7 @@ export function validateAndNormalizeBackupPayload(payload) {
     seenAnimalIds.add(id)
 
     const status = VALID_STATUSES.has(animal.status) ? animal.status : 'active'
+    const baseStatus = VALID_STATUSES.has(animal.baseStatus) ? animal.baseStatus : ''
     const sex = VALID_SEXES.has(animal.sex) ? animal.sex : 'unknown'
     const isBreeder = normalizeBreederValue(animal.isBreeder, animal.purpose)
 
@@ -85,6 +89,7 @@ export function validateAndNormalizeBackupPayload(payload) {
       isBreeder,
       sex,
       birthDate: normalizeString(animal.birthDate),
+      baseStatus,
       status,
       damId: normalizeString(animal.damId),
       sireId: normalizeString(animal.sireId),
@@ -132,8 +137,14 @@ export function validateAndNormalizeBackupPayload(payload) {
 
     const animalId = normalizeString(event.animalId)
     const partnerAnimalId = normalizeString(event.partnerAnimalId)
+    const animalIds = deriveEventAnimalIds({
+      type: event.type,
+      animalIds: event.animalIds,
+      animalId,
+      partnerAnimalId,
+    })
 
-    if (!animalId || !seenAnimalIds.has(animalId)) {
+    if (animalIds.length === 0) {
       throw new Error(`Backup file is invalid: event "${id}" references a missing animal.`)
     }
 
@@ -143,24 +154,32 @@ export function validateAndNormalizeBackupPayload(payload) {
       throw new Error(`Backup file is invalid: event "${id}" has an unsupported type.`)
     }
 
-    if (partnerAnimalId && !seenAnimalIds.has(partnerAnimalId)) {
+    for (const relatedAnimalId of animalIds) {
+      if (!seenAnimalIds.has(relatedAnimalId)) {
+        throw new Error(`Backup file is invalid: event "${id}" references a missing animal.`)
+      }
+    }
+
+    if (type === 'breeding' && partnerAnimalId && !seenAnimalIds.has(partnerAnimalId)) {
       throw new Error(`Backup file is invalid: event "${id}" references a missing breeding partner.`)
     }
 
-    return {
+    return normalizeEventRecord({
       id,
       animalId,
+      animalIds,
       type,
       partnerAnimalId: type === 'breeding' ? partnerAnimalId : '',
+      amount: event.amount,
       date: normalizeString(event.date),
       notes: normalizeString(event.notes),
       createdAt: normalizeTimestamp(event.createdAt),
       updatedAt: normalizeTimestamp(event.updatedAt),
-    }
+    })
   })
 
   return {
-    schemaVersion: typeof payload.schemaVersion === 'number' ? payload.schemaVersion : 1,
+    schemaVersion: typeof payload.schemaVersion === 'number' ? payload.schemaVersion : 3,
     exportedAt: normalizeTimestamp(payload.exportedAt),
     animals: normalizedAnimals,
     events: normalizedEvents,

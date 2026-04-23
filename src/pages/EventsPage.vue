@@ -16,7 +16,6 @@
                 color="primary"
                 icon="add"
                 :label="t('events.addEvent')"
-                :disable="activeAnimalsForEvents.length === 0"
                 @click="openEventDialog"
               />
             </div>
@@ -95,67 +94,38 @@
           </q-card-section>
 
           <q-list v-else-if="listMode === 'paged'" separator >
-            <q-item v-for="event in paginatedEvents" :key="event.id" class="q-py-md">
-              <q-item-section avatar>
-                <q-avatar
-                  :color="getEventTypeMeta(event.type).color"
-                  text-color="white"
-                  :icon="getEventTypeMeta(event.type).icon"
+            <EventListItem
+              v-for="event in paginatedEvents"
+              :key="event.id"
+              :event="event"
+              :animal-resolver="animalById"
+              :detail-target="eventDetailTarget(event)"
+              item-class="q-py-md"
+              @open="openEventDetail"
+            >
+              <template #actions="{ event: itemEvent }">
+                <q-btn
+                  flat
+                  round
+                  dense
+                  color="primary"
+                  icon="edit"
+                  :aria-label="t('events.editEvent')"
+                  :title="t('events.editEvent')"
+                  @click.stop="openEditDialog(itemEvent)"
                 />
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label class="text-weight-medium">
-                  {{ t('common.eventForAnimal', { eventType: getEventTypeMeta(event.type).label, animal: animalDisplayName(animalById(event.animalId)) }) }}
-                </q-item-label>
-                <q-item-label caption>
-                  {{ formatDisplayDate(event.date) }}
-                  <span v-if="animalById(event.animalId)">
-                    • {{ animalSpeciesBreed(animalById(event.animalId), { includeFallback: false }) }}
-                  </span>
-                </q-item-label>
-                <q-item-label v-if="event.notes" caption class="text-grey-7">
-                  {{ event.notes }}
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section side top>
-                <div class="column items-end q-gutter-xs">
-                  <div class="row q-gutter-xs">
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="visibility"
-                      :aria-label="t('events.viewAnimal')"
-                      :title="t('events.viewAnimal')"
-                      :to="{ path: `/animals/${event.animalId}`, query: { from: 'events' } }"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="edit"
-                      :aria-label="t('events.editEvent')"
-                      :title="t('events.editEvent')"
-                      @click="openEditDialog(event)"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="negative"
-                      icon="delete"
-                      :aria-label="t('events.deleteEvent')"
-                      :title="t('events.deleteEvent')"
-                      @click="confirmDeleteEvent(event)"
-                    />
-                  </div>
-                </div>
-              </q-item-section>
-            </q-item>
+                <q-btn
+                  flat
+                  round
+                  dense
+                  color="negative"
+                  icon="delete"
+                  :aria-label="t('events.deleteEvent')"
+                  :title="t('events.deleteEvent')"
+                  @click.stop="confirmDeleteEvent(itemEvent)"
+                />
+              </template>
+            </EventListItem>
           </q-list>
 
           <q-virtual-scroll
@@ -166,67 +136,35 @@
           >
             <template #default="{ item: event, index }">
               <div :key="event.id">
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar
-                      :color="getEventTypeMeta(event.type).color"
-                      text-color="white"
-                      :icon="getEventTypeMeta(event.type).icon"
+                <EventListItem
+                  :event="event"
+                  :animal-resolver="animalById"
+                  :detail-target="eventDetailTarget(event)"
+                  @open="openEventDetail"
+                >
+                  <template #actions="{ event: itemEvent }">
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="primary"
+                      icon="edit"
+                      :aria-label="t('events.editEvent')"
+                      :title="t('events.editEvent')"
+                      @click.stop="openEditDialog(itemEvent)"
                     />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">
-                      {{ t('common.eventForAnimal', { eventType: getEventTypeMeta(event.type).label, animal: animalDisplayName(animalById(event.animalId)) }) }}
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ formatDisplayDate(event.date) }}
-                      <span v-if="animalById(event.animalId)">
-                        • {{ animalSpeciesBreed(animalById(event.animalId), { includeFallback: false }) }}
-                      </span>
-                    </q-item-label>
-                    <q-item-label v-if="event.notes" caption class="text-grey-7">
-                      {{ event.notes }}
-                    </q-item-label>
-                  </q-item-section>
-
-                  <q-item-section side top>
-                    <div class="column items-end q-gutter-xs">
-                      <div class="row q-gutter-xs">
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="primary"
-                          icon="visibility"
-                          :aria-label="t('events.viewAnimal')"
-                          :title="t('events.viewAnimal')"
-                          :to="{ path: `/animals/${event.animalId}`, query: { from: 'events' } }"
-                        />
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="primary"
-                          icon="edit"
-                          :aria-label="t('events.editEvent')"
-                          :title="t('events.editEvent')"
-                          @click="openEditDialog(event)"
-                        />
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="negative"
-                          icon="delete"
-                          :aria-label="t('events.deleteEvent')"
-                          :title="t('events.deleteEvent')"
-                          @click="confirmDeleteEvent(event)"
-                        />
-                      </div>
-                    </div>
-                  </q-item-section>
-                </q-item>
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="negative"
+                      icon="delete"
+                      :aria-label="t('events.deleteEvent')"
+                      :title="t('events.deleteEvent')"
+                      @click.stop="confirmDeleteEvent(itemEvent)"
+                    />
+                  </template>
+                </EventListItem>
                 <q-separator v-if="index < filteredEvents.length - 1" />
               </div>
             </template>
@@ -248,91 +186,59 @@
           />
 
         </q-card>
-    <q-dialog v-model="isEventDialogOpen">
-        <q-card style="width: 100%; max-width: 640px">
-          <q-card-section class="row items-center justify-between">
-            <div>
-              <div class="text-overline text-weight-bold text-primary">{{ t('events.dialogOverline') }}</div>
-              <div class="text-h6 text-weight-bold">{{ eventDialogTitle }}</div>
-            </div>
-            <q-btn
-              flat
-              round
-              dense
-              icon="close"
-              :aria-label="t('common.closeDialog')"
-              :title="t('common.closeDialog')"
-              @click="closeEventDialog"
-            />
-          </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            <q-form class="column q-gutter-md" @submit.prevent="submitEvent">
-            <AnimalPickerField
-              v-model="eventForm.animalId"
-              :animals="eventPickerAnimals"
-              :label="t('events.pickAnimal')"
-              :dialog-title="t('events.pickAnimal')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
-            <q-select
-              v-model="eventForm.type"
-              outlined
-              :label="t('events.eventType')"
-              :options="eventTypeOptions"
-              emit-value
-              map-options
-            />
-            <AnimalPickerField
-              v-if="eventForm.type === 'breeding'"
-              v-model="eventForm.partnerAnimalId"
-              :animals="breedingPartnerAnimals"
-              :label="t('events.pickPartner')"
-              :dialog-title="t('events.pickPartner')"
-              :empty-label="t('common.noAnimalSelected')"
-            />
-            <q-input v-model="eventForm.date" outlined type="date" :label="t('events.eventDate')" />
-            <q-input v-model="eventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
-
-            <div class="row justify-end q-gutter-sm">
-              <q-btn flat color="grey-7" :label="t('common.cancel')" @click="closeEventDialog" />
-              <q-btn unelevated color="primary" :label="eventSubmitLabel" type="submit" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <EventFormDialog
+      v-model="isEventDialogOpen"
+      :animals="animals"
+      :event="selectedEvent"
+      :mode="eventFormMode"
+      :title="eventDialogTitle"
+      @purchase-selected="openPurchaseDialog"
+      @submit="submitEvent"
+    />
+    <PurchaseEventDialog
+      v-model="isPurchaseDialogOpen"
+      :animals="animals"
+      :current-animal-count="animals.length"
+      :initial-animal-ids="initialPurchaseAnimalIds"
+      :is-premium="isPremium"
+      @submit="submitPurchaseEvent"
+    />
   </AppPageShell>
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
-import AnimalPickerField from 'src/components/AnimalPickerField.vue'
+import EventListItem from 'src/components/EventListItem.vue'
+import EventFormDialog from 'src/components/EventFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
+import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
 import { getEventTypeMeta, getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
-import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
-import {
-  filterBreedingPartnerCandidates,
-  validateBreedingPartnerSelection,
-} from 'src/utils/breeding-partners'
-import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { filterEventsList } from 'src/utils/list-filters'
 
 const $q = useQuasar()
+const route = useRoute()
+const router = useRouter()
 const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
+const authStore = useAuthStore()
 const eventsStore = useEventsStore()
 
 const { animals, errorMessage: animalsErrorMessage, isLoading: animalsLoading } = storeToRefs(animalsStore)
+const { isPremium } = storeToRefs(authStore)
 const { errorMessage: eventsErrorMessage, events, isLoading: eventsLoading } = storeToRefs(eventsStore)
 
 const isEventDialogOpen = ref(false)
+const isPurchaseDialogOpen = ref(false)
+const initialPurchaseAnimalIds = ref([])
 const eventFormMode = ref('create')
 const selectedEventId = ref('')
 const listMode = ref('paged')
@@ -342,8 +248,6 @@ const searchTerm = ref('')
 const selectedEventType = ref('')
 const startDate = ref('')
 const endDate = ref('')
-const eventForm = reactive(defaultEventForm())
-const eventTypeOptions = computed(() => getEventTypeOptions())
 const pageSizeOptions = [
   { label: '10', value: 10 },
   { label: '25', value: 25 },
@@ -353,14 +257,12 @@ const listModeOptions = computed(() => [
   { label: t('common.pages'), value: 'paged' },
   { label: t('common.viewAll'), value: 'all' },
 ])
+const eventTypeOptions = computed(() => getEventTypeOptions())
 
 const isBusy = computed(() => animalsLoading.value || eventsLoading.value)
 const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsErrorMessage.value)
 const eventDialogTitle = computed(() =>
   eventFormMode.value === 'edit' ? t('events.editEvent') : t('events.addEvent'),
-)
-const eventSubmitLabel = computed(() =>
-  eventFormMode.value === 'edit' ? t('common.saveChanges') : t('common.saveEvent'),
 )
 
 const filteredEvents = computed(() => {
@@ -371,29 +273,9 @@ const filteredEvents = computed(() => {
     endDate: endDate.value,
   })
 })
-const activeAnimalsForEvents = computed(() =>
-  animals.value.filter((animal) => animal.status === 'active'),
+const selectedEvent = computed(() =>
+  events.value.find((event) => event.id === selectedEventId.value) ?? null,
 )
-const breedingPartnerAnimals = computed(() =>
-  filterBreedingPartnerCandidates({
-    animals: animals.value,
-    animalId: eventForm.animalId,
-    currentPartnerId: eventForm.partnerAnimalId,
-  }),
-)
-const eventPickerAnimals = computed(() => {
-  if (eventFormMode.value !== 'edit') {
-    return activeAnimalsForEvents.value
-  }
-
-  const selectedAnimal = animalById(eventForm.animalId)
-
-  if (!selectedAnimal || selectedAnimal.status === 'active') {
-    return activeAnimalsForEvents.value
-  }
-
-  return [selectedAnimal, ...activeAnimalsForEvents.value.filter((animal) => animal.id !== selectedAnimal.id)]
-})
 const pageCount = computed(() =>
   Math.max(1, Math.ceil(filteredEvents.value.length / pageSize.value)),
 )
@@ -413,101 +295,64 @@ const emptyStateMessage = computed(() => {
   return t('events.emptyFiltered')
 })
 
-function defaultEventForm() {
-  return {
-    animalId: '',
-    type: 'breeding',
-    partnerAnimalId: '',
-    date: todayDateString(),
-    notes: '',
-  }
-}
-
-function resetEventForm() {
-  Object.assign(eventForm, {
-    ...defaultEventForm(),
-    animalId: activeAnimalsForEvents.value[0]?.id ?? '',
-  })
-}
-
 function openEventDialog() {
-  if (activeAnimalsForEvents.value.length === 0) {
-    $q.notify({
-      color: 'negative',
-      message: t('common.onlyActiveAnimalsForEvents'),
-      position: 'top',
-    })
-    return
-  }
-
   eventFormMode.value = 'create'
   selectedEventId.value = ''
-  resetEventForm()
   isEventDialogOpen.value = true
 }
 
 function openEditDialog(event) {
   eventFormMode.value = 'edit'
   selectedEventId.value = event.id
-  Object.assign(eventForm, {
-    animalId: event.animalId,
-    type: event.type,
-    partnerAnimalId: event.partnerAnimalId ?? '',
-    date: event.date,
-    notes: event.notes ?? '',
-  })
   isEventDialogOpen.value = true
 }
 
-function closeEventDialog() {
-  isEventDialogOpen.value = false
-  eventFormMode.value = 'create'
-  selectedEventId.value = ''
-  resetEventForm()
-}
-
-async function submitEvent() {
-  if (!eventForm.animalId) {
-    $q.notify({
-      color: 'negative',
-      message: t('events.selectAnimalBeforeSaving'),
-      position: 'top',
-    })
-    return
-  }
-
-  if (eventForm.type === 'breeding') {
-    const breedingValidationKey = validateBreedingPartnerSelection({
-      animals: animals.value,
-      animalId: eventForm.animalId,
-      partnerAnimalId: eventForm.partnerAnimalId,
-    })
-
-    if (breedingValidationKey) {
-      $q.notify({
-        color: 'negative',
-        message: t(breedingValidationKey),
-        position: 'top',
-      })
-      return
-    }
-  }
-
+async function submitEvent(payload) {
   try {
     const isEditing = eventFormMode.value === 'edit'
 
-    if (eventFormMode.value === 'edit') {
-      await eventsStore.editEvent(selectedEventId.value, eventForm)
+    if (isEditing) {
+      await eventsStore.editEvent(selectedEventId.value, payload)
     } else {
-      await eventsStore.addEvent(eventForm)
+      await eventsStore.addEvent(payload)
     }
 
     await animalsStore.loadAnimals()
-    closeEventDialog()
+    isEventDialogOpen.value = false
+    selectedEventId.value = ''
+    eventFormMode.value = 'create'
 
     $q.notify({
       color: 'positive',
       message: isEditing ? t('events.eventUpdated') : t('events.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+function openPurchaseDialog(payload = {}) {
+  initialPurchaseAnimalIds.value = payload.animalIds ?? []
+  eventFormMode.value = 'create'
+  selectedEventId.value = ''
+  isPurchaseDialogOpen.value = true
+}
+
+async function submitPurchaseEvent(payload) {
+  try {
+    await eventsStore.addPurchaseEvent(payload)
+    await animalsStore.loadAnimals()
+    isPurchaseDialogOpen.value = false
+    initialPurchaseAnimalIds.value = []
+
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
       position: 'top',
     })
   } catch (error) {
@@ -548,26 +393,35 @@ function animalById(id) {
   return animalsStore.getAnimalById(id)
 }
 
-function animalDisplayName(animal) {
-  return formatAnimalDisplayName(animal)
+function eventDetailTarget(event) {
+  return { path: `/events/${event.id}`, query: { from: 'events' } }
 }
 
-function animalSpeciesBreed(animal, options) {
-  return formatAnimalSpeciesBreed(animal, options)
+function openEventDetail(event) {
+  void router.push(eventDetailTarget(event))
+}
+
+function openRequestedEditDialog() {
+  const editEventId = String(route.query.edit ?? '')
+
+  if (!editEventId) {
+    return
+  }
+
+  const event = events.value.find((item) => item.id === editEventId)
+
+  if (event) {
+    openEditDialog(event)
+  }
+
+  const { edit, ...query } = route.query
+  void edit
+  void router.replace({ path: '/events', query })
 }
 
 watch([searchTerm, selectedEventType, startDate, endDate, listMode, pageSize], () => {
   currentPage.value = 1
 })
-
-watch(
-  () => eventForm.type,
-  (value) => {
-    if (value !== 'breeding') {
-      eventForm.partnerAnimalId = ''
-    }
-  },
-)
 
 watch(filteredEvents, () => {
   if (currentPage.value > pageCount.value) {
@@ -588,6 +442,6 @@ onMounted(async () => {
     // store error messages are already exposed to the UI
   }
 
-  resetEventForm()
+  openRequestedEditDialog()
 })
 </script>

@@ -1,6 +1,8 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { createEvent, deleteEvent, listEvents, updateEvent } from 'src/services/events-db'
+import { createPurchaseEventWithAnimals } from 'src/services/purchase-events-db'
+import { eventIncludesAnimal } from 'src/utils/event-records'
 
 export const useEventsStore = defineStore('events', () => {
   const events = ref([])
@@ -40,6 +42,12 @@ export const useEventsStore = defineStore('events', () => {
     return event
   }
 
+  async function addPurchaseEvent(payload) {
+    const { event, animals } = await createPurchaseEventWithAnimals(payload)
+    events.value = sortEvents([event, ...events.value])
+    return { event, animals }
+  }
+
   async function editEvent(id, payload) {
     const updatedEvent = await updateEvent(id, payload)
     events.value = sortEvents(
@@ -54,7 +62,7 @@ export const useEventsStore = defineStore('events', () => {
   }
 
   function eventsForAnimal(animalId) {
-    return events.value.filter((event) => event.animalId === animalId)
+    return events.value.filter((event) => eventIncludesAnimal(event, animalId))
   }
 
   return {
@@ -64,6 +72,7 @@ export const useEventsStore = defineStore('events', () => {
     isLoading,
     totalEvents,
     addEvent,
+    addPurchaseEvent,
     editEvent,
     eventsForAnimal,
     loadEvents,

@@ -11,7 +11,7 @@ import { validateAndNormalizeBackupPayload } from '../src/utils/backup-data.js'
 
 test('round-trips backup data through the Excel workbook format', () => {
   const workbookArray = writeBackupWorkbookArray({
-    schemaVersion: 1,
+    schemaVersion: 3,
     exportedAt: '2026-04-08T12:00:00.000Z',
     animals: [
       {
@@ -22,6 +22,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         breed: 'Nellore',
         isBreeder: true,
         sex: 'female',
+        baseStatus: 'active',
         birthDate: '2024-01-10',
         status: 'active',
         damId: '',
@@ -38,6 +39,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         breed: 'Angus',
         isBreeder: true,
         sex: 'male',
+        baseStatus: 'active',
         birthDate: '2023-01-10',
         status: 'active',
         damId: '',
@@ -51,7 +53,9 @@ test('round-trips backup data through the Excel workbook format', () => {
       {
         id: 'event-1',
         animalId: 'animal-1',
+        animalIds: ['animal-1', 'animal-2'],
         type: 'breeding',
+        amount: 1250.5,
         partnerAnimalId: 'animal-2',
         date: '2026-04-03',
         notes: 'Healthy pairing',
@@ -68,9 +72,12 @@ test('round-trips backup data through the Excel workbook format', () => {
   assert.equal(normalizedPayload.animals[0].isBreeder, true)
   assert.equal(normalizedPayload.animals[0].name, 'Bella')
   assert.equal(normalizedPayload.animals[0].breed, 'Nellore')
+  assert.equal(normalizedPayload.animals[0].baseStatus, 'active')
   assert.equal(normalizedPayload.events.length, 1)
+  assert.deepEqual(normalizedPayload.events[0].animalIds, ['animal-1', 'animal-2'])
   assert.equal(normalizedPayload.events[0].partnerAnimalId, 'animal-2')
   assert.equal(normalizedPayload.events[0].type, 'breeding')
+  assert.equal(normalizedPayload.events[0].amount, 1250.5)
 })
 
 test('rejects Excel backups missing the Animals sheet', () => {

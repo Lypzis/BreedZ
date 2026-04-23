@@ -117,70 +117,37 @@
           </q-card-section>
 
           <q-list v-else-if="listMode === 'paged'" separator>
-            <q-item v-for="animal in paginatedAnimals" :key="animal.id" class="q-py-md">
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white" icon="pets" />
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label class="text-weight-medium">
-                    {{ animalDisplayName(animal) }}
-                </q-item-label>
-                <q-item-label caption>
-                  {{ animalSummary(animal) }} • {{ sexLabel(animal.sex) }}
-                  <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section side top>
-                <div class="column items-end q-gutter-sm">
-                  <q-chip
-                    v-if="animal.isBreeder"
-                    square
-                    dense
-                    color="info"
-                    text-color="white"
-                  >
-                    {{ t('common.reproducer') }}
-                  </q-chip>
-                  <q-chip square dense :color="statusColor(animal.status)" text-color="white">
-                    {{ statusLabel(animal.status) }}
-                  </q-chip>
-                  <div class="row q-gutter-xs">
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="visibility"
-                      :aria-label="t('animals.viewAnimal')"
-                      :title="t('animals.viewAnimal')"
-                      :to="`/animals/${animal.id}`"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="primary"
-                      icon="edit"
-                      :aria-label="t('animals.editAnimal')"
-                      :title="t('animals.editAnimal')"
-                      @click="openEditDialog(animal)"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      dense
-                      color="negative"
-                      icon="delete"
-                      :aria-label="t('animals.deleteAnimal')"
-                      :title="t('animals.deleteAnimal')"
-                      @click="confirmDelete(animal)"
-                    />
-                  </div>
-                </div>
-              </q-item-section>
-            </q-item>
+            <AnimalListItem
+              v-for="animal in paginatedAnimals"
+              :key="animal.id"
+              :animal="animal"
+              :detail-target="animalDetailTarget(animal)"
+              item-class="q-py-md"
+              @open="openAnimalDetail"
+            >
+              <template #actions="{ animal: itemAnimal }">
+                <q-btn
+                  flat
+                  round
+                  dense
+                  color="primary"
+                  icon="edit"
+                  :aria-label="t('animals.editAnimal')"
+                  :title="t('animals.editAnimal')"
+                  @click.stop="openEditDialog(itemAnimal)"
+                />
+                <q-btn
+                  flat
+                  round
+                  dense
+                  color="negative"
+                  icon="delete"
+                  :aria-label="t('animals.deleteAnimal')"
+                  :title="t('animals.deleteAnimal')"
+                  @click.stop="confirmDelete(itemAnimal)"
+                />
+              </template>
+            </AnimalListItem>
           </q-list>
 
           <q-virtual-scroll
@@ -191,70 +158,34 @@
           >
             <template #default="{ item: animal, index }">
               <div :key="animal.id">
-                <q-item>
-                  <q-item-section avatar>
-                    <q-avatar color="primary" text-color="white" icon="pets" />
-                  </q-item-section>
-
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">
-                      {{ animalDisplayName(animal) }}
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ animalSummary(animal) }} • {{ sexLabel(animal.sex) }}
-                      <span v-if="animal.birthDate"> • {{ ageSummary(animal.birthDate) }}</span>
-                    </q-item-label>
-                  </q-item-section>
-
-                  <q-item-section side top>
-                    <div class="column items-end q-gutter-sm">
-                      <q-chip
-                        v-if="animal.isBreeder"
-                        square
-                        dense
-                        color="info"
-                        text-color="white"
-                      >
-                        {{ t('common.reproducer') }}
-                      </q-chip>
-                      <q-chip square dense :color="statusColor(animal.status)" text-color="white">
-                        {{ statusLabel(animal.status) }}
-                      </q-chip>
-                      <div class="row q-gutter-xs">
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="primary"
-                          icon="visibility"
-                          :aria-label="t('animals.viewAnimal')"
-                          :title="t('animals.viewAnimal')"
-                          :to="`/animals/${animal.id}`"
-                        />
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="primary"
-                          icon="edit"
-                          :aria-label="t('animals.editAnimal')"
-                          :title="t('animals.editAnimal')"
-                          @click="openEditDialog(animal)"
-                        />
-                        <q-btn
-                          flat
-                          round
-                          dense
-                          color="negative"
-                          icon="delete"
-                          :aria-label="t('animals.deleteAnimal')"
-                          :title="t('animals.deleteAnimal')"
-                          @click="confirmDelete(animal)"
-                        />
-                      </div>
-                    </div>
-                  </q-item-section>
-                </q-item>
+                <AnimalListItem
+                  :animal="animal"
+                  :detail-target="animalDetailTarget(animal)"
+                  @open="openAnimalDetail"
+                >
+                  <template #actions="{ animal: itemAnimal }">
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="primary"
+                      icon="edit"
+                      :aria-label="t('animals.editAnimal')"
+                      :title="t('animals.editAnimal')"
+                      @click.stop="openEditDialog(itemAnimal)"
+                    />
+                    <q-btn
+                      flat
+                      round
+                      dense
+                      color="negative"
+                      icon="delete"
+                      :aria-label="t('animals.deleteAnimal')"
+                      :title="t('animals.deleteAnimal')"
+                      @click.stop="confirmDelete(itemAnimal)"
+                    />
+                  </template>
+                </AnimalListItem>
                 <q-separator v-if="index < filteredAnimals.length - 1" />
               </div>
             </template>
@@ -293,14 +224,13 @@ import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
+import AnimalListItem from 'src/components/AnimalListItem.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useAnimalsStore } from 'src/stores/animals-store'
-import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
-import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
+import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import { filterAnimalsList } from 'src/utils/list-filters'
-import { formatAnimalSex } from 'src/utils/parent-candidates'
 import {
   ANIMAL_LIMIT_REACHED_ERROR,
   canCreateAnimal,
@@ -446,6 +376,14 @@ function confirmDelete(animal) {
   })
 }
 
+function animalDetailTarget(animal) {
+  return `/animals/${animal.id}`
+}
+
+function openAnimalDetail(animal) {
+  void router.push(animalDetailTarget(animal))
+}
+
 function notifyAnimalLimitReminder(totalCount) {
   const reminder = getAnimalLimitReminder(totalCount, { isPremium: isPremium.value })
 
@@ -471,7 +409,9 @@ function notifyAnimalLimitBlocked() {
     ok: {
       label: t('animals.goToAccount'),
       color: 'primary',
+      textColor: 'white',
       unelevated: true,
+      noCaps: true,
     },
     cancel: {
       label: t('common.close'),
@@ -486,44 +426,6 @@ function notifyAnimalLimitBlocked() {
 
 function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
-}
-
-function animalSummary(animal) {
-  return formatAnimalSpeciesBreed(animal)
-}
-
-function sexLabel(sex) {
-  return formatAnimalSex(sex)
-}
-
-function statusLabel(status) {
-  return t(`common.status.${status}`)
-}
-
-function formatDate(value) {
-  if (!value) {
-    return ''
-  }
-
-  return formatDisplayDate(value)
-}
-
-function ageSummary(value) {
-  const ageLabel = formatAgeLabel(value)
-
-  return ageLabel || formatDate(value)
-}
-
-function statusColor(status) {
-  if (status === 'sold') {
-    return 'accent'
-  }
-
-  if (status === 'dead') {
-    return 'negative'
-  }
-
-  return 'primary'
 }
 
 watch([searchTerm, selectedStatus, selectedSpecies, selectedBreed, breedersOnly, listMode, pageSize], () => {
