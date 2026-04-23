@@ -26,17 +26,26 @@
       <template v-else>
         <q-card-section>
           <div class="row q-col-gutter-md">
-            <div
-              v-for="item in animalMetricCards"
-              :key="item.key"
-              class="col-12 col-sm-6 col-lg-3"
-            >
+            <div v-for="item in animalMetricCards" :key="item.key" class="col-6 col-lg-3">
               <q-banner rounded class="bg-green-1 text-primary overview-metric">
-                <template #avatar>
-                  <q-icon :name="item.icon" color="primary" />
-                </template>
-                <div class="text-h5 text-weight-bold">{{ item.value }}</div>
-                <div class="text-caption text-grey-8">{{ item.label }}</div>
+                <div class="row items-center no-wrap full-width">
+
+                  <div class="col-auto flex flex-center q-pr-md">
+                    <q-icon :name="item.icon" color="primary" size="36px" />
+                  </div>
+
+                  <div class="col">
+                    <div class="text-h5 text-weight-bold">{{ item.value }}</div>
+                    <div class="text-caption text-grey-8" style="word-break: break-word; overflow-wrap: break-word;">{{
+                      item.label }}</div>
+                  </div>
+
+                  <!-- Right side -->
+                  <!-- <div class="col-auto text-grey-6 text-caption">
+                    +12%
+                  </div> -->
+
+                </div>
               </q-banner>
             </div>
           </div>
@@ -145,7 +154,7 @@ const financialRows = computed(() => [
     color: overview.value.financials.recordedBalance >= 0 ? 'positive' : 'negative',
     label: t('overview.netRecordedResult'),
     value: amountLabel(overview.value.financials.recordedBalance),
-    textClass: overview.value.financials.recordedBalance >= 0 ? 'text-positive' : 'text-negative',
+    textClass: overview.value.financials.recordedBalance >= 0 ? 'text-primary' : 'text-negative',
   },
 ])
 
