@@ -44,6 +44,20 @@ test('normalizes event records with canonical animalIds, legacy compatibility fi
   assert.equal(normalized.amount, 1250.5)
 })
 
+test('normalizes herd-scoped events with no animal ids', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    scope: 'herd',
+    type: 'feed_cost',
+    amount: '500',
+  })
+
+  assert.equal(normalized.scope, 'herd')
+  assert.deepEqual(normalized.animalIds, [])
+  assert.equal(normalized.animalId, '')
+  assert.equal(normalized.amount, 500)
+})
+
 test('normalizes locale-agnostic amount strings', () => {
   assert.equal(normalizeEventAmount('1,250.50'), 1250.5)
   assert.equal(normalizeEventAmount('1.250,50'), 1250.5)

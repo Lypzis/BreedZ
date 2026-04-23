@@ -197,6 +197,12 @@ const navItems = computed(() => [
     to: '/events',
   },
   {
+    key: 'overview',
+    label: t('nav.overview'),
+    icon: 'insights',
+    to: '/overview',
+  },
+  {
     key: 'tutorial',
     label: t('nav.tutorial'),
     icon: 'school',

@@ -17,6 +17,7 @@ export const messages = {
       dashboard: 'Dashboard',
       animals: 'Animals',
       events: 'Events',
+      overview: 'Overview',
       account: 'Account',
       settings: 'Settings',
       tutorial: 'Tutorial',
@@ -95,6 +96,12 @@ export const messages = {
       sale: 'Sale',
       vaccination: 'Vaccination',
       health_issue: 'Health issue',
+      feed_cost: 'Feed cost',
+      labor_cost: 'Labor cost',
+      supply_cost: 'Supply cost',
+      maintenance_cost: 'Maintenance cost',
+      other_expense: 'Other expense',
+      other_income: 'Other income',
       death: 'Death',
       custom: 'Custom event',
     },
@@ -133,13 +140,13 @@ export const messages = {
         },
         {
           title: 'Record herd events',
-          description: 'Log breeding, calving, vaccination, health, and custom records.',
+          description: 'Log breeding, purchases, sales, health records, and herd-wide expenses.',
           chip: 'Events',
         },
         {
           title: 'See what needs attention',
-          description: 'Use the dashboard for today, upcoming work, and animals missing history.',
-          chip: 'Today',
+          description: 'Use the dashboard and overview for today, herd totals, and recorded outcomes.',
+          chip: 'Overview',
         },
         {
           title: 'Back up your data',
@@ -163,6 +170,7 @@ export const messages = {
       featuresItems: [
         'Track each animal',
         'Record breeding events',
+        'Track purchases, sales, and expenses',
         'Track births and lineage',
         'Full history per animal',
       ],
@@ -170,8 +178,8 @@ export const messages = {
       howItWorksTitle: 'Simple to use in the field',
       howItWorksItems: [
         'Add your animals',
-        'Record breeding, births, and notes',
-        'Check history anytime',
+        'Record breeding, purchases, sales, expenses, and notes',
+        'Check history and outcomes anytime',
       ],
       offlineOverline: 'Offline First',
       offlineTitle: 'Built for farms without reliable internet',
@@ -268,6 +276,21 @@ export const messages = {
       selectAnimalBeforeSaving: 'Select an animal before saving.',
       eventAdded: 'Event added.',
       eventSaveFailed: 'Failed to save event.',
+    },
+    overview: {
+      overline: 'Overview',
+      title: 'Herd overview',
+      description: 'All-time totals from the animals and events saved on this device.',
+      totalAnimals: 'Total animals',
+      activeAnimals: 'Active animals',
+      soldAnimals: 'Sold animals',
+      breeders: 'Reproducers',
+      financialTitle: 'Outcome summary',
+      financialHint: 'Based only on event amounts entered in BreedZ.',
+      salesTotal: 'Sales total',
+      purchaseTotal: 'Purchase total',
+      recordedExpenses: 'Recorded expenses',
+      netRecordedResult: 'Net recorded result',
     },
     animalPicker: {
       overline: 'Animals',
@@ -510,9 +533,11 @@ export const messages = {
       backToDashboard: 'Back to dashboard',
       backToAnimal: 'Back to animal',
       affectedAnimals: 'Affected animals',
+      wholeHerd: 'Whole herd',
       dialogOverline: 'Events',
       pickAnimal: 'Pick animal',
       pickAnimals: 'Pick animals',
+      pickAnimalsOptional: 'Pick animals (optional)',
       pickAdditionalAnimals: 'Additional animals',
       pickPartner: 'Breeding partner',
       eventType: 'Event type',
@@ -589,6 +614,7 @@ export const messages = {
       tipsTitle: 'Good habits for local recordkeeping',
       openAnimals: 'Open animals',
       openEvents: 'Open events',
+      openOverview: 'Open overview',
       openSettings: 'Open settings',
       steps: [
         {
@@ -615,14 +641,23 @@ export const messages = {
           number: '3',
           title: 'Record events as they happen',
           description:
-            'Use the animal timeline or the events page to log breeding, calving, vaccination, health, and custom notes.',
+            'Use the animal timeline or the events page to log breeding, calving, purchases, sales, health, and herd expenses.',
           hints: [
             'Use animal page for one animal.',
-            'Use events page for the whole herd.',
+            'Use the events page for shared events, purchases, and whole-herd expenses.',
           ],
         },
         {
           number: '4',
+          title: 'Check the overview',
+          description:
+            'Open Overview to see herd totals, sales, purchases, recorded expenses, and the net recorded result.',
+          hints: [
+            'Overview is a quick answer screen, not full accounting.',
+          ],
+        },
+        {
+          number: '5',
           title: 'Review history per animal',
           description: 'Open an animal to see its timeline, linked parents, and linked offspring in one place.',
           hints: [
@@ -630,7 +665,7 @@ export const messages = {
           ],
         },
         {
-          number: '5',
+          number: '6',
           title: 'Back up your records',
           description:
             'Go to settings and export an Excel backup so you can keep a safe copy of your local data.',
@@ -641,7 +676,7 @@ export const messages = {
       ],
       tips: [
         'Add records the same day to avoid losing dates and details.',
-        'Use notes for context, not as a replacement for structured lineage and events.',
+        'Use structured events for purchases, sales, and herd expenses before adding extra context in notes.',
         'Export a backup regularly if this device holds your main herd history.',
       ],
     },
@@ -980,6 +1015,7 @@ export const messages = {
       dashboard: 'Painel',
       animals: 'Animais',
       events: 'Eventos',
+      overview: 'Visão geral',
       account: 'Conta',
       settings: 'Configurações',
       tutorial: 'Tutorial',
@@ -1058,6 +1094,12 @@ export const messages = {
       sale: 'Venda',
       vaccination: 'Vacinação',
       health_issue: 'Problema de saúde',
+      feed_cost: 'Custo com ração',
+      labor_cost: 'Custo com mão de obra',
+      supply_cost: 'Custo com insumos',
+      maintenance_cost: 'Custo de manutenção',
+      other_expense: 'Outra despesa',
+      other_income: 'Outra receita',
       death: 'Morte',
       custom: 'Evento personalizado',
     },
@@ -1096,13 +1138,13 @@ export const messages = {
         },
         {
           title: 'Registrar eventos do rebanho',
-          description: 'Anote cruzamento, parto, vacinação, saúde e eventos personalizados.',
+          description: 'Anote cobertura, compras, vendas, saúde e despesas do rebanho.',
           chip: 'Eventos',
         },
         {
           title: 'Ver o que precisa de atenção',
-          description: 'Use o painel para hoje, próximos manejos e animais sem histórico.',
-          chip: 'Hoje',
+          description: 'Use o painel e a visão geral para hoje, totais do rebanho e resultados registrados.',
+          chip: 'Visão geral',
         },
         {
           title: 'Fazer backup dos dados',
@@ -1126,6 +1168,7 @@ export const messages = {
       featuresItems: [
         'Acompanhe cada animal',
         'Registre eventos reprodutivos',
+        'Acompanhe compras, vendas e despesas',
         'Acompanhe nascimentos e linhagem',
         'Tenha histórico completo por animal',
       ],
@@ -1133,8 +1176,8 @@ export const messages = {
       howItWorksTitle: 'Simples de usar no campo',
       howItWorksItems: [
         'Cadastre seus animais',
-        'Registre coberturas, partos e observações',
-        'Consulte o histórico a qualquer momento',
+        'Registre coberturas, compras, vendas, despesas e observações',
+        'Consulte histórico e resultados a qualquer momento',
       ],
       offlineOverline: 'Offline First',
       offlineTitle: 'Feito para fazendas com internet instável',
@@ -1232,6 +1275,21 @@ export const messages = {
       selectAnimalBeforeSaving: 'Selecione um animal antes de salvar.',
       eventAdded: 'Evento adicionado.',
       eventSaveFailed: 'Não foi possível salvar o evento.',
+    },
+    overview: {
+      overline: 'Visão geral',
+      title: 'Resumo do rebanho',
+      description: 'Totais gerais dos animais e eventos salvos neste dispositivo.',
+      totalAnimals: 'Total de animais',
+      activeAnimals: 'Animais ativos',
+      soldAnimals: 'Animais vendidos',
+      breeders: 'Reprodutores',
+      financialTitle: 'Resumo de resultado',
+      financialHint: 'Baseado apenas nos valores informados em eventos no BreedZ.',
+      salesTotal: 'Total de vendas',
+      purchaseTotal: 'Total de compras',
+      recordedExpenses: 'Despesas registradas',
+      netRecordedResult: 'Resultado líquido registrado',
     },
     animalPicker: {
       overline: 'Animais',
@@ -1473,9 +1531,11 @@ export const messages = {
       backToDashboard: 'Voltar para o painel',
       backToAnimal: 'Voltar para o animal',
       affectedAnimals: 'Animais afetados',
+      wholeHerd: 'Rebanho inteiro',
       dialogOverline: 'Eventos',
       pickAnimal: 'Escolher animal',
       pickAnimals: 'Escolher animais',
+      pickAnimalsOptional: 'Escolher animais (opcional)',
       pickAdditionalAnimals: 'Animais adicionais',
       pickPartner: 'Parceiro do cruzamento',
       eventType: 'Tipo de evento',
@@ -1552,6 +1612,7 @@ export const messages = {
       tipsTitle: 'Bons hábitos para o registro local',
       openAnimals: 'Abrir animais',
       openEvents: 'Abrir eventos',
+      openOverview: 'Abrir visão geral',
       openSettings: 'Abrir configurações',
       steps: [
         {
@@ -1578,14 +1639,23 @@ export const messages = {
           number: '3',
           title: 'Registre os eventos conforme acontecem',
           description:
-            'Use a página do animal ou a página de eventos para registrar cobertura, parto, vacinação, saúde e observações personalizadas.',
+            'Use a página do animal ou a página de eventos para registrar cobertura, parto, compras, vendas, saúde e despesas do rebanho.',
           hints: [
             'Use a página do animal para um animal específico.',
-            'Use a página de eventos para o rebanho inteiro.',
+            'Use a página de eventos para eventos compartilhados, compras e despesas do rebanho inteiro.',
           ],
         },
         {
           number: '4',
+          title: 'Confira a visão geral',
+          description:
+            'Abra a Visão geral para ver totais do rebanho, vendas, compras, despesas registradas e o resultado líquido registrado.',
+          hints: [
+            'A visão geral é uma tela de resposta rápida, não contabilidade completa.',
+          ],
+        },
+        {
+          number: '5',
           title: 'Revise o histórico por animal',
           description: 'Abra um animal para ver em um só lugar a linha do tempo, os pais vinculados e os descendentes.',
           hints: [
@@ -1593,7 +1663,7 @@ export const messages = {
           ],
         },
         {
-          number: '5',
+          number: '6',
           title: 'Faça backup dos registros',
           description:
             'Vá em configurações e exporte um backup em Excel para manter uma cópia segura dos seus dados locais.',
@@ -1604,7 +1674,7 @@ export const messages = {
       ],
       tips: [
         'Registre tudo no mesmo dia para não perder datas e detalhes.',
-        'Use observações como contexto, não como substituto de linhagem e eventos estruturados.',
+        'Use eventos estruturados para compras, vendas e despesas antes de adicionar contexto nas observações.',
         'Exporte um backup com frequência se este dispositivo guarda o principal histórico do rebanho.',
       ],
     },
@@ -1943,6 +2013,7 @@ export const messages = {
       dashboard: 'Panel',
       animals: 'Animales',
       events: 'Eventos',
+      overview: 'Resumen',
       account: 'Cuenta',
       settings: 'Ajustes',
       tutorial: 'Tutorial',
@@ -2015,6 +2086,12 @@ export const messages = {
       sale: 'Venta',
       vaccination: 'Vacunación',
       health_issue: 'Problema de salud',
+      feed_cost: 'Costo de alimento',
+      labor_cost: 'Costo de mano de obra',
+      supply_cost: 'Costo de insumos',
+      maintenance_cost: 'Costo de mantenimiento',
+      other_expense: 'Otro gasto',
+      other_income: 'Otro ingreso',
       death: 'Muerte',
       custom: 'Evento personalizado',
     },
@@ -2055,6 +2132,21 @@ export const messages = {
       selectAnimalBeforeSaving: 'Selecciona un animal antes de guardar.',
       eventAdded: 'Evento agregado.',
       eventSaveFailed: 'No se pudo guardar el evento.',
+    },
+    overview: {
+      overline: 'Resumen',
+      title: 'Resumen del rebaño',
+      description: 'Totales generales de los animales y eventos guardados en este dispositivo.',
+      totalAnimals: 'Total de animales',
+      activeAnimals: 'Animales activos',
+      soldAnimals: 'Animales vendidos',
+      breeders: 'Reproductores',
+      financialTitle: 'Resumen de resultado',
+      financialHint: 'Basado solo en importes ingresados en eventos de BreedZ.',
+      salesTotal: 'Total de ventas',
+      purchaseTotal: 'Total de compras',
+      recordedExpenses: 'Gastos registrados',
+      netRecordedResult: 'Resultado neto registrado',
     },
     animalPicker: {
       overline: 'Animales',
@@ -2302,9 +2394,11 @@ export const messages = {
       backToDashboard: 'Volver al panel',
       backToAnimal: 'Volver al animal',
       affectedAnimals: 'Animales afectados',
+      wholeHerd: 'Todo el rebaño',
       dialogOverline: 'Eventos',
       pickAnimal: 'Elegir animal',
       pickAnimals: 'Elegir animales',
+      pickAnimalsOptional: 'Elegir animales (opcional)',
       pickAdditionalAnimals: 'Animales adicionales',
       pickPartner: 'Pareja de reproducción',
       eventType: 'Tipo de evento',
@@ -2383,6 +2477,7 @@ export const messages = {
       tipsTitle: 'Buenos hábitos para el registro local',
       openAnimals: 'Abrir animales',
       openEvents: 'Abrir eventos',
+      openOverview: 'Abrir resumen',
       openSettings: 'Abrir ajustes',
       steps: [
         {
@@ -2410,14 +2505,23 @@ export const messages = {
           number: '3',
           title: 'Registra los eventos cuando ocurran',
           description:
-            'Usa la página del animal o la página de eventos para registrar reproducción, partos, vacunación, salud y notas personalizadas.',
+            'Usa la página del animal o la página de eventos para registrar reproducción, partos, compras, ventas, salud y gastos del rebaño.',
           hints: [
             'Usa la página del animal para un solo animal.',
-            'Usa la página de eventos para todo el rebaño.',
+            'Usa la página de eventos para eventos compartidos, compras y gastos de todo el rebaño.',
           ],
         },
         {
           number: '4',
+          title: 'Revisa el resumen',
+          description:
+            'Abre Resumen para ver totales del rebaño, ventas, compras, gastos registrados y el resultado neto registrado.',
+          hints: [
+            'Resumen es una pantalla de respuesta rápida, no contabilidad completa.',
+          ],
+        },
+        {
+          number: '5',
           title: 'Revisa el historial por animal',
           description:
             'Abre un animal para ver en un solo lugar su línea de tiempo, los padres vinculados y la descendencia.',
@@ -2426,7 +2530,7 @@ export const messages = {
           ],
         },
         {
-          number: '5',
+          number: '6',
           title: 'Haz respaldo de tus registros',
           description:
             'Ve a ajustes y exporta un respaldo en Excel para guardar una copia segura de tus datos locales.',
@@ -2437,7 +2541,7 @@ export const messages = {
       ],
       tips: [
         'Registra todo el mismo día para no perder fechas ni detalles.',
-        'Usa las notas como contexto, no como sustituto del linaje y los eventos estructurados.',
+        'Usa eventos estructurados para compras, ventas y gastos antes de agregar contexto en notas.',
         'Exporta un respaldo con frecuencia si este dispositivo guarda el historial principal del rebaño.',
       ],
     },
@@ -2476,13 +2580,13 @@ export const messages = {
         },
         {
           title: 'Registrar eventos del ganado',
-          description: 'Anota reproducción, partos, vacunación, salud y eventos personalizados.',
+          description: 'Anota reproducción, compras, ventas, salud y gastos del rebaño.',
           chip: 'Eventos',
         },
         {
           title: 'Ver qué necesita atención',
-          description: 'Usa el panel para hoy, próximos manejos y animales sin historial.',
-          chip: 'Hoy',
+          description: 'Usa el panel y el resumen para hoy, totales del rebaño y resultados registrados.',
+          chip: 'Resumen',
         },
         {
           title: 'Respaldar tus datos',
@@ -2506,6 +2610,7 @@ export const messages = {
       featuresItems: [
         'Registrar cada animal',
         'Anotar eventos reproductivos',
+        'Seguir compras, ventas y gastos',
         'Seguir partos y linaje',
         'Historial completo por animal',
       ],
@@ -2513,8 +2618,8 @@ export const messages = {
       howItWorksTitle: 'Simple de usar en el campo',
       howItWorksItems: [
         'Agrega tus animales',
-        'Registra reproducción, partos y notas',
-        'Consulta el historial cuando lo necesites',
+        'Registra reproducción, compras, ventas, gastos y notas',
+        'Consulta historial y resultados cuando lo necesites',
       ],
       offlineOverline: 'Offline first',
       offlineTitle: 'Hecho para fincas sin internet confiable',

@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, normalizeLocale } from 'src/i18n/localePreference'
+import { DEFAULT_LOCALE, normalizeLocale } from '../i18n/localePreference.js'
 
 const ROUTE_SEGMENT_TO_LOCALE = {
   en: 'en',
@@ -118,6 +118,7 @@ export function isAppShellPath(path = '/') {
     || normalizedPath === '/tutorial'
     || normalizedPath.startsWith('/animals')
     || normalizedPath.startsWith('/events')
+    || normalizedPath === '/overview'
     || normalizedPath.startsWith('/account')
     || normalizedPath.startsWith('/settings')
   )

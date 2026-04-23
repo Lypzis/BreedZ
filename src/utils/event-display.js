@@ -16,8 +16,14 @@ export function getEventAnimals(event = {}, resolveAnimalById = () => null) {
 export function formatEventAnimalsSummary(
   event = {},
   resolveAnimalById = () => null,
-  { maxNames = 2 } = {},
+  { herdLabel = 'Whole herd', maxNames = 2 } = {},
 ) {
+  const eventAnimalIds = getEventAnimalIds(event)
+
+  if (normalizeEventRecord(event).scope === 'herd' && eventAnimalIds.length === 0) {
+    return herdLabel
+  }
+
   const names = getEventAnimals(event, resolveAnimalById)
     .map(({ animal }) => formatAnimalDisplayName(animal))
 

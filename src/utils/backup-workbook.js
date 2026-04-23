@@ -26,6 +26,7 @@ const EVENT_COLUMNS = [
   ['id', 'ID'],
   ['animalIds', 'Animal IDs'],
   ['animalId', 'Animal ID'],
+  ['scope', 'Scope'],
   ['type', 'Type'],
   ['amount', 'Amount'],
   ['date', 'Date'],
