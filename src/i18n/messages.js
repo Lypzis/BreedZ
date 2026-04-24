@@ -118,6 +118,7 @@ export const messages = {
       installApp: 'Install app',
       installed: 'Installed',
       seeHowItWorks: 'See how it works',
+      openTutorial: 'Open tutorial',
       installHintIos: 'On iPhone or iPad, use Share and then Add to Home Screen.',
       installHintFirefox:
         'Firefox may not show a native install prompt. Use the browser menu or create a shortcut manually.',
@@ -259,6 +260,7 @@ export const messages = {
       activeAnimalsCaption: 'Ready for day-to-day tracking.',
       todayEventsTitle: '{count} events today',
       todayEventsCaption: 'Logged or scheduled for {date}.',
+      todayEventsCaptionGeneric: 'Logged or scheduled for today.',
       upcomingEventsTitle: '{count} upcoming events',
       upcomingEventsCaption: 'Future-dated reminders already in the timeline.',
       todayOverline: 'Today',
@@ -276,6 +278,9 @@ export const messages = {
       showingToday: 'Showing {shown} of {total} events for today.',
       showingUpcoming: 'Showing {shown} of {total} upcoming events.',
       showingNeedsSetup: 'Showing {shown} of {total} animals needing setup.',
+      addFirstAnimal: 'Add your first animal',
+      firstRunHint:
+        'Start by adding your first animal. You can also record herd-wide expenses or other income without animals.',
       noAnimalBeforeEvent: 'Start by adding your animals to begin tracking.',
       selectAnimalBeforeSaving: 'Select an animal before saving.',
       eventAdded: 'Event added.',
@@ -1215,6 +1220,7 @@ export const messages = {
       installApp: 'Instalar app',
       installed: 'Instalado',
       seeHowItWorks: 'Ver como funciona',
+      openTutorial: 'Abrir tutorial',
       installHintIos: 'No iPhone ou iPad, use Compartilhar e depois Adicionar à Tela de Início.',
       installHintFirefox:
         'O Firefox pode não mostrar um aviso nativo de instalação. Use o menu do navegador ou crie um atalho manualmente.',
@@ -1356,6 +1362,7 @@ export const messages = {
       activeAnimalsCaption: 'Prontos para o acompanhamento do dia a dia.',
       todayEventsTitle: '{count} eventos hoje',
       todayEventsCaption: 'Registrados ou agendados para {date}.',
+      todayEventsCaptionGeneric: 'Registrados ou agendados para hoje.',
       upcomingEventsTitle: '{count} próximos eventos',
       upcomingEventsCaption: 'Lembretes futuros já registrados na linha do tempo.',
       todayOverline: 'Hoje',
@@ -1374,6 +1381,9 @@ export const messages = {
       showingToday: 'Mostrando {shown} de {total} eventos de hoje.',
       showingUpcoming: 'Mostrando {shown} de {total} próximos eventos.',
       showingNeedsSetup: 'Mostrando {shown} de {total} animais que precisam de ajuste.',
+      addFirstAnimal: 'Adicione seu primeiro animal',
+      firstRunHint:
+        'Comece adicionando seu primeiro animal. Você também pode registrar despesas do rebanho ou outras receitas sem animais.',
       noAnimalBeforeEvent: 'Comece adicionando seus animais para iniciar o acompanhamento.',
       selectAnimalBeforeSaving: 'Selecione um animal antes de salvar.',
       eventAdded: 'Evento adicionado.',
@@ -2308,6 +2318,7 @@ export const messages = {
       activeAnimalsCaption: 'Listos para el seguimiento diario.',
       todayEventsTitle: '{count} eventos hoy',
       todayEventsCaption: 'Registrados o programados para {date}.',
+      todayEventsCaptionGeneric: 'Registrados o programados para hoy.',
       upcomingEventsTitle: '{count} próximos eventos',
       upcomingEventsCaption: 'Los recordatorios con fecha futura ya están en la línea de tiempo.',
       todayOverline: 'Hoy',
@@ -2326,6 +2337,9 @@ export const messages = {
       showingToday: 'Mostrando {shown} de {total} eventos de hoy.',
       showingUpcoming: 'Mostrando {shown} de {total} próximos eventos.',
       showingNeedsSetup: 'Mostrando {shown} de {total} animales por completar.',
+      addFirstAnimal: 'Agrega tu primer animal',
+      firstRunHint:
+        'Empieza agregando tu primer animal. También puedes registrar gastos del rebaño u otros ingresos sin animales.',
       noAnimalBeforeEvent: 'Empieza agregando tus animales para comenzar el seguimiento.',
       selectAnimalBeforeSaving: 'Selecciona un animal antes de guardar.',
       eventAdded: 'Evento agregado.',
@@ -2756,6 +2770,7 @@ export const messages = {
       installApp: 'Instalar app',
       installed: 'Instalada',
       seeHowItWorks: 'Ver cómo funciona',
+      openTutorial: 'Abrir tutorial',
       installHintIos: 'En iPhone o iPad, usa Compartir y luego Añadir a pantalla de inicio.',
       installHintFirefox:
         'Firefox puede no mostrar una indicación nativa de instalación. Usa el menú del navegador o crea un acceso directo manualmente.',

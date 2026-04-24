@@ -13,11 +13,36 @@
             <div class="col-12 col-md-auto">
               <div class="row q-gutter-sm justify-end">
                 <q-btn
+                  v-if="showFirstRunActions"
+                  unelevated
+                  color="primary"
+                  icon="pets"
+                  :label="t('dashboard.addFirstAnimal')"
+                  to="/animals"
+                />
+                <q-btn
+                  v-else
                   unelevated
                   color="primary"
                   icon="add"
                   :label="t('common.addEvent')"
                   @click="openQuickEventDialog"
+                />
+                <q-btn
+                  v-if="showFirstRunActions"
+                  outline
+                  color="primary"
+                  icon="assignment"
+                  :label="t('common.addEvent')"
+                  @click="openQuickEventDialog"
+                />
+                <q-btn
+                  v-if="showFirstRunActions"
+                  outline
+                  color="primary"
+                  icon="school"
+                  :label="t('home.openTutorial')"
+                  to="/tutorial"
                 />
                 <q-btn
                   v-if="canShowSignInButton"
@@ -44,6 +69,15 @@
           </q-card-section>
 
           <template v-else>
+            <q-card-section v-if="showFirstRunActions" class="q-pt-none">
+              <q-banner rounded class="bg-grey-1 text-grey-8">
+                <template #avatar>
+                  <q-icon name="info" color="primary" />
+                </template>
+                <div>{{ t('dashboard.firstRunHint') }}</div>
+              </q-banner>
+            </q-card-section>
+
             <q-card-section>
               <div class="row q-col-gutter-md">
                 <div class="col-12 col-sm-4">
@@ -62,7 +96,7 @@
                       <q-icon name="today" color="primary" />
                     </template>
                     <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.todayEventsTitle', { count: todayEvents.length }) }}</div>
-                    <div class="text-caption text-grey-8">{{ t('dashboard.todayEventsCaption', { date: todayLabel }) }}</div>
+                    <div class="text-caption text-grey-8">{{ todayEventsCaption }}</div>
                   </q-banner>
                 </div>
 
@@ -213,40 +247,6 @@
       :is-premium="isPremium"
       @submit="submitPurchaseEvent"
     />
-
-    <q-dialog v-model="isMissingAnimalsDialogOpen">
-      <q-card style="width: 100%; max-width: 420px">
-        <q-card-section class="row items-center justify-between">
-          <div class="text-h6 text-weight-bold">{{ t('common.addEvent') }}</div>
-          <q-btn
-            flat
-            round
-            dense
-            icon="close"
-            :aria-label="t('common.closeDialog')"
-            :title="t('common.closeDialog')"
-            v-close-popup
-          />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <div class="text-body1 text-grey-8">
-            {{ t('dashboard.noAnimalBeforeEvent') }}
-          </div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat color="grey-7" :label="t('common.cancel')" v-close-popup />
-          <q-btn
-            unelevated
-            color="primary"
-            :label="t('common.addAnimal')"
-            to="/animals"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </AppPageShell>
 </template>
 
@@ -288,22 +288,32 @@ const { isLoaded: isAuthLoaded, isPremium, isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
-const isMissingAnimalsDialogOpen = ref(false)
 const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
 const dashboardSectionLimit = 5
 
-const today = computed(() => todayDateString())
-const todayLabel = computed(() => formatDisplayDate(today.value))
+const hasAnimals = computed(() => animals.value.length > 0)
+const showFirstRunActions = computed(() => animalsStore.isLoaded && !hasAnimals.value)
+const today = computed(() => (hasHydrated.value ? todayDateString() : ''))
+const todayLabel = computed(() => (today.value ? formatDisplayDate(today.value) : ''))
+const todayEventsCaption = computed(() =>
+  hasHydrated.value
+    ? t('dashboard.todayEventsCaption', { date: todayLabel.value })
+    : t('dashboard.todayEventsCaptionGeneric'),
+)
 const isBusy = computed(() => animalsLoading.value || eventsLoading.value)
 const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsErrorMessage.value)
 const canShowSignInButton = computed(() =>
   hasHydrated.value && isAuthLoaded.value && !isSignedIn.value,
 )
 
-const todayEvents = computed(() => events.value.filter((event) => event.date === today.value))
+const todayEvents = computed(() =>
+  today.value ? events.value.filter((event) => event.date === today.value) : [],
+)
 const todayEventsPreview = computed(() => todayEvents.value.slice(0, dashboardSectionLimit))
-const upcomingEvents = computed(() => events.value.filter((event) => event.date > today.value))
+const upcomingEvents = computed(() =>
+  today.value ? events.value.filter((event) => event.date > today.value) : [],
+)
 const upcomingEventsPreview = computed(() => upcomingEvents.value.slice(0, dashboardSectionLimit))
 const animalsWithoutEvents = computed(() => {
   const animalIdsWithEvents = new Set(

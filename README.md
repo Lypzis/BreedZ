@@ -336,6 +336,21 @@ Summary:
 - Nothing critical is obviously missing for a first premium rollout.
 - The main remaining work is reliability, billing UX polish, and abuse protection.
 
+### Animal Weight Snapshot
+
+Goal:
+- Add an optional `weight` field to the animal model for current/manual weight tracking.
+
+Why:
+- Weight is useful basic herd data even before full weight-history features exist.
+- It can support sale context, management decisions, and future reporting.
+
+Suggested first scope:
+- [ ] Add optional `weight` to the animal form
+- [ ] Persist `weight` in local storage and backup/import flows
+- [ ] Show `weight` on animal detail
+- [ ] Reevaluate later whether we also want `weightUpdatedAt` or weight history/events
+
 ### Spanish Rollout
 
 Goal:
