@@ -689,6 +689,29 @@ export const messages = {
         'Export a backup regularly if this device holds your main herd history.',
       ],
     },
+    homeShare: {
+      overline: 'Share',
+      title: 'Know a farmer who needs this?',
+      description: 'Share it or save the link for later.',
+      shareButton: 'Copy link',
+      whatsAppButton: 'WhatsApp',
+      copied: 'BreedZ link copied.',
+      error: 'Could not share BreedZ right now.',
+      nativeShareText: 'Tracking cattle breeding got way easier with this app. Works offline too.',
+      whatsAppText:
+        'Tracking cattle breeding got way easier with this app. Works offline too:\n{url}',
+    },
+    guideShare: {
+      overline: 'Share',
+      title: 'Found this useful?',
+      description: 'Share this with another farmer — or save it for later.',
+      shareButton: 'Copy link',
+      whatsAppButton: 'WhatsApp',
+      copied: 'Guide link copied.',
+      error: 'Could not share this guide right now.',
+      nativeShareText: 'This guide may help with herd recordkeeping.',
+      whatsAppText: 'Found this useful for herd recordkeeping: {title}\n{url}',
+    },
     guideBreedingDates: {
       meta: {
         title: 'How to Track Cattle Breeding Dates',
@@ -1790,6 +1813,29 @@ export const messages = {
         'Use eventos estruturados para compras, vendas e despesas antes de adicionar contexto nas observações.',
         'Exporte um backup com frequência se este dispositivo guarda o principal histórico do rebanho.',
       ],
+    },
+    homeShare: {
+      overline: 'Compartilhar',
+      title: 'Conhece algum produtor que precise disso?',
+      description: 'Compartilhe ou guarde o link para depois.',
+      shareButton: 'Copiar link',
+      whatsAppButton: 'WhatsApp',
+      copied: 'Link do BreedZ copiado.',
+      error: 'Não foi possível compartilhar o BreedZ agora.',
+      nativeShareText: 'Acompanhar a reprodução do gado ficou muito mais fácil com este app. Funciona offline também.',
+      whatsAppText:
+        'Acompanhar a reprodução do gado ficou muito mais fácil com este app. Funciona offline também:\n{url}',
+    },
+    guideShare: {
+      overline: 'Compartilhar',
+      title: 'Achou útil?',
+      description: 'Compartilhe isso com outro produtor — ou guarde para ver depois.',
+      shareButton: 'Copiar link',
+      whatsAppButton: 'WhatsApp',
+      copied: 'Link do guia copiado.',
+      error: 'Não foi possível compartilhar este guia agora.',
+      nativeShareText: 'Este guia pode ajudar no controle do rebanho.',
+      whatsAppText: 'Achei este guia útil para o controle do rebanho: {title}\n{url}',
     },
     guideBreedingDates: {
       meta: {
@@ -2902,6 +2948,29 @@ export const messages = {
           answer: 'Próximamente.',
         },
       ],
+    },
+    homeShare: {
+      overline: 'Compartir',
+      title: '¿Conoces a algún productor que necesite esto?',
+      description: 'Compártelo o guarda el enlace para después.',
+      shareButton: 'Copiar enlace',
+      whatsAppButton: 'WhatsApp',
+      copied: 'Enlace de BreedZ copiado.',
+      error: 'No se pudo compartir BreedZ ahora.',
+      nativeShareText: 'Llevar el control reproductivo del ganado se volvió mucho más fácil con esta app. También funciona offline.',
+      whatsAppText:
+        'Llevar el control reproductivo del ganado se volvió mucho más fácil con esta app. También funciona offline:\n{url}',
+    },
+    guideShare: {
+      overline: 'Compartir',
+      title: '¿Te resultó útil?',
+      description: 'Compártelo con otro productor — o guárdalo para verlo después.',
+      shareButton: 'Copiar enlace',
+      whatsAppButton: 'WhatsApp',
+      copied: 'Enlace de la guía copiado.',
+      error: 'No se pudo compartir esta guía ahora.',
+      nativeShareText: 'Esta guía puede ayudar con los registros del rebaño.',
+      whatsAppText: 'Me resultó útil esta guía para los registros del rebaño: {title}\n{url}',
     },
     guideBreedingDates: {
       meta: {
