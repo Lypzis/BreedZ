@@ -47,7 +47,25 @@
                 :options="eventTypeOptions"
                 emit-value
                 map-options
-              />
+              >
+                <template #prepend>
+                  <q-icon
+                    v-if="selectedEventTypeOption"
+                    :name="selectedEventTypeOption.icon"
+                    :color="selectedEventTypeOption.color"
+                  />
+                </template>
+                <template #option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-item-section avatar>
+                      <q-icon :name="scope.opt.icon" :color="scope.opt.color" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>{{ scope.opt.label }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
             </div>
             <div class="col-12 col-md-3">
               <q-input v-model="startDate" outlined dense type="date" :label="t('events.fromDate')" />
@@ -258,6 +276,9 @@ const listModeOptions = computed(() => [
   { label: t('common.viewAll'), value: 'all' },
 ])
 const eventTypeOptions = computed(() => getEventTypeOptions())
+const selectedEventTypeOption = computed(() =>
+  eventTypeOptions.value.find((option) => option.value === selectedEventType.value) ?? null,
+)
 
 const isBusy = computed(() => animalsLoading.value || eventsLoading.value)
 const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsErrorMessage.value)

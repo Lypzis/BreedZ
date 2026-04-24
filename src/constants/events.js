@@ -1,20 +1,20 @@
 import { t } from '../i18n/index.js'
 
 const EVENT_TYPE_META = {
-  birth: { labelKey: 'eventTypes.birth', icon: 'child_friendly', color: 'secondary' },
   breeding: { labelKey: 'eventTypes.breeding', icon: 'favorite', color: 'primary' },
-  purchase: { labelKey: 'eventTypes.purchase', icon: 'shopping_cart', color: 'positive' },
-  sale: { labelKey: 'eventTypes.sale', icon: 'sell', color: 'info' },
+  birth: { labelKey: 'eventTypes.birth', icon: 'child_friendly', color: 'secondary' },
   vaccination: { labelKey: 'eventTypes.vaccination', icon: 'vaccines', color: 'accent' },
   health_issue: { labelKey: 'eventTypes.health_issue', icon: 'healing', color: 'negative' },
+  purchase: { labelKey: 'eventTypes.purchase', icon: 'shopping_cart', color: 'positive' },
+  sale: { labelKey: 'eventTypes.sale', icon: 'sell', color: 'info' },
+  death: { labelKey: 'eventTypes.death', icon: 'warning', color: 'dark' },
+  custom: { labelKey: 'eventTypes.custom', icon: 'assignment', color: 'primary' },
   feed_cost: { labelKey: 'eventTypes.feed_cost', icon: 'grass', color: 'warning' },
   labor_cost: { labelKey: 'eventTypes.labor_cost', icon: 'engineering', color: 'warning' },
   supply_cost: { labelKey: 'eventTypes.supply_cost', icon: 'inventory_2', color: 'warning' },
   maintenance_cost: { labelKey: 'eventTypes.maintenance_cost', icon: 'build', color: 'warning' },
   other_expense: { labelKey: 'eventTypes.other_expense', icon: 'receipt_long', color: 'warning' },
   other_income: { labelKey: 'eventTypes.other_income', icon: 'payments', color: 'positive' },
-  death: { labelKey: 'eventTypes.death', icon: 'warning', color: 'dark' },
-  custom: { labelKey: 'eventTypes.custom', icon: 'assignment', color: 'primary' },
 }
 
 export const HERD_SCOPE_EVENT_TYPES = new Set([
@@ -33,6 +33,8 @@ export function canEventUseHerdScope(type) {
 export function getEventTypeOptions() {
   return Object.entries(EVENT_TYPE_META).map(([value, meta]) => ({
     label: t(meta.labelKey),
+    icon: meta.icon,
+    color: meta.color,
     value,
   }))
 }

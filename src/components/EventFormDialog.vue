@@ -26,7 +26,25 @@
             :options="eventTypeOptions"
             emit-value
             map-options
-          />
+          >
+            <template #prepend>
+              <q-icon
+                v-if="selectedEventTypeOption"
+                :name="selectedEventTypeOption.icon"
+                :color="selectedEventTypeOption.color"
+              />
+            </template>
+            <template #option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section avatar>
+                  <q-icon :name="scope.opt.icon" :color="scope.opt.color" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.label }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
           <AnimalPickerField
             v-if="!hasFixedAnimal && (eventSelectionMode === 'single' || eventSelectionMode === 'breeding')"
             v-model="eventForm.animalId"
@@ -131,6 +149,9 @@ const eventForm = reactive(defaultEventForm())
 const isSyncingEventForm = ref(false)
 
 const eventTypeOptions = computed(() => getEventTypeOptions())
+const selectedEventTypeOption = computed(() =>
+  eventTypeOptions.value.find((option) => option.value === eventForm.type) ?? null,
+)
 const hasFixedAnimal = computed(() => Boolean(props.fixedAnimalId))
 const activeAnimalsForEvents = computed(() =>
   props.animals.filter((animal) => animal.status === 'active'),
