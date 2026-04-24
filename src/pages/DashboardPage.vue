@@ -13,7 +13,7 @@
             <div class="col-12 col-md-auto">
               <div class="row q-gutter-sm justify-end">
                 <q-btn
-                  v-if="!hasAnimals"
+                  v-if="showFirstRunActions"
                   unelevated
                   color="primary"
                   icon="pets"
@@ -29,7 +29,7 @@
                   @click="openQuickEventDialog"
                 />
                 <q-btn
-                  v-if="!hasAnimals"
+                  v-if="showFirstRunActions"
                   outline
                   color="primary"
                   icon="assignment"
@@ -37,7 +37,7 @@
                   @click="openQuickEventDialog"
                 />
                 <q-btn
-                  v-if="!hasAnimals"
+                  v-if="showFirstRunActions"
                   outline
                   color="primary"
                   icon="school"
@@ -69,7 +69,7 @@
           </q-card-section>
 
           <template v-else>
-            <q-card-section v-if="!hasAnimals" class="q-pt-none">
+            <q-card-section v-if="showFirstRunActions" class="q-pt-none">
               <q-banner rounded class="bg-grey-1 text-grey-8">
                 <template #avatar>
                   <q-icon name="info" color="primary" />
@@ -293,6 +293,7 @@ const hasHydrated = ref(false)
 const dashboardSectionLimit = 5
 
 const hasAnimals = computed(() => animals.value.length > 0)
+const showFirstRunActions = computed(() => animalsStore.isLoaded && !hasAnimals.value)
 const today = computed(() => (hasHydrated.value ? todayDateString() : ''))
 const todayLabel = computed(() => (today.value ? formatDisplayDate(today.value) : ''))
 const todayEventsCaption = computed(() =>

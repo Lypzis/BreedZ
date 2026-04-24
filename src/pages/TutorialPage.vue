@@ -1,80 +1,76 @@
 <template>
   <AppPageShell>
-        <q-card flat>
-          <q-card-section class="q-pb-none">
-            <div class="text-overline text-weight-bold text-primary">{{ t('tutorial.overline') }}</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('tutorial.title') }}</div>
-            <div class="text-body1 text-grey-7">
-              {{ t('tutorial.description') }}
-            </div>
-          </q-card-section>
+    <q-card flat>
+      <q-card-section class="q-pb-none">
+        <div class="text-overline text-weight-bold text-primary">{{ t('tutorial.overline') }}</div>
+        <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('tutorial.title') }}</div>
+        <div class="text-body1 text-grey-7">
+          {{ t('tutorial.description') }}
+        </div>
+      </q-card-section>
 
-          <q-card-section class="q-px-none">
-            <q-list >
-              <q-item v-for="step in steps" :key="step.title" :class="{ 'q-pt-lg': step !== 0 }">
-                <q-item-section avatar top>
-                  <q-avatar color="primary" text-color="white">{{ step.number }}</q-avatar>
-                </q-item-section>
+      <q-card-section class="q-px-none">
+        <q-list>
+          <q-item v-for="step in steps" :key="step.title" :class="{ 'q-pt-lg': step !== 0 }">
+            <q-item-section avatar top>
+              <q-avatar color="primary" text-color="white">{{ step.number }}</q-avatar>
+            </q-item-section>
 
-                <q-item-section>
-                  <q-item-label class="text-subtitle1 text-weight-bold">
-                    {{ step.title }}
-                  </q-item-label>
-                  <q-item-label class="text-body2 text-grey-7 q-mt-xs">
-                    {{ step.description }}
-                  </q-item-label>
-                  <div class="row q-col-gutter-sm q-mt-sm">
-                    <div
-                      v-for="hint in step.hints"
-                      :key="hint"
-                      class="col-12"
-                    >
-                      <q-banner rounded class="bg-grey-1 text-grey-8">
-                        <template #avatar>
-                          <q-icon name="check_circle" color="primary" />
-                        </template>
-                        {{ hint }}
-                      </q-banner>
-                    </div>
-                  </div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section >
-            <div class="text-overline text-weight-bold text-accent">{{ t('tutorial.tipsOverline') }}</div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('tutorial.tipsTitle') }}</div>
-
-            <q-list>
-              <q-item v-for="tip in tips" :key="tip">
-                <q-item-section avatar>
-                  <q-icon name="task_alt" color="accent" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ tip }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <div class="row q-col-gutter-sm">
-              <div class="col-12 col-sm-auto">
-                <q-btn unelevated color="primary" icon="pets" :label="t('tutorial.openAnimals')" to="/animals" />
+            <q-item-section>
+              <q-item-label class="text-subtitle1 text-weight-bold">
+                {{ step.title }}
+              </q-item-label>
+              <q-item-label class="text-body2 text-grey-7 q-mt-xs">
+                {{ step.description }}
+              </q-item-label>
+              <div class="row q-col-gutter-sm q-mt-sm">
+                <div v-for="hint in step.hints" :key="hint" class="col-12">
+                  <q-banner rounded class="bg-grey-1 text-grey-8">
+                    <template #avatar>
+                      <q-icon name="check_circle" color="primary" />
+                    </template>
+                    {{ hint }}
+                  </q-banner>
+                </div>
               </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/events" />
-              </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="insights" :label="t('tutorial.openOverview')" to="/overview" />
-              </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/settings" />
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-accent">{{ t('tutorial.tipsOverline') }}</div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('tutorial.tipsTitle') }}</div>
+
+        <q-list>
+          <q-item v-for="tip in tips" :key="tip">
+            <q-item-section avatar>
+              <q-icon name="task_alt" color="accent" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ tip }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none q-mb-lg">
+        <div class="row q-col-gutter-sm">
+          <div class="col-12 col-sm-auto">
+            <q-btn unelevated color="primary" icon="pets" :label="t('tutorial.openAnimals')" to="/animals" />
+          </div>
+          <div class="col-12 col-sm-auto">
+            <q-btn outline color="primary" icon="assignment" :label="t('tutorial.openEvents')" to="/events" />
+          </div>
+          <div class="col-12 col-sm-auto">
+            <q-btn outline color="primary" icon="insights" :label="t('tutorial.openOverview')" to="/overview" />
+          </div>
+          <div class="col-12 col-sm-auto">
+            <q-btn outline color="primary" icon="settings" :label="t('tutorial.openSettings')" to="/settings" />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
   </AppPageShell>
 </template>
 
