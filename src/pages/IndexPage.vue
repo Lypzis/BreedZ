@@ -1,332 +1,279 @@
 <template>
   <AppPageShell>
-        <q-card flat>
-          <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">{{ t('home.overline') }}</div>
-            <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
-              {{ t('home.heroTitle') }}
-            </h1>
-            <div class="text-body1 text-grey-7">
-              {{ t('home.heroSubtitle') }}
-            </div>
-          </q-card-section>
+    <q-card flat>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">{{ t('home.overline') }}</div>
+        <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
+          {{ t('home.heroTitle') }}
+        </h1>
+        <div class="text-body1 text-grey-7">
+          {{ t('home.heroSubtitle') }}
+        </div>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="row q-col-gutter-sm">
-              <div class="col-12 col-sm-auto">
-                <q-btn
-                  unelevated
-                  color="primary"
-                  :label="installButtonLabel"
-                  icon="download"
-                  :disable="isInstalled"
-                  @click="handleInstallClick"
-                />
-              </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn
-                  outline
-                  color="primary"
-                  icon="dashboard"
-                  :label="t('home.openDashboard')"
-                  :to="dashboardPath"
-                />
-              </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn
-                  outline
-                  color="primary"
-                  icon="school"
-                  :label="t('home.seeHowItWorks')"
-                  :to="tutorialPath"
-                />
-              </div>
-            </div>
-          </q-card-section>
+      <q-card-section>
+        <div class="row q-col-gutter-sm">
+          <div class="col-12 col-sm-auto">
+            <q-btn unelevated color="primary" :label="installButtonLabel" icon="download" :disable="isInstalled"
+              @click="handleInstallClick" />
+          </div>
+          <div class="col-12 col-sm-auto">
+            <q-btn outline color="primary" icon="dashboard" :label="t('home.openDashboard')" :to="dashboardPath" />
+          </div>
+          <div class="col-12 col-sm-auto">
+            <q-btn outline color="primary" icon="school" :label="t('home.seeHowItWorks')" :to="tutorialPath" />
+          </div>
+        </div>
+      </q-card-section>
 
-          <q-card-section  >
-            <q-banner rounded class="bg-grey-1 text-grey-8">
-              <template #avatar>
-                <q-icon name="task_alt" color="primary" />
-              </template>
-              {{ t('home.heroBanner') }}
-            </q-banner>
+      <q-card-section>
+        <q-banner rounded class="bg-grey-1 text-grey-8">
+          <template #avatar>
+            <q-icon name="task_alt" color="primary" />
+          </template>
+          {{ t('home.heroBanner') }}
+        </q-banner>
 
-            <q-banner
-              v-if="installHintVisible || installStatusMessage"
-              rounded
-              class="bg-white text-grey-8 q-mt-md"
-            >
-              {{ installStatusMessage || installInstructions }}
-            </q-banner>
-          </q-card-section>
+        <q-banner v-if="installHintVisible || installStatusMessage" rounded class="bg-white text-grey-8 q-mt-md">
+          {{ installStatusMessage || installInstructions }}
+        </q-banner>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="row items-center q-col-gutter-lg">
-              <div class="col-12 col-md-5">
-                <q-img
-                  :src="logoFull"
-                  :alt="t('brand.name')"
-                  fit="contain"
-                  no-spinner
-                  class="landing-hero-image"
-                />
-              </div>
-              <div class="col-12 col-md-7">
-                <div class="text-overline text-weight-bold text-primary">
-                  {{ t('home.appOverline') }}
-                </div>
-                <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-                  {{ t('home.appTitle') }}
-                </div>
-
-                <q-list>
-                  <q-item v-for="item in appItems" :key="item.title">
-                    <q-item-section avatar>
-                      <q-icon :name="item.icon" color="primary" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label class="text-weight-medium">{{ item.title }}</q-item-label>
-                      <q-item-label caption>{{ item.description }}</q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      <q-chip dense color="green-1" text-color="primary">{{ item.chip }}</q-chip>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </div>
-            </div>
-          </q-card-section>
-
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-accent">
-              {{ t('home.problemOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.problemTitle') }}
-            </div>
-
-            <q-list>
-              <q-item v-for="problem in breedingProblems" :key="problem">
-                <q-item-section avatar>
-                  <q-icon name="warning_amber" color="accent" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ problem }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section  >
+      <q-card-section>
+        <div class="row items-center q-col-gutter-lg">
+          <div class="col-12 col-md-5">
+            <q-img :src="logoFull" :alt="t('brand.name')" fit="contain" no-spinner class="landing-hero-image" />
+          </div>
+          <div class="col-12 col-md-7">
             <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.featuresOverline') }}
+              {{ t('home.appOverline') }}
             </div>
             <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.featuresTitle') }}
-            </div>
-            <div class="text-body1 text-grey-7 q-mb-md">
-              {{ t('home.featuresDescription') }}
+              {{ t('home.appTitle') }}
             </div>
 
             <q-list>
-              <q-item v-for="feature in recordFeatures" :key="feature.label">
-                <q-item-section avatar>
-                  <q-icon :name="feature.icon" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ feature.label }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.howItWorksOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.howItWorksTitle') }}
-            </div>
-
-            <q-list>
-              <q-item v-for="step in fieldSteps" :key="step.step">
-                <q-item-section avatar>
-                  <q-avatar color="primary" text-color="white">{{ step.step }}</q-avatar>
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ step.label }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.offlineOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.offlineTitle') }}
-            </div>
-
-            <q-list>
-              <q-item v-for="item in offlineBenefits" :key="item.label">
+              <q-item v-for="item in appItems" :key="item.title">
                 <q-item-section avatar>
                   <q-icon :name="item.icon" color="primary" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ item.label }}</q-item-label>
+                  <q-item-label class="text-weight-medium">{{ item.title }}</q-item-label>
+                  <q-item-label caption>{{ item.description }}</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-chip dense color="green-1" text-color="primary">{{ item.chip }}</q-chip>
                 </q-item-section>
               </q-item>
             </q-list>
-          </q-card-section>
+          </div>
+        </div>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.premiumOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.premiumTitle') }}
-            </div>
-            <div class="text-body1 text-grey-7 q-mb-md">
-              {{ t('home.premiumDescription') }}
-            </div>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-accent">
+          {{ t('home.problemOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.problemTitle') }}
+        </div>
 
-            <q-list>
-              <q-item v-for="item in premiumItems" :key="item">
-                <q-item-section avatar>
-                  <q-icon name="workspace_premium" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>{{ item }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
+        <q-list>
+          <q-item v-for="problem in breedingProblems" :key="problem">
+            <q-item-section avatar>
+              <q-icon name="warning_amber" color="accent" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ problem }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.guidesOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.guidesTitle') }}
-            </div>
-            <div class="text-body1 text-grey-7 q-mb-md">
-              {{ t('home.guidesDescription') }}
-            </div>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.featuresOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.featuresTitle') }}
+        </div>
+        <div class="text-body1 text-grey-7 q-mb-md">
+          {{ t('home.featuresDescription') }}
+        </div>
 
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-4">
-                <q-card flat bordered>
-                  <q-card-section>
-                    <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
-                    <div class="text-body2 text-grey-7 q-mt-sm">
-                      {{ t('home.breedingGuideDescription') }}
-                    </div>
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      color="primary"
-                      icon="open_in_new"
-                      :label="t('home.openBreedingGuide')"
-                      :to="breedingGuidePath"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </div>
+        <q-list>
+          <q-item v-for="feature in recordFeatures" :key="feature.label">
+            <q-item-section avatar>
+              <q-icon :name="feature.icon" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ feature.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
 
-              <div class="col-12 col-md-4">
-                <q-card flat bordered>
-                  <q-card-section>
-                    <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
-                    <div class="text-body2 text-grey-7 q-mt-sm">
-                      {{ t('home.cowPregnancyGuideDescription') }}
-                    </div>
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      color="primary"
-                      icon="open_in_new"
-                      :label="t('home.openCowPregnancyGuide')"
-                      :to="cowPregnancyGuidePath"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </div>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.howItWorksOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.howItWorksTitle') }}
+        </div>
 
-              <div class="col-12 col-md-4">
-                <q-card flat bordered>
-                  <q-card-section>
-                    <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
-                    <div class="text-body2 text-grey-7 q-mt-sm">
-                      {{ t('home.lineageGuideDescription') }}
-                    </div>
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      flat
-                      color="primary"
-                      icon="open_in_new"
-                      :label="t('home.openLineageGuide')"
-                      :to="lineageGuidePath"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </div>
-            </div>
-          </q-card-section>
+        <q-list>
+          <q-item v-for="step in fieldSteps" :key="step.step">
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white">{{ step.step }}</q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ step.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-accent">
-              {{ t('home.faqOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.faqTitle') }}
-            </div>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.offlineOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.offlineTitle') }}
+        </div>
 
-            <q-list>
-              <q-item v-for="faq in faqs" :key="faq.question">
-                <q-item-section>
-                  <q-item-label class="text-weight-bold">{{ faq.question }}</q-item-label>
-                  <q-item-label caption class="text-grey-7">{{ faq.answer }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
+        <q-list>
+          <q-item v-for="item in offlineBenefits" :key="item.label">
+            <q-item-section avatar>
+              <q-icon :name="item.icon" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ item.label }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
 
-          <q-card-section  >
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.ctaOverline') }}
-            </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.ctaTitle') }}
-            </div>
-            <div class="row q-col-gutter-sm">
-              <div class="col-12 col-sm-auto">
-                <q-btn
-                  unelevated
-                  color="primary"
-                  :label="installButtonLabel"
-                  icon="download"
-                  :disable="isInstalled"
-                  @click="handleInstallClick"
-                />
-              </div>
-              <div class="col-12 col-sm-auto">
-                <q-btn
-                  outline
-                  color="primary"
-                  icon="dashboard"
-                  :label="t('home.openDashboard')"
-                  :to="dashboardPath"
-                />
-              </div>
-            </div>
-            <div class="text-caption text-grey-7 q-mt-sm">{{ t('common.noSignupRequired') }}</div>
-          </q-card-section>
-        </q-card>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.premiumOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.premiumTitle') }}
+        </div>
+        <div class="text-body1 text-grey-7 q-mb-md">
+          {{ t('home.premiumDescription') }}
+        </div>
+
+        <q-list>
+          <q-item v-for="item in premiumItems" :key="item">
+            <q-item-section avatar>
+              <q-icon name="workspace_premium" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ item }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.guidesOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.guidesTitle') }}
+        </div>
+        <div class="text-body1 text-grey-7 q-mb-md">
+          {{ t('home.guidesDescription') }}
+        </div>
+
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-md-4">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.breedingGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openBreedingGuide')"
+                  :to="breedingGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.cowPregnancyGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openCowPregnancyGuide')"
+                  :to="cowPregnancyGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.lineageGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openLineageGuide')"
+                  :to="lineageGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-accent">
+          {{ t('home.faqOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.faqTitle') }}
+        </div>
+
+        <q-list>
+          <q-item v-for="faq in faqs" :key="faq.question">
+            <q-item-section>
+              <q-item-label class="text-weight-bold">{{ faq.question }}</q-item-label>
+              <q-item-label caption class="text-grey-7">{{ faq.answer }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section class="q-mb-md">
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('home.ctaOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('home.ctaTitle') }}
+        </div>
+        <div class="row q-col-gutter-sm">
+          <div class="col-6 col-sm-auto">
+            <q-btn unelevated color="primary" :label="installButtonLabel" icon="download" :disable="isInstalled"
+              @click="handleInstallClick" />
+          </div>
+          <div class="col-6 col-sm-auto">
+            <q-btn outline color="primary" icon="dashboard" :label="t('common.openApp')" :to="dashboardPath" />
+          </div>
+        </div>
+        <div class="text-caption text-grey-7 q-mt-sm">{{ t('common.noSignupRequired') }}</div>
+      </q-card-section>
+
+      <GuideShareSection :title="t('brand.name')" :path="sharePath" message-prefix="homeShare" />
+    </q-card>
   </AppPageShell>
 </template>
 
@@ -335,6 +282,7 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideShareSection from 'src/components/GuideShareSection.vue'
 import logoFull from 'src/assets/logo-hero.webp'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
@@ -359,6 +307,7 @@ useMeta(() =>
 
 const dashboardPath = computed(() => '/')
 const tutorialPath = computed(() => '/tutorial')
+const sharePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
 const breedingGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )

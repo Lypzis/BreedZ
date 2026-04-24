@@ -177,6 +177,11 @@
           </q-item>
         </q-list>
       </q-card-section>
+
+      <GuideShareSection
+        :title="t('guideCowPregnancy.title')"
+        :path="sharePath"
+      />
     </q-card>
   </AppPageShell>
 </template>
@@ -186,6 +191,7 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideShareSection from 'src/components/GuideShareSection.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -209,6 +215,9 @@ useMeta(() =>
 const dashboardPath = computed(() => '/')
 const breedingDatesGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
+)
+const sharePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
 )
 const timelineItems = computed(() => tm('guideCowPregnancy.timelineItems') ?? [])
 const variationItems = computed(() => tm('guideCowPregnancy.variationItems') ?? [])
