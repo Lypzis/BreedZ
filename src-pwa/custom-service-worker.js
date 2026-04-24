@@ -37,11 +37,6 @@ cleanupOutdatedCaches()
 // When offline (or if the fetch fails), fall back to the cached offline shell.
 if (process.env.PROD) {
   registerRoute(
-    ({ request, url }) => request.mode === 'navigate' && url.pathname === APP_START_URL,
-    async () => matchPrecache(APP_START_URL) || matchPrecache(process.env.PWA_FALLBACK_HTML),
-  )
-
-  registerRoute(
     ({ request }) => request.mode === 'navigate',
     async ({ event }) => {
       try {
