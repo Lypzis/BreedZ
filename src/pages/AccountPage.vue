@@ -6,7 +6,7 @@
               <div class="text-overline text-weight-bold text-primary">{{ t('account.overline') }}</div>
               <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('account.title') }}</div>
               <div class="text-body1 text-grey-7">
-                {{ t('account.description') }}
+                {{ accountDescriptionLabel }}
               </div>
             </div>
           </q-card-section>
@@ -287,6 +287,10 @@ const authModeOptions = computed(() => [
   { label: t('account.signIn'), value: 'sign-in' },
   { label: t('account.createAccount'), value: 'sign-up' },
 ])
+
+const accountDescriptionLabel = computed(() =>
+  isSignedIn.value ? t('account.descriptionSignedIn') : t('account.description'),
+)
 
 const currentPlanLabel = computed(() =>
   isPremium.value ? t('account.planPremium') : t('account.planFree'),

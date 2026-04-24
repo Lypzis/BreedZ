@@ -20,6 +20,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         name: 'Bella',
         species: 'Cattle',
         breed: 'Nellore',
+        weight: '420',
         isBreeder: true,
         sex: 'female',
         baseStatus: 'active',
@@ -37,6 +38,7 @@ test('round-trips backup data through the Excel workbook format', () => {
         name: 'Ranger',
         species: 'Cattle',
         breed: 'Angus',
+        weight: '710.5',
         isBreeder: true,
         sex: 'male',
         baseStatus: 'active',
@@ -72,6 +74,7 @@ test('round-trips backup data through the Excel workbook format', () => {
   assert.equal(normalizedPayload.animals[0].isBreeder, true)
   assert.equal(normalizedPayload.animals[0].name, 'Bella')
   assert.equal(normalizedPayload.animals[0].breed, 'Nellore')
+  assert.equal(normalizedPayload.animals[0].weight, '420')
   assert.equal(normalizedPayload.animals[0].baseStatus, 'active')
   assert.equal(normalizedPayload.events.length, 1)
   assert.deepEqual(normalizedPayload.events[0].animalIds, ['animal-1', 'animal-2'])
