@@ -73,9 +73,25 @@
           </q-banner>
         </q-card-section>
 
+        <PagedListControls
+          v-if="filteredAnimals.length > 0"
+          :current-page="currentPage"
+          :list-mode="listMode"
+          :list-mode-options="listModeOptions"
+          :page-count="pageCount"
+          :page-size="pageSize"
+          :page-size-options="pageSizeOptions"
+          :per-page-label="t('common.perPage')"
+          :showing-text="pickerCountLabel"
+          :show-pagination="false"
+          @update:current-page="currentPage = $event"
+          @update:list-mode="listMode = $event"
+          @update:page-size="pageSize = $event"
+        />
+
         <q-list v-if="filteredAnimals.length > 0" separator>
           <q-item
-            v-for="animal in filteredAnimals"
+            v-for="animal in displayedAnimals"
             :key="animal.id"
             clickable
             @click="selectAnimal(animal)"
@@ -100,13 +116,30 @@
             {{ t('animalPicker.empty') }}
           </q-banner>
         </q-card-section>
+
+        <PagedListControls
+          v-if="filteredAnimals.length > 0"
+          :current-page="currentPage"
+          :list-mode="listMode"
+          :list-mode-options="listModeOptions"
+          :page-count="pageCount"
+          :page-size="pageSize"
+          :page-size-options="pageSizeOptions"
+          :per-page-label="t('common.perPage')"
+          :showing-text="pickerCountLabel"
+          :show-header="false"
+          @update:current-page="currentPage = $event"
+          @update:list-mode="listMode = $event"
+          @update:page-size="pageSize = $event"
+        />
       </q-card>
     </q-dialog>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import PagedListControls from 'src/components/PagedListControls.vue'
 import { useI18nText } from 'src/i18n'
 import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { filterAnimalCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
@@ -144,6 +177,14 @@ const { t } = useI18nText()
 
 const isPickerOpen = ref(false)
 const searchTerm = ref('')
+const currentPage = ref(1)
+const listMode = ref('paged')
+const pageSize = ref(5)
+const pageSizeOptions = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '25', value: 25 },
+]
 
 const selectedAnimal = computed(() =>
   props.animals.find((animal) => animal.id === props.modelValue) ?? null,
@@ -159,6 +200,20 @@ const filteredAnimals = computed(() =>
     animals: props.animals,
     query: searchTerm.value,
   }),
+)
+const listModeOptions = computed(() => [
+  { label: t('common.pages'), value: 'paged' },
+  { label: t('common.viewAll'), value: 'all' },
+])
+const pageCount = computed(() =>
+  Math.max(1, Math.ceil(filteredAnimals.value.length / pageSize.value)),
+)
+const paginatedAnimals = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return filteredAnimals.value.slice(start, start + pageSize.value)
+})
+const displayedAnimals = computed(() =>
+  listMode.value === 'paged' ? paginatedAnimals.value : filteredAnimals.value,
 )
 const pickerCountLabel = computed(() =>
   filteredAnimals.value.length === 1
@@ -179,6 +234,7 @@ function sexLabel(sex) {
 }
 
 function openPicker() {
+  currentPage.value = 1
   isPickerOpen.value = true
 }
 
@@ -190,7 +246,18 @@ function selectAnimal(animal) {
   emit('update:modelValue', animal.id)
   isPickerOpen.value = false
   searchTerm.value = ''
+  currentPage.value = 1
 }
+
+watch(filteredAnimals, () => {
+  if (currentPage.value > pageCount.value) {
+    currentPage.value = pageCount.value
+  }
+})
+
+watch(searchTerm, () => {
+  currentPage.value = 1
+})
 </script>
 
 <style scoped>

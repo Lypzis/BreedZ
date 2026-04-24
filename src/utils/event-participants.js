@@ -51,10 +51,7 @@ export function buildEventAnimalIds({
   const selectionMode = getEventSelectionMode(type)
 
   if (selectionMode === 'optionalMulti') {
-    return uniqueIds([
-      fixedAnimalId,
-      ...animalIds,
-    ])
+    return uniqueIds(animalIds)
   }
 
   if (selectionMode === 'breeding') {
@@ -65,10 +62,7 @@ export function buildEventAnimalIds({
     return uniqueIds([fixedAnimalId || animalId])
   }
 
-  return uniqueIds([
-    fixedAnimalId,
-    ...animalIds,
-  ])
+  return uniqueIds(animalIds)
 }
 
 export function getEventAmountLabelKey(type) {

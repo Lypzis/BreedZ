@@ -180,12 +180,7 @@ function defaultEventForm() {
 
 function getEventAnimalIdsForForm(event) {
   const animalIds = event?.animalIds ?? (event?.animalId ? [event.animalId] : [])
-
-  if (!hasFixedAnimal.value) {
-    return animalIds
-  }
-
-  return animalIds.filter((id) => id !== props.fixedAnimalId)
+  return animalIds
 }
 
 function syncForm() {
@@ -207,7 +202,7 @@ function syncForm() {
     Object.assign(eventForm, {
       ...defaultEventForm(),
       animalId: hasFixedAnimal.value ? props.fixedAnimalId : defaultAnimalId,
-      animalIds: [],
+      animalIds: hasFixedAnimal.value ? [props.fixedAnimalId] : [],
     })
   }
 
@@ -292,7 +287,7 @@ function buildSelectableEventAnimals(selectedIds = []) {
   return [
     ...selectedAnimals,
     ...activeAnimalsForEvents.value.filter((animal) =>
-      animal.id !== props.fixedAnimalId && !selectedIds.includes(animal.id),
+      !selectedIds.includes(animal.id),
     ),
   ]
 }
@@ -341,9 +336,7 @@ watch(
     }
 
     if (getEventSelectionMode(value) === 'multi' || getEventSelectionMode(value) === 'optionalMulti') {
-      eventForm.animalIds = hasFixedAnimal.value
-        ? currentAnimalIds.filter((id) => id !== props.fixedAnimalId)
-        : currentAnimalIds
+      eventForm.animalIds = currentAnimalIds
       eventForm.animalId = eventForm.animalIds[0] ?? (hasFixedAnimal.value ? props.fixedAnimalId : '')
       return
     }

@@ -1,13 +1,7 @@
 <template>
   <AppPageShell>
     <div class="q-mb-md">
-      <q-btn
-        flat
-        color="primary"
-        icon="arrow_back"
-        :label="backLinkLabel"
-        :to="backLinkTarget"
-      />
+      <q-btn flat color="primary" icon="arrow_back" :label="backLinkLabel" :to="backLinkTarget" />
     </div>
 
     <q-card flat>
@@ -27,11 +21,7 @@
       </q-card-section>
 
       <template v-else>
-        <DetailHeader
-          :title="eventMeta.label"
-          :avatar-color="eventMeta.color"
-          :avatar-icon="eventMeta.icon"
-        >
+        <DetailHeader :title="eventMeta.label" :avatar-color="eventMeta.color" :avatar-icon="eventMeta.icon">
           <template #chips>
             <div class="col-auto">
               <q-chip square color="green-1" text-color="primary" icon="event">
@@ -51,20 +41,9 @@
           </template>
 
           <template #actions>
-            <q-btn
-              unelevated
-              color="primary"
-              icon="edit"
-              :label="t('events.editEvent')"
-              @click="openEditDialog"
-            />
-            <q-btn
-              outline
-              color="negative"
-              icon="delete"
-              :label="t('events.deleteEvent')"
-              @click="confirmDeleteEvent"
-            />
+            <q-btn unelevated color="primary" icon="edit" :label="t('events.editEvent')" @click="openEditDialog" />
+            <q-btn outline color="negative" icon="delete" :label="t('events.deleteEvent')"
+              @click="confirmDeleteEvent" />
           </template>
         </DetailHeader>
 
@@ -74,9 +53,9 @@
           </q-banner>
         </q-card-section>
 
-        <q-card-section class="q-pb-none" >
-            <div class="text-overline text-weight-bold text-accent">{{ t('animals.overline') }}</div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('events.affectedAnimals') }}</div>
+        <q-card-section class="q-pb-none">
+          <div class="text-overline text-weight-bold text-accent">{{ t('animals.overline') }}</div>
+          <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('events.affectedAnimals') }}</div>
         </q-card-section>
 
         <q-card-section v-if="event.scope === 'herd' && affectedAnimals.length === 0" class="q-pt-none">
@@ -88,30 +67,18 @@
           </q-banner>
         </q-card-section>
 
-        <PagedListControls
-          v-else
-          :current-page="affectedAnimalsPage"
-          :list-mode="affectedAnimalsListMode"
-          :list-mode-options="listModeOptions"
-          :page-count="affectedAnimalsPageCount"
-          :page-size="affectedAnimalsPageSize"
-          :page-size-options="pageSizeOptions"
+        <PagedListControls v-else :current-page="affectedAnimalsPage" :list-mode="affectedAnimalsListMode"
+          :list-mode-options="listModeOptions" :page-count="affectedAnimalsPageCount"
+          :page-size="affectedAnimalsPageSize" :page-size-options="pageSizeOptions"
           :per-page-label="t('common.perPage')"
           :showing-text="t('events.showingCount', { shown: displayedAffectedAnimalsCount, total: affectedAnimals.length })"
-          :show-pagination="false"
-          @update:current-page="affectedAnimalsPage = $event"
-          @update:list-mode="affectedAnimalsListMode = $event"
-          @update:page-size="affectedAnimalsPageSize = $event"
-        />
+          :show-pagination="false" @update:current-page="affectedAnimalsPage = $event"
+          @update:list-mode="affectedAnimalsListMode = $event" @update:page-size="affectedAnimalsPageSize = $event" />
 
         <q-list v-if="!(event.scope === 'herd' && affectedAnimals.length === 0)" separator>
           <template v-for="{ id, animal } in displayedAffectedAnimals" :key="id">
-            <AnimalListItem
-              v-if="animal"
-              :animal="animal"
-              :detail-target="{ path: `/animals/${id}`, query: { from: 'events' } }"
-              @open="openAnimalDetail"
-            />
+            <AnimalListItem v-if="animal" :animal="animal"
+              :detail-target="{ path: `/animals/${id}`, query: { from: 'events' } }" @open="openAnimalDetail" />
             <q-item v-else>
               <q-item-section avatar>
                 <q-avatar color="primary" text-color="white" icon="pets" />
@@ -129,23 +96,15 @@
           </template>
         </q-list>
 
-        <PagedListControls
-          v-if="!(event.scope === 'herd' && affectedAnimals.length === 0)"
-          :current-page="affectedAnimalsPage"
-          :list-mode="affectedAnimalsListMode"
-          :list-mode-options="listModeOptions"
-          :page-count="affectedAnimalsPageCount"
-          :page-size="affectedAnimalsPageSize"
-          :page-size-options="pageSizeOptions"
-          :per-page-label="t('common.perPage')"
-          :show-header="false"
+        <PagedListControls v-if="!(event.scope === 'herd' && affectedAnimals.length === 0)"
+          :current-page="affectedAnimalsPage" :list-mode="affectedAnimalsListMode" :list-mode-options="listModeOptions"
+          :page-count="affectedAnimalsPageCount" :page-size="affectedAnimalsPageSize"
+          :page-size-options="pageSizeOptions" :per-page-label="t('common.perPage')" :show-header="false"
           :showing-text="t('events.showingCount', { shown: displayedAffectedAnimalsCount, total: affectedAnimals.length })"
-          @update:current-page="affectedAnimalsPage = $event"
-          @update:list-mode="affectedAnimalsListMode = $event"
-          @update:page-size="affectedAnimalsPageSize = $event"
-        />
+          @update:current-page="affectedAnimalsPage = $event" @update:list-mode="affectedAnimalsListMode = $event"
+          @update:page-size="affectedAnimalsPageSize = $event" />
 
-        <q-card-section v-if="event.notes" class="q-pt-none">
+        <q-card-section v-if="event.notes">
           <q-banner rounded class="bg-grey-1 text-grey-8">
             <template #avatar>
               <q-icon name="notes" color="primary" />
@@ -156,14 +115,8 @@
       </template>
     </q-card>
 
-    <EventFormDialog
-      v-model="isEventDialogOpen"
-      :animals="animals"
-      :event="event"
-      mode="edit"
-      :title="t('events.editEvent')"
-      @submit="submitEvent"
-    />
+    <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :event="event" mode="edit"
+      :title="t('events.editEvent')" @submit="submitEvent" />
   </AppPageShell>
 </template>
 

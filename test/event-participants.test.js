@@ -41,14 +41,32 @@ test('builds single, breeding, and multi event animal ids correctly', () => {
   )
 })
 
-test('builds animal ids with a fixed animal for animal detail flows', () => {
+test('fixed animal is not silently injected into multi-animal event ids', () => {
   assert.deepEqual(
     buildEventAnimalIds({
       type: 'vaccination',
       animalIds: ['animal-2'],
       fixedAnimalId: 'animal-1',
     }),
+    ['animal-2'],
+  )
+
+  assert.deepEqual(
+    buildEventAnimalIds({
+      type: 'vaccination',
+      animalIds: ['animal-1', 'animal-2'],
+      fixedAnimalId: 'animal-1',
+    }),
     ['animal-1', 'animal-2'],
+  )
+
+  assert.deepEqual(
+    buildEventAnimalIds({
+      type: 'feed_cost',
+      animalIds: [],
+      fixedAnimalId: 'animal-1',
+    }),
+    [],
   )
 })
 
