@@ -15,6 +15,7 @@ function normalizeStatusValue(value) {
 function normalizeStoredAnimal(animal) {
   return {
     ...animal,
+    weight: typeof animal?.weight === 'string' ? animal.weight.trim() : '',
     isBreeder: normalizeAnimalBreeder(animal?.isBreeder, animal?.purpose),
     baseStatus: normalizeStatusValue(animal?.baseStatus ?? animal?.status),
     status: normalizeStatusValue(animal?.status ?? animal?.baseStatus),
@@ -47,6 +48,7 @@ export function buildAnimalRecord(input, options = {}) {
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
     breed: normalizeBreedLabel(input.breed),
+    weight: input.weight?.trim() ?? '',
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',
@@ -81,6 +83,7 @@ export async function updateAnimal(id, input) {
     name: input.name?.trim() ?? '',
     species: normalizeSpeciesLabel(input.species),
     breed: normalizeBreedLabel(input.breed),
+    weight: input.weight?.trim() ?? '',
     isBreeder: normalizeAnimalBreeder(input.isBreeder, input.purpose),
     sex: input.sex ?? 'unknown',
     birthDate: input.birthDate ?? '',

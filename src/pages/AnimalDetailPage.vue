@@ -51,6 +51,11 @@
                 {{ sexLabel(animal.sex) }}
               </q-chip>
             </div>
+            <div class="col-auto" v-if="animal.weight">
+              <q-chip square color="green-1" text-color="primary" icon="scale">
+                {{ weightChipLabel(animal.weight) }}
+              </q-chip>
+            </div>
             <div class="col-auto">
               <q-chip square color="green-1" text-color="primary" icon="event" class="detail-wrap-chip">
                 {{ birthChipLabel(animal.birthDate) }}
@@ -365,10 +370,12 @@ import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
+import { useSettingsStore } from 'src/stores/settings-store'
 import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { groupBreedingsByPartner } from 'src/utils/breeding-history'
 import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
 import { formatAnimalSex } from 'src/utils/parent-candidates'
+import { formatStoredWeightForDisplay } from 'src/utils/weight'
 
 const $q = useQuasar()
 const { t } = useI18nText()
@@ -377,10 +384,12 @@ const router = useRouter()
 const animalsStore = useAnimalsStore()
 const authStore = useAuthStore()
 const eventsStore = useEventsStore()
+const settingsStore = useSettingsStore()
 
 const { animals, errorMessage: animalsErrorMessage, isLoading: animalsLoading } = storeToRefs(animalsStore)
 const { isPremium } = storeToRefs(authStore)
 const { errorMessage: eventsErrorMessage, isLoading: eventsLoading, events } = storeToRefs(eventsStore)
+const { weightUnit } = storeToRefs(settingsStore)
 
 const isAnimalDialogOpen = ref(false)
 const isEventDialogOpen = ref(false)
@@ -665,6 +674,10 @@ function openEventDetail(event) {
 
 function sexLabel(sex) {
   return formatAnimalSex(sex)
+}
+
+function weightChipLabel(weight) {
+  return formatStoredWeightForDisplay(weight, weightUnit.value)
 }
 
 function formatDate(value) {

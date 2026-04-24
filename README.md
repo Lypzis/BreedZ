@@ -346,9 +346,9 @@ Why:
 - It can support sale context, management decisions, and future reporting.
 
 Suggested first scope:
-- [ ] Add optional `weight` to the animal form
-- [ ] Persist `weight` in local storage and backup/import flows
-- [ ] Show `weight` on animal detail
+- [x] Add optional `weight` to the animal form
+- [x] Persist `weight` in local storage and backup/import flows
+- [x] Show `weight` on animal detail
 - [ ] Reevaluate later whether we also want `weightUpdatedAt` or weight history/events
 
 ### Spanish Rollout

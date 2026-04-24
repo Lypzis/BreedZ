@@ -10,6 +10,7 @@ const ANIMAL_COLUMNS = [
   ['name', 'Name'],
   ['species', 'Species'],
   ['breed', 'Breed'],
+  ['weight', 'Weight (kg)'],
   ['sex', 'Sex'],
   ['baseStatus', 'Base Status'],
   ['status', 'Status'],

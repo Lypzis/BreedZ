@@ -62,6 +62,16 @@
             @new-value="createBreedValue"
             @blur="commitBreedInput"
           />
+          <q-input
+            v-model="form.weight"
+            outlined
+            type="number"
+            step="0.1"
+            inputmode="decimal"
+            :label="t('animalForm.weight')"
+            :placeholder="weightPlaceholder"
+            :suffix="weightUnit"
+          />
           <q-select v-model="form.sex" outlined :label="t('animalForm.sex')" :options="sexOptions" emit-value map-options />
           <q-input v-model="form.birthDate" outlined type="date" :label="t('animalForm.birthDate')" />
           <q-select
@@ -234,11 +244,14 @@
 
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useI18nText } from 'src/i18n'
+import { useSettingsStore } from 'src/stores/settings-store'
 import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { filterParentCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
 import { normalizeBreedLabel, normalizeSpeciesLabel } from 'src/utils/species'
+import { convertInputWeightToStored, convertStoredWeightToUnit } from 'src/utils/weight'
 
 const props = defineProps({
   modelValue: {
@@ -263,6 +276,8 @@ const emit = defineEmits(['submit', 'update:modelValue'])
 
 const $q = useQuasar()
 const { t } = useI18nText()
+const settingsStore = useSettingsStore()
+const { weightUnit } = storeToRefs(settingsStore)
 
 const isParentPickerOpen = ref(false)
 const parentPickerType = ref('dam')
@@ -337,6 +352,7 @@ const parentCandidates = computed(() =>
     query: parentSearchTerm.value,
   }),
 )
+const weightPlaceholder = computed(() => (weightUnit.value === 'lb' ? '925' : t('animalForm.weightPlaceholder')))
 
 watch(
   () => [props.modelValue, props.animal],
@@ -385,6 +401,7 @@ function defaultForm() {
     name: '',
     species: '',
     breed: '',
+    weight: '',
     isBreeder: false,
     sex: 'unknown',
     birthDate: '',
@@ -405,6 +422,7 @@ function loadForm() {
           name: props.animal.name,
           species: props.animal.species,
           breed: props.animal.breed ?? '',
+          weight: convertStoredWeightToUnit(props.animal.weight ?? '', weightUnit.value),
           isBreeder: props.animal.isBreeder === true,
           sex: props.animal.sex ?? 'unknown',
           birthDate: props.animal.birthDate,
@@ -528,7 +546,10 @@ async function submitForm() {
     return
   }
 
-  emit('submit', { ...form })
+  emit('submit', {
+    ...form,
+    weight: convertInputWeightToStored(form.weight, weightUnit.value),
+  })
 }
 
 function animalDisplayName(animal) {
