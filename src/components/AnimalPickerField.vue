@@ -34,7 +34,7 @@
     </q-input>
 
     <q-dialog v-model="isPickerOpen">
-      <q-card style="width: 100%; max-width: 640px">
+      <q-card class="app-dialog-card" style="width: 100%; max-width: 640px">
         <q-card-section class="row items-center justify-between">
           <div>
             <div class="text-overline text-weight-bold text-primary">{{ t('animalPicker.overline') }}</div>
@@ -51,7 +51,7 @@
           />
         </q-card-section>
 
-        <q-card-section class="q-pt-none">
+        <q-card-section class="app-dialog-card__body q-pt-none">
           <q-input
             v-model="searchTerm"
             outlined
@@ -71,67 +71,66 @@
             </template>
             {{ pickerCountLabel }}
           </q-banner>
+          <PagedListControls
+            v-if="filteredAnimals.length > 0"
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="pickerCountLabel"
+            :show-pagination="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
+
+          <q-list v-if="filteredAnimals.length > 0" separator>
+            <q-item
+              v-for="animal in displayedAnimals"
+              :key="animal.id"
+              clickable
+              @click="selectAnimal(animal)"
+            >
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white" icon="pets" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
+                <q-item-label caption>
+                  {{ animalSpeciesBreed(animal) }} • {{ sexLabel(animal.sex) }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+
+          <q-card-section v-else class="q-pt-none">
+            <q-banner rounded class="bg-grey-1 text-grey-8">
+              <template #avatar>
+                <q-icon name="search_off" color="primary" />
+              </template>
+              {{ t('animalPicker.empty') }}
+            </q-banner>
+          </q-card-section>
+
+          <PagedListControls
+            v-if="filteredAnimals.length > 0"
+            :current-page="currentPage"
+            :list-mode="listMode"
+            :list-mode-options="listModeOptions"
+            :page-count="pageCount"
+            :page-size="pageSize"
+            :page-size-options="pageSizeOptions"
+            :per-page-label="t('common.perPage')"
+            :showing-text="pickerCountLabel"
+            :show-header="false"
+            @update:current-page="currentPage = $event"
+            @update:list-mode="listMode = $event"
+            @update:page-size="pageSize = $event"
+          />
         </q-card-section>
-
-        <PagedListControls
-          v-if="filteredAnimals.length > 0"
-          :current-page="currentPage"
-          :list-mode="listMode"
-          :list-mode-options="listModeOptions"
-          :page-count="pageCount"
-          :page-size="pageSize"
-          :page-size-options="pageSizeOptions"
-          :per-page-label="t('common.perPage')"
-          :showing-text="pickerCountLabel"
-          :show-pagination="false"
-          @update:current-page="currentPage = $event"
-          @update:list-mode="listMode = $event"
-          @update:page-size="pageSize = $event"
-        />
-
-        <q-list v-if="filteredAnimals.length > 0" separator>
-          <q-item
-            v-for="animal in displayedAnimals"
-            :key="animal.id"
-            clickable
-            @click="selectAnimal(animal)"
-          >
-            <q-item-section avatar>
-              <q-avatar color="primary" text-color="white" icon="pets" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="text-weight-medium">{{ animalDisplayName(animal) }}</q-item-label>
-              <q-item-label caption>
-                {{ animalSpeciesBreed(animal) }} • {{ sexLabel(animal.sex) }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-
-        <q-card-section v-else class="q-pt-none">
-          <q-banner rounded class="bg-grey-1 text-grey-8">
-            <template #avatar>
-              <q-icon name="search_off" color="primary" />
-            </template>
-            {{ t('animalPicker.empty') }}
-          </q-banner>
-        </q-card-section>
-
-        <PagedListControls
-          v-if="filteredAnimals.length > 0"
-          :current-page="currentPage"
-          :list-mode="listMode"
-          :list-mode-options="listModeOptions"
-          :page-count="pageCount"
-          :page-size="pageSize"
-          :page-size-options="pageSizeOptions"
-          :per-page-label="t('common.perPage')"
-          :showing-text="pickerCountLabel"
-          :show-header="false"
-          @update:current-page="currentPage = $event"
-          @update:list-mode="listMode = $event"
-          @update:page-size="pageSize = $event"
-        />
       </q-card>
     </q-dialog>
   </div>

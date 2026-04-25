@@ -1,6 +1,6 @@
 <template>
   <q-dialog :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)">
-    <q-card style="width: 100%; max-width: 760px">
+    <q-card class="app-dialog-card" style="width: 100%; max-width: 760px">
       <q-card-section class="row items-center justify-between">
         <div>
           <div class="text-overline text-weight-bold text-primary">{{ t('events.purchaseDialogOverline') }}</div>
@@ -17,8 +17,8 @@
         />
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        <q-form class="column q-gutter-md" @submit.prevent="submitForm">
+      <q-card-section class="app-dialog-card__body q-pt-none">
+        <q-form id="purchase-event-dialog" class="column q-gutter-md" @submit.prevent="submitForm">
           
             <div >
               <q-input v-model="form.date" outlined type="date" :label="t('events.eventDate')" />
@@ -133,12 +133,19 @@
             {{ purchaseSummary }}
           </q-banner>
 
-          <div class="row justify-end q-gutter-sm">
-            <q-btn flat color="grey-7" :label="t('common.cancel')" @click="closeDialog" />
-            <q-btn unelevated color="primary" :label="t('events.purchaseSave')" type="submit" />
-          </div>
         </q-form>
       </q-card-section>
+
+      <q-card-actions align="right" class="app-dialog-card__actions">
+        <q-btn flat color="grey-7" :label="t('common.cancel')" @click="closeDialog" />
+        <q-btn
+          unelevated
+          color="primary"
+          :label="t('events.purchaseSave')"
+          type="submit"
+          form="purchase-event-dialog"
+        />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
