@@ -34,7 +34,7 @@
     </q-input>
 
     <q-dialog v-model="isPickerOpen">
-      <q-card style="width: 100%; max-width: 640px">
+      <q-card class="app-dialog-card" style="width: 100%; max-width: 640px">
         <q-card-section class="row items-center justify-between">
           <div>
             <div class="text-overline text-weight-bold text-primary">{{ t('animalPicker.overline') }}</div>
@@ -51,7 +51,7 @@
           />
         </q-card-section>
 
-        <q-card-section class="q-pt-none">
+        <q-card-section class="app-dialog-card__body q-pt-none">
           <q-input
             v-model="searchTerm"
             outlined
@@ -138,7 +138,7 @@
           @update:page-size="pageSize = $event"
         />
 
-        <q-card-actions align="right">
+        <q-card-actions align="right" class="app-dialog-card__actions">
           <q-btn flat color="grey-7" :label="t('common.cancel')" @click="closePicker" />
           <q-btn unelevated color="primary" :label="t('common.save')" @click="saveSelection" />
         </q-card-actions>
