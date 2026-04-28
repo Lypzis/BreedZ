@@ -1,7 +1,7 @@
 <template>
   <AppPageShell>
     <div class="q-mb-md">
-      <q-btn flat color="primary" icon="arrow_back" :label="backLinkLabel" :to="backLinkTarget" />
+      <q-btn flat color="primary" icon="arrow_back" :label="backLinkLabel" @click="navigateBack" />
     </div>
 
     <q-card flat>
@@ -130,6 +130,7 @@ import AnimalListItem from 'src/components/AnimalListItem.vue'
 import DetailHeader from 'src/components/DetailHeader.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
+import { useHistoryAwareBack } from 'src/composables/useHistoryBack'
 import { getEventTypeMeta } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
@@ -201,7 +202,7 @@ const backLinkTarget = computed(() => {
   return '/events'
 })
 
-const backLinkLabel = computed(() => {
+const fallbackBackLinkLabel = computed(() => {
   const from = String(route.query.from ?? '')
 
   if (from === 'dashboard') {
@@ -214,6 +215,14 @@ const backLinkLabel = computed(() => {
 
   return t('events.backToEvents')
 })
+const { backLabel: historyBackLabel, navigateBack } = useHistoryAwareBack({
+  route,
+  router,
+  fallbackTarget: backLinkTarget,
+  fallbackLabel: fallbackBackLinkLabel,
+  genericLabel: computed(() => t('common.back')),
+})
+const backLinkLabel = historyBackLabel
 
 function animalById(id) {
   return animalsStore.getAnimalById(id)
@@ -285,7 +294,7 @@ function confirmDeleteEvent() {
         message: t('events.eventRemoved'),
         position: 'top',
       })
-      await router.push(backLinkTarget.value)
+      await navigateBack()
     } catch (error) {
       $q.notify({
         color: 'negative',

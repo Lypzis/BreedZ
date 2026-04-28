@@ -3,7 +3,7 @@
     <div class="q-mb-md">
       <div class="row items-center justify-between q-col-gutter-sm">
         <div class="col-auto">
-          <q-btn flat color="primary" icon="arrow_back" :label="backLinkLabel" :to="backLinkTarget" />
+          <q-btn flat color="primary" icon="arrow_back" :label="backLinkLabel" @click="navigateBack" />
         </div>
       </div>
     </div>
@@ -91,45 +91,55 @@
 
           <div class="row q-col-gutter-md">
             <div class="col-12 col-md-6">
-              <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer" @click="openParentPickerDialog('dam')">
-                <div class="row items-start no-wrap q-col-gutter-sm">
-                  <div class="col-auto">
-                    <q-icon name="female" color="primary" size="md" />
-                  </div>
-                  <div class="col">
-                    <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.damTitle') }}</div>
-                    <div v-if="damAnimal" class="q-mt-xs">
-                      {{ animalDisplayName(damAnimal) }}
+              <div class="row items-stretch no-wrap q-col-gutter-sm">
+                <div class="col">
+                  <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer"
+                    @click="openParentPickerDialog('dam')">
+                    <div class="row items-start no-wrap q-col-gutter-sm">
+                      <div class="col-auto">
+                        <q-icon name="female" color="primary" size="md" />
+                      </div>
+                      <div class="col">
+                        <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.damTitle') }}</div>
+                        <div v-if="damAnimal" class="q-mt-xs">
+                          {{ animalDisplayName(damAnimal) }}
+                        </div>
+                        <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
+                      </div>
                     </div>
-                    <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
-                  </div>
-                  <div v-if="damAnimal" class="col-auto">
-                    <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
-                      :title="t('animalDetail.openParent')" :to="`/animals/${damAnimal.id}`" @click.stop />
-                  </div>
+                  </q-banner>
                 </div>
-              </q-banner>
+                <div v-if="damAnimal" class="col-auto self-center">
+                  <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
+                    :title="t('animalDetail.openParent')" :to="`/animals/${damAnimal.id}`" />
+                </div>
+              </div>
             </div>
 
             <div class="col-12 col-md-6">
-              <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer" @click="openParentPickerDialog('sire')">
-                <div class="row items-start no-wrap q-col-gutter-sm">
-                  <div class="col-auto">
-                    <q-icon name="male" color="primary" size="md" />
-                  </div>
-                  <div class="col">
-                    <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.sireTitle') }}</div>
-                    <div v-if="sireAnimal" class="q-mt-xs">
-                      {{ animalDisplayName(sireAnimal) }}
+              <div class="row items-stretch no-wrap q-col-gutter-sm">
+                <div class="col">
+                  <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer"
+                    @click="openParentPickerDialog('sire')">
+                    <div class="row items-start no-wrap q-col-gutter-sm">
+                      <div class="col-auto">
+                        <q-icon name="male" color="primary" size="md" />
+                      </div>
+                      <div class="col">
+                        <div class="text-subtitle2 text-weight-bold">{{ t('animalDetail.sireTitle') }}</div>
+                        <div v-if="sireAnimal" class="q-mt-xs">
+                          {{ animalDisplayName(sireAnimal) }}
+                        </div>
+                        <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
+                      </div>
                     </div>
-                    <div v-else class="q-mt-xs">{{ t('animalDetail.notLinkedYet') }}</div>
-                  </div>
-                  <div v-if="sireAnimal" class="col-auto">
-                    <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
-                      :title="t('animalDetail.openParent')" :to="`/animals/${sireAnimal.id}`" @click.stop />
-                  </div>
+                  </q-banner>
                 </div>
-              </q-banner>
+                <div v-if="sireAnimal" class="col-auto self-center">
+                  <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
+                    :title="t('animalDetail.openParent')" :to="`/animals/${sireAnimal.id}`" />
+                </div>
+              </div>
             </div>
           </div>
         </q-card-section>
@@ -154,9 +164,10 @@
 
           <div v-if="breedingGroups.length > 0" class="column q-gutter-md">
             <q-banner v-for="group in displayedBreedingGroups" :key="group.partnerAnimalId" rounded
-              class="bg-grey-1 text-grey-8">
+              class="bg-grey-1 text-grey-8 breeding-partner-banner" :class="{ 'cursor-pointer': group.partnerAnimal }"
+              @click="openBreedingPartner(group)">
               <div class="row items-start no-wrap q-col-gutter-sm">
-                <div class="col-auto">
+                <div class="col-auto self-center">
                   <q-avatar color="primary" text-color="white" icon="favorite" />
                 </div>
 
@@ -175,21 +186,22 @@
                   </div>
                 </div>
 
-                <div v-if="group.partnerAnimal" class="col-auto">
+                <div v-if="group.partnerAnimal" class="col-auto self-center">
                   <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('common.view')"
-                    :title="t('common.view')" :to="`/animals/${group.partnerAnimal.id}`" />
+                    :title="t('common.view')" :to="`/animals/${group.partnerAnimal.id}`" @click.stop />
                 </div>
               </div>
 
               <q-card v-if="group.offspringAnimals.length > 0" flat bordered class="bg-white q-mt-md">
-                <q-card-section class="q-pb-sm">
+                <q-card-section class="q-pb-sm" @click.stop>
                   <div class="text-caption text-weight-medium text-primary">
                     {{ t('animalDetail.breedingOffspringTitle') }}
                   </div>
                 </q-card-section>
 
-                <q-list separator>
-                  <q-item v-for="child in previewBreedingOffspring(group)" :key="child.id">
+                <q-list separator @click.stop>
+                  <q-item v-for="child in previewBreedingOffspring(group)" :key="child.id" clickable
+                    @click.stop="openAnimalDetail(child)">
                     <q-item-section avatar>
                       <q-avatar color="secondary" text-color="white" icon="child_friendly" />
                     </q-item-section>
@@ -206,12 +218,12 @@
 
                     <q-item-section side>
                       <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('common.view')"
-                        :title="t('common.view')" :to="`/animals/${child.id}`" />
+                        :title="t('common.view')" :to="`/animals/${child.id}`" @click.stop />
                     </q-item-section>
                   </q-item>
                 </q-list>
 
-                <q-card-actions v-if="group.offspringAnimals.length > breedingOffspringPreviewSize" align="right">
+                <q-card-actions v-if="group.offspringAnimals.length > breedingOffspringPreviewSize" align="right" @click.stop>
                   <q-btn flat color="primary"
                     :label="t('animalDetail.showMoreBreedingOffspring', { count: group.offspringAnimals.length })"
                     @click="openBreedingOffspringDialog(group)" />
@@ -446,6 +458,7 @@ import EventFormDialog from 'src/components/EventFormDialog.vue'
 import EventListItem from 'src/components/EventListItem.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
 import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
+import { useHistoryAwareBack } from 'src/composables/useHistoryBack'
 import { getEventTypeMeta } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
@@ -613,7 +626,7 @@ const backLinkTarget = computed(() => {
 
   return '/animals'
 })
-const backLinkLabel = computed(() => {
+const fallbackBackLinkLabel = computed(() => {
   const from = String(route.query.from ?? '')
 
   if (from === 'dashboard') {
@@ -626,6 +639,14 @@ const backLinkLabel = computed(() => {
 
   return t('animalDetail.backToAnimals')
 })
+const { backLabel: historyBackLabel, navigateBack } = useHistoryAwareBack({
+  route,
+  router,
+  fallbackTarget: backLinkTarget,
+  fallbackLabel: fallbackBackLinkLabel,
+  genericLabel: computed(() => t('common.back')),
+})
+const backLinkLabel = historyBackLabel
 
 function openEventDialog() {
   if (animal.value?.status !== 'active') {
@@ -847,6 +868,22 @@ function openEventDetail(event) {
   void router.push(eventDetailTarget(event))
 }
 
+function openAnimalDetail(currentAnimal) {
+  if (!currentAnimal?.id) {
+    return
+  }
+
+  void router.push(`/animals/${currentAnimal.id}`)
+}
+
+function openBreedingPartner(group) {
+  if (!group?.partnerAnimal) {
+    return
+  }
+
+  void router.push(`/animals/${group.partnerAnimal.id}`)
+}
+
 function sexLabel(sex) {
   return formatAnimalSex(sex)
 }
@@ -954,6 +991,14 @@ onMounted(async () => {
 
 .parent-record-banner:hover {
   background-color: rgba(61, 111, 63, 0.08);
+}
+
+.breeding-partner-banner {
+  transition: background-color 0.15s ease;
+}
+
+.breeding-partner-banner:hover {
+  background-color: rgba(61, 111, 63, 0.06);
 }
 </style>
 
