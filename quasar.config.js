@@ -2,6 +2,30 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app/wrappers'
+import { execSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+
+function readPackageVersion() {
+  try {
+    const packageJson = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
+    return typeof packageJson.version === 'string' ? packageJson.version : '0.0.0'
+  } catch {
+    return '0.0.0'
+  }
+}
+
+function readGitValue(command, fallback = '') {
+  try {
+    return execSync(command, { encoding: 'utf8' }).trim() || fallback
+  } catch {
+    return fallback
+  }
+}
+
+const appVersion = readPackageVersion()
+const appBuildNumber = readGitValue('git rev-list --count HEAD', '0')
+const appCommitSha = readGitValue('git rev-parse --short HEAD', '')
+const appBuildDate = new Date().toISOString()
 
 export default defineConfig((/* ctx */) => {
   return {
@@ -51,7 +75,12 @@ export default defineConfig((/* ctx */) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        APP_VERSION: appVersion,
+        APP_BUILD_NUMBER: appBuildNumber,
+        APP_COMMIT_SHA: appCommitSha,
+        APP_BUILD_DATE: appBuildDate,
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
