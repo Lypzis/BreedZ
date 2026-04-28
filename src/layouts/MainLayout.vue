@@ -1,22 +1,13 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header
-      bordered
-      class="text-white"
-      style="background: linear-gradient(270deg, var(--q-secondary) 0%, var(--q-primary) 100%)"
-    >
+    <q-header bordered class="text-white"
+      style="background: linear-gradient(270deg, var(--q-secondary) 0%, var(--q-primary) 100%)">
       <q-toolbar class="q-px-sm q-py-xs">
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          :aria-label="t('nav.toggle')"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" :aria-label="t('nav.toggle')" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          <router-link :to="dashboardPath" class="row items-center no-wrap q-gutter-sm text-white" style="text-decoration: none">
+          <router-link :to="dashboardPath" class="row items-center no-wrap q-gutter-sm text-white"
+            style="text-decoration: none">
             <q-avatar rounded size="42px">
               <img :src="logoIcon" :alt="t('brand.name')" />
             </q-avatar>
@@ -26,19 +17,10 @@
           </router-link>
         </q-toolbar-title>
 
-        <q-chip
-          v-if="showNetworkStatusChip"
-          dense
-          square
-          :color="isOnline ? 'green-1' : 'brown-1'"
-          :text-color="isOnline ? 'primary' : 'brown-10'"
-          class="q-mr-md"
-        >
+        <q-chip v-if="showNetworkStatusChip" dense square :color="isOnline ? 'green-1' : 'brown-1'"
+          :text-color="isOnline ? 'primary' : 'brown-10'" class="q-mr-md">
           <template v-if="$q.screen.width > 365">
-            <q-icon
-              :name="isOnline ? 'wifi' : 'wifi_off'"
-              class="q-mr-xs"
-            />
+            <q-icon :name="isOnline ? 'wifi' : 'wifi_off'" class="q-mr-xs" />
             {{ isOnline ? t('layout.online') : t('layout.offline') }}
           </template>
 
@@ -47,21 +29,9 @@
           </template>
         </q-chip>
 
-        <q-btn-toggle
-          v-if="hasHydrated"
-          :model-value="selectedLocale"
-          @update:model-value="onLocaleChange"
-          class="language-toggle"
-          dense
-          no-caps
-          unelevated
-          color="white"
-          text-color="primary"
-          toggle-color="green-1"
-          toggle-text-color="primary"
-          :aria-label="t('language.selector')"
-          :options="localeOptions"
-        />
+        <q-btn-toggle v-if="hasHydrated" :model-value="selectedLocale" @update:model-value="onLocaleChange"
+          class="language-toggle" dense no-caps unelevated color="white" text-color="primary" toggle-color="green-1"
+          toggle-text-color="primary" :aria-label="t('language.selector')" :options="localeOptions" />
       </q-toolbar>
     </q-header>
 
@@ -74,13 +44,8 @@
         </q-item>
 
         <q-list padding>
-          <q-item
-            v-for="item in navItems"
-            :key="item.key"
-            :clickable="Boolean(item.to)"
-            :disable="!item.to"
-            :to="item.to"
-          >
+          <q-item v-for="item in navItems" :key="item.key" :clickable="Boolean(item.to)" :disable="!item.to"
+            :to="item.to">
             <q-item-section avatar>
               <q-icon :name="item.icon" color="primary" />
             </q-item-section>

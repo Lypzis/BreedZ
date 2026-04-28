@@ -148,14 +148,14 @@ This is a repo-specific review of what would change if BreedZ moves from the cur
 
 ### Post-migration checks
 
-- [ ] Opening the installed app still launches BreedZ from the same home-screen icon
-- [ ] Existing installed users receive an update instead of a second install identity
-- [ ] Public pages return HTML body content from the server, not only client shell markup
-- [ ] The route guard does not crash on server render
-- [ ] Service worker update prompt still appears and reload works cleanly
-- [ ] Offline launch still opens the app shell correctly
-- [ ] Localized public routes still preserve canonical and `hreflang` behavior
-- [ ] Public SEO pages no longer inherit unwanted app-shell styling
+- [x] Opening the installed app still launches BreedZ from the same home-screen icon
+- [x] Existing installed users receive an update instead of a second install identity
+- [x] Public pages return HTML body content from the server, not only client shell markup
+- [x] The route guard does not crash on server render
+- [x] Service worker update prompt still appears and reload works cleanly
+- [x] Offline launch still opens the app shell correctly
+- [x] Localized public routes still preserve canonical and `hreflang` behavior
+- [x] Public SEO pages no longer inherit unwanted app-shell styling
 
 ### Recommendation
 
@@ -252,6 +252,33 @@ This is the current implementation order for the first working BreedZ MVP.
 ## Next Features
 
 These are the next medium-sized upgrades planned after the current MVP.
+
+### Upcoming Birth Reminders
+
+Goal:
+- Surface animals approaching their expected birth window
+- Turn breeding records into useful upcoming reminders instead of passive history
+
+Why this matters:
+- Users naturally expect help remembering what is coming next, especially around birth and calving windows
+- The useful behavior is not "predict the exact day", but "show me which animals are getting close"
+
+Practical first version:
+- While saving an event, offer an optional `Set reminder` action
+- If enabled, let the user choose the reminder date manually
+- Save the reminder as its own future event on the animal timeline
+- Show those reminders in the Dashboard `Upcoming` section and timeline views
+
+Data model note:
+- The reminder should belong to the animal, not be trapped inside the original event
+- It can still keep an internal link back to the source event, for example:
+  - `sourceEventId`
+  - `isReminder: true`
+
+Why this shape is better:
+- Users think in terms of "this animal needs attention later"
+- The reminder stays editable and removable on its own
+- The original event stays as historical fact, while the reminder stays future-facing
 
 ### Breeding Pair History
 
@@ -435,7 +462,7 @@ Cluster 1: Breeding tracking
 
 Cluster 2: Lineage and record keeping
 - [ ] `how-to-track-cattle-pedigree`
-- [ ] `best-cattle-record-keeping-methods`
+- [x] `best-cattle-record-keeping-methods`
 - [ ] `cattle-record-keeping-system`
 - [ ] `herd-management-spreadsheet-vs-app`
 - [ ] `best-way-to-track-cattle-records`

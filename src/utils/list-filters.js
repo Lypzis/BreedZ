@@ -1,4 +1,5 @@
 import { getEventTypeMeta } from '../constants/events.js'
+import { getEventAnimalIds } from './event-records.js'
 import { normalizeBreedLabel, normalizeSpeciesLabel } from './species.js'
 
 export function filterAnimalsList(animals, filters = {}) {
@@ -64,7 +65,7 @@ export function filterEventsList(events, resolveAnimalById, filters = {}) {
       return true
     }
 
-    const relatedAnimals = (event.animalIds ?? [event.animalId])
+    const relatedAnimals = getEventAnimalIds(event)
       .map((animalId) => resolveAnimalById(animalId))
       .filter(Boolean)
 

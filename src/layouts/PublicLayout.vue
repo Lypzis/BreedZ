@@ -13,32 +13,12 @@
 
         <q-space />
 
-        <q-btn
-          flat
-          no-caps
-          dense
-          color="primary"
-          icon="dashboard"
-          :label="t('common.openApp')"
-          :aria-label="t('common.openApp')"
-          @click="openApp"
-          class="q-mr-sm"
-        />
+        <q-btn flat no-caps dense color="primary" icon="dashboard" :label="t('common.openApp')"
+          :aria-label="t('common.openApp')" @click="openApp" class="q-mr-sm" />
 
-        <q-btn-toggle
-          :model-value="selectedLocale"
-          @update:model-value="onLocaleChange"
-          class="language-toggle"
-          dense
-          no-caps
-          unelevated
-          color="white"
-          text-color="primary"
-          toggle-color="green-1"
-          toggle-text-color="primary"
-          :aria-label="t('language.selector')"
-          :options="localeOptions"
-        />
+        <q-btn-toggle :model-value="selectedLocale" @update:model-value="onLocaleChange" class="language-toggle" dense
+          no-caps unelevated color="white" text-color="primary" toggle-color="green-1" toggle-text-color="primary"
+          :aria-label="t('language.selector')" :options="localeOptions" />
       </q-toolbar>
     </q-header>
 
