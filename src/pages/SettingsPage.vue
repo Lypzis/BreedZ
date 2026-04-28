@@ -152,37 +152,73 @@
         <div class="text-overline text-weight-bold text-primary">{{ t('settings.appOverline') }}</div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('settings.appTitle') }}</div>
 
-        <q-banner rounded class="bg-grey-1 text-grey-8">
-          <div class="row no-wrap items-start q-col-gutter-sm">
-            <div class="col-auto">
-              <q-icon name="download_for_offline" color="primary" size="md" />
-            </div>
-            <div class="col">
-              <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.installTitle') }}</div>
-              <div class="text-caption q-mt-xs">
-                {{ t('settings.installDescription') }}
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-md-6">
+            <q-banner rounded class="bg-grey-1 text-grey-8 full-height">
+              <div class="row no-wrap items-start q-col-gutter-sm">
+                <div class="col-auto">
+                  <q-icon name="download_for_offline" color="primary" size="md" />
+                </div>
+                <div class="col">
+                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.installTitle') }}</div>
+                  <div class="text-caption q-mt-xs">
+                    {{ t('settings.installDescription') }}
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <q-btn
+                unelevated
+                color="primary"
+                :label="installButtonLabel"
+                icon="download"
+                class="q-mt-md full-width"
+                :disable="isInstalled"
+                @click="handleInstallClick"
+              />
+
+              <q-banner
+                v-if="installHintVisible || installStatusMessage"
+                rounded
+                class="bg-white text-grey-8 q-mt-md"
+              >
+                {{ installStatusMessage || installInstructions }}
+              </q-banner>
+            </q-banner>
           </div>
 
-          <q-btn
-            unelevated
-            color="primary"
-            :label="installButtonLabel"
-            icon="download"
-            class="q-mt-md full-width"
-            :disable="isInstalled"
-            @click="handleInstallClick"
-          />
+          <div class="col-12 col-md-6">
+            <q-banner rounded class="bg-grey-1 text-grey-8 full-height">
+              <div class="row no-wrap items-start q-col-gutter-sm">
+                <div class="col-auto">
+                  <q-icon name="info" color="primary" size="md" />
+                </div>
+                <div class="col">
+                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('settings.versionTitle') }}</div>
+                  <div class="text-caption q-mt-xs">
+                    {{ t('settings.versionDescription') }}
+                  </div>
+                </div>
+              </div>
 
-          <q-banner
-            v-if="installHintVisible || installStatusMessage"
-            rounded
-            class="bg-white text-grey-8 q-mt-md"
-          >
-            {{ installStatusMessage || installInstructions }}
-          </q-banner>
-        </q-banner>
+              <q-list dense separator class="q-mt-md rounded-borders bg-white">
+                <q-item>
+                  <q-item-section>
+                    <q-item-label caption>{{ t('settings.versionLabel') }}</q-item-label>
+                    <q-item-label class="text-weight-bold">{{ appVersionLabel }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item>
+                  <q-item-section>
+                    <q-item-label caption>{{ t('settings.buildLabel') }}</q-item-label>
+                    <q-item-label class="text-weight-bold">{{ appBuildLabel }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-banner>
+          </div>
+        </div>
       </q-card-section>
 
       <q-card-section>
@@ -227,6 +263,7 @@ import { buildBackupWorkbookArray, importBackupWorkbookArrayBuffer } from 'src/s
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { useSettingsStore } from 'src/stores/settings-store'
+import { buildAppBuildLabel, buildAppVersionLabel } from 'src/utils/app-version'
 
 const $q = useQuasar()
 const { t } = useI18nText()
@@ -258,6 +295,8 @@ const weightUnitOptions = computed(() => [
   { label: t('settings.weightUnitKilograms'), value: 'kg' },
   { label: t('settings.weightUnitPounds'), value: 'lb' },
 ])
+const appVersionLabel = buildAppVersionLabel()
+const appBuildLabel = buildAppBuildLabel() || t('settings.localBuild')
 
 const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
