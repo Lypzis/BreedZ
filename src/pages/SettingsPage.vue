@@ -26,17 +26,8 @@
             </div>
           </div>
 
-          <q-btn-toggle
-            v-model="selectedWeightUnit"
-            unelevated
-            no-caps
-            spread
-            toggle-color="primary"
-            color="grey-3"
-            text-color="grey-8"
-            :options="weightUnitOptions"
-            class="q-mt-md"
-          />
+          <q-btn-toggle v-model="selectedWeightUnit" unelevated no-caps spread toggle-color="primary" color="grey-3"
+            text-color="grey-8" :options="weightUnitOptions" class="q-mt-md" />
 
           <div class="text-caption text-grey-7 q-mt-sm">
             {{ t('settings.weightUnitHint') }}
@@ -62,15 +53,8 @@
                   </div>
                 </div>
               </div>
-              <q-btn
-                unelevated
-                color="primary"
-                :label="t('settings.exportExcel')"
-                icon="download"
-                class="q-mt-md full-width"
-                :loading="isExporting"
-                @click="handleExport"
-              />
+              <q-btn unelevated color="primary" :label="t('settings.exportExcel')" icon="download"
+                class="q-mt-md full-width" :loading="isExporting" @click="handleExport" />
             </q-banner>
           </div>
 
@@ -88,26 +72,13 @@
                 </div>
               </div>
 
-              <q-file
-                v-model="selectedBackupFile"
-                outlined
-                dense
-                clearable
+              <q-file v-model="selectedBackupFile" outlined dense clearable
                 accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                :label="t('settings.backupFile')"
-                class="q-mt-md"
-              />
+                :label="t('settings.backupFile')" class="q-mt-md" />
 
-              <q-btn
-                unelevated
-                color="primary"
-                :label="t('settings.importExcel')"
-                icon="upload"
-                class="q-mt-md full-width"
-                :disable="!selectedBackupFile"
-                :loading="isImporting"
-                @click="handleImport"
-              />
+              <q-btn unelevated color="primary" :label="t('settings.importExcel')" icon="upload"
+                class="q-mt-md full-width" :disable="!selectedBackupFile" :loading="isImporting"
+                @click="handleImport" />
 
               <div class="text-caption text-grey-7 q-mt-sm">
                 {{ t('settings.excelHint') }}
@@ -167,27 +138,17 @@
                 </div>
               </div>
 
-              <q-btn
-                unelevated
-                color="primary"
-                :label="installButtonLabel"
-                icon="download"
-                class="q-mt-md full-width"
-                :disable="isInstalled"
-                @click="handleInstallClick"
-              />
+              <q-btn unelevated color="primary" :label="installButtonLabel" icon="download" class="q-mt-md full-width"
+                :disable="isInstalled" @click="handleInstallClick" />
 
-              <q-banner
-                v-if="installHintVisible || installStatusMessage"
-                rounded
-                class="bg-white text-grey-8 q-mt-md"
-              >
+              <q-banner v-if="installHintVisible || installStatusMessage" rounded class="bg-white text-grey-8 q-mt-md">
                 {{ installStatusMessage || installInstructions }}
               </q-banner>
             </q-banner>
           </div>
 
-          <div class="col-12 col-md-6">
+          <!-- Removed Until Version 1.0.0 -->
+          <!--<div class="col-12 col-md-6">
             <q-banner rounded class="bg-grey-1 text-grey-8 full-height">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -217,7 +178,7 @@
                 </q-item>
               </q-list>
             </q-banner>
-          </div>
+          </div>-->
         </div>
       </q-card-section>
 
@@ -238,14 +199,8 @@
             </div>
           </div>
 
-          <q-btn
-            outline
-            color="primary"
-            icon="arrow_forward"
-            :label="t('settings.openAccount')"
-            class="q-mt-md full-width"
-            to="/account"
-          />
+          <q-btn outline color="primary" icon="arrow_forward" :label="t('settings.openAccount')"
+            class="q-mt-md full-width" to="/account" />
         </q-banner>
       </q-card-section>
     </q-card>
@@ -263,7 +218,7 @@ import { buildBackupWorkbookArray, importBackupWorkbookArrayBuffer } from 'src/s
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { useSettingsStore } from 'src/stores/settings-store'
-import { buildAppBuildLabel, buildAppVersionLabel } from 'src/utils/app-version'
+// import { buildAppBuildLabel, buildAppVersionLabel } from 'src/utils/app-version'
 
 const $q = useQuasar()
 const { t } = useI18nText()
@@ -295,8 +250,8 @@ const weightUnitOptions = computed(() => [
   { label: t('settings.weightUnitKilograms'), value: 'kg' },
   { label: t('settings.weightUnitPounds'), value: 'lb' },
 ])
-const appVersionLabel = buildAppVersionLabel()
-const appBuildLabel = buildAppBuildLabel() || t('settings.localBuild')
+// const appVersionLabel = buildAppVersionLabel()
+// const appBuildLabel = buildAppBuildLabel() || t('settings.localBuild')
 
 const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
