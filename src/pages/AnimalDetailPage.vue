@@ -91,7 +91,7 @@
 
           <div class="row q-col-gutter-md">
             <div class="col-12 col-md-6">
-              <q-banner rounded class="bg-grey-1 text-grey-8">
+              <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer" @click="openParentPickerDialog('dam')">
                 <div class="row items-start no-wrap q-col-gutter-sm">
                   <div class="col-auto">
                     <q-icon name="female" color="primary" size="md" />
@@ -105,14 +105,14 @@
                   </div>
                   <div v-if="damAnimal" class="col-auto">
                     <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
-                      :title="t('animalDetail.openParent')" :to="`/animals/${damAnimal.id}`" />
+                      :title="t('animalDetail.openParent')" :to="`/animals/${damAnimal.id}`" @click.stop />
                   </div>
                 </div>
               </q-banner>
             </div>
 
             <div class="col-12 col-md-6">
-              <q-banner rounded class="bg-grey-1 text-grey-8">
+              <q-banner rounded class="bg-grey-1 text-grey-8 parent-record-banner cursor-pointer" @click="openParentPickerDialog('sire')">
                 <div class="row items-start no-wrap q-col-gutter-sm">
                   <div class="col-auto">
                     <q-icon name="male" color="primary" size="md" />
@@ -126,7 +126,7 @@
                   </div>
                   <div v-if="sireAnimal" class="col-auto">
                     <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('animalDetail.openParent')"
-                      :title="t('animalDetail.openParent')" :to="`/animals/${sireAnimal.id}`" />
+                      :title="t('animalDetail.openParent')" :to="`/animals/${sireAnimal.id}`" @click.stop />
                   </div>
                 </div>
               </q-banner>
@@ -348,6 +348,87 @@
       </q-card>
     </q-dialog>
 
+    <q-dialog v-model="isParentPickerOpen">
+      <q-card class="app-dialog-card" style="width: 100%; max-width: 640px">
+        <q-card-section class="row items-center justify-between">
+          <div>
+            <div class="text-overline text-weight-bold text-primary">{{ t('animalForm.lineageOverline') }}</div>
+            <div class="text-h6 text-weight-bold">{{ currentParentDialogTitle }}</div>
+          </div>
+          <q-btn
+            flat
+            round
+            dense
+            icon="close"
+            :aria-label="t('common.closeDialog')"
+            :title="t('common.closeDialog')"
+            @click="isParentPickerOpen = false"
+          />
+        </q-card-section>
+
+        <q-card-section class="app-dialog-card__body q-pt-none">
+          <q-input
+            v-model="parentSearchTerm"
+            outlined
+            dense
+            clearable
+            :label="t('animalForm.searchParent')"
+            :placeholder="t('animalPicker.searchPlaceholder')"
+          >
+            <template #prepend>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+
+          <q-banner rounded class="bg-grey-1 text-grey-8 q-mt-md">
+            <template #avatar>
+              <q-icon name="filter_alt" color="primary" />
+            </template>
+            {{ parentCandidateBanner }}
+          </q-banner>
+
+          <q-list v-if="parentCandidates.length > 0" separator class="q-mt-md">
+            <q-item
+              v-for="candidate in parentCandidates"
+              :key="candidate.id"
+              clickable
+              @click="selectParent(candidate)"
+            >
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white" icon="pets" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label class="text-weight-medium">{{ animalDisplayName(candidate) }}</q-item-label>
+                <q-item-label caption>
+                  {{ animalSpeciesBreed(candidate) }} • {{ sexLabel(candidate.sex) }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+
+          <q-banner v-else rounded class="bg-grey-1 text-grey-8 q-mt-md">
+            <template #avatar>
+              <q-icon name="search_off" color="primary" />
+            </template>
+            {{ t('animalForm.noMatchingParents') }}
+          </q-banner>
+        </q-card-section>
+
+        <q-card-actions align="between" class="app-dialog-card__actions">
+          <q-btn
+            v-if="currentParentLinkedAnimal"
+            flat
+            color="negative"
+            icon="link_off"
+            :label="currentParentUnlinkLabel"
+            @click="clearParentSelection"
+          />
+          <q-space v-else />
+          <q-btn flat color="grey-7" :label="t('common.cancel')" @click="isParentPickerOpen = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <AnimalFormDialog v-model="isAnimalDialogOpen" :animal="animal" :animals="animals" mode="edit"
       @submit="submitAnimalEdit" />
   </AppPageShell>
@@ -374,7 +455,7 @@ import { useSettingsStore } from 'src/stores/settings-store'
 import { formatAnimalDisplayName, formatAnimalSpeciesBreed } from 'src/utils/animal-display'
 import { groupBreedingsByPartner } from 'src/utils/breeding-history'
 import { formatAgeLabel, formatDisplayDate } from 'src/utils/dates'
-import { formatAnimalSex } from 'src/utils/parent-candidates'
+import { filterParentCandidates, formatAnimalSex } from 'src/utils/parent-candidates'
 import { formatStoredWeightForDisplay } from 'src/utils/weight'
 
 const $q = useQuasar()
@@ -392,6 +473,9 @@ const { errorMessage: eventsErrorMessage, isLoading: eventsLoading, events } = s
 const { weightUnit } = storeToRefs(settingsStore)
 
 const isAnimalDialogOpen = ref(false)
+const isParentPickerOpen = ref(false)
+const parentPickerType = ref('dam')
+const parentSearchTerm = ref('')
 const isEventDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const isBreedingOffspringDialogOpen = ref(false)
@@ -424,6 +508,36 @@ const animal = computed(() => animalsStore.getAnimalById(animalId.value))
 const animalEvents = computed(() => eventsStore.eventsForAnimal(animalId.value))
 const damAnimal = computed(() => animalsStore.getAnimalById(animal.value?.damId ?? ''))
 const sireAnimal = computed(() => animalsStore.getAnimalById(animal.value?.sireId ?? ''))
+const currentParentRoleLabel = computed(() => (parentPickerType.value === 'dam' ? t('animalForm.dam') : t('animalForm.sire')))
+const currentParentDialogTitle = computed(() =>
+  parentPickerType.value === 'dam' ? t('animalForm.pickDam') : t('animalForm.pickSire'),
+)
+const currentParentRequiredSex = computed(() => (parentPickerType.value === 'dam' ? 'female' : 'male'))
+const currentParentLinkedAnimal = computed(() =>
+  parentPickerType.value === 'dam' ? damAnimal.value : sireAnimal.value,
+)
+const currentParentUnlinkLabel = computed(() =>
+  parentPickerType.value === 'dam' ? t('animalDetail.unlinkDam') : t('animalDetail.unlinkSire'),
+)
+const parentCandidateBanner = computed(() => {
+  const speciesPart = animal.value?.species
+    ? t('animalForm.showingCandidatesSpeciesPart', { species: animal.value.species })
+    : ''
+
+  return t('animalForm.showingCandidates', {
+    role: currentParentRoleLabel.value.toLowerCase(),
+    speciesPart,
+  })
+})
+const parentCandidates = computed(() =>
+  filterParentCandidates({
+    animals: animals.value,
+    currentAnimalId: animal.value?.id ?? '',
+    species: animal.value?.species ?? '',
+    requiredSex: currentParentRequiredSex.value,
+    query: parentSearchTerm.value,
+  }),
+)
 const timelinePageCount = computed(() =>
   Math.max(1, Math.ceil(animalEvents.value.length / timelinePageSize.value)),
 )
@@ -538,6 +652,12 @@ function openEditDialog() {
   isAnimalDialogOpen.value = true
 }
 
+function openParentPickerDialog(type) {
+  parentPickerType.value = type
+  parentSearchTerm.value = ''
+  isParentPickerOpen.value = true
+}
+
 function previewBreedingOffspring(group) {
   return group.offspringAnimals.slice(0, breedingOffspringPreviewSize)
 }
@@ -569,6 +689,61 @@ async function submitAnimalEdit(payload) {
       position: 'top',
     })
   }
+}
+
+function buildAnimalEditPayload(overrides = {}) {
+  if (!animal.value) {
+    return null
+  }
+
+  return {
+    ...animal.value,
+    status: animal.value.baseStatus ?? animal.value.status,
+    ...overrides,
+  }
+}
+
+async function saveParentLink(overrides) {
+  const payload = buildAnimalEditPayload(overrides)
+
+  if (!payload || !animal.value) {
+    return
+  }
+
+  try {
+    await animalsStore.editAnimal(animal.value.id, payload)
+    isParentPickerOpen.value = false
+    parentSearchTerm.value = ''
+    $q.notify({
+      color: 'positive',
+      message: t('animalDetail.animalUpdated'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('animalDetail.animalUpdateFailed'),
+      position: 'top',
+    })
+  }
+}
+
+function selectParent(parentAnimal) {
+  if (parentPickerType.value === 'dam') {
+    void saveParentLink({ damId: parentAnimal.id })
+    return
+  }
+
+  void saveParentLink({ sireId: parentAnimal.id })
+}
+
+function clearParentSelection() {
+  if (parentPickerType.value === 'dam') {
+    void saveParentLink({ damId: '' })
+    return
+  }
+
+  void saveParentLink({ sireId: '' })
 }
 
 async function submitEvent(payload) {
@@ -770,6 +945,17 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.parent-record-banner {
+  border: 1px dashed rgba(61, 111, 63, 0.5);
+  transition: background-color 0.15s ease;
+}
+
+.parent-record-banner:hover {
+  background-color: rgba(61, 111, 63, 0.08);
+}
+</style>
 
 <style scoped>
 .detail-wrap-chip {
