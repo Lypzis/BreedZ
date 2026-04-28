@@ -38,6 +38,7 @@ export const messages = {
     },
     common: {
       cancel: 'Cancel',
+      back: 'Back',
       close: 'Close',
       closeDialog: 'Close dialog',
       noSignupRequired: 'No signup required',
@@ -1291,6 +1292,7 @@ export const messages = {
     },
     common: {
       cancel: 'Cancelar',
+      back: 'Voltar',
       close: 'Fechar',
       closeDialog: 'Fechar diálogo',
       noSignupRequired: 'Sem cadastro',
@@ -2538,6 +2540,7 @@ export const messages = {
     },
     common: {
       cancel: 'Cancelar',
+      back: 'Volver',
       close: 'Cerrar',
       closeDialog: 'Cerrar diálogo',
       noSignupRequired: 'Sin registro',
