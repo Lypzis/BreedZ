@@ -22,29 +22,6 @@
       </q-card-section>
 
       <q-card-section>
-        <div class="row q-col-gutter-sm">
-          <div class="col-12 col-sm-auto">
-            <q-btn
-              unelevated
-              color="primary"
-              icon="dashboard"
-              :label="t('guideCowPregnancy.openApp')"
-              :to="dashboardPath"
-            />
-          </div>
-          <div class="col-12 col-sm-auto">
-            <q-btn
-              outline
-              color="primary"
-              icon="event"
-              :label="t('guideCowPregnancy.openBreedingDatesGuide')"
-              :to="breedingDatesGuidePath"
-            />
-          </div>
-        </div>
-      </q-card-section>
-
-      <q-card-section>
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCowPregnancy.timelineOverline') }}
         </div>
@@ -213,9 +190,6 @@ useMeta(() =>
 )
 
 const dashboardPath = computed(() => '/')
-const breedingDatesGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
-)
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
 )

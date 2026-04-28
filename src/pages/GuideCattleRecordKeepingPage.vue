@@ -2,21 +2,24 @@
   <AppPageShell>
     <q-card flat>
       <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">{{ t('guideBreedingDates.overline') }}</div>
+        <div class="text-overline text-weight-bold text-primary">{{ t('guideCattleRecordKeeping.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
-          {{ t('guideBreedingDates.title') }}
+          {{ t('guideCattleRecordKeeping.title') }}
         </h1>
         <div class="text-body1 text-grey-7">
-          {{ t('guideBreedingDates.description') }}
+          {{ t('guideCattleRecordKeeping.description') }}
         </div>
       </q-card-section>
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideBreedingDates.problemOverline') }}
+          {{ t('guideCattleRecordKeeping.problemOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.problemTitle') }}
+          {{ t('guideCattleRecordKeeping.problemTitle') }}
+        </div>
+        <div class="text-body1 text-grey-7 q-mb-md">
+          {{ t('guideCattleRecordKeeping.problemDescription') }}
         </div>
 
         <q-list>
@@ -33,87 +36,78 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideBreedingDates.logicOverline') }}
+          {{ t('guideCattleRecordKeeping.methodsOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.logicTitle') }}
+          {{ t('guideCattleRecordKeeping.methodsTitle') }}
+        </div>
+        <div class="column q-gutter-md">
+          <q-card
+            v-for="method in methods"
+            :key="method.title"
+            flat
+            bordered
+          >
+            <q-card-section>
+              <div class="text-subtitle1 text-weight-bold text-primary">{{ method.title }}</div>
+              <div class="text-body2 text-grey-7 q-mt-sm">{{ method.description }}</div>
+              <q-list dense class="q-mt-sm">
+                <q-item v-for="item in method.items" :key="item">
+                  <q-item-section avatar>
+                    <q-icon name="check_circle" color="primary" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ item }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideCattleRecordKeeping.bestOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideCattleRecordKeeping.bestTitle') }}
         </div>
         <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideBreedingDates.logicDescription') }}
+          {{ t('guideCattleRecordKeeping.bestDescription') }}
         </div>
 
         <q-list>
-          <q-item v-for="step in logicSteps" :key="step">
+          <q-item v-for="item in bestItems" :key="item">
             <q-item-section avatar>
-              <q-icon name="check_circle" color="primary" />
+              <q-icon name="task_alt" color="primary" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ step }}</q-item-label>
+              <q-item-label>{{ item }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
 
         <q-banner rounded class="bg-grey-1 text-grey-8 q-mt-md">
           <template #avatar>
-            <q-icon name="event" color="primary" />
+            <q-icon name="fact_check" color="primary" />
           </template>
-          <span class="text-weight-medium">{{ t('guideBreedingDates.exampleLabel') }}</span>
-          {{ ` ${t('guideBreedingDates.exampleText')}` }}
+          {{ t('guideCattleRecordKeeping.bestBanner') }}
         </q-banner>
       </q-card-section>
 
       <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideBreedingDates.commonWaysOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.commonWaysTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="item in commonWaysItems" :key="item">
-            <q-item-section avatar>
-              <q-icon name="description" color="primary" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ item }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-
-      <q-card-section>
         <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideBreedingDates.mistakesOverline') }}
+          {{ t('guideCattleRecordKeeping.compareOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.mistakesTitle') }}
+          {{ t('guideCattleRecordKeeping.compareTitle') }}
         </div>
 
         <q-list>
-          <q-item v-for="item in mistakesItems" :key="item">
+          <q-item v-for="item in compareItems" :key="item">
             <q-item-section avatar>
-              <q-icon name="report_problem" color="accent" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ item }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideBreedingDates.breaksOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.breaksTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="item in breaksItems" :key="item">
-            <q-item-section avatar>
-              <q-icon name="error_outline" color="accent" />
+              <q-icon name="balance" color="accent" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ item }}</q-item-label>
@@ -124,19 +118,19 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideBreedingDates.betterWayOverline') }}
+          {{ t('guideCattleRecordKeeping.breedzOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.betterWayTitle') }}
+          {{ t('guideCattleRecordKeeping.breedzTitle') }}
         </div>
         <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideBreedingDates.betterWayDescription') }}
+          {{ t('guideCattleRecordKeeping.breedzDescription') }}
         </div>
 
         <q-list>
-          <q-item v-for="item in betterWayItems" :key="item">
+          <q-item v-for="item in breedzItems" :key="item">
             <q-item-section avatar>
-              <q-icon name="task_alt" color="primary" />
+              <q-icon name="devices" color="primary" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ item }}</q-item-label>
@@ -148,7 +142,7 @@
           unelevated
           color="primary"
           icon="open_in_new"
-          :label="t('guideBreedingDates.openApp')"
+          :label="t('guideCattleRecordKeeping.openApp')"
           :to="dashboardPath"
           class="q-mt-md"
         />
@@ -156,16 +150,16 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideBreedingDates.tipsOverline') }}
+          {{ t('guideCattleRecordKeeping.checklistOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.tipsTitle') }}
+          {{ t('guideCattleRecordKeeping.checklistTitle') }}
         </div>
 
         <q-list>
-          <q-item v-for="item in tipsItems" :key="item">
+          <q-item v-for="item in checklistItems" :key="item">
             <q-item-section avatar>
-              <q-icon name="lightbulb" color="primary" />
+              <q-icon name="done_all" color="primary" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ item }}</q-item-label>
@@ -176,10 +170,10 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideBreedingDates.faqOverline') }}
+          {{ t('guideCattleRecordKeeping.faqOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideBreedingDates.faqTitle') }}
+          {{ t('guideCattleRecordKeeping.faqTitle') }}
         </div>
 
         <q-list>
@@ -193,7 +187,7 @@
       </q-card-section>
 
       <GuideShareSection
-        :title="t('guideBreedingDates.title')"
+        :title="t('guideCattleRecordKeeping.title')"
         :path="sharePath"
       />
     </q-card>
@@ -220,22 +214,21 @@ const routeLocale = computed(() =>
 
 useMeta(() =>
   buildPageMeta({
-    title: t('guideBreedingDates.meta.title'),
-    description: t('guideBreedingDates.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
+    title: t('guideCattleRecordKeeping.meta.title'),
+    description: t('guideCattleRecordKeeping.meta.description'),
+    path: buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
   }),
 )
 
 const dashboardPath = computed(() => '/')
 const sharePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
+  buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
 )
-const problemItems = computed(() => tm('guideBreedingDates.problemItems') ?? [])
-const logicSteps = computed(() => tm('guideBreedingDates.logicSteps') ?? [])
-const commonWaysItems = computed(() => tm('guideBreedingDates.commonWaysItems') ?? [])
-const mistakesItems = computed(() => tm('guideBreedingDates.mistakesItems') ?? [])
-const breaksItems = computed(() => tm('guideBreedingDates.breaksItems') ?? [])
-const betterWayItems = computed(() => tm('guideBreedingDates.betterWayItems') ?? [])
-const tipsItems = computed(() => tm('guideBreedingDates.tipsItems') ?? [])
-const faqs = computed(() => tm('guideBreedingDates.faqs') ?? [])
+const problemItems = computed(() => tm('guideCattleRecordKeeping.problemItems') ?? [])
+const methods = computed(() => tm('guideCattleRecordKeeping.methods') ?? [])
+const bestItems = computed(() => tm('guideCattleRecordKeeping.bestItems') ?? [])
+const compareItems = computed(() => tm('guideCattleRecordKeeping.compareItems') ?? [])
+const breedzItems = computed(() => tm('guideCattleRecordKeeping.breedzItems') ?? [])
+const checklistItems = computed(() => tm('guideCattleRecordKeeping.checklistItems') ?? [])
+const faqs = computed(() => tm('guideCattleRecordKeeping.faqs') ?? [])
 </script>

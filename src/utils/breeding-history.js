@@ -1,17 +1,21 @@
+import { normalizeEventRecord } from './event-records.js'
+
 export function groupBreedingsByPartner(currentAnimalId, animals, events) {
   const animalsById = new Map(animals.map((animal) => [animal.id, animal]))
   const breedingGroups = new Map()
 
-  for (const event of events) {
-    if (event.type !== 'breeding' || !event.partnerAnimalId) {
+  for (const rawEvent of events) {
+    const event = normalizeEventRecord(rawEvent)
+
+    if (
+      event.type !== 'breeding'
+      || event.animalIds.length < 2
+      || !event.animalIds.includes(currentAnimalId)
+    ) {
       continue
     }
 
-    const otherAnimalId = event.animalId === currentAnimalId
-      ? event.partnerAnimalId
-      : event.partnerAnimalId === currentAnimalId
-        ? event.animalId
-        : ''
+    const otherAnimalId = event.animalIds.find((animalId) => animalId !== currentAnimalId) ?? ''
 
     if (!otherAnimalId) {
       continue

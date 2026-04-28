@@ -128,6 +128,10 @@ export function deriveEventAnimalIds(event = {}) {
   return uniqueStrings([legacyAnimalId])
 }
 
+export function getEventAnimalIds(event = {}) {
+  return deriveEventAnimalIds(event)
+}
+
 export function normalizeEventRecord(event = {}) {
   const type = normalizeString(event.type)
   const animalIds = deriveEventAnimalIds(event)

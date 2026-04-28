@@ -20,9 +20,6 @@
           <div class="col-12 col-sm-auto">
             <q-btn outline color="primary" icon="dashboard" :label="t('home.openDashboard')" :to="dashboardPath" />
           </div>
-          <div class="col-12 col-sm-auto">
-            <q-btn outline color="primary" icon="school" :label="t('home.seeHowItWorks')" :to="tutorialPath" />
-          </div>
         </div>
       </q-card-section>
 
@@ -131,6 +128,15 @@
             </q-item-section>
           </q-item>
         </q-list>
+
+        <q-btn
+          unelevated
+          color="primary"
+          icon="school"
+          :label="t('home.openTutorial')"
+          :to="tutorialPath"
+          class="q-mt-md"
+        />
       </q-card-section>
 
       <q-card-section>
@@ -188,7 +194,7 @@
         </div>
 
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-6 col-lg-3">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
@@ -203,7 +209,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-6 col-lg-3">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
@@ -218,7 +224,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-md-6 col-lg-3">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
@@ -229,6 +235,21 @@
               <q-card-actions align="right">
                 <q-btn flat color="primary" icon="open_in_new" :label="t('home.openLineageGuide')"
                   :to="lineageGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-3">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('home.recordKeepingGuideTitle') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.recordKeepingGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openRecordKeepingGuide')"
+                  :to="recordKeepingGuidePath" />
               </q-card-actions>
             </q-card>
           </div>
@@ -316,6 +337,9 @@ const cowPregnancyGuidePath = computed(() =>
 )
 const lineageGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/how-to-track-cattle-lineage'),
+)
+const recordKeepingGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
 )
 
 const {

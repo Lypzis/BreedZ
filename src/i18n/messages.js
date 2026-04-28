@@ -213,6 +213,10 @@ export const messages = {
       lineageGuideDescription:
         'See a practical lineage workflow for linking parents, offspring, and breeding pairs without losing history over time.',
       openLineageGuide: 'Read the lineage guide',
+      recordKeepingGuideTitle: 'Best cattle record-keeping methods',
+      recordKeepingGuideDescription:
+        'Compare paper, spreadsheets, and digital tools to find a record-keeping method you will actually keep up on the farm.',
+      openRecordKeepingGuide: 'Read the record-keeping guide',
       ctaOverline: 'Get Started',
       ctaTitle: 'Open BreedZ and start recording the herd today',
       faqOverline: 'FAQ',
@@ -740,48 +744,56 @@ export const messages = {
       overline: 'Guide',
       title: 'How to Track Cattle Breeding Dates (Simple Guide)',
       description:
-        'Know when breeding happened, when to expect calving, and how to avoid missing critical dates in your herd.',
-      openApp: 'Open BreedZ',
+        'Missing breeding dates means guessing calving windows, rebreeding timing, and herd decisions later.',
+      openApp: 'Start tracking your herd now',
       openTutorial: 'Open tutorial',
       problemOverline: 'Why It Matters',
-      problemTitle: 'Why tracking breeding dates matters',
+      problemTitle: 'Why missing breeding dates costs you later',
       problemItems: [
         'Missing dates leads to missed calving windows.',
         'It gets harder to know when to rebreed.',
         'You lose visibility over herd cycles when records stay scattered.',
       ],
-      logicOverline: 'Basic Logic',
-      logicTitle: 'How breeding tracking works',
+      logicOverline: 'How It Works',
+      logicTitle: 'A simple system that works',
       logicDescription:
-        'The process is simple: record the breeding date, estimate the expected calving date, and keep each animal history updated.',
+        'The goal is simple: record the breeding date, estimate the calving window, and keep each animal history up to date.',
       logicSteps: [
         'Record the breeding date.',
-        'Add about 283 days to estimate calving.',
-        'Review the animal history when you need to check progress.',
+        'Add around 283 days to estimate calving.',
+        'Check the animal history when you need to review progress.',
       ],
       exampleLabel: 'Example:',
       exampleText: 'Breeding: April 1 -> Expected calving: January 9.',
       commonWaysOverline: 'Common Methods',
       commonWaysTitle: 'Common ways farmers track breeding',
       commonWaysItems: [
-        'Paper notebooks',
-        'Memory and verbal notes',
-        'Simple spreadsheets',
+        'Paper notebooks that are easy to lose or leave behind',
+        'Memory and verbal notes that get unreliable when cycles overlap',
+        'Simple spreadsheets that are slower to update in the field',
+      ],
+      mistakesOverline: 'Common Mistakes',
+      mistakesTitle: 'What most people get wrong',
+      mistakesItems: [
+        'Not recording the exact breeding date.',
+        'Relying on memory once several animals overlap.',
+        'Keeping dates without linking them back to the right animal.',
+        'Checking too late because the record was never updated.',
       ],
       breaksOverline: 'Where It Fails',
-      breaksTitle: 'Where this starts to fail',
+      breaksTitle: 'Why these systems break down',
       breaksItems: [
         'The herd grows and there are more animals to track.',
         'Breeding cycles overlap across multiple animals.',
         'Updates get forgotten during busy farm work.',
       ],
       betterWayOverline: 'Better Tracking',
-      betterWayTitle: 'A simpler way to track everything',
+      betterWayTitle: 'A better way to keep dates usable',
       betterWayDescription:
-        'A herd management app helps you record breeding once, keep history per animal, and check the whole herd faster when decisions need to be made.',
+        'A herd management app helps you record breeding once, keep history per animal, and review the whole herd faster when decisions need to be made.',
       betterWayItems: [
         'Record breeding once and keep it linked to the right animal.',
-        'Review expected calving timing without searching old notes.',
+        'Review expected calving timing without digging through old notes.',
         'Keep one clear history per animal instead of scattered records.',
       ],
       tipsOverline: 'Practical Tips',
@@ -821,7 +833,7 @@ export const messages = {
       shortAnswerLabel: 'Short answer:',
       shortAnswer:
         'A cow is usually pregnant for about 283 days, or roughly nine months and one week.',
-      openApp: 'Open BreedZ',
+      openApp: 'Start tracking your herd now',
       openBreedingDatesGuide: 'Read breeding dates guide',
       timelineOverline: 'Pregnancy Timeline',
       timelineTitle: 'The basic cow pregnancy timeline',
@@ -913,7 +925,7 @@ export const messages = {
       title: 'How to Track Cattle Lineage and Avoid Breeding Mistakes',
       description:
         'Strong herds are not built only by good animals. They are built by good records that make breeding decisions clearer over time.',
-      openApp: 'Open BreedZ',
+      openApp: 'Start tracking your herd now',
       hookOverline: 'The problem',
       hookTitle: 'Poor tracking quietly turns into expensive breeding mistakes',
       hookDescription:
@@ -989,6 +1001,101 @@ export const messages = {
         'Tracking cattle lineage does not need to be complicated. But ignoring it is where the real cost shows up later.',
       takeawayBanner:
         'If you want better animals, better breeding decisions, and better long-term results, start with clearer records.',
+    },
+    guideCattleRecordKeeping: {
+      meta: {
+        title: 'Best Cattle Record-Keeping Methods',
+        description:
+          'Compare the best cattle record-keeping methods, from notebooks to spreadsheets to apps, and choose a system that stays useful on real farms.',
+      },
+      overline: 'Guide',
+      title: 'Best Cattle Record-Keeping Methods',
+      description:
+        'The best record-keeping method is not the fanciest one. It is the one you can keep updated when the farm gets busy.',
+      openApp: 'Start tracking your herd now',
+      openTutorial: 'Open tutorial',
+      problemOverline: 'The problem',
+      problemTitle: 'Most cattle records fail because the system is too easy to ignore',
+      problemDescription:
+        'Farm records usually break down for practical reasons, not because the producer does not care about the herd.',
+      problemItems: [
+        'Notes get split across notebooks, memory, and chat messages',
+        'Spreadsheets are hard to update quickly in the field',
+        'Important dates get written down without the right animal attached',
+        'The system works for a week, then gets skipped during busy farm work',
+      ],
+      methodsOverline: 'Common methods',
+      methodsTitle: 'The main ways farmers keep cattle records',
+      methods: [
+        {
+          title: 'Paper notebooks',
+          description: 'Fast to start and familiar, but easy to lose, damage, or forget to review later.',
+          items: ['Simple and low-cost', 'Hard to search', 'Easy to duplicate or misread'],
+        },
+        {
+          title: 'Spreadsheets',
+          description: 'Useful when someone really maintains them, but they become slow and fragile as the herd grows.',
+          items: ['More structured than paper', 'Better for totals and lists', 'Still awkward on the phone in the field'],
+        },
+        {
+          title: 'Record-keeping apps',
+          description: 'Easier to search, filter, and update per animal, especially when the system was built for farm work.',
+          items: ['Faster to review history', 'Better at keeping records connected', 'Works best when it stays simple'],
+        },
+      ],
+      bestOverline: 'What works best',
+      bestTitle: 'A good cattle record system should do a few things well',
+      bestDescription:
+        'You do not need complicated reports first. You need a system that helps you find the right animal fast and log the next update without friction.',
+      bestItems: [
+        'Each animal has one clear record',
+        'Breeding, birth, health, and sale history stay attached to that animal',
+        'You can review lineage without hunting through old notes',
+        'The method still works when there is no reliable internet in the field',
+      ],
+      bestBanner:
+        'The best method is the one that stays accurate after the busy season, not just on setup day.',
+      compareOverline: 'Paper vs spreadsheet vs app',
+      compareTitle: 'How to choose the right method for your herd',
+      compareItems: [
+        'Paper is fine for very small herds, but it gets messy fast.',
+        'Spreadsheets help with structure, but they are easy to neglect on a phone.',
+        'A simple app is usually the strongest option when you need speed, search, and per-animal history.',
+      ],
+      breedzOverline: 'Where BreedZ fits',
+      breedzTitle: 'How BreedZ solves the practical record-keeping problem',
+      breedzDescription:
+        'BreedZ is built for the moment when you need records to be quick, clear, and still available in the field.',
+      breedzItems: [
+        'Keep each animal record in one place',
+        'Log breeding, births, sales, purchases, and health events on the timeline',
+        'Link dam, sire, and offspring without building a complex spreadsheet',
+        'Keep working offline and export to Excel when you want a backup',
+      ],
+      checklistOverline: 'Simple checklist',
+      checklistTitle: 'A practical standard for better cattle records',
+      checklistItems: [
+        'Use one unique ID or tag per animal',
+        'Record updates on the same day whenever possible',
+        'Keep breeding and birth records linked to the correct animal',
+        'Review the herd regularly instead of waiting for a problem',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about cattle record keeping',
+      faqs: [
+        {
+          question: 'What should cattle records include?',
+          answer: 'At minimum: animal ID, breeding dates, births, health notes, sales, purchases, and parent links when known.',
+        },
+        {
+          question: 'Are spreadsheets enough for cattle records?',
+          answer: 'They can be enough for some herds, but they often become hard to maintain quickly in day-to-day farm work.',
+        },
+        {
+          question: 'What makes a record-keeping app better?',
+          answer: 'Search, per-animal history, lineage links, and fast updates in the field usually make the biggest difference.',
+        },
+      ],
     },
     about: {
       meta: {
@@ -1357,6 +1464,10 @@ export const messages = {
       lineageGuideDescription:
         'Veja um fluxo prático para ligar pais, descendentes e pares reprodutivos sem perder o histórico com o tempo.',
       openLineageGuide: 'Ler o guia de linhagem',
+      recordKeepingGuideTitle: 'Melhores métodos para registro do gado',
+      recordKeepingGuideDescription:
+        'Compare caderno, planilha e app para escolher um método de registro que você realmente consiga manter na fazenda.',
+      openRecordKeepingGuide: 'Ler o guia de registros',
       ctaOverline: 'Comece Agora',
       ctaTitle: 'Abra o BreedZ e comece a registrar o rebanho hoje',
       faqOverline: 'FAQ',
@@ -1884,48 +1995,56 @@ export const messages = {
       overline: 'Guia',
       title: 'Como acompanhar datas de cobertura no gado (guia simples)',
       description:
-        'Saiba quando a cobertura aconteceu, quando esperar o parto e como evitar perder datas importantes no rebanho.',
-      openApp: 'Abrir BreedZ',
+        'Perder datas de cobertura faz você adivinhar a janela de parto, o momento de recobrir e decisões do rebanho depois.',
+      openApp: 'Comece a acompanhar seu rebanho agora',
       openTutorial: 'Abrir tutorial',
       problemOverline: 'Por que isso importa',
-      problemTitle: 'Por que acompanhar datas de cobertura importa',
+      problemTitle: 'Por que perder datas de cobertura cobra caro depois',
       problemItems: [
         'Perder datas atrasa a previsão de parto.',
         'Fica mais difícil saber quando recobrir.',
         'Você perde visibilidade sobre os ciclos do rebanho quando os registros ficam espalhados.',
       ],
-      logicOverline: 'Lógica básica',
-      logicTitle: 'Como funciona o acompanhamento reprodutivo',
+      logicOverline: 'Como funciona',
+      logicTitle: 'Um sistema simples que funciona',
       logicDescription:
-        'O processo é simples: registre a data da cobertura, estime a data esperada do parto e mantenha o histórico de cada animal atualizado.',
+        'A lógica é simples: registre a data da cobertura, estime a janela do parto e mantenha o histórico de cada animal em dia.',
       logicSteps: [
         'Registre a data da cobertura.',
         'Some cerca de 283 dias para estimar o parto.',
-        'Revise o histórico do animal quando precisar conferir o andamento.',
+        'Confira o histórico do animal quando precisar revisar o andamento.',
       ],
       exampleLabel: 'Exemplo:',
       exampleText: 'Cobertura: 1 de abril -> Parto esperado: 9 de janeiro.',
       commonWaysOverline: 'Métodos comuns',
       commonWaysTitle: 'Formas comuns de acompanhar a cobertura',
       commonWaysItems: [
-        'Cadernos e anotações em papel',
-        'Memória e avisos verbais',
-        'Planilhas simples',
+        'Cadernos e anotações em papel que se perdem ou ficam para trás',
+        'Memória e avisos verbais que falham quando os ciclos se sobrepõem',
+        'Planilhas simples que demoram mais para atualizar no campo',
+      ],
+      mistakesOverline: 'Erros comuns',
+      mistakesTitle: 'O que mais costuma dar errado',
+      mistakesItems: [
+        'Não registrar a data exata da cobertura.',
+        'Confiar na memória quando vários animais entram no ciclo ao mesmo tempo.',
+        'Guardar a data sem ligar o registro ao animal certo.',
+        'Perceber tarde demais porque o histórico nunca foi atualizado.',
       ],
       breaksOverline: 'Onde isso falha',
-      breaksTitle: 'Onde isso começa a falhar',
+      breaksTitle: 'Por que esses sistemas quebram',
       breaksItems: [
         'O rebanho cresce e há mais animais para acompanhar.',
         'Os ciclos reprodutivos se sobrepõem entre vários animais.',
         'As atualizações são esquecidas na correria da fazenda.',
       ],
       betterWayOverline: 'Melhor forma',
-      betterWayTitle: 'Uma forma mais simples de acompanhar tudo',
+      betterWayTitle: 'Uma forma melhor de manter as datas úteis',
       betterWayDescription:
         'Um app de manejo do rebanho ajuda você a registrar a cobertura uma vez, manter o histórico por animal e revisar o rebanho com mais rapidez quando precisa decidir.',
       betterWayItems: [
         'Registre a cobertura uma vez e mantenha tudo ligado ao animal certo.',
-        'Confira a previsão do parto sem procurar anotações antigas.',
+        'Confira a previsão do parto sem vasculhar anotações antigas.',
         'Mantenha um histórico claro por animal em vez de registros espalhados.',
       ],
       tipsOverline: 'Dicas práticas',
@@ -1965,7 +2084,7 @@ export const messages = {
       shortAnswerLabel: 'Resposta curta:',
       shortAnswer:
         'A vaca geralmente fica prenhe por cerca de 283 dias, ou aproximadamente nove meses e uma semana.',
-      openApp: 'Abrir BreedZ',
+      openApp: 'Comece a acompanhar seu rebanho agora',
       openBreedingDatesGuide: 'Ler guia de datas de cobertura',
       timelineOverline: 'Linha do tempo',
       timelineTitle: 'A linha do tempo básica da gestação bovina',
@@ -2057,7 +2176,7 @@ export const messages = {
       title: 'Como acompanhar a linhagem do gado e evitar erros de cruzamento',
       description:
         'Rebanhos fortes não nascem só de bons animais. Eles nascem de bons registros, que deixam as decisões reprodutivas mais claras com o tempo.',
-      openApp: 'Abrir BreedZ',
+      openApp: 'Comece a acompanhar seu rebanho agora',
       hookOverline: 'O problema',
       hookTitle: 'Registro ruim vira erro reprodutivo caro sem você perceber',
       hookDescription:
@@ -2133,6 +2252,101 @@ export const messages = {
         'Acompanhar a linhagem do gado não precisa ser complicado. Ignorar isso é que cobra caro depois.',
       takeawayBanner:
         'Se você quer animais melhores, decisões reprodutivas melhores e resultados melhores no longo prazo, comece por registros mais claros.',
+    },
+    guideCattleRecordKeeping: {
+      meta: {
+        title: 'Melhores métodos para registro do gado',
+        description:
+          'Compare os melhores métodos para registrar o gado, do caderno à planilha e ao app, e escolha um sistema que continue funcionando na prática da fazenda.',
+      },
+      overline: 'Guia',
+      title: 'Melhores métodos para registro do gado',
+      description:
+        'O melhor método de registro não é o mais sofisticado. É o que você consegue manter atualizado mesmo quando a fazenda aperta.',
+      openApp: 'Comece a acompanhar seu rebanho agora',
+      openTutorial: 'Abrir tutorial',
+      problemOverline: 'O problema',
+      problemTitle: 'A maioria dos registros falha porque o sistema é fácil demais de abandonar',
+      problemDescription:
+        'Na fazenda, os registros costumam se perder por motivos práticos, não por falta de cuidado com o rebanho.',
+      problemItems: [
+        'As anotações ficam divididas entre caderno, memória e mensagens',
+        'Planilhas são difíceis de atualizar rápido no campo',
+        'Datas importantes são anotadas sem ligação clara com o animal certo',
+        'O sistema funciona por alguns dias e depois fica para trás na correria',
+      ],
+      methodsOverline: 'Métodos comuns',
+      methodsTitle: 'As principais formas de registrar o rebanho',
+      methods: [
+        {
+          title: 'Caderno em papel',
+          description: 'É fácil de começar e familiar, mas é simples de perder, molhar ou deixar de consultar depois.',
+          items: ['Simples e barato', 'Difícil de buscar', 'Fácil de duplicar ou interpretar errado'],
+        },
+        {
+          title: 'Planilhas',
+          description: 'Ajudam na organização, mas ficam lentas e frágeis à medida que o rebanho cresce.',
+          items: ['Mais estruturadas que o papel', 'Boas para totais e listas', 'Pouco práticas no celular em uso de campo'],
+        },
+        {
+          title: 'Apps de registro',
+          description: 'Facilitam buscar, filtrar e atualizar por animal, especialmente quando foram pensados para a rotina da fazenda.',
+          items: ['Histórico mais fácil de revisar', 'Registros ficam conectados', 'Funcionam melhor quando mantêm a simplicidade'],
+        },
+      ],
+      bestOverline: 'O que funciona melhor',
+      bestTitle: 'Um bom sistema de registro precisa acertar no básico',
+      bestDescription:
+        'Você não precisa começar com relatórios complexos. Precisa de um sistema que ajude a encontrar o animal certo rápido e registrar a próxima informação sem atrito.',
+      bestItems: [
+        'Cada animal tem um registro claro',
+        'Reprodução, nascimento, saúde e venda ficam ligados ao mesmo histórico',
+        'A linhagem pode ser revisada sem caçar anotações antigas',
+        'O método continua útil mesmo sem internet confiável no campo',
+      ],
+      bestBanner:
+        'O melhor método é o que continua correto depois da correria, não só no dia em que foi montado.',
+      compareOverline: 'Caderno x planilha x app',
+      compareTitle: 'Como escolher o método certo para o seu rebanho',
+      compareItems: [
+        'O papel pode servir para rebanhos muito pequenos, mas se complica rápido.',
+        'Planilhas ajudam na estrutura, mas costumam ficar pesadas no celular.',
+        'Um app simples costuma ser a melhor opção quando você precisa de velocidade, busca e histórico por animal.',
+      ],
+      breedzOverline: 'Onde o BreedZ entra',
+      breedzTitle: 'Como o BreedZ resolve o lado prático do registro',
+      breedzDescription:
+        'O BreedZ foi pensado para o momento em que os registros precisam ser rápidos, claros e disponíveis no campo.',
+      breedzItems: [
+        'Mantenha o registro de cada animal em um só lugar',
+        'Anote reprodução, nascimentos, vendas, compras e saúde na linha do tempo',
+        'Vincule mãe, pai e descendentes sem depender de planilha complexa',
+        'Continue trabalhando offline e exporte para Excel quando quiser backup',
+      ],
+      checklistOverline: 'Checklist simples',
+      checklistTitle: 'Um padrão prático para registrar melhor o gado',
+      checklistItems: [
+        'Use um ID único ou brinco para cada animal',
+        'Registre as atualizações no mesmo dia sempre que possível',
+        'Mantenha reprodução e nascimento ligados ao animal certo',
+        'Revise o rebanho com frequência em vez de esperar um problema aparecer',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre registro do gado',
+      faqs: [
+        {
+          question: 'O que deve entrar no registro do gado?',
+          answer: 'No mínimo: identificação, datas reprodutivas, nascimentos, observações de saúde, vendas, compras e vínculo com os pais quando souber.',
+        },
+        {
+          question: 'Planilha basta para registrar o rebanho?',
+          answer: 'Pode bastar em alguns casos, mas costuma ficar difícil de manter na rotina do dia a dia.',
+        },
+        {
+          question: 'O que faz um app de registro ser melhor?',
+          answer: 'Busca, histórico por animal, vínculo de linhagem e atualização rápida no campo costumam fazer a maior diferença.',
+        },
+      ],
     },
     about: {
       meta: {
@@ -2968,6 +3182,10 @@ export const messages = {
       lineageGuideDescription:
         'Mira un flujo práctico para vincular padres, descendencia y parejas reproductivas sin perder historial con el tiempo.',
       openLineageGuide: 'Leer la guía de linaje',
+      recordKeepingGuideTitle: 'Mejores métodos para llevar registros del ganado',
+      recordKeepingGuideDescription:
+        'Compara cuaderno, hoja de cálculo y app para elegir un método de registro que de verdad puedas mantener en la finca.',
+      openRecordKeepingGuide: 'Leer la guía de registros',
       ctaOverline: 'Comienza ahora',
       ctaTitle: 'Abre BreedZ y empieza a registrar tu rebaño hoy',
       faqOverline: 'FAQ',
@@ -3038,48 +3256,56 @@ export const messages = {
       overline: 'Guía',
       title: 'Cómo registrar fechas de reproducción del ganado (guía simple)',
       description:
-        'Sabe cuándo ocurrió la reproducción, cuándo esperar el parto y cómo evitar perder fechas clave dentro del rebaño.',
-      openApp: 'Abrir BreedZ',
+        'Perder fechas reproductivas te obliga a adivinar la ventana de parto, el momento de volver a cruzar y decisiones del rebaño después.',
+      openApp: 'Empieza a llevar el control de tu rebaño ahora',
       openTutorial: 'Abrir tutorial',
       problemOverline: 'Por qué importa',
-      problemTitle: 'Por qué importa registrar las fechas reproductivas',
+      problemTitle: 'Por qué perder fechas reproductivas te cuesta después',
       problemItems: [
         'Perder fechas lleva a perder la ventana esperada de parto.',
         'Se vuelve más difícil saber cuándo volver a programar la reproducción.',
         'Pierdes visibilidad sobre los ciclos del rebaño cuando los registros quedan dispersos.',
       ],
-      logicOverline: 'Lógica básica',
-      logicTitle: 'Cómo funciona el seguimiento reproductivo',
+      logicOverline: 'Cómo funciona',
+      logicTitle: 'Un sistema simple que sí funciona',
       logicDescription:
-        'El proceso es simple: registra la fecha de reproducción, estima la fecha esperada de parto y mantén actualizado el historial de cada animal.',
+        'La idea es simple: registra la fecha de reproducción, estima la ventana de parto y mantén al día el historial de cada animal.',
       logicSteps: [
         'Registra la fecha de reproducción.',
         'Suma alrededor de 283 días para estimar el parto.',
-        'Revisa el historial del animal cuando necesites ver el avance.',
+        'Consulta el historial del animal cuando necesites revisar el avance.',
       ],
       exampleLabel: 'Ejemplo:',
       exampleText: 'Reproducción: 1 de abril -> Parto esperado: 9 de enero.',
       commonWaysOverline: 'Métodos comunes',
       commonWaysTitle: 'Formas comunes de registrar la reproducción',
       commonWaysItems: [
-        'Cuadernos y notas en papel',
-        'Memoria y avisos verbales',
-        'Hojas de cálculo simples',
+        'Cuadernos y notas en papel que se pierden o se dejan sin revisar',
+        'Memoria y avisos verbales que fallan cuando los ciclos se superponen',
+        'Hojas de cálculo simples que son lentas de actualizar en el campo',
+      ],
+      mistakesOverline: 'Errores comunes',
+      mistakesTitle: 'Lo que más suele salir mal',
+      mistakesItems: [
+        'No registrar la fecha exacta de la reproducción.',
+        'Confiar en la memoria cuando hay varios animales al mismo tiempo.',
+        'Guardar la fecha sin vincularla al animal correcto.',
+        'Revisar demasiado tarde porque el historial nunca se actualizó.',
       ],
       breaksOverline: 'Dónde falla',
-      breaksTitle: 'Dónde empieza a fallar este sistema',
+      breaksTitle: 'Por qué estos sistemas se rompen',
       breaksItems: [
         'El rebaño crece y hay más animales para seguir.',
         'Los ciclos reproductivos se superponen entre varios animales.',
         'Las actualizaciones se olvidan en días de mucho trabajo.',
       ],
       betterWayOverline: 'Mejor seguimiento',
-      betterWayTitle: 'Una forma más simple de registrar todo',
+      betterWayTitle: 'Una mejor forma de mantener las fechas útiles',
       betterWayDescription:
         'Una app de manejo del ganado te ayuda a registrar la reproducción una sola vez, mantener el historial por animal y revisar el rebaño más rápido cuando necesitas decidir.',
       betterWayItems: [
         'Registra la reproducción una vez y mantenla vinculada al animal correcto.',
-        'Consulta la fecha estimada de parto sin buscar notas viejas.',
+        'Consulta la fecha estimada de parto sin rebuscar notas viejas.',
         'Mantén un historial claro por animal en lugar de registros dispersos.',
       ],
       tipsOverline: 'Consejos prácticos',
@@ -3119,7 +3345,7 @@ export const messages = {
       shortAnswerLabel: 'Respuesta corta:',
       shortAnswer:
         'Una vaca suele estar preñada alrededor de 283 días, o aproximadamente nueve meses y una semana.',
-      openApp: 'Abrir BreedZ',
+      openApp: 'Empieza a llevar el control de tu rebaño ahora',
       openBreedingDatesGuide: 'Leer guía de fechas reproductivas',
       timelineOverline: 'Línea de tiempo',
       timelineTitle: 'La línea de tiempo básica de la gestación bovina',
@@ -3211,7 +3437,7 @@ export const messages = {
       title: 'Cómo rastrear el linaje del ganado y evitar errores de reproducción',
       description:
         'Los rebaños fuertes no se construyen solo con buenos animales. También se construyen con buenos registros, que vuelven más claras las decisiones reproductivas con el tiempo.',
-      openApp: 'Abrir BreedZ',
+      openApp: 'Empieza a llevar el control de tu rebaño ahora',
       hookOverline: 'El problema',
       hookTitle: 'Un mal seguimiento termina en errores reproductivos costosos',
       hookDescription:
@@ -3287,6 +3513,101 @@ export const messages = {
         'Rastrear el linaje del ganado no tiene por qué ser complicado. Ignorarlo es lo que termina saliendo caro.',
       takeawayBanner:
         'Si quieres mejores animales, mejores decisiones reproductivas y mejores resultados a largo plazo, empieza con registros más claros.',
+    },
+    guideCattleRecordKeeping: {
+      meta: {
+        title: 'Mejores métodos para llevar registros del ganado',
+        description:
+          'Compara los mejores métodos para llevar registros del ganado, desde cuadernos hasta hojas de cálculo y apps, y elige un sistema que siga funcionando en la práctica.',
+      },
+      overline: 'Guía',
+      title: 'Mejores métodos para llevar registros del ganado',
+      description:
+        'El mejor método de registro no es el más sofisticado. Es el que puedes mantener al día cuando la finca se complica.',
+      openApp: 'Empieza a llevar el control de tu rebaño ahora',
+      openTutorial: 'Abrir tutorial',
+      problemOverline: 'El problema',
+      problemTitle: 'La mayoría de los registros fallan porque el sistema es demasiado fácil de dejar',
+      problemDescription:
+        'En la finca, los registros suelen romperse por motivos prácticos, no porque al productor no le importe el rebaño.',
+      problemItems: [
+        'Las notas quedan repartidas entre cuadernos, memoria y mensajes',
+        'Las hojas de cálculo son lentas de actualizar en el campo',
+        'Las fechas importantes se anotan sin quedar bien ligadas al animal correcto',
+        'El sistema funciona unos días y luego se abandona cuando el trabajo aprieta',
+      ],
+      methodsOverline: 'Métodos comunes',
+      methodsTitle: 'Las principales formas de llevar registros del ganado',
+      methods: [
+        {
+          title: 'Cuadernos en papel',
+          description: 'Son fáciles de empezar y familiares, pero también fáciles de perder, dañar o dejar sin revisar.',
+          items: ['Simples y baratos', 'Difíciles de buscar', 'Fáciles de duplicar o malinterpretar'],
+        },
+        {
+          title: 'Hojas de cálculo',
+          description: 'Ayudan a ordenar mejor, pero se vuelven lentas y frágiles cuando el rebaño crece.',
+          items: ['Más estructuradas que el papel', 'Buenas para listas y totales', 'Incómodas en el móvil durante el trabajo de campo'],
+        },
+        {
+          title: 'Apps de registro',
+          description: 'Facilitan buscar, filtrar y actualizar por animal, sobre todo cuando están pensadas para el trabajo real en la finca.',
+          items: ['Historial más fácil de revisar', 'Los registros quedan conectados', 'Funcionan mejor cuando siguen siendo simples'],
+        },
+      ],
+      bestOverline: 'Lo que mejor funciona',
+      bestTitle: 'Un buen sistema de registros debe resolver bien lo esencial',
+      bestDescription:
+        'No necesitas empezar con informes complejos. Necesitas un sistema que te ayude a encontrar el animal correcto rápido y registrar la siguiente novedad sin fricción.',
+      bestItems: [
+        'Cada animal tiene un registro claro',
+        'Reproducción, nacimiento, salud y venta quedan en el mismo historial',
+        'El linaje se puede revisar sin rebuscar entre notas viejas',
+        'El método sigue siendo útil aunque no haya internet confiable en el campo',
+      ],
+      bestBanner:
+        'El mejor método es el que sigue siendo correcto después de la temporada más ocupada, no solo el día que se configura.',
+      compareOverline: 'Papel vs hoja de cálculo vs app',
+      compareTitle: 'Cómo elegir el método adecuado para tu rebaño',
+      compareItems: [
+        'El papel puede servir en rebaños muy pequeños, pero se complica rápido.',
+        'Las hojas de cálculo ayudan a ordenar, pero suelen volverse pesadas en el móvil.',
+        'Una app sencilla suele ser la opción más fuerte cuando necesitas rapidez, búsqueda e historial por animal.',
+      ],
+      breedzOverline: 'Dónde encaja BreedZ',
+      breedzTitle: 'Cómo BreedZ resuelve el lado práctico del registro',
+      breedzDescription:
+        'BreedZ está hecho para ese momento en que los registros tienen que ser rápidos, claros y seguir disponibles en el campo.',
+      breedzItems: [
+        'Mantén cada animal en un solo registro',
+        'Anota reproducción, nacimientos, ventas, compras y salud en la línea de tiempo',
+        'Vincula madre, padre y crías sin montar una hoja de cálculo complicada',
+        'Sigue trabajando offline y exporta a Excel cuando quieras un respaldo',
+      ],
+      checklistOverline: 'Lista simple',
+      checklistTitle: 'Un estándar práctico para registrar mejor el ganado',
+      checklistItems: [
+        'Usa una identificación única para cada animal',
+        'Registra las novedades el mismo día siempre que sea posible',
+        'Mantén reproducción y nacimiento vinculados al animal correcto',
+        'Revisa el rebaño con frecuencia en lugar de esperar a que aparezca un problema',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre los registros del ganado',
+      faqs: [
+        {
+          question: '¿Qué debería incluir un registro del ganado?',
+          answer: 'Como mínimo: identificación, fechas reproductivas, nacimientos, notas de salud, ventas, compras y vínculo con los padres cuando se conozcan.',
+        },
+        {
+          question: '¿Basta una hoja de cálculo para llevar los registros?',
+          answer: 'A veces sí, pero en muchas fincas termina siendo difícil de mantener en el trabajo diario.',
+        },
+        {
+          question: '¿Qué hace mejor a una app de registros?',
+          answer: 'La búsqueda, el historial por animal, los vínculos de linaje y la rapidez para actualizar en el campo suelen marcar la diferencia.',
+        },
+      ],
     },
     about: {
       meta: {

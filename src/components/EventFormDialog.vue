@@ -106,6 +106,7 @@ import {
   getEventSelectionMode,
 } from 'src/utils/event-participants'
 import { todayDateString } from 'src/utils/dates'
+import { normalizeEventRecord } from 'src/utils/event-records'
 
 const props = defineProps({
   modelValue: {
@@ -201,8 +202,7 @@ function defaultEventForm() {
 }
 
 function getEventAnimalIdsForForm(event) {
-  const animalIds = event?.animalIds ?? (event?.animalId ? [event.animalId] : [])
-  return animalIds
+  return normalizeEventRecord(event).animalIds
 }
 
 function syncForm() {
@@ -211,14 +211,16 @@ function syncForm() {
   isSyncingEventForm.value = true
 
   if (props.event) {
+    const normalizedEvent = normalizeEventRecord(props.event)
+
     Object.assign(eventForm, {
-      animalId: props.event.animalId ?? defaultAnimalId,
-      animalIds: getEventAnimalIdsForForm(props.event),
-      type: props.event.type ?? 'breeding',
-      partnerAnimalId: props.event.partnerAnimalId ?? '',
-      amount: props.event.amount != null ? String(props.event.amount) : '',
-      date: props.event.date || todayDateString(),
-      notes: props.event.notes ?? '',
+      animalId: normalizedEvent.animalIds[0] ?? defaultAnimalId,
+      animalIds: getEventAnimalIdsForForm(normalizedEvent),
+      type: normalizedEvent.type ?? 'breeding',
+      partnerAnimalId: normalizedEvent.animalIds[1] ?? '',
+      amount: normalizedEvent.amount != null ? String(normalizedEvent.amount) : '',
+      date: normalizedEvent.date || todayDateString(),
+      notes: normalizedEvent.notes ?? '',
     })
   } else {
     Object.assign(eventForm, {

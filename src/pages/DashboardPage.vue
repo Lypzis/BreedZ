@@ -265,6 +265,7 @@ import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
+import { getEventAnimalIds } from 'src/utils/event-records'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -317,7 +318,7 @@ const upcomingEvents = computed(() =>
 const upcomingEventsPreview = computed(() => upcomingEvents.value.slice(0, dashboardSectionLimit))
 const animalsWithoutEvents = computed(() => {
   const animalIdsWithEvents = new Set(
-    events.value.flatMap((event) => event.animalIds ?? [event.animalId]),
+    events.value.flatMap((event) => getEventAnimalIds(event)),
   )
 
   return activeAnimals.value.filter((animal) => !animalIdsWithEvents.has(animal.id))
