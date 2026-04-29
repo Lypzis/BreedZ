@@ -447,6 +447,8 @@ Current live guides:
 - [x] `track-cattle-breeding-dates`
 - [x] `how-long-is-cow-pregnancy`
 - [x] `how-to-track-cattle-lineage`
+- [x] `best-cattle-record-keeping-methods`
+- [x] `lost-breeding-records-what-to-do`
 
 Cluster 1: Breeding tracking
 - [x] `how-long-is-cow-pregnancy`
@@ -469,7 +471,7 @@ Cluster 3: Offline farm reality
 - [ ] `best-offline-farm-apps`
 
 Cluster 4: Pain-driven searches
-- [ ] `lost-breeding-records-what-to-do`
+- [x] `lost-breeding-records-what-to-do`
 - [ ] `forgot-cow-breeding-date`
 - [ ] `cattle-record-mistakes`
 - [ ] `how-to-fix-messy-herd-records`

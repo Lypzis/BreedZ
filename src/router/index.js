@@ -67,6 +67,10 @@ export default defineRouter(function ({ ssrContext }) {
     const isCatchAllRoute = to.matched.some((record) => record.path.includes(':catchAll'))
 
     if (isCatchAllRoute) {
+      if (process.env.SERVER) {
+        ssrContext?.res?.status?.(404)
+      }
+
       return true
     }
 

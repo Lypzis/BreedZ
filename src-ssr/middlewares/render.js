@@ -5,6 +5,11 @@ import { defineSsrMiddleware } from '#q-app/wrappers'
 // render the page with Vue
 
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
+  app.get(resolve.urlPath('/_network-check'), (req, res) => {
+    res.setHeader('Cache-Control', 'no-store')
+    res.status(204).send()
+  })
+
   app.get(resolve.urlPath('*'), (req, res, next) => {
     if (req.path !== '/' && req.path.endsWith('/')) {
       const normalizedPath = req.path.replace(/\/+$/, '') || '/'

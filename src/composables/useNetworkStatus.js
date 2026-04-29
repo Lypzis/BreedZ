@@ -21,8 +21,7 @@ export function useNetworkStatus() {
       })
 
       if (requestId === verificationRequestId) {
-        // A real network response, even 404, is enough to consider the app online.
-        isOnline.value = Boolean(response)
+        isOnline.value = response.ok
       }
     } catch {
       if (requestId === verificationRequestId) {

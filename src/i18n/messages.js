@@ -218,6 +218,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compare paper, spreadsheets, and digital tools to find a record-keeping method you will actually keep up on the farm.',
       openRecordKeepingGuide: 'Read the record-keeping guide',
+      lostRecordsGuideTitle: 'Lost breeding records: what to do next',
+      lostRecordsGuideDescription:
+        'Recover what you can, mark uncertain dates clearly, and rebuild a system that prevents the same problem next season.',
+      openLostRecordsGuide: 'Read the recovery guide',
       ctaOverline: 'Get Started',
       ctaTitle: 'Open BreedZ and start recording the herd today',
       faqOverline: 'FAQ',
@@ -1105,6 +1109,107 @@ export const messages = {
         },
       ],
     },
+    guideLostBreedingRecords: {
+      meta: {
+        title: 'Lost Breeding Records: What to Do Next',
+        description:
+          'Lost cattle breeding records? Learn what to recover first, how to handle uncertain breeding dates, and how to rebuild cleaner herd records.',
+      },
+      overline: 'Guide',
+      title: 'Lost Breeding Records: What to Do Next',
+      description:
+        'Lost breeding records are stressful because they turn calving windows, pregnancy checks, and rebreeding decisions into guesses. The fix is to recover what you can, label uncertainty honestly, and rebuild a better system from today forward.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Do not invent exact dates. Gather every clue, estimate a date range when needed, mark uncertain records clearly, and start keeping each future breeding event tied to the animal.',
+      openApp: 'Start rebuilding your herd records',
+      firstOverline: 'First response',
+      firstTitle: 'What to do first when breeding records are missing',
+      firstDescription:
+        'Before rewriting anything, slow down and collect the fragments. Most farms have more clues than it feels like in the first panic.',
+      firstItems: [
+        'Check notebooks, calendars, phone photos, text messages, invoices, and vet or AI notes.',
+        'Ask anyone who helped during breeding, pasture moves, pregnancy checks, or calving watch.',
+        'List every cow, heifer, bull, and breeding group involved before trying to fill dates.',
+        'Separate confirmed facts from guesses so you do not make the record look more certain than it is.',
+      ],
+      rebuildOverline: 'Recovery process',
+      rebuildTitle: 'A practical way to rebuild lost breeding records',
+      rebuildSteps: [
+        {
+          title: '1. Start with confirmed events',
+          description:
+            'Write down anything you can prove: AI date, bull turn-in date, bull removal date, pregnancy check date, calving date, or observed breeding.',
+          items: ['Confirmed dates', 'Animal IDs', 'Bull or breeding partner when known'],
+        },
+        {
+          title: '2. Turn weak memories into date ranges',
+          description:
+            'If the only clue is “early May” or “after the south pasture move,” record that as an estimated window instead of a fake exact date.',
+          items: ['Approximate start date', 'Approximate end date', 'Note explaining the source'],
+        },
+        {
+          title: '3. Link every clue back to the animal',
+          description:
+            'A recovered date is only useful if you know which animal it belongs to. Use tag, name, or another unique ID before saving the record.',
+          items: ['Cow or heifer ID', 'Possible sire', 'Any related notes'],
+        },
+        {
+          title: '4. Review the rebuilt list before acting on it',
+          description:
+            'Use uncertain records for planning, but be careful with decisions that depend on exact timing. When health or pregnancy status matters, involve a veterinarian.',
+          items: ['High-confidence records', 'Estimated records', 'Records still unknown'],
+        },
+      ],
+      estimateOverline: 'Estimating dates',
+      estimateTitle: 'How to handle an unknown breeding date',
+      estimateDescription:
+        'Sometimes the exact date is gone. The goal is not perfection; it is a useful record that makes the uncertainty visible.',
+      estimateItems: [
+        'Use the most reliable date range you can defend.',
+        'If a pregnancy check or calving date exists, use it as a clue, not as proof of one exact breeding day.',
+        'Add a note such as “estimated from bull exposure window” or “date uncertain.”',
+        'Keep uncertain records separate from confirmed records when reviewing the herd.',
+      ],
+      avoidOverline: 'Avoid this',
+      avoidTitle: 'What not to do after losing breeding records',
+      avoidItems: [
+        'Do not create exact dates just to make the record look complete.',
+        'Do not mix confirmed and estimated dates without a note.',
+        'Do not leave records only in memory after rebuilding them once.',
+        'Do not wait until calving season to find out which animals still have missing history.',
+      ],
+      systemOverline: 'Prevent it next time',
+      systemTitle: 'Build a record system that survives busy farm work',
+      systemDescription:
+        'After the missing records are cleaned up, the bigger win is making the next season harder to lose.',
+      systemItems: [
+        'Give every animal a unique ID or tag.',
+        'Record breeding events the same day whenever possible.',
+        'Keep dates attached to the animal timeline, not only in a general notebook.',
+        'Export a backup regularly if this device holds your main herd history.',
+        'Use offline access so records can still be updated in the field.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about lost breeding records',
+      faqs: [
+        {
+          question: 'What if I cannot recover the exact breeding date?',
+          answer:
+            'Use the best date range you can support and mark it as estimated. A clear estimated record is safer than a fake exact date.',
+        },
+        {
+          question: 'Can I estimate a breeding date from a calving date?',
+          answer:
+            'A calving date can give a rough clue, but it should not be treated as proof of one exact breeding date because gestation length varies.',
+        },
+        {
+          question: 'How can I stop this from happening again?',
+          answer:
+            'Keep one animal timeline, record events the same day, and export backups regularly so the records do not live in only one fragile place.',
+        },
+      ],
+    },
     about: {
       meta: {
         title: 'About BreedZ',
@@ -1477,6 +1582,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compare caderno, planilha e app para escolher um método de registro que você realmente consiga manter na fazenda.',
       openRecordKeepingGuide: 'Ler o guia de registros',
+      lostRecordsGuideTitle: 'Perdi registros de cobertura: o que fazer',
+      lostRecordsGuideDescription:
+        'Recupere o que for possível, marque datas incertas com clareza e refaça um sistema que evite o mesmo problema na próxima estação.',
+      openLostRecordsGuide: 'Ler o guia de recuperação',
       ctaOverline: 'Comece Agora',
       ctaTitle: 'Abra o BreedZ e comece a registrar o rebanho hoje',
       faqOverline: 'FAQ',
@@ -2365,6 +2474,107 @@ export const messages = {
         },
       ],
     },
+    guideLostBreedingRecords: {
+      meta: {
+        title: 'Perdi registros de cobertura: o que fazer',
+        description:
+          'Perdeu registros de cobertura do gado? Veja o que recuperar primeiro, como lidar com datas incertas e como reconstruir registros melhores.',
+      },
+      overline: 'Guia',
+      title: 'Perdi registros de cobertura: o que fazer',
+      description:
+        'Perder registros de cobertura assusta porque transforma previsão de parto, diagnóstico de gestação e decisões de recobertura em chute. A saída é recuperar o que der, marcar a incerteza com honestidade e reconstruir um sistema melhor a partir de hoje.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Não invente datas exatas. Reúna pistas, estime uma janela quando precisar, marque registros incertos com clareza e passe a manter cada cobertura ligada ao animal.',
+      openApp: 'Comece a reconstruir seus registros',
+      firstOverline: 'Primeira resposta',
+      firstTitle: 'O que fazer primeiro quando registros de cobertura somem',
+      firstDescription:
+        'Antes de reescrever tudo, pare e junte os fragmentos. Quase toda fazenda tem mais pistas do que parece no primeiro susto.',
+      firstItems: [
+        'Confira cadernos, calendários, fotos no celular, mensagens, notas fiscais e anotações de veterinário ou inseminação.',
+        'Pergunte a quem ajudou na cobertura, troca de pasto, diagnóstico de gestação ou observação de parto.',
+        'Liste cada vaca, novilha, touro e lote envolvido antes de tentar preencher as datas.',
+        'Separe fatos confirmados de palpites para não deixar o registro parecer mais certo do que realmente é.',
+      ],
+      rebuildOverline: 'Processo de recuperação',
+      rebuildTitle: 'Uma forma prática de reconstruir registros perdidos',
+      rebuildSteps: [
+        {
+          title: '1. Comece pelos eventos confirmados',
+          description:
+            'Anote tudo que você consegue comprovar: data de inseminação, entrada do touro, saída do touro, diagnóstico de gestação, parto ou cobertura observada.',
+          items: ['Datas confirmadas', 'Identificação dos animais', 'Touro ou parceiro quando souber'],
+        },
+        {
+          title: '2. Transforme lembranças fracas em janelas de data',
+          description:
+            'Se a pista é apenas “começo de maio” ou “depois da troca para o pasto de baixo”, registre como janela estimada, não como data exata falsa.',
+          items: ['Data inicial aproximada', 'Data final aproximada', 'Observação explicando a origem'],
+        },
+        {
+          title: '3. Ligue cada pista ao animal certo',
+          description:
+            'Uma data recuperada só ajuda se você sabe a qual animal ela pertence. Use brinco, nome ou outro identificador único antes de salvar.',
+          items: ['ID da vaca ou novilha', 'Possível pai', 'Observações relacionadas'],
+        },
+        {
+          title: '4. Revise a lista reconstruída antes de decidir',
+          description:
+            'Use registros incertos para planejamento, mas tome cuidado com decisões que dependem de data exata. Quando saúde ou gestação estiverem em jogo, envolva um veterinário.',
+          items: ['Registros de alta confiança', 'Registros estimados', 'Registros ainda desconhecidos'],
+        },
+      ],
+      estimateOverline: 'Estimando datas',
+      estimateTitle: 'Como lidar com uma data de cobertura desconhecida',
+      estimateDescription:
+        'Às vezes a data exata se perdeu. O objetivo não é perfeição; é um registro útil que mostra a incerteza.',
+      estimateItems: [
+        'Use a janela de data mais confiável que você consegue justificar.',
+        'Se houver diagnóstico de gestação ou data de parto, use como pista, não como prova de um dia exato de cobertura.',
+        'Acrescente uma observação como “estimado pela janela com touro” ou “data incerta”.',
+        'Mantenha registros incertos separados dos confirmados na hora de revisar o rebanho.',
+      ],
+      avoidOverline: 'Evite isso',
+      avoidTitle: 'O que não fazer depois de perder registros de cobertura',
+      avoidItems: [
+        'Não crie datas exatas só para o registro parecer completo.',
+        'Não misture datas confirmadas e estimadas sem observação.',
+        'Não deixe os registros só na memória depois de reconstruir uma vez.',
+        'Não espere a época de parto para descobrir quais animais ainda têm histórico faltando.',
+      ],
+      systemOverline: 'Previna na próxima',
+      systemTitle: 'Monte um sistema que aguente a correria da fazenda',
+      systemDescription:
+        'Depois de limpar os registros perdidos, o maior ganho é tornar a próxima estação mais difícil de perder.',
+      systemItems: [
+        'Use um ID único ou brinco para cada animal.',
+        'Registre coberturas no mesmo dia sempre que possível.',
+        'Mantenha as datas ligadas à linha do tempo do animal, não só em um caderno geral.',
+        'Exporte backup regularmente se este aparelho guarda o histórico principal do rebanho.',
+        'Use acesso offline para atualizar os registros mesmo no campo.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre registros de cobertura perdidos',
+      faqs: [
+        {
+          question: 'E se eu não conseguir recuperar a data exata da cobertura?',
+          answer:
+            'Use a melhor janela que conseguir sustentar e marque como estimada. Um registro estimado claro é mais seguro do que uma data exata falsa.',
+        },
+        {
+          question: 'Posso estimar a cobertura pela data de parto?',
+          answer:
+            'A data de parto pode dar uma pista aproximada, mas não deve ser tratada como prova de um dia exato porque a duração da gestação varia.',
+        },
+        {
+          question: 'Como evito perder isso de novo?',
+          answer:
+            'Mantenha uma linha do tempo por animal, registre eventos no mesmo dia e exporte backups regularmente para os dados não ficarem em um lugar frágil.',
+        },
+      ],
+    },
     about: {
       meta: {
         title: 'Sobre o BreedZ',
@@ -3212,6 +3422,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compara cuaderno, hoja de cálculo y app para elegir un método de registro que de verdad puedas mantener en la finca.',
       openRecordKeepingGuide: 'Leer la guía de registros',
+      lostRecordsGuideTitle: 'Perdí registros reproductivos: qué hacer',
+      lostRecordsGuideDescription:
+        'Recupera lo que puedas, marca las fechas inciertas con claridad y reconstruye un sistema que evite el mismo problema la próxima temporada.',
+      openLostRecordsGuide: 'Leer la guía de recuperación',
       ctaOverline: 'Comienza ahora',
       ctaTitle: 'Abre BreedZ y empieza a registrar tu rebaño hoy',
       faqOverline: 'FAQ',
@@ -3632,6 +3846,107 @@ export const messages = {
         {
           question: '¿Qué hace mejor a una app de registros?',
           answer: 'La búsqueda, el historial por animal, los vínculos de linaje y la rapidez para actualizar en el campo suelen marcar la diferencia.',
+        },
+      ],
+    },
+    guideLostBreedingRecords: {
+      meta: {
+        title: 'Perdí registros reproductivos: qué hacer',
+        description:
+          '¿Perdiste registros reproductivos del ganado? Aprende qué recuperar primero, cómo manejar fechas inciertas y cómo reconstruir mejores registros.',
+      },
+      overline: 'Guía',
+      title: 'Perdí registros reproductivos: qué hacer',
+      description:
+        'Perder registros reproductivos preocupa porque convierte ventanas de parto, revisiones de preñez y decisiones de volver a cruzar en suposiciones. La solución es recuperar lo posible, marcar la incertidumbre con honestidad y reconstruir un sistema mejor desde hoy.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'No inventes fechas exactas. Reúne pistas, estima un rango cuando haga falta, marca los registros inciertos con claridad y mantén cada reproducción ligada al animal.',
+      openApp: 'Empieza a reconstruir tus registros',
+      firstOverline: 'Primera respuesta',
+      firstTitle: 'Qué hacer primero cuando faltan registros reproductivos',
+      firstDescription:
+        'Antes de reescribir todo, detente y reúne los fragmentos. Casi toda finca tiene más pistas de las que parece en el primer susto.',
+      firstItems: [
+        'Revisa cuadernos, calendarios, fotos del móvil, mensajes, facturas y notas veterinarias o de inseminación.',
+        'Pregunta a quien ayudó durante la reproducción, cambios de potrero, revisiones de preñez o vigilancia de partos.',
+        'Lista cada vaca, novilla, toro y grupo reproductivo involucrado antes de intentar completar fechas.',
+        'Separa los hechos confirmados de las suposiciones para que el registro no parezca más seguro de lo que es.',
+      ],
+      rebuildOverline: 'Proceso de recuperación',
+      rebuildTitle: 'Una forma práctica de reconstruir registros perdidos',
+      rebuildSteps: [
+        {
+          title: '1. Empieza con eventos confirmados',
+          description:
+            'Anota todo lo que puedas comprobar: fecha de inseminación, entrada del toro, salida del toro, revisión de preñez, parto o monta observada.',
+          items: ['Fechas confirmadas', 'Identificación de animales', 'Toro o pareja cuando se conozca'],
+        },
+        {
+          title: '2. Convierte recuerdos débiles en rangos de fecha',
+          description:
+            'Si la pista es “a comienzos de mayo” o “después del cambio de potrero”, regístrala como rango estimado, no como una fecha exacta falsa.',
+          items: ['Fecha inicial aproximada', 'Fecha final aproximada', 'Nota explicando la fuente'],
+        },
+        {
+          title: '3. Vincula cada pista al animal correcto',
+          description:
+            'Una fecha recuperada solo sirve si sabes a qué animal pertenece. Usa identificación, nombre o número único antes de guardarla.',
+          items: ['ID de la vaca o novilla', 'Posible padre', 'Notas relacionadas'],
+        },
+        {
+          title: '4. Revisa la lista reconstruida antes de decidir',
+          description:
+            'Usa registros inciertos para planificar, pero ten cuidado con decisiones que dependan de fechas exactas. Si importan la salud o la preñez, consulta a un veterinario.',
+          items: ['Registros de alta confianza', 'Registros estimados', 'Registros aún desconocidos'],
+        },
+      ],
+      estimateOverline: 'Estimar fechas',
+      estimateTitle: 'Cómo manejar una fecha de reproducción desconocida',
+      estimateDescription:
+        'A veces la fecha exacta se perdió. El objetivo no es la perfección; es un registro útil que muestre la incertidumbre.',
+      estimateItems: [
+        'Usa el rango de fecha más confiable que puedas defender.',
+        'Si hay revisión de preñez o fecha de parto, úsala como pista, no como prueba de un día exacto de reproducción.',
+        'Agrega una nota como “estimado por ventana con toro” o “fecha incierta”.',
+        'Mantén los registros inciertos separados de los confirmados al revisar el rebaño.',
+      ],
+      avoidOverline: 'Evita esto',
+      avoidTitle: 'Qué no hacer después de perder registros reproductivos',
+      avoidItems: [
+        'No crees fechas exactas solo para que el registro parezca completo.',
+        'No mezcles fechas confirmadas y estimadas sin una nota.',
+        'No dejes los registros solo en la memoria después de reconstruirlos una vez.',
+        'No esperes hasta la temporada de partos para descubrir qué animales siguen sin historial.',
+      ],
+      systemOverline: 'Prevenir la próxima vez',
+      systemTitle: 'Construye un sistema que aguante el trabajo real de la finca',
+      systemDescription:
+        'Después de ordenar los registros perdidos, la ganancia mayor es hacer que la próxima temporada sea más difícil de perder.',
+      systemItems: [
+        'Usa una identificación única para cada animal.',
+        'Registra la reproducción el mismo día siempre que sea posible.',
+        'Mantén las fechas ligadas a la línea de tiempo del animal, no solo a un cuaderno general.',
+        'Exporta respaldos con regularidad si este dispositivo guarda el historial principal del rebaño.',
+        'Usa acceso offline para actualizar registros incluso en el campo.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre registros reproductivos perdidos',
+      faqs: [
+        {
+          question: '¿Qué pasa si no puedo recuperar la fecha exacta?',
+          answer:
+            'Usa el mejor rango que puedas sostener y márcalo como estimado. Un registro estimado claro es más seguro que una fecha exacta falsa.',
+        },
+        {
+          question: '¿Puedo estimar la reproducción desde la fecha de parto?',
+          answer:
+            'La fecha de parto puede dar una pista aproximada, pero no debe tratarse como prueba de un día exacto porque la duración de la gestación varía.',
+        },
+        {
+          question: '¿Cómo evito que vuelva a pasar?',
+          answer:
+            'Mantén una línea de tiempo por animal, registra eventos el mismo día y exporta respaldos con regularidad para que los datos no vivan en un solo lugar frágil.',
         },
       ],
     },
