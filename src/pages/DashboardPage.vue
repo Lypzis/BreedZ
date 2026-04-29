@@ -123,32 +123,60 @@
                 </div>
               </div>
 
-                <q-banner v-if="todayEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="event_available" color="primary" />
-                  </template>
-                  {{ t('dashboard.todayEmpty') }}
-                </q-banner>
+              <q-banner v-if="todayEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
+                <template #avatar>
+                  <q-icon name="event_available" color="primary" />
+                </template>
+                {{ t('dashboard.todayEmpty') }}
+              </q-banner>
 
-              <q-list v-else separator>
-                <EventListItem
-                  v-for="event in todayEventsPreview"
-                  :key="event.id"
-                  :event="event"
-                  :animal-resolver="animalById"
-                  :detail-target="eventDetailTarget(event)"
-                  :notes-fallback="t('common.noExtraNotesAdded')"
-                  :show-animal-meta="false"
-                  :show-date="false"
-                  item-class="q-py-md"
-                  :side-top="false"
-                  @open="openEventDetail"
+              <template v-else>
+                <PagedListControls
+                  :current-page="todayCurrentPage"
+                  :list-mode="todayListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="todayPageCount"
+                  :page-size="todayPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingToday', { shown: displayedTodayEventsCount, total: todayEvents.length })"
+                  :show-pagination="false"
+                  @update:current-page="todayCurrentPage = $event"
+                  @update:list-mode="todayListMode = $event"
+                  @update:page-size="todayPageSize = $event"
                 />
-              </q-list>
 
-              <div v-if="todayEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
-                {{ t('dashboard.showingToday', { shown: todayEventsPreview.length, total: todayEvents.length }) }}
-              </div>
+                <q-list separator>
+                  <EventListItem
+                    v-for="event in displayedTodayEvents"
+                    :key="event.id"
+                    :event="event"
+                    :animal-resolver="animalById"
+                    :detail-target="eventDetailTarget(event)"
+                    :notes-fallback="t('common.noExtraNotesAdded')"
+                    :show-animal-meta="false"
+                    :show-date="false"
+                    item-class="q-py-md"
+                    :side-top="false"
+                    @open="openEventDetail"
+                  />
+                </q-list>
+
+                <PagedListControls
+                  :current-page="todayCurrentPage"
+                  :list-mode="todayListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="todayPageCount"
+                  :page-size="todayPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingToday', { shown: displayedTodayEventsCount, total: todayEvents.length })"
+                  :show-header="false"
+                  @update:current-page="todayCurrentPage = $event"
+                  @update:list-mode="todayListMode = $event"
+                  @update:page-size="todayPageSize = $event"
+                />
+              </template>
             </q-card-section>
 
             <q-card-section >
@@ -162,31 +190,59 @@
                 </div>
               </div>
 
-                <q-banner v-if="upcomingEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="event" color="primary" />
-                  </template>
-                  {{ t('dashboard.upcomingEmpty') }}
-                </q-banner>
+              <q-banner v-if="upcomingEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
+                <template #avatar>
+                  <q-icon name="event" color="primary" />
+                </template>
+                {{ t('dashboard.upcomingEmpty') }}
+              </q-banner>
 
-              <q-list v-else separator>
-                <EventListItem
-                  v-for="event in upcomingEventsPreview"
-                  :key="event.id"
-                  :event="event"
-                  :animal-resolver="animalById"
-                  :detail-target="eventDetailTarget(event)"
-                  :show-animal-meta="false"
-                  :show-notes="false"
-                  item-class="q-py-md"
-                  :side-top="false"
-                  @open="openEventDetail"
+              <template v-else>
+                <PagedListControls
+                  :current-page="upcomingCurrentPage"
+                  :list-mode="upcomingListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="upcomingPageCount"
+                  :page-size="upcomingPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingUpcoming', { shown: displayedUpcomingEventsCount, total: upcomingEvents.length })"
+                  :show-pagination="false"
+                  @update:current-page="upcomingCurrentPage = $event"
+                  @update:list-mode="upcomingListMode = $event"
+                  @update:page-size="upcomingPageSize = $event"
                 />
-              </q-list>
 
-              <div v-if="upcomingEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
-                {{ t('dashboard.showingUpcoming', { shown: upcomingEventsPreview.length, total: upcomingEvents.length }) }}
-              </div>
+                <q-list separator>
+                  <EventListItem
+                    v-for="event in displayedUpcomingEvents"
+                    :key="event.id"
+                    :event="event"
+                    :animal-resolver="animalById"
+                    :detail-target="eventDetailTarget(event)"
+                    :show-animal-meta="false"
+                    :show-notes="false"
+                    item-class="q-py-md"
+                    :side-top="false"
+                    @open="openEventDetail"
+                  />
+                </q-list>
+
+                <PagedListControls
+                  :current-page="upcomingCurrentPage"
+                  :list-mode="upcomingListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="upcomingPageCount"
+                  :page-size="upcomingPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingUpcoming', { shown: displayedUpcomingEventsCount, total: upcomingEvents.length })"
+                  :show-header="false"
+                  @update:current-page="upcomingCurrentPage = $event"
+                  @update:list-mode="upcomingListMode = $event"
+                  @update:page-size="upcomingPageSize = $event"
+                />
+              </template>
             </q-card-section>
 
             <q-card-section >
@@ -200,33 +256,61 @@
                 </div>
               </div>
 
-                <q-banner v-if="animalsWithoutEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="task_alt" color="primary" />
-                  </template>
-                  {{ t('dashboard.needsSetupEmpty') }}
-                </q-banner>
+              <q-banner v-if="animalsWithoutEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
+                <template #avatar>
+                  <q-icon name="task_alt" color="primary" />
+                </template>
+                {{ t('dashboard.needsSetupEmpty') }}
+              </q-banner>
 
-              <q-list v-else separator>
-                <AnimalListItem
-                  v-for="animal in animalsWithoutEventsPreview"
-                  :key="animal.id"
-                  :animal="animal"
-                  :caption-suffix="t('dashboard.needsSetupCaption')"
-                  :detail-target="animalDetailTarget(animal)"
-                  :show-age="false"
-                  :show-breeder="false"
-                  :show-sex="false"
-                  :show-status="false"
-                  item-class="q-py-md"
-                  :side-top="false"
-                  @open="openAnimalDetail"
+              <template v-else>
+                <PagedListControls
+                  :current-page="needsSetupCurrentPage"
+                  :list-mode="needsSetupListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="needsSetupPageCount"
+                  :page-size="needsSetupPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingNeedsSetup', { shown: displayedNeedsSetupAnimalsCount, total: animalsWithoutEvents.length })"
+                  :show-pagination="false"
+                  @update:current-page="needsSetupCurrentPage = $event"
+                  @update:list-mode="needsSetupListMode = $event"
+                  @update:page-size="needsSetupPageSize = $event"
                 />
-              </q-list>
 
-              <div v-if="animalsWithoutEvents.length > dashboardSectionLimit" class="text-caption text-grey-7 q-mt-sm">
-                {{ t('dashboard.showingNeedsSetup', { shown: animalsWithoutEventsPreview.length, total: animalsWithoutEvents.length }) }}
-              </div>
+                <q-list separator>
+                  <AnimalListItem
+                    v-for="animal in displayedNeedsSetupAnimals"
+                    :key="animal.id"
+                    :animal="animal"
+                    :caption-suffix="t('dashboard.needsSetupCaption')"
+                    :detail-target="animalDetailTarget(animal)"
+                    :show-age="false"
+                    :show-breeder="false"
+                    :show-sex="false"
+                    :show-status="false"
+                    item-class="q-py-md"
+                    :side-top="false"
+                    @open="openAnimalDetail"
+                  />
+                </q-list>
+
+                <PagedListControls
+                  :current-page="needsSetupCurrentPage"
+                  :list-mode="needsSetupListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="needsSetupPageCount"
+                  :page-size="needsSetupPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingNeedsSetup', { shown: displayedNeedsSetupAnimalsCount, total: animalsWithoutEvents.length })"
+                  :show-header="false"
+                  @update:current-page="needsSetupCurrentPage = $event"
+                  @update:list-mode="needsSetupListMode = $event"
+                  @update:page-size="needsSetupPageSize = $event"
+                />
+              </template>
             </q-card-section>
 
           </template>
@@ -251,7 +335,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
@@ -259,6 +343,7 @@ import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalListItem from 'src/components/AnimalListItem.vue'
 import EventListItem from 'src/components/EventListItem.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
+import PagedListControls from 'src/components/PagedListControls.vue'
 import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
@@ -291,7 +376,24 @@ const isQuickEventDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
-const dashboardSectionLimit = 5
+const todayListMode = ref('paged')
+const todayCurrentPage = ref(1)
+const todayPageSize = ref(5)
+const upcomingListMode = ref('paged')
+const upcomingCurrentPage = ref(1)
+const upcomingPageSize = ref(5)
+const needsSetupListMode = ref('paged')
+const needsSetupCurrentPage = ref(1)
+const needsSetupPageSize = ref(5)
+const pageSizeOptions = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '25', value: 25 },
+]
+const listModeOptions = computed(() => [
+  { label: t('common.pages'), value: 'paged' },
+  { label: t('common.viewAll'), value: 'all' },
+])
 
 const hasAnimals = computed(() => animals.value.length > 0)
 const showFirstRunActions = computed(() => animalsStore.isLoaded && !hasAnimals.value)
@@ -311,11 +413,31 @@ const canShowSignInButton = computed(() =>
 const todayEvents = computed(() =>
   today.value ? events.value.filter((event) => event.date === today.value) : [],
 )
-const todayEventsPreview = computed(() => todayEvents.value.slice(0, dashboardSectionLimit))
+const todayPageCount = computed(() =>
+  Math.max(1, Math.ceil(todayEvents.value.length / todayPageSize.value)),
+)
+const paginatedTodayEvents = computed(() => {
+  const start = (todayCurrentPage.value - 1) * todayPageSize.value
+  return todayEvents.value.slice(start, start + todayPageSize.value)
+})
+const displayedTodayEvents = computed(() =>
+  todayListMode.value === 'paged' ? paginatedTodayEvents.value : todayEvents.value,
+)
+const displayedTodayEventsCount = computed(() => displayedTodayEvents.value.length)
 const upcomingEvents = computed(() =>
   today.value ? events.value.filter((event) => event.date > today.value) : [],
 )
-const upcomingEventsPreview = computed(() => upcomingEvents.value.slice(0, dashboardSectionLimit))
+const upcomingPageCount = computed(() =>
+  Math.max(1, Math.ceil(upcomingEvents.value.length / upcomingPageSize.value)),
+)
+const paginatedUpcomingEvents = computed(() => {
+  const start = (upcomingCurrentPage.value - 1) * upcomingPageSize.value
+  return upcomingEvents.value.slice(start, start + upcomingPageSize.value)
+})
+const displayedUpcomingEvents = computed(() =>
+  upcomingListMode.value === 'paged' ? paginatedUpcomingEvents.value : upcomingEvents.value,
+)
+const displayedUpcomingEventsCount = computed(() => displayedUpcomingEvents.value.length)
 const animalsWithoutEvents = computed(() => {
   const animalIdsWithEvents = new Set(
     events.value.flatMap((event) => getEventAnimalIds(event)),
@@ -323,9 +445,19 @@ const animalsWithoutEvents = computed(() => {
 
   return activeAnimals.value.filter((animal) => !animalIdsWithEvents.has(animal.id))
 })
-const animalsWithoutEventsPreview = computed(() =>
-  animalsWithoutEvents.value.slice(0, dashboardSectionLimit),
+const needsSetupPageCount = computed(() =>
+  Math.max(1, Math.ceil(animalsWithoutEvents.value.length / needsSetupPageSize.value)),
 )
+const paginatedNeedsSetupAnimals = computed(() => {
+  const start = (needsSetupCurrentPage.value - 1) * needsSetupPageSize.value
+  return animalsWithoutEvents.value.slice(start, start + needsSetupPageSize.value)
+})
+const displayedNeedsSetupAnimals = computed(() =>
+  needsSetupListMode.value === 'paged'
+    ? paginatedNeedsSetupAnimals.value
+    : animalsWithoutEvents.value,
+)
+const displayedNeedsSetupAnimalsCount = computed(() => displayedNeedsSetupAnimals.value.length)
 
 function openQuickEventDialog() {
   isQuickEventDialogOpen.value = true
@@ -386,6 +518,36 @@ function animalDetailTarget(animal) {
 function openAnimalDetail(animal) {
   void router.push(animalDetailTarget(animal))
 }
+
+watch([todayEvents, todayListMode, todayPageSize], () => {
+  todayCurrentPage.value = 1
+})
+
+watch(todayPageCount, () => {
+  if (todayCurrentPage.value > todayPageCount.value) {
+    todayCurrentPage.value = todayPageCount.value
+  }
+})
+
+watch([upcomingEvents, upcomingListMode, upcomingPageSize], () => {
+  upcomingCurrentPage.value = 1
+})
+
+watch(upcomingPageCount, () => {
+  if (upcomingCurrentPage.value > upcomingPageCount.value) {
+    upcomingCurrentPage.value = upcomingPageCount.value
+  }
+})
+
+watch([animalsWithoutEvents, needsSetupListMode, needsSetupPageSize], () => {
+  needsSetupCurrentPage.value = 1
+})
+
+watch(needsSetupPageCount, () => {
+  if (needsSetupCurrentPage.value > needsSetupPageCount.value) {
+    needsSetupCurrentPage.value = needsSetupPageCount.value
+  }
+})
 
 onMounted(async () => {
   hasHydrated.value = true
