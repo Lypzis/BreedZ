@@ -411,8 +411,12 @@ const canShowSignInButton = computed(() =>
   hasHydrated.value && isAuthLoaded.value && !isSignedIn.value,
 )
 
+function sortEventsByDateAsc(items) {
+  return [...items].sort((left, right) => (left.date ?? '').localeCompare(right.date ?? ''))
+}
+
 const todayEvents = computed(() =>
-  today.value ? events.value.filter((event) => event.date === today.value) : [],
+  today.value ? sortEventsByDateAsc(events.value.filter((event) => event.date === today.value)) : [],
 )
 const todayPageCount = computed(() =>
   Math.max(1, Math.ceil(todayEvents.value.length / todayPageSize.value)),
@@ -426,7 +430,7 @@ const displayedTodayEvents = computed(() =>
 )
 const displayedTodayEventsCount = computed(() => displayedTodayEvents.value.length)
 const upcomingEvents = computed(() =>
-  today.value ? events.value.filter((event) => event.date > today.value) : [],
+  today.value ? sortEventsByDateAsc(events.value.filter((event) => event.date > today.value)) : [],
 )
 const upcomingPageCount = computed(() =>
   Math.max(1, Math.ceil(upcomingEvents.value.length / upcomingPageSize.value)),

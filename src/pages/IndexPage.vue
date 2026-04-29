@@ -194,7 +194,7 @@
         </div>
 
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="col-12 col-md-6 col-lg">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
@@ -209,7 +209,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="col-12 col-md-6 col-lg">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
@@ -224,7 +224,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="col-12 col-md-6 col-lg">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
@@ -239,7 +239,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg-3">
+          <div class="col-12 col-md-6 col-lg">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.recordKeepingGuideTitle') }}</div>
@@ -250,6 +250,21 @@
               <q-card-actions align="right">
                 <q-btn flat color="primary" icon="open_in_new" :label="t('home.openRecordKeepingGuide')"
                   :to="recordKeepingGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('home.lostRecordsGuideTitle') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.lostRecordsGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openLostRecordsGuide')"
+                  :to="lostRecordsGuidePath" />
               </q-card-actions>
             </q-card>
           </div>
@@ -340,6 +355,9 @@ const lineageGuidePath = computed(() =>
 )
 const recordKeepingGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
+)
+const lostRecordsGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/lost-breeding-records-what-to-do'),
 )
 
 const {
