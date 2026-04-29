@@ -64,7 +64,10 @@ export function resolveStatusFromTimeline(currentStatus, events = [], referenceD
     return 'dead'
   }
 
-  if (baseStatus !== 'sold' && events.some((event) => event.type === 'sale' && isDatedOnOrBefore(event.date, referenceDate))) {
+  if (
+    baseStatus !== 'sold'
+    && events.some((event) => event.type === 'sale' && isDatedOnOrBefore(event.date, referenceDate))
+  ) {
     return 'sold'
   }
 

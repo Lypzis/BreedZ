@@ -257,28 +257,23 @@ These are the next medium-sized upgrades planned after the current MVP.
 
 Goal:
 - Surface animals approaching their expected birth window
-- Turn breeding records into useful upcoming reminders instead of passive history
+- Turn breeding records into useful upcoming guidance instead of passive history
 
 Why this matters:
 - Users naturally expect help remembering what is coming next, especially around birth and calving windows
 - The useful behavior is not "predict the exact day", but "show me which animals are getting close"
 
 Practical first version:
-- While saving an event, offer an optional `Set reminder` action
-- If enabled, let the user choose the reminder date manually
-- Save the reminder as its own future event on the animal timeline
-- Show those reminders in the Dashboard `Upcoming` section and timeline views
+- Start with breeding events only
+- After saving a breeding event, offer an optional expected-birth follow-up
+- Suggest a default date based on species gestation rules when species is known
+- Let the user adjust or skip that date
+- Surface those follow-ups in the Dashboard `Upcoming` section and the relevant animal page
 
-Data model note:
-- The reminder should belong to the animal, not be trapped inside the original event
-- It can still keep an internal link back to the source event, for example:
-  - `sourceEventId`
-  - `isReminder: true`
-
-Why this shape is better:
-- Users think in terms of "this animal needs attention later"
-- The reminder stays editable and removable on its own
-- The original event stays as historical fact, while the reminder stays future-facing
+Design note:
+- Do not treat this as a generic reminder system for every event
+- The strongest user value is specifically around breeding -> expected birth timing
+- Keep the UX distinct from normal timeline events so it does not look like duplicate records
 
 ### Breeding Pair History
 
