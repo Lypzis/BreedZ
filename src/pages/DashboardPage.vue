@@ -376,6 +376,7 @@ const isQuickEventDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
+const dashboardSectionLimit = 5
 const todayListMode = ref('paged')
 const todayCurrentPage = ref(1)
 const todayPageSize = ref(5)
