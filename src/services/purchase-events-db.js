@@ -1,6 +1,7 @@
 import { buildAnimalRecord } from './animals-db.js'
 import { createId, openAppDatabase, STORE_NAMES } from './app-db.js'
 import { normalizeEventRecord } from '../utils/event-records.js'
+import { todayDateString } from '../utils/dates.js'
 
 function uniqueIds(values = []) {
   const seen = new Set()
@@ -49,6 +50,7 @@ export function createPurchaseEventWithAnimals(input = {}) {
           animalId: animalIds[0],
           animalIds,
           type: 'purchase',
+          confirmationStatus: String(input.date ?? '').trim() > todayDateString() ? 'pending' : 'confirmed',
           amount: input.amount,
           date: input.date,
           notes: input.notes?.trim() ?? '',

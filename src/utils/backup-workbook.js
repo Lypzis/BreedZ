@@ -29,6 +29,8 @@ const EVENT_COLUMNS = [
   ['animalId', 'Animal ID'],
   ['scope', 'Scope'],
   ['type', 'Type'],
+  ['linkedEventId', 'Linked Event ID'],
+  ['confirmationStatus', 'Confirmation Status'],
   ['amount', 'Amount'],
   ['date', 'Date'],
   ['partnerAnimalId', 'Partner Animal ID'],
@@ -96,7 +98,7 @@ export function parseBackupWorkbook(workbook) {
   const eventRows = XLSX.utils.sheet_to_json(eventsSheet, { defval: '', raw: false })
 
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     exportedAt: new Date().toISOString(),
     animals: fromSheetRows(animalRows, ANIMAL_COLUMNS),
     events: fromSheetRows(eventRows, EVENT_COLUMNS),

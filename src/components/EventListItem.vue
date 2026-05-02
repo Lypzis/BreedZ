@@ -57,6 +57,7 @@ import {
   formatEventSpeciesBreedSummary,
   getEventAnimalIds,
 } from 'src/utils/event-display'
+import { isEventNeedingConfirmation, isFutureScheduledEvent } from 'src/utils/event-records'
 import { getEventAmountLabelKey } from 'src/utils/event-participants'
 import { formatDisplayDate } from 'src/utils/dates'
 
@@ -146,12 +147,21 @@ const titleText = computed(() => {
 })
 const captionText = computed(() => {
   const parts = []
+  const stateText = isEventNeedingConfirmation(props.event)
+    ? t('events.needsConfirmationState')
+    : isFutureScheduledEvent(props.event)
+      ? t('events.scheduledState')
+      : ''
   const dateText = props.showDate
     ? formatDisplayDate(props.event.date) || t('common.dateNotSet')
     : ''
   const animalMeta = props.showAnimalMeta
     ? formatEventSpeciesBreedSummary(props.event, props.animalResolver)
     : ''
+
+  if (stateText) {
+    parts.push(stateText)
+  }
 
   if (dateText) {
     parts.push(dateText)

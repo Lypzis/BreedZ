@@ -22,6 +22,12 @@ test('builds overview counts and recorded balance from animals and events', () =
         amount: 1500,
       },
       {
+        type: 'sale',
+        animalIds: ['animal-1'],
+        amount: 999,
+        confirmationStatus: 'pending',
+      },
+      {
         type: 'vaccination',
         animalIds: ['animal-1', 'animal-3'],
         amount: 100,

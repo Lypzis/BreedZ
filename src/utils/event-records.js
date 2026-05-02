@@ -1,3 +1,5 @@
+import { todayDateString } from './dates.js'
+
 function normalizeString(value, fallback = '') {
   return typeof value === 'string' ? value.trim() : fallback
 }
@@ -46,6 +48,20 @@ function normalizeAnimalIdsValue(value) {
   }
 
   return uniqueStrings(rawValue.split(','))
+}
+
+function normalizeConfirmationStatusValue(value, eventDate, referenceDate = todayDateString()) {
+  const normalizedValue = normalizeString(value).toLowerCase()
+
+  if (normalizedValue === 'pending' || normalizedValue === 'confirmed') {
+    return normalizedValue
+  }
+
+  if (normalizeString(eventDate) > normalizeString(referenceDate)) {
+    return 'pending'
+  }
+
+  return 'confirmed'
 }
 
 function parseLocaleAgnosticNumber(value) {
@@ -107,6 +123,26 @@ export function normalizeEventAmount(value) {
   return Number.isFinite(parsedValue) ? parsedValue : null
 }
 
+export function sanitizeNonNegativeAmountInput(value) {
+  const rawValue = normalizeString(value)
+
+  if (!rawValue) {
+    return ''
+  }
+
+  const sanitizedValue = rawValue.replace(/[^0-9.,]/g, '')
+
+  if (!sanitizedValue) {
+    return ''
+  }
+
+  if (sanitizedValue.startsWith('.') || sanitizedValue.startsWith(',')) {
+    return `0${sanitizedValue}`
+  }
+
+  return sanitizedValue
+}
+
 export function deriveEventAnimalIds(event = {}) {
   const type = normalizeString(event.type)
   const normalizedAnimalIds = normalizeAnimalIdsValue(event.animalIds)
@@ -147,6 +183,8 @@ export function normalizeEventRecord(event = {}) {
     animalIds,
     animalId,
     partnerAnimalId,
+    linkedEventId: normalizeString(event.linkedEventId),
+    confirmationStatus: normalizeConfirmationStatusValue(event.confirmationStatus, event.date),
     amount: normalizeEventAmount(event.amount),
   }
 }
@@ -159,4 +197,23 @@ export function eventIncludesAnimal(event, animalId) {
   }
 
   return normalizeEventRecord(event).animalIds.includes(normalizedAnimalId)
+}
+
+export function isPendingEvent(event = {}) {
+  return normalizeEventRecord(event).confirmationStatus === 'pending'
+}
+
+export function isFutureScheduledEvent(event = {}, referenceDate = todayDateString()) {
+  const normalizedEvent = normalizeEventRecord(event)
+
+  return normalizedEvent.confirmationStatus === 'pending'
+    && normalizeString(normalizedEvent.date) > normalizeString(referenceDate)
+}
+
+export function isEventNeedingConfirmation(event = {}, referenceDate = todayDateString()) {
+  const normalizedEvent = normalizeEventRecord(event)
+
+  return normalizedEvent.confirmationStatus === 'pending'
+    && normalizeString(normalizedEvent.date) !== ''
+    && normalizeString(normalizedEvent.date) <= normalizeString(referenceDate)
 }

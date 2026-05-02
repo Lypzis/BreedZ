@@ -24,7 +24,13 @@
               <q-input v-model="form.date" outlined type="date" :label="t('events.eventDate')" />
             </div>
             <div >
-              <q-input v-model="form.amount" outlined inputmode="decimal" :label="t('events.price')" />
+              <q-input
+                :model-value="form.amount"
+                outlined
+                inputmode="decimal"
+                :label="t('events.price')"
+                @update:model-value="updateAmountValue"
+              />
             </div>
 
           <AnimalMultiPickerField
@@ -156,6 +162,7 @@ import { useQuasar } from 'quasar'
 import AnimalMultiPickerField from 'src/components/AnimalMultiPickerField.vue'
 import { useI18nText } from 'src/i18n'
 import { todayDateString } from 'src/utils/dates'
+import { sanitizeNonNegativeAmountInput } from 'src/utils/event-records'
 import { canCreateAnimal } from 'src/utils/premium-limits'
 
 const props = defineProps({
@@ -238,6 +245,10 @@ function defaultNewAnimalForm() {
     birthDate: '',
     notes: '',
   }
+}
+
+function updateAmountValue(value) {
+  form.amount = sanitizeNonNegativeAmountInput(value)
 }
 
 function hasNewAnimalContent(animal) {

@@ -298,7 +298,7 @@
           @update:list-mode="timelineListMode = $event" @update:page-size="timelinePageSize = $event" />
       </template>
     </q-card>
-    <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :event="selectedEvent"
+    <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :events="events" :event="selectedEvent"
       :fixed-animal-id="animalId" :mode="eventFormMode"
       :overline="t('animalDetail.eventDialogOverline')" :title="eventDialogTitle" @purchase-selected="openPurchaseDialog"
       @submit="submitEvent" />

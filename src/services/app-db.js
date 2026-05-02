@@ -19,6 +19,8 @@ function isEventCanonicallyStored(event, normalizedEvent) {
     JSON.stringify(event.animalIds ?? []) === JSON.stringify(normalizedEvent.animalIds) &&
     (event.animalId ?? '') === normalizedEvent.animalId &&
     (event.partnerAnimalId ?? '') === normalizedEvent.partnerAnimalId &&
+    (event.linkedEventId ?? '') === normalizedEvent.linkedEventId &&
+    (event.confirmationStatus ?? '') === normalizedEvent.confirmationStatus &&
     (event.amount ?? null) === normalizedEvent.amount
   )
 }

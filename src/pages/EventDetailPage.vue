@@ -28,6 +28,16 @@
                 {{ formatDate(event.date) }}
               </q-chip>
             </div>
+            <div v-if="eventStateChip" class="col-auto">
+              <q-chip
+                square
+                :color="eventStateChip.color"
+                :text-color="eventStateChip.textColor"
+                :icon="eventStateChip.icon"
+              >
+                {{ eventStateChip.label }}
+              </q-chip>
+            </div>
             <div v-if="amountDisplay" class="col-auto">
               <q-chip square color="green-1" text-color="primary" icon="paid">
                 {{ amountLabel }}: {{ amountDisplay }}
@@ -41,6 +51,14 @@
           </template>
 
           <template #actions>
+            <q-btn
+              v-if="canConfirmEvent"
+              unelevated
+              color="primary"
+              icon="task_alt"
+              :label="t('events.confirmEvent')"
+              @click="confirmPendingEvent"
+            />
             <q-btn unelevated color="primary" icon="edit" :label="t('events.editEvent')" @click="openEditDialog" />
             <q-btn outline color="negative" icon="delete" :label="t('events.deleteEvent')"
               @click="confirmDeleteEvent" />
@@ -115,7 +133,7 @@
       </template>
     </q-card>
 
-    <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :event="event" mode="edit"
+    <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :events="events" :event="event" mode="edit"
       :title="t('events.editEvent')" @submit="submitEvent" />
   </AppPageShell>
 </template>
@@ -141,7 +159,8 @@ import {
   getEventAnimals,
 } from 'src/utils/event-display'
 import { getEventAmountLabelKey } from 'src/utils/event-participants'
-import { formatDisplayDate } from 'src/utils/dates'
+import { formatDisplayDate, todayDateString } from 'src/utils/dates'
+import { isEventNeedingConfirmation, isFutureScheduledEvent } from 'src/utils/event-records'
 
 const route = useRoute()
 const router = useRouter()
@@ -165,6 +184,32 @@ const loadErrorMessage = computed(() => animalsErrorMessage.value || eventsError
 const affectedAnimals = computed(() => getEventAnimals(event.value, animalById))
 const amountDisplay = computed(() => formatEventAmount(event.value?.amount))
 const amountLabel = computed(() => t(getEventAmountLabelKey(event.value?.type)))
+const canConfirmEvent = computed(() => event.value && isEventNeedingConfirmation(event.value, todayDateString()))
+const eventStateChip = computed(() => {
+  if (!event.value) {
+    return null
+  }
+
+  if (isEventNeedingConfirmation(event.value, todayDateString())) {
+    return {
+      color: 'orange-1',
+      textColor: 'warning',
+      icon: 'pending_actions',
+      label: t('events.needsConfirmationState'),
+    }
+  }
+
+  if (isFutureScheduledEvent(event.value, todayDateString())) {
+    return {
+      color: 'blue-1',
+      textColor: 'primary',
+      icon: 'schedule',
+      label: t('events.scheduledState'),
+    }
+  }
+
+  return null
+})
 const pageSizeOptions = [
   { label: '10', value: 10 },
   { label: '25', value: 25 },
@@ -262,6 +307,28 @@ async function submitEvent(payload) {
     $q.notify({
       color: 'negative',
       message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function confirmPendingEvent() {
+  if (!event.value) {
+    return
+  }
+
+  try {
+    await eventsStore.confirmEventById(event.value.id)
+    await animalsStore.loadAnimals()
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventConfirmed'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventConfirmFailed'),
       position: 'top',
     })
   }

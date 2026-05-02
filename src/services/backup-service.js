@@ -11,7 +11,7 @@ export async function buildBackupPayload() {
   const [animals, events] = await Promise.all([listAnimals(), listEvents()])
 
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     exportedAt: new Date().toISOString(),
     animals,
     events,

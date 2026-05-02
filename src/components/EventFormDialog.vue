@@ -69,12 +69,33 @@
             :dialog-title="t('events.pickPartner')"
             :empty-label="t('common.noAnimalSelected')"
           />
-          <q-input v-model="eventForm.date" outlined type="date" :label="t('events.eventDate')" />
+          <q-toggle
+            v-if="showExpectedBirthPlanner"
+            v-model="eventForm.expectedBirthEnabled"
+            color="primary"
+            :label="t('events.addExpectedBirth')"
+          />
           <q-input
-            v-model="eventForm.amount"
+            v-if="showExpectedBirthPlanner && eventForm.expectedBirthEnabled"
+            v-model="eventForm.expectedBirthDate"
+            outlined
+            type="date"
+            :label="t('events.expectedBirthDate')"
+            :min="todayDateString()"
+          />
+          <q-input
+            v-model="eventForm.date"
+            outlined
+            type="date"
+            :label="t('events.eventDate')"
+            :min="eventDateMin || undefined"
+          />
+          <q-input
+            :model-value="eventForm.amount"
             outlined
             inputmode="decimal"
             :label="eventAmountLabel"
+            @update:model-value="updateAmountValue"
           />
           <q-input v-model="eventForm.notes" outlined autogrow type="textarea" :label="t('events.notes')" />
 
@@ -106,7 +127,7 @@ import {
   getEventSelectionMode,
 } from 'src/utils/event-participants'
 import { todayDateString } from 'src/utils/dates'
-import { normalizeEventRecord } from 'src/utils/event-records'
+import { normalizeEventRecord, sanitizeNonNegativeAmountInput } from 'src/utils/event-records'
 
 const props = defineProps({
   modelValue: {
@@ -114,6 +135,10 @@ const props = defineProps({
     default: false,
   },
   animals: {
+    type: Array,
+    default: () => [],
+  },
+  events: {
     type: Array,
     default: () => [],
   },
@@ -172,6 +197,10 @@ const submitLabel = computed(() =>
 const eventSelectionMode = computed(() => getEventSelectionMode(eventForm.type))
 const eventAmountLabel = computed(() => t(getEventAmountLabelKey(eventForm.type)))
 const isHerdScopedEvent = computed(() => eventSelectionMode.value === 'optionalMulti')
+const eventDateMin = computed(() => (eventForm.type === 'expected_birth' ? todayDateString() : ''))
+const showExpectedBirthPlanner = computed(() =>
+  eventForm.type === 'breeding',
+)
 const multiAnimalPickerLabel = computed(() => {
   if (isHerdScopedEvent.value) {
     return t('events.pickAnimalsOptional')
@@ -188,6 +217,14 @@ const breedingPartnerAnimals = computed(() =>
     currentPartnerId: eventForm.partnerAnimalId,
   }),
 )
+const linkedExpectedBirthEvent = computed(() => {
+  if (!props.event?.linkedEventId) {
+    return null
+  }
+
+  const linkedEvent = props.events.find((event) => event.id === props.event.linkedEventId) ?? null
+  return linkedEvent?.type === 'expected_birth' ? linkedEvent : null
+})
 
 function defaultEventForm() {
   return {
@@ -195,6 +232,8 @@ function defaultEventForm() {
     animalIds: [],
     type: 'breeding',
     partnerAnimalId: '',
+    expectedBirthEnabled: false,
+    expectedBirthDate: '',
     amount: '',
     date: todayDateString(),
     notes: '',
@@ -218,6 +257,10 @@ function syncForm() {
       animalIds: getEventAnimalIdsForForm(normalizedEvent),
       type: normalizedEvent.type ?? 'breeding',
       partnerAnimalId: normalizedEvent.animalIds[1] ?? '',
+      expectedBirthEnabled:
+        normalizedEvent.type === 'breeding' && Boolean(linkedExpectedBirthEvent.value),
+      expectedBirthDate:
+        normalizedEvent.type === 'breeding' ? (linkedExpectedBirthEvent.value?.date ?? '') : '',
       amount: normalizedEvent.amount != null ? String(normalizedEvent.amount) : '',
       date: normalizedEvent.date || todayDateString(),
       notes: normalizedEvent.notes ?? '',
@@ -291,6 +334,73 @@ function submitForm() {
     }
   }
 
+  if (eventForm.type === 'expected_birth') {
+    const targetAnimal = props.animals.find((animal) => animal.id === primaryAnimalId)
+
+    if (!eventForm.date || eventForm.date < todayDateString()) {
+      $q.notify({
+        color: 'negative',
+        message: t('events.expectedBirthFutureDateOnly'),
+        position: 'top',
+      })
+      return
+    }
+
+    if (targetAnimal?.sex === 'male') {
+      $q.notify({
+        color: 'negative',
+        message: t('events.expectedBirthFemaleOnly'),
+        position: 'top',
+      })
+      return
+    }
+  }
+
+  let expectedBirthPlan = null
+
+  if (showExpectedBirthPlanner.value && eventForm.expectedBirthEnabled) {
+    if (!eventForm.expectedBirthDate) {
+      $q.notify({
+        color: 'negative',
+        message: t('events.expectedBirthDateRequired'),
+        position: 'top',
+      })
+      return
+    }
+
+    if (eventForm.expectedBirthDate < todayDateString()) {
+      $q.notify({
+        color: 'negative',
+        message: t('events.expectedBirthFutureDateOnly'),
+        position: 'top',
+      })
+      return
+    }
+
+    const expectedBirthAnimalId = resolveExpectedBirthAnimalId(eventAnimalIds)
+
+    if (!expectedBirthAnimalId) {
+      $q.notify({
+        color: 'negative',
+        message: t('events.expectedBirthNeedsFemale'),
+        position: 'top',
+      })
+      return
+    }
+
+    expectedBirthPlan = {
+      enabled: true,
+      animalId: expectedBirthAnimalId,
+      date: eventForm.expectedBirthDate,
+      linkedEventId: linkedExpectedBirthEvent.value?.id ?? '',
+    }
+  } else if (showExpectedBirthPlanner.value) {
+    expectedBirthPlan = {
+      enabled: false,
+      linkedEventId: linkedExpectedBirthEvent.value?.id ?? '',
+    }
+  }
+
   emit('submit', {
     animalId: eventAnimalIds[0] ?? eventForm.animalId,
     animalIds: eventAnimalIds,
@@ -300,7 +410,26 @@ function submitForm() {
     amount: eventForm.amount,
     date: eventForm.date,
     notes: eventForm.notes,
+    expectedBirthPlan,
   })
+}
+
+function resolveExpectedBirthAnimalId(eventAnimalIds = []) {
+  const relatedAnimals = eventAnimalIds
+    .map((animalId) => props.animals.find((animal) => animal.id === animalId))
+    .filter(Boolean)
+
+  const femaleAnimals = relatedAnimals.filter((animal) => animal.sex === 'female')
+
+  if (femaleAnimals.length === 0) {
+    return ''
+  }
+
+  return femaleAnimals[0].id ?? ''
+}
+
+function updateAmountValue(value) {
+  eventForm.amount = sanitizeNonNegativeAmountInput(value)
 }
 
 function buildSelectableEventAnimals(selectedIds = []) {
@@ -308,9 +437,17 @@ function buildSelectableEventAnimals(selectedIds = []) {
     .map((animalId) => props.animals.find((animal) => animal.id === animalId))
     .filter(Boolean)
 
+  const availableAnimals = activeAnimalsForEvents.value.filter((animal) => {
+    if (eventForm.type !== 'expected_birth') {
+      return true
+    }
+
+    return animal.sex !== 'male'
+  })
+
   return [
     ...selectedAnimals,
-    ...activeAnimalsForEvents.value.filter((animal) =>
+    ...availableAnimals.filter((animal) =>
       !selectedIds.includes(animal.id),
     ),
   ]
@@ -326,7 +463,7 @@ watch(
 )
 
 watch(
-  () => [props.event, props.defaultAnimalId, props.fixedAnimalId, props.animals],
+  () => [props.event, props.events, props.defaultAnimalId, props.fixedAnimalId, props.animals],
   () => {
     if (props.modelValue) {
       syncForm()
@@ -357,6 +494,8 @@ watch(
 
     if (value !== 'breeding') {
       eventForm.partnerAnimalId = ''
+      eventForm.expectedBirthEnabled = false
+      eventForm.expectedBirthDate = ''
     }
 
     if (getEventSelectionMode(value) === 'multi' || getEventSelectionMode(value) === 'optionalMulti') {

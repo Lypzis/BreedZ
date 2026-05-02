@@ -1,4 +1,4 @@
-import { normalizeEventAmount, normalizeEventRecord } from './event-records.js'
+import { isPendingEvent, normalizeEventAmount, normalizeEventRecord } from './event-records.js'
 
 const COST_EVENT_TYPES = new Set([
   'purchase',
@@ -45,6 +45,11 @@ export function buildOverviewSummary(animals = [], events = []) {
 
   for (const rawEvent of events) {
     const event = normalizeEventRecord(rawEvent)
+
+    if (isPendingEvent(event)) {
+      continue
+    }
+
     const type = event.type || 'custom'
     const amount = normalizeEventAmount(event.amount) ?? 0
 
