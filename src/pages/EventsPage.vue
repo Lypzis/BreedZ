@@ -208,6 +208,7 @@
     <EventFormDialog
       v-model="isEventDialogOpen"
       :animals="animals"
+      :events="events"
       :event="selectedEvent"
       :mode="eventFormMode"
       :title="eventDialogTitle"
@@ -286,13 +287,24 @@ const eventDialogTitle = computed(() =>
   eventFormMode.value === 'edit' ? t('events.editEvent') : t('events.addEvent'),
 )
 
-const filteredEvents = computed(() => {
-  return filterEventsList(events.value, animalById, {
-    searchTerm: searchTerm.value,
-    eventType: selectedEventType.value,
-    startDate: startDate.value,
-    endDate: endDate.value,
+function sortEventsByNewestCreated(items) {
+  return [...items].sort((left, right) => {
+    const leftValue = left.createdAt ?? left.updatedAt ?? left.date ?? ''
+    const rightValue = right.createdAt ?? right.updatedAt ?? right.date ?? ''
+
+    return rightValue.localeCompare(leftValue)
   })
+}
+
+const filteredEvents = computed(() => {
+  return sortEventsByNewestCreated(
+    filterEventsList(events.value, animalById, {
+      searchTerm: searchTerm.value,
+      eventType: selectedEventType.value,
+      startDate: startDate.value,
+      endDate: endDate.value,
+    }),
+  )
 })
 const selectedEvent = computed(() =>
   events.value.find((event) => event.id === selectedEventId.value) ?? null,

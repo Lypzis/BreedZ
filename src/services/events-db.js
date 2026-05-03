@@ -5,6 +5,7 @@ import {
   withStore,
 } from 'src/services/app-db'
 import { getAnimal, touchAnimalUpdatedAt } from 'src/services/animals-db'
+import { todayDateString } from 'src/utils/dates'
 import { resolveBaseStatus, resolveStatusFromTimeline } from 'src/utils/event-status'
 import { eventIncludesAnimal, normalizeEventRecord } from 'src/utils/event-records'
 
@@ -63,6 +64,27 @@ async function syncAnimalStatusesByIds(ids = []) {
   }
 }
 
+function resolveConfirmationStatus(input = {}, existingEvent = null, referenceDate = todayDateString()) {
+  const explicitStatus = String(input.confirmationStatus ?? '').trim().toLowerCase()
+
+  if (explicitStatus === 'pending' || explicitStatus === 'confirmed') {
+    return explicitStatus
+  }
+
+  const nextDate = String(input.date ?? existingEvent?.date ?? '').trim()
+  const existingStatus = String(existingEvent?.confirmationStatus ?? '').trim().toLowerCase()
+
+  if (nextDate > String(referenceDate)) {
+    return 'pending'
+  }
+
+  if (existingStatus === 'pending') {
+    return 'pending'
+  }
+
+  return 'confirmed'
+}
+
 export async function createEvent(input) {
   const timestamp = new Date().toISOString()
   const event = normalizeEventRecord({
@@ -72,6 +94,8 @@ export async function createEvent(input) {
     scope: input.scope,
     type: input.type,
     partnerAnimalId: input.partnerAnimalId,
+    linkedEventId: input.linkedEventId,
+    confirmationStatus: resolveConfirmationStatus(input),
     amount: input.amount,
     date: input.date,
     notes: input.notes?.trim() ?? '',
@@ -99,6 +123,8 @@ export async function updateEvent(id, input) {
     scope: input.scope ?? existingEvent.scope,
     type: input.type ?? existingEvent.type,
     partnerAnimalId: input.partnerAnimalId ?? existingEvent.partnerAnimalId,
+    linkedEventId: input.linkedEventId ?? existingEvent.linkedEventId,
+    confirmationStatus: resolveConfirmationStatus(input, existingEvent),
     amount: input.amount ?? existingEvent.amount,
     date: input.date ?? existingEvent.date,
     notes: input.notes?.trim() ?? '',
@@ -109,6 +135,29 @@ export async function updateEvent(id, input) {
   await syncAnimalStatusesByIds([...existingEvent.animalIds, ...updatedEvent.animalIds])
 
   return updatedEvent
+}
+
+export async function confirmEvent(id) {
+  const existingEvent = await getEvent(id)
+
+  if (!existingEvent) {
+    throw new Error('Event not found.')
+  }
+
+  if ((existingEvent.date ?? '') > todayDateString()) {
+    throw new Error('Future events cannot be confirmed yet.')
+  }
+
+  const confirmedEvent = normalizeEventRecord({
+    ...existingEvent,
+    confirmationStatus: 'confirmed',
+    updatedAt: new Date().toISOString(),
+  })
+
+  await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(confirmedEvent))
+  await syncAnimalStatusesByIds(confirmedEvent.animalIds)
+
+  return confirmedEvent
 }
 
 export async function deleteEvent(id) {
@@ -150,6 +199,11 @@ export async function deleteEventsForAnimal(animalId) {
 
     if (shouldDeleteEvent) {
       await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.id))
+
+      if (event.linkedEventId) {
+        await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.linkedEventId))
+      }
+
       continue
     }
 

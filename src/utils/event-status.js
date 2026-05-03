@@ -18,7 +18,23 @@ function normalizeStatusValue(value) {
   return ''
 }
 
-export function resolveBaseStatus(baseStatus, currentStatus, events = [], referenceDate = todayDateString()) {
+function normalizeConfirmationStatusValue(value) {
+  const normalizedValue = String(value || '').trim().toLowerCase()
+
+  if (normalizedValue === 'pending' || normalizedValue === 'confirmed') {
+    return normalizedValue
+  }
+
+  return 'confirmed'
+}
+
+function isConfirmedDatedEvent(event, type, referenceDate = todayDateString()) {
+  return event.type === type
+    && normalizeConfirmationStatusValue(event.confirmationStatus) === 'confirmed'
+    && isDatedOnOrBefore(event.date, referenceDate)
+}
+
+export function resolveBaseStatus(baseStatus, currentStatus, events = []) {
   const persistedBaseStatus = normalizeStatusValue(baseStatus)
 
   if (persistedBaseStatus) {
@@ -33,7 +49,7 @@ export function resolveBaseStatus(baseStatus, currentStatus, events = [], refere
 
   if (
     fallbackStatus === 'sold'
-    && events.some((event) => event.type === 'sale' && isDatedOnOrBefore(event.date, referenceDate))
+    && events.some((event) => event.type === 'sale')
   ) {
     return 'active'
   }
@@ -41,12 +57,26 @@ export function resolveBaseStatus(baseStatus, currentStatus, events = [], refere
   return fallbackStatus
 }
 
-export function resolveStatusAfterEvent(currentStatus, eventType, eventDate, referenceDate = todayDateString()) {
-  if (eventType === 'death') {
+export function resolveStatusAfterEvent(
+  currentStatus,
+  eventType,
+  eventDate,
+  referenceDate = todayDateString(),
+  confirmationStatus = 'confirmed',
+) {
+  if (
+    eventType === 'death'
+    && normalizeConfirmationStatusValue(confirmationStatus) === 'confirmed'
+    && isDatedOnOrBefore(eventDate, referenceDate)
+  ) {
     return 'dead'
   }
 
-  if (eventType === 'sale' && isDatedOnOrBefore(eventDate, referenceDate)) {
+  if (
+    eventType === 'sale'
+    && normalizeConfirmationStatusValue(confirmationStatus) === 'confirmed'
+    && isDatedOnOrBefore(eventDate, referenceDate)
+  ) {
     return 'sold'
   }
 
@@ -60,13 +90,13 @@ export function resolveStatusFromTimeline(currentStatus, events = [], referenceD
     return 'dead'
   }
 
-  if (events.some((event) => event.type === 'death')) {
+  if (events.some((event) => isConfirmedDatedEvent(event, 'death', referenceDate))) {
     return 'dead'
   }
 
   if (
     baseStatus !== 'sold'
-    && events.some((event) => event.type === 'sale' && isDatedOnOrBefore(event.date, referenceDate))
+    && events.some((event) => isConfirmedDatedEvent(event, 'sale', referenceDate))
   ) {
     return 'sold'
   }

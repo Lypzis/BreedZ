@@ -4,6 +4,7 @@ const VALID_STATUSES = new Set(['active', 'sold', 'dead'])
 const VALID_SEXES = new Set(['female', 'male', 'unknown'])
 const VALID_EVENT_TYPES = new Set([
   'birth',
+  'expected_birth',
   'breeding',
   'purchase',
   'sale',
@@ -187,6 +188,8 @@ export function validateAndNormalizeBackupPayload(payload) {
       scope,
       type,
       partnerAnimalId: type === 'breeding' ? partnerAnimalId : '',
+      linkedEventId: normalizeString(event.linkedEventId),
+      confirmationStatus: normalizeString(event.confirmationStatus),
       amount: event.amount,
       date: normalizeString(event.date),
       notes: normalizeString(event.notes),
@@ -196,7 +199,7 @@ export function validateAndNormalizeBackupPayload(payload) {
   })
 
   return {
-    schemaVersion: typeof payload.schemaVersion === 'number' ? payload.schemaVersion : 3,
+    schemaVersion: typeof payload.schemaVersion === 'number' ? payload.schemaVersion : 4,
     exportedAt: normalizeTimestamp(payload.exportedAt),
     animals: normalizedAnimals,
     events: normalizedEvents,

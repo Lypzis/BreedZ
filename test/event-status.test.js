@@ -6,7 +6,7 @@ import {
   resolveStatusFromTimeline,
 } from '../src/utils/event-status.js'
 
-test('marks the animal as dead for death events', () => {
+test('marks the animal as dead for confirmed death events dated today or earlier', () => {
   assert.equal(resolveStatusAfterEvent('active', 'death', '2026-04-06'), 'dead')
   assert.equal(resolveStatusAfterEvent('sold', 'death', '2026-04-06'), 'dead')
 })
@@ -25,9 +25,18 @@ test('keeps the animal active for future sale events', () => {
   assert.equal(resolveStatusAfterEvent('active', 'sale', '2026-04-07', '2026-04-06'), 'active')
 })
 
+test('does not apply pending sale or death events to animal status', () => {
+  assert.equal(resolveStatusAfterEvent('active', 'sale', '2026-04-05', '2026-04-06', 'pending'), 'active')
+  assert.equal(resolveStatusAfterEvent('active', 'death', '2026-04-05', '2026-04-06', 'pending'), 'active')
+})
+
 test('timeline reconciliation prioritizes death over sale and applies due sale events', () => {
   assert.equal(
-    resolveStatusFromTimeline('active', [{ type: 'sale', date: '2026-04-05' }], '2026-04-06'),
+    resolveStatusFromTimeline(
+      'active',
+      [{ type: 'sale', date: '2026-04-05', confirmationStatus: 'confirmed' }],
+      '2026-04-06',
+    ),
     'sold',
   )
 
@@ -35,8 +44,8 @@ test('timeline reconciliation prioritizes death over sale and applies due sale e
     resolveStatusFromTimeline(
       'active',
       [
-        { type: 'sale', date: '2026-04-05' },
-        { type: 'death', date: '2026-04-04' },
+        { type: 'sale', date: '2026-04-05', confirmationStatus: 'confirmed' },
+        { type: 'death', date: '2026-04-04', confirmationStatus: 'confirmed' },
       ],
       '2026-04-06',
     ),
@@ -46,7 +55,11 @@ test('timeline reconciliation prioritizes death over sale and applies due sale e
 
 test('timeline reconciliation does not apply future sale events early', () => {
   assert.equal(
-    resolveStatusFromTimeline('active', [{ type: 'sale', date: '2026-04-07' }], '2026-04-06'),
+    resolveStatusFromTimeline(
+      'active',
+      [{ type: 'sale', date: '2026-04-07', confirmationStatus: 'pending' }],
+      '2026-04-06',
+    ),
     'active',
   )
 })
@@ -56,7 +69,7 @@ test('resolves a missing base status back to active when legacy sold status is f
     resolveBaseStatus(
       '',
       'sold',
-      [{ type: 'sale', date: '2026-04-05' }],
+      [{ type: 'sale', date: '2026-04-05', confirmationStatus: 'confirmed' }],
       '2026-04-06',
     ),
     'active',
@@ -68,7 +81,7 @@ test('resolves a missing base status back to active when legacy dead status is f
     resolveBaseStatus(
       '',
       'dead',
-      [{ type: 'death', date: '2026-04-05' }],
+      [{ type: 'death', date: '2026-04-05', confirmationStatus: 'confirmed' }],
       '2026-04-06',
     ),
     'active',

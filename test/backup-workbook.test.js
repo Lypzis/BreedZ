@@ -11,7 +11,7 @@ import { validateAndNormalizeBackupPayload } from '../src/utils/backup-data.js'
 
 test('round-trips backup data through the Excel workbook format', () => {
   const workbookArray = writeBackupWorkbookArray({
-    schemaVersion: 3,
+    schemaVersion: 4,
     exportedAt: '2026-04-08T12:00:00.000Z',
     animals: [
       {
@@ -57,6 +57,8 @@ test('round-trips backup data through the Excel workbook format', () => {
         animalId: 'animal-1',
         animalIds: ['animal-1', 'animal-2'],
         type: 'breeding',
+        linkedEventId: 'event-2',
+        confirmationStatus: 'confirmed',
         amount: 1250.5,
         partnerAnimalId: 'animal-2',
         date: '2026-04-03',
@@ -80,6 +82,8 @@ test('round-trips backup data through the Excel workbook format', () => {
   assert.deepEqual(normalizedPayload.events[0].animalIds, ['animal-1', 'animal-2'])
   assert.equal(normalizedPayload.events[0].partnerAnimalId, 'animal-2')
   assert.equal(normalizedPayload.events[0].type, 'breeding')
+  assert.equal(normalizedPayload.events[0].linkedEventId, 'event-2')
+  assert.equal(normalizedPayload.events[0].confirmationStatus, 'confirmed')
   assert.equal(normalizedPayload.events[0].amount, 1250.5)
 })
 

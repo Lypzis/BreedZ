@@ -80,7 +80,7 @@
 
             <q-card-section>
               <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-4">
+                <div class="col-12 col-sm-6 col-lg-3">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="pets" color="primary" />
@@ -90,7 +90,7 @@
                   </q-banner>
                 </div>
 
-                <div class="col-12 col-sm-4">
+                <div class="col-12 col-sm-6 col-lg-3">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="today" color="primary" />
@@ -100,13 +100,23 @@
                   </q-banner>
                 </div>
 
-                <div class="col-12 col-sm-4">
+                <div class="col-12 col-sm-6 col-lg-3">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="schedule" color="primary" />
                     </template>
                     <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.upcomingEventsTitle', { count: upcomingEvents.length }) }}</div>
                     <div class="text-caption text-grey-8">{{ t('dashboard.upcomingEventsCaption') }}</div>
+                  </q-banner>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <q-banner rounded class="bg-orange-1 text-warning">
+                    <template #avatar>
+                      <q-icon name="pending_actions" color="warning" />
+                    </template>
+                    <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.needsConfirmationEventsTitle', { count: needsConfirmationEvents.length }) }}</div>
+                    <div class="text-caption text-grey-8">{{ t('dashboard.needsConfirmationEventsCaption') }}</div>
                   </q-banner>
                 </div>
               </div>
@@ -248,6 +258,72 @@
             <q-card-section >
               <div class="row items-center justify-between q-col-gutter-sm">
                 <div class="col">
+                  <div class="text-overline text-weight-bold text-warning">{{ t('dashboard.needsConfirmationOverline') }}</div>
+                  <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.needsConfirmationSectionTitle') }}</div>
+                </div>
+                <div v-if="needsConfirmationEvents.length > dashboardSectionLimit" class="col-auto">
+                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
+                </div>
+              </div>
+
+              <q-banner v-if="needsConfirmationEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
+                <template #avatar>
+                  <q-icon name="task_alt" color="primary" />
+                </template>
+                {{ t('dashboard.needsConfirmationEmpty') }}
+              </q-banner>
+
+              <template v-else>
+                <PagedListControls
+                  :current-page="needsConfirmationCurrentPage"
+                  :list-mode="needsConfirmationListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="needsConfirmationPageCount"
+                  :page-size="needsConfirmationPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingNeedsConfirmation', { shown: displayedNeedsConfirmationEventsCount, total: needsConfirmationEvents.length })"
+                  :show-pagination="false"
+                  @update:current-page="needsConfirmationCurrentPage = $event"
+                  @update:list-mode="needsConfirmationListMode = $event"
+                  @update:page-size="needsConfirmationPageSize = $event"
+                />
+
+                <q-list separator>
+                  <EventListItem
+                    v-for="event in displayedNeedsConfirmationEvents"
+                    :key="event.id"
+                    :event="event"
+                    :animal-resolver="animalById"
+                    :detail-target="eventDetailTarget(event)"
+                    :show-animal-meta="false"
+                    :show-notes="false"
+                    item-class="q-py-md"
+                    :side-top="false"
+                    @open="openEventDetail"
+                  />
+                </q-list>
+
+                <PagedListControls
+                  :current-page="needsConfirmationCurrentPage"
+                  :list-mode="needsConfirmationListMode"
+                  :list-mode-options="listModeOptions"
+                  :page-count="needsConfirmationPageCount"
+                  :page-size="needsConfirmationPageSize"
+                  :page-size-options="pageSizeOptions"
+                  :per-page-label="t('common.perPage')"
+                  :showing-text="t('dashboard.showingNeedsConfirmation', { shown: displayedNeedsConfirmationEventsCount, total: needsConfirmationEvents.length })"
+                  :show-header="false"
+                  @update:current-page="needsConfirmationCurrentPage = $event"
+                  @update:list-mode="needsConfirmationListMode = $event"
+                  @update:page-size="needsConfirmationPageSize = $event"
+                />
+              </template>
+            </q-card-section>
+
+            <q-card-section >
+              <div class="row items-center justify-between q-col-gutter-sm">
+                <div class="col">
                   <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.needsSetupOverline') }}</div>
                   <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.needsSetupTitle') }}</div>
                 </div>
@@ -318,6 +394,7 @@
     <EventFormDialog
       v-model="isQuickEventDialogOpen"
       :animals="activeAnimals"
+      :events="events"
       :overline="t('dashboard.overline')"
       :title="t('dashboard.quickAddTitle')"
       @purchase-selected="openPurchaseDialog"
@@ -350,7 +427,7 @@ import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
-import { getEventAnimalIds } from 'src/utils/event-records'
+import { getEventAnimalIds, isEventNeedingConfirmation, isFutureScheduledEvent } from 'src/utils/event-records'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -383,6 +460,9 @@ const todayPageSize = ref(5)
 const upcomingListMode = ref('paged')
 const upcomingCurrentPage = ref(1)
 const upcomingPageSize = ref(5)
+const needsConfirmationListMode = ref('paged')
+const needsConfirmationCurrentPage = ref(1)
+const needsConfirmationPageSize = ref(5)
 const needsSetupListMode = ref('paged')
 const needsSetupCurrentPage = ref(1)
 const needsSetupPageSize = ref(5)
@@ -416,7 +496,13 @@ function sortEventsByDateAsc(items) {
 }
 
 const todayEvents = computed(() =>
-  today.value ? sortEventsByDateAsc(events.value.filter((event) => event.date === today.value)) : [],
+  today.value
+    ? sortEventsByDateAsc(
+        events.value.filter(
+          (event) => event.date === today.value && !isEventNeedingConfirmation(event, today.value),
+        ),
+      )
+    : [],
 )
 const todayPageCount = computed(() =>
   Math.max(1, Math.ceil(todayEvents.value.length / todayPageSize.value)),
@@ -430,7 +516,9 @@ const displayedTodayEvents = computed(() =>
 )
 const displayedTodayEventsCount = computed(() => displayedTodayEvents.value.length)
 const upcomingEvents = computed(() =>
-  today.value ? sortEventsByDateAsc(events.value.filter((event) => event.date > today.value)) : [],
+  today.value
+    ? sortEventsByDateAsc(events.value.filter((event) => isFutureScheduledEvent(event, today.value)))
+    : [],
 )
 const upcomingPageCount = computed(() =>
   Math.max(1, Math.ceil(upcomingEvents.value.length / upcomingPageSize.value)),
@@ -443,6 +531,24 @@ const displayedUpcomingEvents = computed(() =>
   upcomingListMode.value === 'paged' ? paginatedUpcomingEvents.value : upcomingEvents.value,
 )
 const displayedUpcomingEventsCount = computed(() => displayedUpcomingEvents.value.length)
+const needsConfirmationEvents = computed(() =>
+  today.value
+    ? sortEventsByDateAsc(events.value.filter((event) => isEventNeedingConfirmation(event, today.value)))
+    : [],
+)
+const needsConfirmationPageCount = computed(() =>
+  Math.max(1, Math.ceil(needsConfirmationEvents.value.length / needsConfirmationPageSize.value)),
+)
+const paginatedNeedsConfirmationEvents = computed(() => {
+  const start = (needsConfirmationCurrentPage.value - 1) * needsConfirmationPageSize.value
+  return needsConfirmationEvents.value.slice(start, start + needsConfirmationPageSize.value)
+})
+const displayedNeedsConfirmationEvents = computed(() =>
+  needsConfirmationListMode.value === 'paged'
+    ? paginatedNeedsConfirmationEvents.value
+    : needsConfirmationEvents.value,
+)
+const displayedNeedsConfirmationEventsCount = computed(() => displayedNeedsConfirmationEvents.value.length)
 const animalsWithoutEvents = computed(() => {
   const animalIdsWithEvents = new Set(
     events.value.flatMap((event) => getEventAnimalIds(event)),
@@ -541,6 +647,16 @@ watch([upcomingEvents, upcomingListMode, upcomingPageSize], () => {
 watch(upcomingPageCount, () => {
   if (upcomingCurrentPage.value > upcomingPageCount.value) {
     upcomingCurrentPage.value = upcomingPageCount.value
+  }
+})
+
+watch([needsConfirmationEvents, needsConfirmationListMode, needsConfirmationPageSize], () => {
+  needsConfirmationCurrentPage.value = 1
+})
+
+watch(needsConfirmationPageCount, () => {
+  if (needsConfirmationCurrentPage.value > needsConfirmationPageCount.value) {
+    needsConfirmationCurrentPage.value = needsConfirmationPageCount.value
   }
 })
 
