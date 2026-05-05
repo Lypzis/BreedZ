@@ -8,6 +8,12 @@ import { getAnimal, touchAnimalUpdatedAt } from 'src/services/animals-db'
 import { todayDateString } from 'src/utils/dates'
 import { resolveBaseStatus, resolveStatusFromTimeline } from 'src/utils/event-status'
 import { eventIncludesAnimal, normalizeEventRecord } from 'src/utils/event-records'
+import {
+  isRecordDeleted,
+  markRecordDeleted,
+  markRecordDirty,
+  normalizeLocalSyncMetadata,
+} from 'src/utils/sync-metadata'
 
 function sortEvents(events) {
   return [...events].sort((left, right) => {
@@ -18,10 +24,23 @@ function sortEvents(events) {
   })
 }
 
-export async function listEvents() {
+function normalizeStoredEvent(event) {
+  const normalizedEvent = normalizeEventRecord(event)
+
+  return {
+    ...normalizedEvent,
+    sync: normalizeLocalSyncMetadata(normalizedEvent.sync),
+  }
+}
+
+export async function listEvents(options = {}) {
   await migrateStoredEventsToCanonicalShape()
   const events = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.getAll())) ?? []
-  return sortEvents(events.map(normalizeEventRecord))
+  return sortEvents(
+    events
+      .map(normalizeStoredEvent)
+      .filter((event) => options.includeDeleted === true || !isRecordDeleted(event)),
+  )
 }
 
 export async function listEventsByAnimalId(animalId) {
@@ -44,12 +63,12 @@ async function syncAnimalStatusFromTimeline(animalId) {
     return touchAnimalUpdatedAt(animalId)
   }
 
-  const updatedAnimal = {
+  const updatedAnimal = markRecordDirty({
     ...existingAnimal,
     baseStatus,
     status: nextStatus,
     updatedAt: new Date().toISOString(),
-  }
+  })
 
   await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
 
@@ -87,7 +106,7 @@ function resolveConfirmationStatus(input = {}, existingEvent = null, referenceDa
 
 export async function createEvent(input) {
   const timestamp = new Date().toISOString()
-  const event = normalizeEventRecord({
+  const event = markRecordDirty(normalizeEventRecord({
     id: createId('event'),
     animalId: input.animalId,
     animalIds: input.animalIds,
@@ -101,7 +120,7 @@ export async function createEvent(input) {
     notes: input.notes?.trim() ?? '',
     createdAt: timestamp,
     updatedAt: timestamp,
-  })
+  }))
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(event))
   await syncAnimalStatusesByIds(event.animalIds)
@@ -116,7 +135,7 @@ export async function updateEvent(id, input) {
     throw new Error('Event not found.')
   }
 
-  const updatedEvent = normalizeEventRecord({
+  const updatedEvent = markRecordDirty(normalizeEventRecord({
     ...existingEvent,
     animalId: input.animalId ?? existingEvent.animalId,
     animalIds: input.animalIds ?? existingEvent.animalIds,
@@ -129,7 +148,7 @@ export async function updateEvent(id, input) {
     date: input.date ?? existingEvent.date,
     notes: input.notes?.trim() ?? '',
     updatedAt: new Date().toISOString(),
-  })
+  }))
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(updatedEvent))
   await syncAnimalStatusesByIds([...existingEvent.animalIds, ...updatedEvent.animalIds])
@@ -148,11 +167,11 @@ export async function confirmEvent(id) {
     throw new Error('Future events cannot be confirmed yet.')
   }
 
-  const confirmedEvent = normalizeEventRecord({
+  const confirmedEvent = markRecordDirty(normalizeEventRecord({
     ...existingEvent,
     confirmationStatus: 'confirmed',
     updatedAt: new Date().toISOString(),
-  })
+  }))
 
   await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(confirmedEvent))
   await syncAnimalStatusesByIds(confirmedEvent.animalIds)
@@ -161,26 +180,38 @@ export async function confirmEvent(id) {
 }
 
 export async function deleteEvent(id) {
-  const event = await getEvent(id)
+  const event = await getEvent(id, { includeDeleted: true })
 
-  if (!event) {
+  if (!event || isRecordDeleted(event)) {
     return null
   }
 
-  await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(id))
+  const deletedEvent = markRecordDeleted(event)
+
+  await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(deletedEvent))
   await syncAnimalStatusesByIds(event.animalIds)
 
-  return event
+  return deletedEvent
 }
 
-export async function getEvent(id) {
+export async function getEvent(id, options = {}) {
   if (!id) {
     return null
   }
 
   const event = (await withStore(STORE_NAMES.events, 'readonly', (store) => store.get(id))) ?? null
 
-  return event ? normalizeEventRecord(event) : null
+  if (!event) {
+    return null
+  }
+
+  const normalizedEvent = normalizeStoredEvent(event)
+
+  if (options.includeDeleted !== true && isRecordDeleted(normalizedEvent)) {
+    return null
+  }
+
+  return normalizedEvent
 }
 
 export async function deleteEventsForAnimal(animalId) {
@@ -198,20 +229,24 @@ export async function deleteEventsForAnimal(animalId) {
     const shouldDeleteEvent = event.type === 'breeding' || remainingAnimalIds.length === 0
 
     if (shouldDeleteEvent) {
-      await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.id))
+      await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(markRecordDeleted(event)))
 
       if (event.linkedEventId) {
-        await withStore(STORE_NAMES.events, 'readwrite', (store) => store.delete(event.linkedEventId))
+        const linkedEvent = await getEvent(event.linkedEventId, { includeDeleted: true })
+
+        if (linkedEvent && !isRecordDeleted(linkedEvent)) {
+          await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(markRecordDeleted(linkedEvent)))
+        }
       }
 
       continue
     }
 
-    const updatedEvent = normalizeEventRecord({
+    const updatedEvent = markRecordDirty(normalizeEventRecord({
       ...event,
       animalIds: remainingAnimalIds,
       updatedAt: new Date().toISOString(),
-    })
+    }))
 
     await withStore(STORE_NAMES.events, 'readwrite', (store) => store.put(updatedEvent))
   }

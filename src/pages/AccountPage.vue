@@ -1,258 +1,189 @@
 <template>
   <AppPageShell>
-        <q-card flat class="account-card">
-          <q-card-section class="row items-start justify-between q-col-gutter-md">
-            <div class="col-12 col-md">
-              <div class="text-overline text-weight-bold text-primary">{{ t('account.overline') }}</div>
-              <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('account.title') }}</div>
-              <div class="text-body1 text-grey-7">
-                {{ accountDescriptionLabel }}
-              </div>
+    <q-card flat class="account-card">
+      <q-card-section class="row items-start justify-between q-col-gutter-md">
+        <div class="col-12 col-md">
+          <div class="text-overline text-weight-bold text-primary">{{ t('account.overline') }}</div>
+          <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('account.title') }}</div>
+          <div class="text-body1 text-grey-7">
+            {{ accountDescriptionLabel }}
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section v-if="errorMessage" class="q-pb-none">
+        <q-banner rounded class="bg-red-1 text-negative">
+          {{ errorMessage }}
+        </q-banner>
+      </q-card-section>
+
+      <q-card-section>
+        <q-card v-if="!isLoaded" flat bordered>
+          <q-card-section class="row items-center q-gutter-sm">
+            <q-spinner color="primary" size="24px" />
+            <div class="text-body2 text-grey-7">
+              {{ t('account.loadingAccount') }}
             </div>
           </q-card-section>
+        </q-card>
 
-          <q-card-section v-if="errorMessage" class="q-pb-none">
-            <q-banner rounded class="bg-red-1 text-negative">
-              {{ errorMessage }}
-            </q-banner>
-          </q-card-section>
+        <q-banner v-else-if="isSignedIn" rounded class="bg-green-1 text-primary">
+          <template #avatar>
+            <q-icon name="account_circle" color="primary" />
+          </template>
+          <div class="text-subtitle2 text-weight-bold">{{ t('account.signedInTitle') }}</div>
+          <div class="text-caption text-grey-8 q-mt-xs">
+            {{ user?.email || t('account.emailUnavailable') }}
+          </div>
+          <div class="text-caption text-grey-8 q-mt-sm">
+            {{ isLoading ? '' : premiumStatusLabel }}
+          </div>
 
-          <q-card-section >
-            <q-card v-if="!isLoaded" flat bordered>
-              <q-card-section class="row items-center q-gutter-sm">
-                <q-spinner color="primary" size="24px" />
-                <div class="text-body2 text-grey-7">
-                  {{ t('account.loadingAccount') }}
-                </div>
-              </q-card-section>
-            </q-card>
+          <div class="row q-gutter-sm q-mt-md">
+            <q-btn flat color="primary" icon="logout" :label="t('account.signOut')" :loading="isLoading"
+              @click="handleSignOut" />
+          </div>
+        </q-banner>
 
-            <q-banner v-else-if="isSignedIn" rounded class="bg-green-1 text-primary">
-              <template #avatar>
-                <q-icon name="account_circle" color="primary" />
-              </template>
-              <div class="text-subtitle2 text-weight-bold">{{ t('account.signedInTitle') }}</div>
-              <div class="text-caption text-grey-8 q-mt-xs">
-                {{ user?.email || t('account.emailUnavailable') }}
-              </div>
-              <div class="text-caption text-grey-8 q-mt-sm">
-                {{ premiumStatusLabel }}
-              </div>
-
-              <div class="row q-gutter-sm q-mt-md">
-                <q-btn
-                  flat
-                  color="primary"
-                  icon="logout"
-                  :label="t('account.signOut')"
-                  :loading="isLoading"
-                  @click="handleSignOut"
-                />
-              </div>
-            </q-banner>
-
-            <q-card v-else flat bordered>
-              <q-card-section>
-                <q-btn-toggle
-                  v-model="authMode"
-                  unelevated
-                  no-caps
-                  color="green-1"
-                  text-color="primary"
-                  toggle-color="primary"
-                  toggle-text-color="white"
-                  :options="authModeOptions"
-                />
-              </q-card-section>
-
-              <q-card-section class="q-pt-none">
-                <q-form class="column q-gutter-md" @submit.prevent="submitAuth">
-                  <q-input
-                    v-model="email"
-                    outlined
-                    type="email"
-                    autocomplete="email"
-                    :label="t('account.email')"
-                  />
-                  <q-input
-                    v-model="password"
-                    outlined
-                    :type="showPassword ? 'text' : 'password'"
-                    autocomplete="current-password"
-                    :label="t('account.password')"
-                  >
-                    <template #append>
-                      <q-btn
-                        flat
-                        round
-                        dense
-                        :icon="showPassword ? 'visibility_off' : 'visibility'"
-                        :aria-label="t('account.togglePassword')"
-                        :title="t('account.togglePassword')"
-                        @click="showPassword = !showPassword"
-                      />
-                    </template>
-                  </q-input>
-
-                  <q-checkbox
-                    v-if="authMode === 'sign-up'"
-                    v-model="receiveUpdates"
-                    color="primary"
-                    :label="t('account.receiveUpdates')"
-                  />
-
-                  <q-btn
-                    unelevated
-                    color="primary"
-                    type="submit"
-                    :loading="isLoading"
-                    :label="authMode === 'sign-in' ? t('account.signIn') : t('account.createAccount')"
-                  />
-
-                  <q-btn
-                    v-if="authMode === 'sign-in'"
-                    flat
-                    no-caps
-                    color="primary"
-                    class="self-end q-px-sm"
-                    :disable="isLoading"
-                    :label="t('account.forgotPassword')"
-                    @click="handlePasswordReset"
-                  />
-                </q-form>
-              </q-card-section>
-            </q-card>
-          </q-card-section>
-
-          <q-card-section >
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-md-6">
-                <q-banner rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="workspace_premium" color="primary" />
-                  </template>
-                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.planTitle') }}</div>
-                  <div class="text-caption q-mt-xs">
-                    {{ currentPlanLabel }}
-                  </div>
-                </q-banner>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <q-banner rounded class="bg-grey-1 text-grey-8">
-                  <template #avatar>
-                    <q-icon name="credit_card" color="primary" />
-                  </template>
-                  <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.billingTitle') }}</div>
-                  <div class="text-caption q-mt-xs" v-html="billingDescriptionLabel" />
-                </q-banner>
-              </div>
-            </div>
+        <q-card v-else flat bordered>
+          <q-card-section>
+            <q-btn-toggle v-model="authMode" unelevated no-caps color="green-1" text-color="primary"
+              toggle-color="primary" toggle-text-color="white" :options="authModeOptions" />
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <div v-if="isSignedIn && isPremium" class="row q-col-gutter-md">
-              <div class="col-12">
-                <q-card flat bordered>
-                  <q-card-section>
-                    <div class="text-overline text-primary text-weight-bold">
-                      {{ t('account.activeSubscriptionOverline') }}
-                    </div>
-                    <div class="text-h5 text-weight-bold q-mt-sm">
-                      {{ currentPremiumPriceLabel }}
-                    </div>
-                    <div class="text-body2 text-grey-7 q-mt-sm">
-                      {{ currentPremiumDescriptionLabel }}
-                    </div>
-                  </q-card-section>
-                  <q-card-actions align="right">
-                    <q-btn
-                      unelevated
-                      color="primary"
-                      :loading="portalLoading"
-                      :label="t('account.manageSubscription')"
-                      @click="openCustomerPortal"
-                    />
-                  </q-card-actions>
-                </q-card>
-              </div>
-            </div>
+            <q-form class="column q-gutter-md" @submit.prevent="submitAuth">
+              <q-input v-model="email" outlined type="email" autocomplete="email" :label="t('account.email')" />
+              <q-input v-model="password" outlined :type="showPassword ? 'text' : 'password'"
+                autocomplete="current-password" :label="t('account.password')">
+                <template #append>
+                  <q-btn flat round dense :icon="showPassword ? 'visibility_off' : 'visibility'"
+                    :aria-label="t('account.togglePassword')" :title="t('account.togglePassword')"
+                    @click="showPassword = !showPassword" />
+                </template>
+              </q-input>
 
-            <template v-else>
-              <div class="row q-col-gutter-md">
-                <div class="col-12 col-md-6">
-                  <q-card flat bordered>
-                    <q-card-section>
-                      <div class="text-overline text-primary text-weight-bold">
-                        {{ t('account.monthlyPlanOverline') }}
-                      </div>
-                      <div class="text-h5 text-weight-bold q-mt-sm">
-                        {{ t('account.monthlyPlanPrice') }}
-                      </div>
-                      <div class="text-body2 text-grey-7 q-mt-sm">
-                        {{ t('account.monthlyPlanDescription') }}
-                      </div>
-                    </q-card-section>
-                    <q-card-actions align="right">
-                      <q-btn
-                        unelevated
-                        color="primary"
-                        :disable="!isSignedIn"
-                        :loading="checkoutLoading === 'monthly'"
-                        :label="t('account.subscribeMonthly')"
-                        @click="startCheckout('monthly')"
-                      />
-                    </q-card-actions>
-                  </q-card>
-                </div>
+              <q-checkbox v-if="authMode === 'sign-up'" v-model="receiveUpdates" color="primary"
+                :label="t('account.receiveUpdates')" />
 
-                <div class="col-12 col-md-6">
-                  <q-card flat bordered>
-                    <q-card-section>
-                      <div class="text-overline text-primary text-weight-bold">
-                        {{ t('account.yearlyPlanOverline') }}
-                      </div>
-                      <div class="text-h5 text-weight-bold q-mt-sm">
-                        {{ t('account.yearlyPlanPrice') }}
-                      </div>
-                      <div class="text-body2 text-grey-7 q-mt-sm">
-                        {{ t('account.yearlyPlanDescription') }}
-                      </div>
-                      <div class="text-caption text-primary text-weight-medium q-mt-sm">
-                        {{ t('account.yearlyPlanSavings') }}
-                      </div>
-                    </q-card-section>
-                    <q-card-actions align="right">
-                      <q-btn
-                        unelevated
-                        color="primary"
-                        :disable="!isSignedIn"
-                        :loading="checkoutLoading === 'yearly'"
-                        :label="t('account.subscribeYearly')"
-                        @click="startCheckout('yearly')"
-                      />
-                    </q-card-actions>
-                  </q-card>
-                </div>
-              </div>
+              <q-btn unelevated color="primary" type="submit" :loading="isLoading"
+                :label="authMode === 'sign-in' ? t('account.signIn') : t('account.createAccount')" />
 
-              <q-banner
-                v-if="!isSignedIn"
-                rounded
-                class="bg-warning text-white q-mt-md"
-              >
-                {{ t('account.signInToSubscribe') }}
-              </q-banner>
-            </template>
+              <q-btn v-if="authMode === 'sign-in'" flat no-caps color="primary" class="self-end q-px-sm"
+                :disable="isLoading" :label="t('account.forgotPassword')" @click="handlePasswordReset" />
+            </q-form>
           </q-card-section>
-
-          <q-inner-loading :showing="showAccountLoading" color="primary">
-            <q-spinner color="primary" size="40px" />
-            <div class="text-body2 text-primary text-weight-medium q-mt-md">
-              {{ accountLoadingLabel }}
-            </div>
-          </q-inner-loading>
         </q-card>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-md-6">
+            <q-banner rounded class="bg-grey-1 text-grey-8">
+              <template #avatar>
+                <q-icon name="workspace_premium" color="primary" />
+              </template>
+              <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.planTitle') }}</div>
+              <div class="text-caption q-mt-xs">
+                {{ currentPlanLabel }}
+              </div>
+            </q-banner>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <q-banner rounded class="bg-grey-1 text-grey-8">
+              <template #avatar>
+                <q-icon name="credit_card" color="primary" />
+              </template>
+              <div class="text-subtitle2 text-weight-bold text-primary">{{ t('account.billingTitle') }}</div>
+              <div class="text-caption q-mt-xs" v-html="billingDescriptionLabel" />
+            </q-banner>
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <div v-if="isSignedIn && isPremium" class="row q-col-gutter-md">
+          <div class="col-12">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-overline text-primary text-weight-bold">
+                  {{ t('account.activeSubscriptionOverline') }}
+                </div>
+                <div class="text-h5 text-weight-bold q-mt-sm">
+                  {{ currentPremiumPriceLabel }}
+                </div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ currentPremiumDescriptionLabel }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn unelevated color="primary" :loading="portalLoading" :label="t('account.manageSubscription')"
+                  @click="openCustomerPortal" />
+              </q-card-actions>
+            </q-card>
+          </div>
+        </div>
+
+        <template v-else>
+          <div class="row q-col-gutter-md">
+            <div class="col-12 col-md-6">
+              <q-card flat bordered>
+                <q-card-section>
+                  <div class="text-overline text-primary text-weight-bold">
+                    {{ t('account.monthlyPlanOverline') }}
+                  </div>
+                  <div class="text-h5 text-weight-bold q-mt-sm">
+                    {{ t('account.monthlyPlanPrice') }}
+                  </div>
+                  <div class="text-body2 text-grey-7 q-mt-sm">
+                    {{ t('account.monthlyPlanDescription') }}
+                  </div>
+                </q-card-section>
+                <q-card-actions align="right">
+                  <q-btn unelevated color="primary" :disable="!isSignedIn" :loading="checkoutLoading === 'monthly'"
+                    :label="t('account.subscribeMonthly')" @click="startCheckout('monthly')" />
+                </q-card-actions>
+              </q-card>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <q-card flat bordered>
+                <q-card-section>
+                  <div class="text-overline text-primary text-weight-bold">
+                    {{ t('account.yearlyPlanOverline') }}
+                  </div>
+                  <div class="text-h5 text-weight-bold q-mt-sm">
+                    {{ t('account.yearlyPlanPrice') }}
+                  </div>
+                  <div class="text-body2 text-grey-7 q-mt-sm">
+                    {{ t('account.yearlyPlanDescription') }}
+                  </div>
+                  <div class="text-caption text-primary text-weight-medium q-mt-sm">
+                    {{ t('account.yearlyPlanSavings') }}
+                  </div>
+                </q-card-section>
+                <q-card-actions align="right">
+                  <q-btn unelevated color="primary" :disable="!isSignedIn" :loading="checkoutLoading === 'yearly'"
+                    :label="t('account.subscribeYearly')" @click="startCheckout('yearly')" />
+                </q-card-actions>
+              </q-card>
+            </div>
+          </div>
+
+          <q-banner v-if="!isSignedIn" rounded class="bg-warning text-white q-mt-md">
+            {{ t('account.signInToSubscribe') }}
+          </q-banner>
+        </template>
+      </q-card-section>
+
+      <q-inner-loading :showing="showAccountLoading" color="primary">
+        <q-spinner color="primary" size="40px" />
+        <div class="text-body2 text-primary text-weight-medium q-mt-md">
+          {{ accountLoadingLabel }}
+        </div>
+      </q-inner-loading>
+    </q-card>
   </AppPageShell>
 </template>
 

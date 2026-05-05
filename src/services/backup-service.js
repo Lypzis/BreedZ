@@ -6,6 +6,7 @@ import {
   readBackupWorkbookFromArrayBuffer,
   writeBackupWorkbookArray,
 } from 'src/utils/backup-workbook'
+import { stripLocalSyncMetadataFromRecords } from 'src/utils/sync-metadata'
 
 export async function buildBackupPayload() {
   const [animals, events] = await Promise.all([listAnimals(), listEvents()])
@@ -13,8 +14,8 @@ export async function buildBackupPayload() {
   return {
     schemaVersion: 4,
     exportedAt: new Date().toISOString(),
-    animals,
-    events,
+    animals: stripLocalSyncMetadataFromRecords(animals),
+    events: stripLocalSyncMetadataFromRecords(events),
   }
 }
 

@@ -2,6 +2,7 @@ import { buildAnimalRecord } from './animals-db.js'
 import { createId, openAppDatabase, STORE_NAMES } from './app-db.js'
 import { normalizeEventRecord } from '../utils/event-records.js'
 import { todayDateString } from '../utils/dates.js'
+import { markRecordDirty } from '../utils/sync-metadata.js'
 
 function uniqueIds(values = []) {
   const seen = new Set()
@@ -45,7 +46,7 @@ export function createPurchaseEventWithAnimals(input = {}) {
           return
         }
 
-        const event = normalizeEventRecord({
+        const event = markRecordDirty(normalizeEventRecord({
           id: createId('event'),
           animalId: animalIds[0],
           animalIds,
@@ -56,7 +57,7 @@ export function createPurchaseEventWithAnimals(input = {}) {
           notes: input.notes?.trim() ?? '',
           createdAt: timestamp,
           updatedAt: timestamp,
-        })
+        }))
 
         const transaction = db.transaction([STORE_NAMES.animals, STORE_NAMES.events], 'readwrite')
         const animalsStore = transaction.objectStore(STORE_NAMES.animals)

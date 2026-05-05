@@ -384,7 +384,7 @@ const fieldSteps = computed(() =>
 )
 const offlineBenefits = computed(() =>
   (tm('home.offlineItems') ?? []).map((label, index) => ({
-    icon: ['wifi_off', 'save', 'download_done'][index] ?? 'task_alt',
+    icon: ['wifi_off', 'save', 'download_done', 'cloud_sync'][index] ?? 'task_alt',
     label,
   })),
 )
@@ -393,7 +393,7 @@ const faqs = computed(() => tm('home.faqs') ?? [])
 const appItems = computed(() =>
   (tm('home.appItems') ?? []).map((item, index) => ({
     ...item,
-    icon: ['pets', 'family_restroom', 'event', 'dashboard', 'save'][index] ?? 'task_alt',
+    icon: ['pets', 'family_restroom', 'event', 'dashboard', 'backup'][index] ?? 'task_alt',
   })),
 )
 </script>

@@ -39,6 +39,7 @@ export default defineConfig((/* ctx */) => {
       { path: 'initial-page-guard', server: false },
       { path: 'app-check-init', server: false },
       { path: 'auth-init', server: false },
+      { path: 'sync-init', server: false },
       { path: 'prime-offline-shell', server: false },
     ],
 

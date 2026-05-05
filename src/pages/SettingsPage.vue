@@ -39,8 +39,36 @@
         <div class="text-overline text-weight-bold text-primary">{{ t('settings.dataSafetyOverline') }}</div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('settings.dataSafetyTitle') }}</div>
 
+        <q-banner rounded :class="syncStatusBannerClass" class="q-mb-md">
+          <div class="row no-wrap items-start q-col-gutter-sm">
+            <div class="col-auto">
+              <q-icon :name="syncStatusIcon" :color="syncStatusIconColor" size="md" />
+            </div>
+            <div class="col">
+              <div class="text-subtitle2 text-weight-bold" :class="syncStatusTitleClass">{{ syncStatusTitle }}</div>
+              <div class="text-caption q-mt-xs">
+                {{ syncStatusDescription }}
+              </div>
+              <div v-if="pendingSyncTotal > 0" class="text-caption q-mt-xs">
+                {{ t('settings.syncPendingBreakdown', { animals: pendingSyncAnimals, events: pendingSyncEvents }) }}
+              </div>
+              <div v-if="!isSyncingNow && syncErrorMessage" class="text-caption text-negative q-mt-xs">
+                {{ syncErrorMessage }}
+              </div>
+            </div>
+          </div>
+
+
+          <q-btn v-if="!isSignedIn || !isPremium" unelevated color="primary" icon="workspace_premium"
+            class="q-mt-md full-width" :label="syncAccountButtonLabel" to="/account" />
+
+          <q-btn v-else unelevated color="primary" icon="sync" :label="t('settings.syncNow')" class="q-mt-md full-width"
+            :disable="!canRunManualSync" :loading="isSyncingNow" @click="handleManualSync" />
+
+        </q-banner>
+
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-green-1 text-primary">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -58,7 +86,7 @@
             </q-banner>
           </div>
 
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-grey-1 text-grey-8">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -124,7 +152,7 @@
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('settings.appTitle') }}</div>
 
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-grey-1 text-grey-8 full-height">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -208,14 +236,17 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { buildBackupWorkbookArray, importBackupWorkbookArrayBuffer } from 'src/services/backup-service'
+import { listPendingSyncRecords } from 'src/services/sync-queue'
+import { requestPremiumSyncNow, usePremiumSyncStatus } from 'src/services/sync-scheduler'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { useSettingsStore } from 'src/stores/settings-store'
 // import { buildAppBuildLabel, buildAppVersionLabel } from 'src/utils/app-version'
@@ -223,8 +254,10 @@ import { useSettingsStore } from 'src/stores/settings-store'
 const $q = useQuasar()
 const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
+const authStore = useAuthStore()
 const eventsStore = useEventsStore()
 const settingsStore = useSettingsStore()
+const { isLoaded: authLoaded, isPremium, isSignedIn } = storeToRefs(authStore)
 const { weightUnit } = storeToRefs(settingsStore)
 const {
   installButtonLabel,
@@ -240,6 +273,11 @@ const isImporting = ref(false)
 const selectedBackupFile = ref(null)
 const statusMessage = ref('')
 const statusType = ref('positive')
+const isManualSyncing = ref(false)
+const pendingSyncAnimals = ref(0)
+const pendingSyncEvents = ref(0)
+const syncErrorMessage = ref('')
+const { isSyncing: isPremiumSyncing } = usePremiumSyncStatus()
 
 const selectedWeightUnit = computed({
   get: () => weightUnit.value,
@@ -256,6 +294,190 @@ const weightUnitOptions = computed(() => [
 const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
 )
+const pendingSyncTotal = computed(() => pendingSyncAnimals.value + pendingSyncEvents.value)
+const isSyncingNow = computed(() => isManualSyncing.value || isPremiumSyncing.value)
+const canRunManualSync = computed(() =>
+  authLoaded.value && isSignedIn.value && isPremium.value,
+)
+const hasSyncError = computed(() => !isSyncingNow.value && Boolean(syncErrorMessage.value))
+const syncStatusBannerClass = computed(() => {
+  if (isSyncingNow.value) {
+    return 'bg-green-1 text-primary'
+  }
+
+  if (hasSyncError.value) {
+    return 'bg-red-1 text-negative'
+  }
+
+  if (!isSignedIn.value || !isPremium.value) {
+    return 'bg-grey-1 text-grey-8'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'bg-orange-1 text-warning'
+  }
+
+  return 'bg-green-1 text-primary'
+})
+const syncStatusIcon = computed(() => {
+  if (isSyncingNow.value) {
+    return 'sync'
+  }
+
+  if (hasSyncError.value) {
+    return 'sync_problem'
+  }
+
+  if (!isSignedIn.value) {
+    return 'cloud_off'
+  }
+
+  if (!isPremium.value) {
+    return 'lock'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'cloud_upload'
+  }
+
+  return 'cloud_done'
+})
+const syncStatusIconColor = computed(() => {
+  if (isSyncingNow.value) {
+    return 'primary'
+  }
+
+  if (hasSyncError.value) {
+    return 'negative'
+  }
+
+  if (!isSignedIn.value || !isPremium.value) {
+    return 'primary'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'warning'
+  }
+
+  return 'primary'
+})
+const syncStatusTitleClass = computed(() => {
+  if (hasSyncError.value) {
+    return 'text-negative'
+  }
+
+  if (isSyncingNow.value || !isSignedIn.value || !isPremium.value) {
+    return 'text-primary'
+  }
+
+  return ''
+})
+const syncStatusTitle = computed(() => {
+  if (isSyncingNow.value) {
+    return t('settings.syncingTitle')
+  }
+
+  if (hasSyncError.value) {
+    return t('settings.syncFailedTitle')
+  }
+
+  if (!isSignedIn.value) {
+    return t('settings.syncLocalOnlyTitle')
+  }
+
+  if (!isPremium.value) {
+    return t('settings.syncPremiumLockedTitle')
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return t('settings.syncPendingTitle', { count: pendingSyncTotal.value })
+  }
+
+  return t('settings.syncActiveTitle')
+})
+const syncStatusDescription = computed(() => {
+  if (isSyncingNow.value) {
+    return t('settings.syncingDescription')
+  }
+
+  if (hasSyncError.value) {
+    return t('settings.syncFailedDescription')
+  }
+
+  if (!isSignedIn.value) {
+    return t('settings.syncLocalOnlyDescription')
+  }
+
+  if (!isPremium.value) {
+    return t('settings.syncPremiumLockedDescription')
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return t('settings.syncPendingDescription')
+  }
+
+  return t('settings.syncActiveDescription')
+})
+const syncAccountButtonLabel = computed(() =>
+  isSignedIn.value ? t('settings.upgradeForSync') : t('settings.signInForSync'),
+)
+
+async function refreshPendingSyncStatus() {
+  const pending = await listPendingSyncRecords()
+  const records = [...pending.animals, ...pending.events]
+  const failedRecord = records.find((record) => record.sync?.error)
+
+  pendingSyncAnimals.value = pending.animals.length
+  pendingSyncEvents.value = pending.events.length
+  syncErrorMessage.value = failedRecord?.sync?.error ?? ''
+}
+
+async function handleManualSync() {
+  if (!canRunManualSync.value) {
+    return
+  }
+
+  isManualSyncing.value = true
+  syncErrorMessage.value = ''
+
+  try {
+    const result = await requestPremiumSyncNow('settings-manual')
+    await refreshPendingSyncStatus()
+
+    if (result?.skippedReason === 'offline') {
+      $q.notify({
+        color: 'warning',
+        message: t('settings.syncOffline'),
+        position: 'top',
+      })
+      return
+    }
+
+    if (result?.skippedReason) {
+      $q.notify({
+        color: 'warning',
+        message: t('settings.syncSkipped'),
+        position: 'top',
+      })
+      return
+    }
+
+    if (result?.failed > 0) {
+      syncErrorMessage.value = t('settings.syncFailedDescription')
+      return
+    }
+
+    $q.notify({
+      color: 'positive',
+      message: t('settings.syncSuccess'),
+      position: 'top',
+    })
+  } catch (error) {
+    syncErrorMessage.value = error instanceof Error ? error.message : t('settings.syncFailedDescription')
+  } finally {
+    isManualSyncing.value = false
+  }
+}
 
 async function handleExport() {
   isExporting.value = true
@@ -297,6 +519,7 @@ async function handleImport() {
     const arrayBuffer = await selectedBackupFile.value.arrayBuffer()
     await importBackupWorkbookArrayBuffer(arrayBuffer)
     await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
+    await refreshPendingSyncStatus()
 
     statusType.value = 'positive'
     statusMessage.value = t('settings.importSuccess')
@@ -320,4 +543,19 @@ async function handleImport() {
     isImporting.value = false
   }
 }
+
+onMounted(() => {
+  void refreshPendingSyncStatus()
+})
+
+watch(isPremiumSyncing, (isSyncing, wasSyncing) => {
+  if (isSyncing) {
+    syncErrorMessage.value = ''
+    return
+  }
+
+  if (wasSyncing) {
+    void refreshPendingSyncStatus()
+  }
+})
 </script>

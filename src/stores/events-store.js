@@ -2,6 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { confirmEvent, createEvent, deleteEvent, listEvents, updateEvent } from 'src/services/events-db'
 import { createPurchaseEventWithAnimals } from 'src/services/purchase-events-db'
+import { requestPremiumSync } from 'src/services/sync-scheduler'
 import { eventIncludesAnimal } from 'src/utils/event-records'
 
 export const useEventsStore = defineStore('events', () => {
@@ -68,12 +69,14 @@ export const useEventsStore = defineStore('events', () => {
     }
 
     events.value = sortEvents([...createdEvents, ...events.value])
+    requestPremiumSync('event-created')
     return event
   }
 
   async function addPurchaseEvent(payload) {
     const { event, animals } = await createPurchaseEventWithAnimals(payload)
     events.value = sortEvents([event, ...events.value])
+    requestPremiumSync('purchase-created')
     return { event, animals }
   }
 
@@ -114,6 +117,7 @@ export const useEventsStore = defineStore('events', () => {
             }),
           )
 
+          requestPremiumSync('event-updated')
           return updatedEvent
         }
 
@@ -129,6 +133,7 @@ export const useEventsStore = defineStore('events', () => {
 
         updatedEvent = await updateEvent(updatedEvent.id, { linkedEventId: createdLinkedEvent.id })
         events.value = sortEvents([createdLinkedEvent, ...nextEvents.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))])
+        requestPremiumSync('event-updated')
         return updatedEvent
       }
 
@@ -140,11 +145,13 @@ export const useEventsStore = defineStore('events', () => {
             .filter((event) => event.id !== linkedExpectedBirthId)
             .map((event) => (event.id === updatedEvent.id ? updatedEvent : event)),
         )
+        requestPremiumSync('event-updated')
         return updatedEvent
       }
     }
 
     events.value = sortEvents(nextEvents)
+    requestPremiumSync('event-updated')
     return updatedEvent
   }
 
@@ -161,6 +168,7 @@ export const useEventsStore = defineStore('events', () => {
       events.value = events.value.filter(
         (currentEvent) => currentEvent.id !== id && currentEvent.id !== event.linkedEventId,
       )
+      requestPremiumSync('event-deleted')
       return
     }
 
@@ -175,12 +183,14 @@ export const useEventsStore = defineStore('events', () => {
             .filter((currentEvent) => currentEvent.id !== id)
             .map((currentEvent) => (currentEvent.id === updatedBreedingEvent.id ? updatedBreedingEvent : currentEvent)),
         )
+        requestPremiumSync('event-deleted')
         return
       }
     }
 
     await deleteEvent(id)
     events.value = events.value.filter((event) => event.id !== id)
+    requestPremiumSync('event-deleted')
   }
 
   async function confirmEventById(id) {
@@ -188,6 +198,7 @@ export const useEventsStore = defineStore('events', () => {
     events.value = sortEvents(
       events.value.map((event) => (event.id === id ? updatedEvent : event)),
     )
+    requestPremiumSync('event-confirmed')
     return updatedEvent
   }
 
