@@ -2,6 +2,7 @@ import { STORE_NAMES, withStore } from 'src/services/app-db'
 import { listAnimals } from 'src/services/animals-db'
 import { listEvents } from 'src/services/events-db'
 import { resolveBaseStatus, resolveStatusFromTimeline } from 'src/utils/event-status'
+import { markRecordDirty } from 'src/utils/sync-metadata'
 
 export async function syncAnimalStatusesFromEvents(referenceDate) {
   const [animals, events] = await Promise.all([listAnimals(), listEvents()])
@@ -29,12 +30,12 @@ export async function syncAnimalStatusesFromEvents(referenceDate) {
         return null
       }
 
-      return {
+      return markRecordDirty({
         ...animal,
         baseStatus,
         status: nextStatus,
         updatedAt: new Date().toISOString(),
-      }
+      })
     })
     .filter(Boolean)
 

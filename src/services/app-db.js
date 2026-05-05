@@ -1,11 +1,12 @@
 import { normalizeEventRecord } from '../utils/event-records.js'
 
 export const DB_NAME = 'breedz-db'
-const DB_VERSION = 3
+const DB_VERSION = 5
 
 export const STORE_NAMES = {
   animals: 'animals',
   events: 'events',
+  syncState: 'syncState',
 }
 
 let dbPromise
@@ -56,6 +57,8 @@ export function openAppDatabase() {
 
         ensureIndex(animalsStore, 'updatedAt', 'updatedAt')
         ensureIndex(animalsStore, 'status', 'status')
+        ensureIndex(animalsStore, 'syncDirty', 'sync.dirty')
+        ensureIndex(animalsStore, 'syncDeleted', 'sync.deleted')
 
         let eventsStore
 
@@ -69,6 +72,12 @@ export function openAppDatabase() {
         ensureIndex(eventsStore, 'animalIds', 'animalIds', { multiEntry: true })
         ensureIndex(eventsStore, 'date', 'date')
         ensureIndex(eventsStore, 'updatedAt', 'updatedAt')
+        ensureIndex(eventsStore, 'syncDirty', 'sync.dirty')
+        ensureIndex(eventsStore, 'syncDeleted', 'sync.deleted')
+
+        if (!db.objectStoreNames.contains(STORE_NAMES.syncState)) {
+          db.createObjectStore(STORE_NAMES.syncState, { keyPath: 'id' })
+        }
       }
 
       request.onsuccess = () => resolve(request.result)

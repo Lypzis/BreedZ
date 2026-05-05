@@ -39,8 +39,54 @@
         <div class="text-overline text-weight-bold text-primary">{{ t('settings.dataSafetyOverline') }}</div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('settings.dataSafetyTitle') }}</div>
 
+        <q-banner rounded :class="syncStatusBannerClass" class="q-mb-md">
+          <div class="row no-wrap items-start q-col-gutter-sm">
+            <div class="col-auto">
+              <q-icon :name="syncStatusIcon" :color="syncStatusIconColor" size="md" />
+            </div>
+            <div class="col">
+              <div class="text-subtitle2 text-weight-bold" :class="syncStatusTitleClass">{{ syncStatusTitle }}</div>
+              <div class="text-caption q-mt-xs">
+                {{ syncStatusDescription }}
+              </div>
+              <div v-if="pendingSyncTotal > 0" class="text-caption q-mt-xs">
+                {{ t('settings.syncPendingBreakdown', { animals: pendingSyncAnimals, events: pendingSyncEvents }) }}
+              </div>
+              <div v-if="!isSyncingNow && syncErrorMessage" class="text-caption text-negative q-mt-xs">
+                {{ syncErrorMessage }}
+              </div>
+            </div>
+          </div>
+
+
+          <q-btn v-if="!isSignedIn || !isPremium" unelevated color="primary" icon="workspace_premium"
+            class="q-mt-md full-width" :label="syncAccountButtonLabel" to="/account" />
+
+          <q-btn v-else unelevated color="primary" icon="sync" :label="t('settings.syncNow')" class="q-mt-md full-width"
+            :disable="!canRunManualSync" :loading="isSyncingNow" @click="handleManualSync" />
+
+        </q-banner>
+
+        <q-banner v-if="localRecordSyncNoticeVisible" rounded class="bg-brown-1 text-brown-10 q-mb-md">
+          <div class="row no-wrap items-start q-col-gutter-sm">
+            <div class="col-auto">
+              <q-icon name="privacy_tip" color="brown-7" size="md" />
+            </div>
+            <div class="col">
+              <div class="text-subtitle2 text-weight-bold">{{ localRecordSyncNoticeTitle }}</div>
+              <div class="text-caption q-mt-xs">
+                {{ localRecordSyncNoticeDescription }}
+              </div>
+            </div>
+          </div>
+
+          <q-btn v-if="canJoinLocalRecordsFromSettings" unelevated color="primary" icon="link"
+            :label="t('settings.localRecordsJoinConfirm')" class="q-mt-md full-width" :loading="isJoiningLocalRecords"
+            @click="handleJoinLocalRecords" />
+        </q-banner>
+
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-green-1 text-primary">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -58,7 +104,7 @@
             </q-banner>
           </div>
 
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-grey-1 text-grey-8">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -124,7 +170,7 @@
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('settings.appTitle') }}</div>
 
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <q-banner rounded class="bg-grey-1 text-grey-8 full-height">
               <div class="row no-wrap items-start q-col-gutter-sm">
                 <div class="col-auto">
@@ -208,14 +254,18 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
 import { buildBackupWorkbookArray, importBackupWorkbookArrayBuffer } from 'src/services/backup-service'
+import { getLocalRecordSyncReadiness, joinLocalRecordsToAccount } from 'src/services/sync-ownership'
+import { listPendingSyncRecords } from 'src/services/sync-queue'
+import { requestPremiumSyncNow, usePremiumSyncStatus } from 'src/services/sync-scheduler'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { useSettingsStore } from 'src/stores/settings-store'
 // import { buildAppBuildLabel, buildAppVersionLabel } from 'src/utils/app-version'
@@ -223,8 +273,10 @@ import { useSettingsStore } from 'src/stores/settings-store'
 const $q = useQuasar()
 const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
+const authStore = useAuthStore()
 const eventsStore = useEventsStore()
 const settingsStore = useSettingsStore()
+const { isLoaded: authLoaded, isPremium, isSignedIn } = storeToRefs(authStore)
 const { weightUnit } = storeToRefs(settingsStore)
 const {
   installButtonLabel,
@@ -240,6 +292,13 @@ const isImporting = ref(false)
 const selectedBackupFile = ref(null)
 const statusMessage = ref('')
 const statusType = ref('positive')
+const isManualSyncing = ref(false)
+const pendingSyncAnimals = ref(0)
+const pendingSyncEvents = ref(0)
+const syncErrorMessage = ref('')
+const { isSyncing: isPremiumSyncing } = usePremiumSyncStatus()
+const localRecordSyncReadiness = ref(null)
+const isJoiningLocalRecords = ref(false)
 
 const selectedWeightUnit = computed({
   get: () => weightUnit.value,
@@ -256,6 +315,284 @@ const weightUnitOptions = computed(() => [
 const statusBannerClass = computed(() =>
   statusType.value === 'negative' ? 'bg-red-1 text-negative' : 'bg-green-1 text-primary',
 )
+const pendingSyncTotal = computed(() => pendingSyncAnimals.value + pendingSyncEvents.value)
+const isSyncingNow = computed(() => isManualSyncing.value || isPremiumSyncing.value)
+const canRunManualSync = computed(() =>
+  authLoaded.value && isSignedIn.value && isPremium.value,
+)
+const hasSyncError = computed(() => !isSyncingNow.value && Boolean(syncErrorMessage.value))
+const syncStatusBannerClass = computed(() => {
+  if (isSyncingNow.value) {
+    return 'bg-green-1 text-primary'
+  }
+
+  if (hasSyncError.value) {
+    return 'bg-red-1 text-negative'
+  }
+
+  if (!isSignedIn.value || !isPremium.value) {
+    return 'bg-grey-1 text-grey-8'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'bg-orange-1 text-warning'
+  }
+
+  return 'bg-green-1 text-primary'
+})
+const syncStatusIcon = computed(() => {
+  if (isSyncingNow.value) {
+    return 'sync'
+  }
+
+  if (hasSyncError.value) {
+    return 'sync_problem'
+  }
+
+  if (!isSignedIn.value) {
+    return 'cloud_off'
+  }
+
+  if (!isPremium.value) {
+    return 'lock'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'cloud_upload'
+  }
+
+  return 'cloud_done'
+})
+const syncStatusIconColor = computed(() => {
+  if (isSyncingNow.value) {
+    return 'primary'
+  }
+
+  if (hasSyncError.value) {
+    return 'negative'
+  }
+
+  if (!isSignedIn.value || !isPremium.value) {
+    return 'primary'
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return 'warning'
+  }
+
+  return 'primary'
+})
+const syncStatusTitleClass = computed(() => {
+  if (hasSyncError.value) {
+    return 'text-negative'
+  }
+
+  if (isSyncingNow.value || !isSignedIn.value || !isPremium.value) {
+    return 'text-primary'
+  }
+
+  return ''
+})
+const syncStatusTitle = computed(() => {
+  if (isSyncingNow.value) {
+    return t('settings.syncingTitle')
+  }
+
+  if (hasSyncError.value) {
+    return t('settings.syncFailedTitle')
+  }
+
+  if (!isSignedIn.value) {
+    return t('settings.syncLocalOnlyTitle')
+  }
+
+  if (!isPremium.value) {
+    return t('settings.syncPremiumLockedTitle')
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return t('settings.syncPendingTitle', { count: pendingSyncTotal.value })
+  }
+
+  return t('settings.syncActiveTitle')
+})
+const syncStatusDescription = computed(() => {
+  if (isSyncingNow.value) {
+    return t('settings.syncingDescription')
+  }
+
+  if (hasSyncError.value) {
+    return t('settings.syncFailedDescription')
+  }
+
+  if (!isSignedIn.value) {
+    return t('settings.syncLocalOnlyDescription')
+  }
+
+  if (!isPremium.value) {
+    return t('settings.syncPremiumLockedDescription')
+  }
+
+  if (pendingSyncTotal.value > 0) {
+    return t('settings.syncPendingDescription')
+  }
+
+  return t('settings.syncActiveDescription')
+})
+const syncAccountButtonLabel = computed(() =>
+  isSignedIn.value ? t('settings.upgradeForSync') : t('settings.signInForSync'),
+)
+const localRecordSyncSkippedReason = computed(() => localRecordSyncReadiness.value?.skippedReason ?? '')
+const localRecordSyncNoticeVisible = computed(() =>
+  isSignedIn.value &&
+  isPremium.value &&
+  (
+    localRecordSyncSkippedReason.value === 'local-records-kept-on-device' ||
+    localRecordSyncSkippedReason.value === 'local-records-owned-by-another-account' ||
+    localRecordSyncSkippedReason.value === 'local-records-need-decision'
+  ),
+)
+const canJoinLocalRecordsFromSettings = computed(() =>
+  localRecordSyncSkippedReason.value === 'local-records-kept-on-device' ||
+  localRecordSyncSkippedReason.value === 'local-records-need-decision',
+)
+const localRecordSyncNoticeTitle = computed(() => {
+  if (localRecordSyncSkippedReason.value === 'local-records-owned-by-another-account') {
+    return t('settings.localRecordsOtherAccountTitle')
+  }
+
+  return t('settings.localRecordsJoinTitle')
+})
+const localRecordSyncNoticeDescription = computed(() => {
+  const readiness = localRecordSyncReadiness.value ?? { animals: 0, events: 0 }
+
+  if (localRecordSyncSkippedReason.value === 'local-records-owned-by-another-account') {
+    return t('settings.localRecordsOtherAccountDescription')
+  }
+
+  if (localRecordSyncSkippedReason.value === 'local-records-kept-on-device') {
+    return t('settings.localRecordsKeptDescription', readiness)
+  }
+
+  return t('settings.localRecordsJoinMessage', readiness)
+})
+
+async function refreshPendingSyncStatus() {
+  const pending = await listPendingSyncRecords()
+  const records = [...pending.animals, ...pending.events]
+  const failedRecord = records.find((record) => record.sync?.error)
+
+  pendingSyncAnimals.value = pending.animals.length
+  pendingSyncEvents.value = pending.events.length
+  syncErrorMessage.value = failedRecord?.sync?.error ?? ''
+}
+
+async function refreshLocalRecordSyncReadiness() {
+  if (!isSignedIn.value || !isPremium.value || !authStore.user?.uid) {
+    localRecordSyncReadiness.value = null
+    return
+  }
+
+  localRecordSyncReadiness.value = await getLocalRecordSyncReadiness(authStore.user.uid)
+}
+
+async function handleManualSync() {
+  if (!canRunManualSync.value) {
+    return
+  }
+
+  isManualSyncing.value = true
+  syncErrorMessage.value = ''
+
+  try {
+    const result = await requestPremiumSyncNow('settings-manual')
+
+    if ((result?.pulled ?? 0) > 0) {
+      await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
+    }
+
+    await refreshPendingSyncStatus()
+    await refreshLocalRecordSyncReadiness()
+
+    if (result?.skippedReason === 'offline') {
+      $q.notify({
+        color: 'warning',
+        message: t('settings.syncOffline'),
+        position: 'top',
+      })
+      return
+    }
+
+    if (result?.skippedReason) {
+      $q.notify({
+        color: 'warning',
+        message: getSkippedSyncMessage(result.skippedReason),
+        position: 'top',
+      })
+      return
+    }
+
+    if (result?.failed > 0) {
+      syncErrorMessage.value = t('settings.syncFailedDescription')
+      return
+    }
+
+    $q.notify({
+      color: 'positive',
+      message: t('settings.syncSuccess'),
+      position: 'top',
+    })
+  } catch (error) {
+    syncErrorMessage.value = error instanceof Error ? error.message : t('settings.syncFailedDescription')
+  } finally {
+    isManualSyncing.value = false
+  }
+}
+
+function getSkippedSyncMessage(skippedReason) {
+  if (skippedReason === 'local-records-need-decision') {
+    return t('settings.localRecordsNeedDecisionSyncPaused')
+  }
+
+  if (skippedReason === 'local-records-kept-on-device') {
+    return t('settings.localRecordsKeptSyncPaused')
+  }
+
+  if (skippedReason === 'local-records-owned-by-another-account') {
+    return t('settings.localRecordsOtherAccountWarning')
+  }
+
+  return t('settings.syncSkipped')
+}
+
+async function handleJoinLocalRecords() {
+  if (!authStore.user?.uid) {
+    return
+  }
+
+  isJoiningLocalRecords.value = true
+
+  try {
+    await joinLocalRecordsToAccount(authStore.user.uid)
+    await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
+    await refreshLocalRecordSyncReadiness()
+    await handleManualSync()
+
+    $q.notify({
+      color: 'positive',
+      message: t('settings.localRecordsJoined'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('settings.localRecordsJoinFailed'),
+      position: 'top',
+    })
+  } finally {
+    isJoiningLocalRecords.value = false
+  }
+}
 
 async function handleExport() {
   isExporting.value = true
@@ -297,6 +634,7 @@ async function handleImport() {
     const arrayBuffer = await selectedBackupFile.value.arrayBuffer()
     await importBackupWorkbookArrayBuffer(arrayBuffer)
     await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
+    await refreshPendingSyncStatus()
 
     statusType.value = 'positive'
     statusMessage.value = t('settings.importSuccess')
@@ -320,4 +658,25 @@ async function handleImport() {
     isImporting.value = false
   }
 }
+
+onMounted(() => {
+  void refreshPendingSyncStatus()
+  void refreshLocalRecordSyncReadiness()
+})
+
+watch(isPremiumSyncing, (isSyncing, wasSyncing) => {
+  if (isSyncing) {
+    syncErrorMessage.value = ''
+    return
+  }
+
+  if (wasSyncing) {
+    void refreshPendingSyncStatus()
+    void refreshLocalRecordSyncReadiness()
+  }
+})
+
+watch([isSignedIn, isPremium], () => {
+  void refreshLocalRecordSyncReadiness()
+})
 </script>

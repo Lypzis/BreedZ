@@ -222,6 +222,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import AnimalLimitReachedDialog from 'src/components/AnimalLimitReachedDialog.vue'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
 import AnimalListItem from 'src/components/AnimalListItem.vue'
@@ -404,21 +405,7 @@ function notifyAnimalLimitReminder(totalCount) {
 
 function notifyAnimalLimitBlocked() {
   $q.dialog({
-    title: t('animals.premiumBlockedTitle'),
-    message: t('animals.premiumBlocked'),
-    ok: {
-      label: t('animals.goToAccount'),
-      color: 'primary',
-      textColor: 'white',
-      unelevated: true,
-      noCaps: true,
-    },
-    cancel: {
-      label: t('common.close'),
-      flat: true,
-      color: 'grey-7',
-    },
-    persistent: true,
+    component: AnimalLimitReachedDialog,
   }).onOk(() => {
     void router.push('/account')
   })

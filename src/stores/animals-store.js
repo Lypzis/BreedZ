@@ -9,6 +9,7 @@ import {
 } from 'src/services/animals-db'
 import { syncAnimalStatusesFromEvents } from 'src/services/animal-status-sync'
 import { deleteEventsForAnimal } from 'src/services/events-db'
+import { requestPremiumSync } from 'src/services/sync-scheduler'
 import { ANIMAL_LIMIT_REACHED_ERROR, canCreateAnimal } from 'src/utils/premium-limits'
 
 export const useAnimalsStore = defineStore('animals', () => {
@@ -44,12 +45,14 @@ export const useAnimalsStore = defineStore('animals', () => {
 
     const animal = await createAnimal(payload)
     await loadAnimals()
+    requestPremiumSync('animal-created')
     return getAnimalById(animal.id) ?? animal
   }
 
   async function editAnimal(id, payload) {
     const animal = await updateAnimal(id, payload)
     await loadAnimals()
+    requestPremiumSync('animal-updated')
     return getAnimalById(id) ?? animal
   }
 
@@ -58,6 +61,7 @@ export const useAnimalsStore = defineStore('animals', () => {
     await deleteEventsForAnimal(id)
     await deleteAnimal(id)
     await loadAnimals()
+    requestPremiumSync('animal-deleted')
   }
 
   function getAnimalById(id) {

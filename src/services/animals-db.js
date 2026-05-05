@@ -1,6 +1,12 @@
 import { createId, STORE_NAMES, withStore } from './app-db.js'
 import { normalizeAnimalBreeder } from '../utils/breeder.js'
 import { normalizeBreedLabel, normalizeSpeciesLabel } from '../utils/species.js'
+import {
+  isRecordDeleted,
+  markRecordDeleted,
+  markRecordDirty,
+  normalizeLocalSyncMetadata,
+} from '../utils/sync-metadata.js'
 
 function normalizeStatusValue(value) {
   const normalizedValue = String(value || '').trim().toLowerCase()
@@ -19,30 +25,33 @@ function normalizeStoredAnimal(animal) {
     isBreeder: normalizeAnimalBreeder(animal?.isBreeder, animal?.purpose),
     baseStatus: normalizeStatusValue(animal?.baseStatus ?? animal?.status),
     status: normalizeStatusValue(animal?.status ?? animal?.baseStatus),
+    sync: normalizeLocalSyncMetadata(animal?.sync),
   }
 }
 
-export async function listAnimals() {
+export async function listAnimals(options = {}) {
   const animals = (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.getAll())) ?? []
 
-  return animals.map(normalizeStoredAnimal).sort((left, right) => {
-    const leftValue = left.updatedAt ?? left.createdAt ?? ''
-    const rightValue = right.updatedAt ?? right.createdAt ?? ''
+  return animals
+    .map(normalizeStoredAnimal)
+    .filter((animal) => options.includeDeleted === true || !isRecordDeleted(animal))
+    .sort((left, right) => {
+      const leftValue = left.updatedAt ?? left.createdAt ?? ''
+      const rightValue = right.updatedAt ?? right.createdAt ?? ''
 
-    return rightValue.localeCompare(leftValue)
-  })
+      return rightValue.localeCompare(leftValue)
+    })
 }
 
 export async function hasSavedAnimals() {
-  const count = await withStore(STORE_NAMES.animals, 'readonly', (store) => store.count())
-
-  return Number(count ?? 0) > 0
+  const animals = await listAnimals()
+  return animals.length > 0
 }
 
 export function buildAnimalRecord(input, options = {}) {
   const timestamp = options.timestamp ?? new Date().toISOString()
 
-  return {
+  return markRecordDirty({
     id: options.id ?? createId('animal'),
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
@@ -59,7 +68,7 @@ export function buildAnimalRecord(input, options = {}) {
     notes: input.notes?.trim() ?? '',
     createdAt: timestamp,
     updatedAt: timestamp,
-  }
+  })
 }
 
 export async function createAnimal(input) {
@@ -77,7 +86,7 @@ export async function updateAnimal(id, input) {
     throw new Error('Animal not found.')
   }
 
-  const updatedAnimal = {
+  const updatedAnimal = markRecordDirty({
     ...existingAnimal,
     tag: input.tag?.trim() ?? '',
     name: input.name?.trim() ?? '',
@@ -93,21 +102,31 @@ export async function updateAnimal(id, input) {
     sireId: input.sireId || '',
     notes: input.notes?.trim() ?? '',
     updatedAt: new Date().toISOString(),
-  }
+  })
 
   await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
 
   return updatedAnimal
 }
 
-export async function getAnimal(id) {
+export async function getAnimal(id, options = {}) {
   if (!id) {
     return null
   }
 
   const animal = (await withStore(STORE_NAMES.animals, 'readonly', (store) => store.get(id))) ?? null
 
-  return animal ? normalizeStoredAnimal(animal) : null
+  if (!animal) {
+    return null
+  }
+
+  const normalizedAnimal = normalizeStoredAnimal(animal)
+
+  if (options.includeDeleted !== true && isRecordDeleted(normalizedAnimal)) {
+    return null
+  }
+
+  return normalizedAnimal
 }
 
 export async function deleteAnimal(id) {
@@ -115,7 +134,17 @@ export async function deleteAnimal(id) {
     return
   }
 
-  await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.delete(id))
+  const existingAnimal = await getAnimal(id, { includeDeleted: true })
+
+  if (!existingAnimal || isRecordDeleted(existingAnimal)) {
+    return
+  }
+
+  const deletedAnimal = markRecordDeleted(existingAnimal)
+
+  await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(deletedAnimal))
+
+  return deletedAnimal
 }
 
 export async function touchAnimalUpdatedAt(id) {
@@ -125,10 +154,10 @@ export async function touchAnimalUpdatedAt(id) {
     return null
   }
 
-  const updatedAnimal = {
+  const updatedAnimal = markRecordDirty({
     ...existingAnimal,
     updatedAt: new Date().toISOString(),
-  }
+  })
 
   await withStore(STORE_NAMES.animals, 'readwrite', (store) => store.put(updatedAnimal))
 
@@ -147,12 +176,14 @@ export async function clearParentReferences(parentId) {
 
   for (const animal of animalsToUpdate) {
     await withStore(STORE_NAMES.animals, 'readwrite', (store) =>
-      store.put({
-        ...animal,
-        damId: animal.damId === parentId ? '' : animal.damId ?? '',
-        sireId: animal.sireId === parentId ? '' : animal.sireId ?? '',
-        updatedAt: new Date().toISOString(),
-      }),
+      store.put(
+        markRecordDirty({
+          ...animal,
+          damId: animal.damId === parentId ? '' : animal.damId ?? '',
+          sireId: animal.sireId === parentId ? '' : animal.sireId ?? '',
+          updatedAt: new Date().toISOString(),
+        }),
+      ),
     )
   }
 }

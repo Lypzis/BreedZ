@@ -1,407 +1,527 @@
-# Multi-Animal Events Roadmap
+# BreedZ Next Additions Roadmap
 
 ## Goal
 
-Evolve the current event system from a single-animal model into a shared event model that can affect multiple animals, while keeping `breeding` as a special case limited to exactly 2 animals.
+This roadmap lists the next necessary additions for BreedZ after the current MVP foundation.
 
-This should make it possible to register one event for many animals without duplicating records, while keeping the UI and data model understandable.
+BreedZ already has a strong base for offline animal records, breeding history, lineage, multi-animal events, purchases, sales, deaths, expected birth events, backups, SSR public pages, and PWA offline launch. The next work should focus on turning those records into dependable farm workflows without making the UI heavy.
 
-## Product Decision
+## Product Priorities
 
-We will represent one real-world event as one shared event record.
+Recommended order:
 
-We will **not** solve this by overloading the Animals page with an "event filter" as the main navigation pattern.
+1. Account-linked cloud sync and backup
+2. Breeding lifecycle workflows
+3. Smarter breeding date assistance
+4. Reminders and notifications
+5. Farm or herd grouping
+6. Structured health records
+7. Better animal identity and data integrity
+8. Deeper financial records
 
-Instead, we will:
+The first four items are the most important for a breeding-focused farm app. The others become more important as BreedZ grows from herd recordkeeping into broader farm management.
 
-- keep the Animals area focused on animals
-- keep the Events area focused on events
-- add an `EventDetailPage`, similar to `AnimalDetailPage`
-- show the list of affected animals inside the event detail page
+## 1. Account-Linked Cloud Sync And Backup
 
-## Event Model Direction
+### Why
 
-### New canonical shape
+The app has authentication and premium billing, but farm data is still stored locally in IndexedDB. A signed-in user should not expect their herd to disappear when they switch devices, lose a phone, clear browser data, or reinstall the PWA.
 
-Events should move toward this shape:
+### First Version
 
-```js
-{
-  id: string,
-  animalIds: string[],
-  type: 'birth' | 'breeding' | 'sale' | 'vaccination' | 'health_issue' | 'death' | 'custom',
-  amount: number | null,
-  date: string,
-  notes: string,
-  createdAt: string,
-  updatedAt: string,
-}
-```
+- Keep IndexedDB as the fast offline-first source of truth.
+- Add a Firestore-backed sync layer for signed-in users.
+- Sync `animals` and `events` first.
+- Keep manual Excel export/import as a safety fallback.
+- Show sync state clearly in the app shell or Settings page.
 
-### Transition compatibility
+### Implementation Steps
+
+1. Add cloud document structure:
+   - `users/{uid}/animals/{animalId}`
+   - `users/{uid}/events/{eventId}`
+   - optional `users/{uid}/syncState/meta`
+
+2. Add sync metadata locally:
+   - `dirty`
+   - `deleted`
+   - `lastSyncedAt`
+   - `cloudUpdatedAt`
+   - `syncError`
+
+3. Update local write paths:
+   - create animal
+   - update animal
+   - delete animal
+   - create event
+   - update event
+   - delete event
+   - purchase event transaction
+
+4. Build a sync service:
+   - push dirty local records when online
+   - pull cloud records after sign-in
+   - merge records by `updatedAt`
+   - keep deleted records as tombstones until synced
 
-During migration, we may keep legacy compatibility fields temporarily:
+5. Add conflict behavior:
+   - last-write-wins for the first version
+   - preserve local backup export before any destructive cloud import
+   - log unresolved conflicts for later tooling
 
-- `animalId`
-- `partnerAnimalId`
+6. Add UI states:
+   - signed out: local-only mode
+   - signed in and synced
+   - syncing
+   - offline changes pending
+   - sync failed
 
-These should be considered transitional, not the long-term source of truth.
+7. Add tests:
+   - local record marked dirty after edit
+   - dirty record pushed to cloud
+   - cloud record pulled into empty local database
+   - local delete syncs as cloud delete or tombstone
+   - offline edits retry after network returns
 
-Long term, `animalIds` should be the canonical event-to-animal relationship.
+### Later
 
-## Event Amount Field
+- Multi-device conflict review screen
+- Automatic encrypted backup snapshots
+- Restore from cloud backup
+- Export before restore
 
-Events should gain an optional financial field:
+## 2. Breeding Lifecycle Workflows
 
-- `amount`
+### Why
 
-Recommended model:
+BreedZ already records breeding events, partners, expected birth, and births. The next step is to model the real breeding lifecycle: bred, pregnancy checked, expected to calve, calved, open, failed, aborted, weaned.
+
+### First Version
 
-```js
-amount: number | null
-```
+Add workflow events that connect to a breeding record:
 
-### Amount meaning
+- `pregnancy_check`
+- `breeding_failed`
+- `abortion`
+- `weaning`
+
+Keep them as event types first. Avoid building a complicated state machine until actual user behavior proves it is needed.
 
-The amount should represent the total value of the event, not a per-animal value.
+### Implementation Steps
 
-This keeps the first version simpler, especially for shared events affecting many animals.
+1. Extend event types:
+   - add `pregnancy_check`
+   - add `breeding_failed`
+   - add `abortion`
+   - add `weaning`
 
-If per-animal financial breakdown is needed later, that can be added in a future iteration.
+2. Add event-specific fields through a generic `details` object:
+   - pregnancy check result: `pregnant`, `open`, `unknown`
+   - method: `palpation`, `ultrasound`, `blood_test`, `visual`, `other`
+   - linked breeding event id
+   - linked expected birth event id
 
-### Currency handling
+3. Update event normalization and backup:
+   - persist `details`
+   - validate known detail fields
+   - preserve unknown detail fields for forward compatibility
 
-For now, the model should remain currency-agnostic.
+4. Add UI flows:
+   - from a breeding event detail page, add pregnancy check
+   - from expected birth, record calving or failed outcome
+   - from animal detail, show breeding status summary
 
-We will:
+5. Add outcome handling:
+   - pregnancy check `open` can close or mark the expected birth as not applicable
+   - `breeding_failed` can close linked expected birth
+   - `abortion` can close linked expected birth
+   - birth can complete the breeding cycle
 
-- not store a currency field yet
-- assume the user is working in their own local currency
-- format the amount according to the app locale for display purposes
+6. Add dashboard sections:
+   - pregnancy checks due
+   - expected births due soon
+   - overdue expected births
+   - unresolved breeding records
 
-Examples:
+7. Add tests:
+   - pregnancy check links to breeding
+   - failed breeding closes expected birth
+   - birth completes expected birth workflow
+   - dashboard groups due and overdue breeding follow-ups
 
-- `en`: `1,000.00`
-- `pt-BR` / `es`: `1.000,00`
+### Later
 
-Locale formatting should be treated as presentation behavior, not as an implied stored currency.
+- Rebreeding reminders after failed pregnancy
+- Calving difficulty score
+- Multiple offspring from one pregnancy
+- Weaning groups
+- Reproductive performance metrics
 
-### Suggested UI labels
+## 3. Smarter Breeding Date Assistance
 
-The stored field should stay neutral as `amount`, while UI labels can vary by context:
+### Why
 
-- `purchase`: price or amount
-- `sale`: price or amount
-- `vaccination`: cost
-- `health_issue`: cost
-- `custom`: amount
+The app currently lets users manually add expected birth dates. The README already describes a stronger version: suggest expected birth dates from species gestation rules.
 
-### Type guidance
+### First Version
 
-- `purchase`: optional but strongly encouraged
-- `sale`: optional but strongly encouraged
-- `vaccination`: optional
-- `health_issue`: optional
-- `custom`: optional
-- `breeding`: optional
-- `birth`: usually hidden or optional
-- `death`: optional
+When saving a breeding event, suggest a default expected birth date if the female animal's species is known.
 
-## Event Rules By Type
+### Implementation Steps
 
-### Herd-scoped operational events
+1. Add gestation rules:
+   - cattle: 283 days
+   - sheep: 147 days
+   - goat: 150 days
+   - pig: 114 days
+   - horse: 340 days
+   - fallback: no automatic date
 
-Some financial/operational event types may affect the whole herd instead of specific animals.
+2. Add a utility:
+   - `getGestationDaysForSpecies(species)`
+   - `buildExpectedBirthDate(breedingDate, species)`
 
-These event types can be saved with no attached animals:
+3. Update `EventFormDialog`:
+   - when type is `breeding`, detect female animal in the pair
+   - prefill expected birth date when toggle is enabled
+   - update suggestion if breeding date changes
+   - keep user edits if the user manually changes the date
 
-- `feed_cost`
-- `labor_cost`
-- `supply_cost`
-- `maintenance_cost`
-- `other_expense`
-- `other_income`
+4. Add copy:
+   - "Suggested from species gestation average"
+   - "Adjust if your herd uses a different estimate"
 
-Rules:
+5. Add tests:
+   - cattle breeding date plus 283 days
+   - unknown species does not suggest a date
+   - manual edit is preserved after suggestion
 
-- zero attached animals means the event is herd-scoped
-- attached animals are optional for these event types
-- if animals are attached, the event can appear in those animal timelines
-- if no animals are attached, the event appears in Events and Overview only
-- UI labels should mark animal attachment as optional for these types
+### Later
 
-### Purchase
+- User-configurable gestation defaults
+- Calving window instead of single date
+- Breed-specific gestation adjustments
+- Public gestation calculator page connected to the app
 
-- can affect 1 or more animals
-- can include:
-  - existing animals already saved in the app
-  - newly created animals created during the purchase flow
-  - or a mix of both
+## 4. Reminders And Notifications
 
-Purchase is a special event because it may introduce animals into the system for the first time.
+### Why
 
-For that reason, purchase should not be treated as only a normal "attach existing animals to event" flow.
+Dashboard reminders are useful when the user opens the app, but farm work often needs alerts before the user remembers to check. A PWA should make upcoming breeding and health tasks harder to miss.
 
-### Breeding
+### First Version
 
-- must affect exactly 2 animals
-- must remain a special case
-- both animals must be different
-- both animals must be active
-- species must match when known
-- sexes must be compatible when known
+Start with in-app reminder preferences and PWA notification support for expected births and pending confirmations.
 
-### Birth
+### Implementation Steps
 
-- must affect exactly 1 animal
+1. Add reminder preferences:
+   - reminders enabled
+   - days before expected birth
+   - days before scheduled event
+   - quiet mode toggle
 
-Reason:
-- birth belongs to the newborn animal's own timeline
-- even when there are twins or multiple offspring, each newborn should have its own birth event
+2. Add reminder calculation utilities:
+   - due today
+   - due soon
+   - overdue
+   - needs confirmation
 
-### Sale
+3. Add Settings UI:
+   - enable reminders
+   - request notification permission
+   - show current browser permission state
 
-- can affect 1 or more animals
+4. Add service worker notification support:
+   - receive scheduled reminder messages
+   - show notification with event title and date
+   - open app to the event detail page
 
-### Vaccination
+5. Add fallback for browsers without scheduled notifications:
+   - show prominent in-app reminders on launch
+   - show "notifications unavailable" state
 
-- can affect 1 or more animals
+6. Add tests:
+   - expected birth due soon calculation
+   - overdue expected birth calculation
+   - pending event confirmation calculation
 
-### Health issue
+### Later
 
-- can affect 1 or more animals
+- Cloud scheduled reminders for signed-in users
+- Email reminders
+- Calendar export
+- Per-event reminder override
 
-### Death
+## 5. Farm, Herd, Lot, And Pasture Grouping
 
-- can affect 1 or more animals
+### Why
 
-### Custom
+The current data model has animals and events only. That is clean for MVP, but real operations often need to know where an animal is, which herd it belongs to, or which pasture/lot it moved through.
 
-- can affect 1 or more animals
+### First Version
 
-## UX Decision
+Add lightweight grouping without forcing every user into complex farm setup.
 
-### Event detail page
+### Implementation Steps
 
-We will add an `EventDetailPage`.
+1. Add optional group fields to animals:
+   - `farmId`
+   - `herdId`
+   - `lotId`
+   - `pastureId`
 
-It should show:
+2. Add local stores:
+   - `farms`
+   - `herds`
+   - `locations`
 
-- event type
-- event date
-- amount, when present
-- notes
-- affected animals list
-- quick links to each animal
-- edit action
-- delete action
+3. Add simple Settings or Management screens:
+   - create herd
+   - create pasture/location
+   - rename
+   - archive
 
-This keeps the mental model clean:
+4. Add animal form fields:
+   - herd
+   - location
 
-- `AnimalDetailPage`: everything about one animal
-- `EventDetailPage`: everything about one event
+5. Add movement event:
+   - `movement`
+   - from location
+   - to location
+   - date
+   - affected animal ids
 
-### Purchase flow
+6. Update filters:
+   - animals by herd
+   - animals by location
+   - events by location
 
-Purchase should have a dedicated creation flow instead of being forced into the generic event dialog.
+7. Add tests:
+   - animal can belong to herd/location
+   - movement event updates current location
+   - archived location remains visible on old events
 
-Recommended UX:
+### Later
 
-1. purchase details
-2. animals in this purchase
-3. review and save
+- Multi-farm account support
+- User roles per farm
+- Shared farm access
+- Pasture occupancy reports
 
-Inside the purchase flow, the user should be able to:
+## 6. Structured Health Records
 
-- select existing animals
-- create one new animal
-- create many new animals
-- mix existing and new animals in the same purchase
+### Why
 
-This is cleaner than overloading the standard event modal with repeated full animal forms.
+`vaccination` and `health_issue` are useful, but notes are not enough for operational health records. Farmers often need product, dosage, withdrawal, vet, and follow-up data.
 
-Implemented entry point:
+### First Version
 
-- `purchase` appears as an event type in the regular Add Event dialog
-- selecting `purchase` hands off to a dedicated purchase dialog
-- the purchase dialog supports existing animals, newly created animals, or both
-- new animals from purchase default to `status: active`
-- save uses one IndexedDB transaction across animals and events
+Keep health events simple but add structured details where they matter.
 
-### Events list
+### Implementation Steps
 
-The Events page should remain the main place to browse event records.
+1. Extend `vaccination` event details:
+   - product
+   - dose
+   - route
+   - batch/lot number
+   - withdrawal end date
+   - next dose date
 
-Each list item should eventually link to the new event detail page instead of only exposing inline actions.
+2. Extend `health_issue` event details:
+   - condition
+   - severity
+   - treatment
+   - veterinarian
+   - follow-up date
+   - withdrawal end date
 
-The event list copy should adapt from "event for animal" to wording that supports:
+3. Add form sections:
+   - show structured health fields only for health event types
+   - keep notes available
+   - keep all fields optional at first
 
-- one animal
-- multiple animals
+4. Add dashboard health follow-ups:
+   - next dose due
+   - health follow-up due
+   - withdrawal active
 
-### Animal detail page
+5. Add tests:
+   - health details persist
+   - backup round-trip preserves details
+   - withdrawal active is calculated correctly
 
-Animal detail should continue showing related events, but now a single event may be shared with multiple animals.
+### Later
 
-From the animal timeline, users should be able to open the corresponding `EventDetailPage`.
+- Medicine inventory
+- Treatment protocol templates
+- Vet contact records
+- Compliance reports
 
-## Data / Behavior Impact
+## 7. Animal Identity And Data Integrity
 
-The current codebase assumes one primary animal per event in many places, so this is a real model migration, not only a form change.
+### Why
 
-Areas that will need updates include:
+Animal identity is the foundation of farm records. BreedZ currently supports tag or name, but it should gradually protect users from duplicate or ambiguous records.
 
-- IndexedDB schema and event indexes
-- event create / update / delete services
-- event backup import / export normalization
-- event filtering and search
-- event rendering in dashboard, events list, and animal detail
-- status sync logic
-- breeding history logic
-- quick-add event flows
-- purchase-with-animal-creation flow
-- amount input, validation, storage, and formatting
+### First Version
 
-## Purchase Event Behavior
+Improve identifiers and safety without blocking fast entry.
 
-### Save order
+### Implementation Steps
 
-For purchase, we should save in this order:
+1. Add optional identity fields:
+   - official ID
+   - secondary tag
+   - microchip
+   - brand
+   - registration number
 
-1. create any new animals first
-2. collect all affected animal ids
-3. create one shared `purchase` event using those ids
+2. Add soft duplicate warnings:
+   - same tag
+   - same official ID
+   - same name plus birth date
 
-### Atomicity
+3. Add archive behavior:
+   - archive animal instead of hard delete
+   - keep lineage and historical events intact
 
-The ideal implementation is to save purchased animals and the purchase event in one IndexedDB transaction spanning both stores.
+4. Update delete flow:
+   - explain event and lineage impact
+   - prefer archive
+   - keep hard delete behind a stronger confirmation
 
-This avoids partial states such as:
+5. Add data integrity checks:
+   - no self-parent
+   - no impossible lineage cycle
+   - parent sex warning
+   - birth date before parent birth date warning
 
-- animals created but purchase event missing
-- purchase event created without all animals saved
+6. Add tests:
+   - duplicate tag warning
+   - archived animal remains in historical event
+   - lineage cycle rejected
+   - parent birth date warning
 
-### Initial defaults for newly purchased animals
+### Later
 
-New animals created from purchase should default to:
+- Animal photos
+- Document attachments
+- Audit history
+- Merge duplicate animals
 
-- `status: active`
+## 8. Deeper Financial Records
 
-Other defaults can follow the current normal animal creation rules unless product requirements later define purchase-specific defaults.
+### Why
 
-## Status Rules Impact
+BreedZ already has event amounts and overview totals. That is useful, but farm finance needs more structure if it becomes a real operations feature.
 
-Today, animal status changes are derived from event types like `sale` and `death`.
+### First Version
 
-After migration:
+Add better categorization and period reporting while keeping the event-based model.
 
-- a multi-animal `sale` should update the status of all affected animals
-- a multi-animal `death` should update the status of all affected animals
-- non-status-changing events should leave statuses untouched
+### Implementation Steps
 
-This means status logic must move from "one event updates one animal" to "one event may update many animals".
+1. Add app-level currency preference:
+   - currency code
+   - display style
+   - default from locale if not set
 
-## Recommended Migration Strategy
+2. Add financial details:
+   - vendor
+   - buyer
+   - payment method
+   - payment status
+   - receipt/reference number
 
-### Phase 1: Model foundation
+3. Add financial filters:
+   - by date range
+   - by event type
+   - by income/expense
+   - by animal/herd/location later
 
-- introduce `animalIds` on events
-- introduce optional `amount`
-- normalize reads so old events still work
-- derive `animalIds` from:
-  - `[animalId]` for normal legacy events
-  - `[animalId, partnerAnimalId]` for breeding legacy events
-- keep writes compatible while the UI is still being migrated
+4. Update Overview:
+   - current month
+   - year to date
+   - custom date range
+   - income
+   - expenses
+   - net result
 
-### Phase 2: Service layer
+5. Add export improvements:
+   - finance-specific sheet
+   - totals by category
+   - totals by period
 
-- update event service functions to read/write `animalIds`
-- update list-by-animal helpers to match events where `animalIds` contains the animal
-- update delete and status-sync paths to handle multiple animals
+6. Add tests:
+   - currency formatting
+   - date-range financial totals
+   - pending events excluded from financial totals
+   - export includes financial summary
 
-### Phase 3: Forms and validation
+### Later
 
-- replace single-animal picker with multi-animal selection for eligible event types
-- keep breeding with exactly 2 animals and breeding-specific validation
-- keep birth constrained to exactly 1 animal
-- introduce a dedicated purchase flow for creating one or many animals during purchase
-- add optional amount input with locale-aware formatting
+- Invoices and receipts
+- Profit per animal
+- Cost per herd
+- Inventory valuation
+- Stripe is only for BreedZ subscription billing, not farm finance processing
 
-### Phase 4: UI rollout
+## Cross-Cutting Requirements
 
-- update Events page item rendering for multiple animals
-- add `EventDetailPage`
-- link event rows/cards to the event detail page
-- update Animal detail event timeline links
-- update dashboard event previews
-- display event amount where it adds value
-- defer purchase entry point and purchase wizard/dialog to a dedicated purchase implementation phase
+### Clean UI Rules
 
-### Phase 5: Backup and migration safety
+- Keep the default experience simple.
+- Put advanced fields behind expandable sections.
+- Prefer event-specific fields over giant universal forms.
+- Keep first-run flow focused on adding animals and first breeding/event records.
+- Avoid making the app feel like accounting or compliance software unless the user opens those areas.
 
-- update backup validation/import/export to support `animalIds`
-- confirm legacy backups still import correctly
-- confirm existing stored data upgrades cleanly
+### Offline-First Rules
 
-Implemented safety bridge:
+- Every core workflow must work offline.
+- Offline edits must be visibly queued for sync.
+- Manual export must remain available even after cloud sync ships.
+- Never require cloud sync to view or edit existing local records.
 
-- backup validation/import/export now accepts and emits `animalIds` and `amount`
-- legacy backup events still normalize from `animalId` and `partnerAnimalId`
-- existing IndexedDB event rows are migrated to the canonical event shape before event listing
-- migrated stored events populate the `animalIds` multi-entry index, so per-animal queries work with old data after migration
-- migration is idempotent: canonical rows are left untouched on later runs
+### Data Safety Rules
 
-### Phase 6: Cleanup
+- Backup before destructive import or cloud restore.
+- Preserve unknown fields in import where possible.
+- Keep migration tests for every schema change.
+- Prefer soft delete for records referenced by lineage or events.
 
-- remove legacy dependence on `animalId` / `partnerAnimalId` once all consumers are migrated
+### Suggested Release Slices
 
-## Open Design Constraints
+1. Sync foundation:
+   - local dirty metadata
+   - signed-in cloud backup
+   - sync status UI
 
-These should remain true while implementing:
+2. Breeding workflow:
+   - pregnancy check
+   - failed breeding
+   - expected birth completion
+   - dashboard follow-ups
 
-- one real-world event should be stored once
-- Animals pages should not become the main representation of event records
-- breeding should not become an unrestricted multi-animal event
-- birth should stay single-animal
-- purchase should support creating new animals within the same flow
-- event detail should become the canonical view for one event
+3. Smarter dates:
+   - gestation rules
+   - suggested expected birth dates
+   - calving window copy
 
-## Suggested First Implementation Slice
+4. Reminder layer:
+   - reminder preferences
+   - in-app due/overdue logic
+   - notification permission flow
 
-The safest first coding slice is:
+5. Farm operations layer:
+   - herds/locations
+   - movement events
+   - structured health details
 
-1. add normalized `animalIds` support in the service/model layer
-2. keep the current UI working through compatibility mapping
-3. update per-animal queries and status sync
-4. then build the new multi-animal event form and event detail page
-
-This minimizes breakage while we migrate the model underneath the current app.
-
-## Future Settings Expansion
-
-As the app grows, the Settings page should evolve beyond backup/import/export utilities.
-
-Recommended future sections:
-
-- `Preferences`
-  - date format
-  - amount formatting behavior
-  - default event behavior
-- `Data`
-  - import
-  - export
-  - backup
-  - reset / clear local data
-- `Billing`
-  - current plan
-  - manage subscription
-- `About`
-  - app version
-  - privacy
-  - terms
-  - contact
-- `Advanced`
-  - migration tools
-  - debug utilities
-
-This should be treated as a future UI organization improvement, not a blocker for the multi-animal event work.
+6. Hardening:
+   - archive instead of delete
+   - duplicate detection
+   - financial reporting by period
