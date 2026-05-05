@@ -1,4 +1,5 @@
 import { STORE_NAMES, withStore } from './app-db.js'
+import { getAccountSyncState, updateAccountSyncCursors } from './sync-state.js'
 import { normalizeEventRecord } from '../utils/event-records.js'
 import {
   markRecordSynced,
@@ -49,6 +50,22 @@ function getCloudUpdatedAt(cloudRecord) {
   return ''
 }
 
+function getMaxCloudUpdatedAt(cloudRecords = []) {
+  return cloudRecords
+    .map(getCloudUpdatedAt)
+    .filter(Boolean)
+    .sort()
+    .at(-1) ?? ''
+}
+
+function compareTimestampValues(leftValue, rightValue) {
+  if (!leftValue || !rightValue) {
+    return 0
+  }
+
+  return String(leftValue).localeCompare(String(rightValue))
+}
+
 function didRecordChangeSinceSnapshot(currentRecord, snapshotRecord) {
   return (
     (currentRecord?.updatedAt ?? '') !== (snapshotRecord?.updatedAt ?? '') ||
@@ -56,9 +73,77 @@ function didRecordChangeSinceSnapshot(currentRecord, snapshotRecord) {
   )
 }
 
+function isCloudRecordAlreadyApplied(localRecord, cloudRecord) {
+  const localSync = normalizeLocalSyncMetadata(localRecord?.sync)
+  const localCloudUpdatedAt = localSync.cloudUpdatedAt
+  const cloudUpdatedAt = getCloudUpdatedAt(cloudRecord)
+
+  return Boolean(
+    localCloudUpdatedAt &&
+    cloudUpdatedAt &&
+    compareTimestampValues(cloudUpdatedAt, localCloudUpdatedAt) <= 0,
+  )
+}
+
 function isPermissionDeniedError(error) {
   return error?.code === 'permission-denied' ||
     String(error?.message || '').toLowerCase().includes('missing or insufficient permissions')
+}
+
+function stripCloudOnlyFields(cloudRecord) {
+  const {
+    clientUpdatedAt,
+    deviceId,
+    schemaVersion,
+    serverUpdatedAt,
+    sync,
+    ...localRecord
+  } = cloudRecord ?? {}
+
+  void clientUpdatedAt
+  void deviceId
+  void schemaVersion
+  void serverUpdatedAt
+  void sync
+
+  return localRecord
+}
+
+function markPulledRecordSynced(record, cloudRecord, options = {}) {
+  const deleted = Boolean(cloudRecord?.deletedAt)
+  const cloudUpdatedAt = getCloudUpdatedAt(cloudRecord)
+  const deviceId = cloudRecord?.deviceId ?? options.deviceId ?? ''
+
+  return markRecordSynced(
+    {
+      ...record,
+      deletedAt: cloudRecord?.deletedAt ?? record?.deletedAt ?? null,
+      sync: normalizeLocalSyncMetadata(
+        {
+          dirty: false,
+          deleted,
+          cloudUpdatedAt,
+          deviceId,
+        },
+        { dirtyIfMissing: false },
+      ),
+    },
+    {
+      cloudUpdatedAt,
+      deviceId,
+      syncedAt: options.syncedAt,
+    },
+  )
+}
+
+function normalizeCloudAnimalForLocal(cloudRecord, options = {}) {
+  return markPulledRecordSynced(stripCloudOnlyFields(cloudRecord), cloudRecord, options)
+}
+
+function normalizeCloudEventForLocal(cloudRecord, options = {}) {
+  const normalizedEvent = normalizeEventRecord(stripCloudOnlyFields(cloudRecord))
+
+  return markPulledRecordSynced(normalizedEvent, cloudRecord, options)
 }
 
 async function getLocalRecord(storeName, id) {
@@ -111,6 +196,17 @@ async function resolveCloudPushers(options = {}) {
     return {
       pushAnimalToCloud: options.pushAnimalToCloud,
       pushEventToCloud: options.pushEventToCloud,
+    }
+  }
+
+  return import('./cloud-sync.js')
+}
+
+async function resolveCloudReaders(options = {}) {
+  if (options.listCloudAnimalsChangedSince && options.listCloudEventsChangedSince) {
+    return {
+      listCloudAnimalsChangedSince: options.listCloudAnimalsChangedSince,
+      listCloudEventsChangedSince: options.listCloudEventsChangedSince,
     }
   }
 
@@ -194,4 +290,154 @@ export async function pushPendingSyncRecords(uid, options = {}) {
   }
 
   return result
+}
+
+async function pullCloudCollection({ cloudRecords, normalizeCloudRecord, storeName, syncedAt }) {
+  const result = {
+    attempted: cloudRecords.length,
+    pulled: 0,
+    skipped: 0,
+    conflicts: 0,
+    failed: 0,
+    errors: [],
+  }
+
+  for (const cloudRecord of cloudRecords) {
+    try {
+      if (!cloudRecord?.id) {
+        result.skipped += 1
+        continue
+      }
+
+      const localRecord = await getLocalRecord(storeName, cloudRecord.id)
+      const localSync = normalizeLocalSyncMetadata(localRecord?.sync)
+
+      if (localRecord && localSync.dirty) {
+        result.skipped += 1
+        result.conflicts += 1
+        continue
+      }
+
+      if (localRecord && isCloudRecordAlreadyApplied(localRecord, cloudRecord)) {
+        result.skipped += 1
+        continue
+      }
+
+      await putLocalRecord(storeName, normalizeCloudRecord(cloudRecord, { syncedAt }))
+      result.pulled += 1
+    } catch (error) {
+      result.failed += 1
+      result.errors.push({ collection: storeName, id: cloudRecord?.id ?? '', error })
+    }
+  }
+
+  return result
+}
+
+function combineSyncResults(pushResult, pullResult) {
+  return {
+    ...pushResult,
+    failed: pushResult.failed + pullResult.failed,
+    skipped: pushResult.skipped + pullResult.skipped,
+    errors: [...pushResult.errors, ...pullResult.errors],
+    pulled: pullResult.pulled,
+    pullAttempted: pullResult.attempted,
+    pullConflicts: pullResult.conflicts,
+    pullFailed: pullResult.failed,
+    pullSkipped: pullResult.skipped,
+    animalCloudCursor: pullResult.animalCloudCursor,
+    eventCloudCursor: pullResult.eventCloudCursor,
+  }
+}
+
+export async function pullCloudSyncRecords(uid, options = {}) {
+  if (!uid) {
+    throw new Error('A signed-in user is required for cloud sync.')
+  }
+
+  const { listCloudAnimalsChangedSince, listCloudEventsChangedSince } = await resolveCloudReaders(options)
+  const syncedAt = options.syncedAt ?? new Date().toISOString()
+  const syncState = options.skipPullCursor === true
+    ? { animalCloudCursor: '', eventCloudCursor: '' }
+    : await getAccountSyncState(uid)
+  const animalSinceDate = options.animalSinceDate
+    ?? options.sinceDate
+    ?? syncState.animalCloudCursor
+    ?? null
+  const eventSinceDate = options.eventSinceDate
+    ?? options.sinceDate
+    ?? syncState.eventCloudCursor
+    ?? null
+  const [cloudAnimals, cloudEvents] = await Promise.all([
+    listCloudAnimalsChangedSince(uid, animalSinceDate),
+    listCloudEventsChangedSince(uid, eventSinceDate),
+  ])
+  const animalResult = await pullCloudCollection({
+    cloudRecords: cloudAnimals ?? [],
+    normalizeCloudRecord: normalizeCloudAnimalForLocal,
+    storeName: STORE_NAMES.animals,
+    syncedAt,
+  })
+  const eventResult = await pullCloudCollection({
+    cloudRecords: cloudEvents ?? [],
+    normalizeCloudRecord: normalizeCloudEventForLocal,
+    storeName: STORE_NAMES.events,
+    syncedAt,
+  })
+  const animalCloudCursor = animalResult.failed === 0 ? getMaxCloudUpdatedAt(cloudAnimals) : ''
+  const eventCloudCursor = eventResult.failed === 0 ? getMaxCloudUpdatedAt(cloudEvents) : ''
+
+  if (options.skipPullCursor !== true && (animalCloudCursor || eventCloudCursor)) {
+    await updateAccountSyncCursors(uid, {
+      animalCloudCursor,
+      eventCloudCursor,
+    })
+  }
+
+  return {
+    attempted: animalResult.attempted + eventResult.attempted,
+    pulled: animalResult.pulled + eventResult.pulled,
+    skipped: animalResult.skipped + eventResult.skipped,
+    conflicts: animalResult.conflicts + eventResult.conflicts,
+    failed: animalResult.failed + eventResult.failed,
+    errors: [...animalResult.errors, ...eventResult.errors],
+    animalCloudCursor,
+    eventCloudCursor,
+  }
+}
+
+export async function syncPremiumRecords(uid, options = {}) {
+  const pushResult = await pushPendingSyncRecords(uid, options)
+
+  if (pushResult.failed > 0) {
+    return {
+      ...pushResult,
+      pulled: 0,
+      pullAttempted: 0,
+      pullConflicts: 0,
+      pullFailed: 0,
+      pullSkipped: 0,
+      animalCloudCursor: '',
+      eventCloudCursor: '',
+    }
+  }
+
+  let pullResult
+
+  try {
+    pullResult = await pullCloudSyncRecords(uid, options)
+  } catch (error) {
+    pullResult = {
+      attempted: 0,
+      pulled: 0,
+      skipped: 0,
+      conflicts: 0,
+      failed: 1,
+      errors: [{ collection: 'cloud-pull', id: '', error }],
+      animalCloudCursor: '',
+      eventCloudCursor: '',
+    }
+  }
+
+  return combineSyncResults(pushResult, pullResult)
 }

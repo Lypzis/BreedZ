@@ -1,7 +1,7 @@
 import { readonly, ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { getDeviceId } from './device-id.js'
-import { pushPendingSyncRecords } from './sync-queue.js'
+import { syncPremiumRecords } from './sync-queue.js'
 
 const DEFAULT_DEBOUNCE_MS = 1200
 
@@ -68,7 +68,7 @@ async function runPremiumSync(reason = 'manual') {
   pendingReason = ''
   isPremiumSyncing.value = true
   premiumSyncReason.value = reason
-  syncPromise = pushPendingSyncRecords(authStore.user.uid, {
+  syncPromise = syncPremiumRecords(authStore.user.uid, {
     deviceId: getDeviceId(),
   })
     .then((result) => {

@@ -442,6 +442,11 @@ async function handleManualSync() {
 
   try {
     const result = await requestPremiumSyncNow('settings-manual')
+
+    if ((result?.pulled ?? 0) > 0) {
+      await Promise.all([animalsStore.loadAnimals(), eventsStore.loadEvents()])
+    }
+
     await refreshPendingSyncStatus()
 
     if (result?.skippedReason === 'offline') {

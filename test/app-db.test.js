@@ -11,7 +11,13 @@ import {
 } from '../src/services/app-db.js'
 import { createAnimal, deleteAnimal, getAnimal, listAnimals } from '../src/services/animals-db.js'
 import { createPurchaseEventWithAnimals } from '../src/services/purchase-events-db.js'
-import { listPendingSyncRecords, pushPendingSyncRecords } from '../src/services/sync-queue.js'
+import { getAccountSyncState } from '../src/services/sync-state.js'
+import {
+  listPendingSyncRecords,
+  pullCloudSyncRecords,
+  pushPendingSyncRecords,
+  syncPremiumRecords,
+} from '../src/services/sync-queue.js'
 import { stripLocalSyncMetadataFromRecords } from '../src/utils/sync-metadata.js'
 
 async function deleteDatabase() {
@@ -379,4 +385,233 @@ test('does not mark a record clean if it changes during sync', async (t) => {
   assert.equal(storedAnimal.tag, 'Race 001 updated')
   assert.equal(storedAnimal.sync.dirty, true)
   assert.equal(storedAnimal.sync.cloudUpdatedAt ?? '', '')
+})
+
+test('pulls cloud sync records into an empty local database', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const serverDate = new Date('2026-05-04T15:00:00.000Z')
+  const result = await pullCloudSyncRecords('user-1', {
+    listCloudAnimalsChangedSince: async () => [
+      {
+        id: 'animal-cloud-1',
+        tag: 'Cloud 001',
+        name: 'Cloud Cow',
+        species: 'Cattle',
+        breed: '',
+        weight: '',
+        isBreeder: true,
+        sex: 'female',
+        birthDate: '2024-01-01',
+        baseStatus: 'active',
+        status: 'active',
+        damId: '',
+        sireId: '',
+        notes: '',
+        createdAt: '2026-05-01T00:00:00.000Z',
+        updatedAt: '2026-05-02T00:00:00.000Z',
+        deletedAt: null,
+        deviceId: 'device-cloud',
+        serverUpdatedAt: { toDate: () => serverDate },
+      },
+    ],
+    listCloudEventsChangedSince: async () => [
+      {
+        id: 'event-cloud-1',
+        animalId: 'animal-cloud-1',
+        animalIds: ['animal-cloud-1'],
+        scope: 'animals',
+        type: 'breeding',
+        partnerAnimalId: '',
+        linkedEventId: '',
+        confirmationStatus: 'confirmed',
+        amount: null,
+        date: '2026-05-03',
+        notes: 'Cloud event',
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z',
+        deletedAt: null,
+        deviceId: 'device-cloud',
+        serverUpdatedAt: { toDate: () => serverDate },
+      },
+    ],
+  })
+
+  assert.equal(result.attempted, 2)
+  assert.equal(result.pulled, 2)
+  assert.equal(result.failed, 0)
+  assert.equal(result.conflicts, 0)
+
+  const animals = await listAnimals()
+  const storedEvents = await withStore(STORE_NAMES.events, 'readonly', (store) => store.getAll())
+
+  assert.deepEqual(animals.map((animal) => animal.id), ['animal-cloud-1'])
+  assert.equal(animals[0].sync.dirty, false)
+  assert.equal(animals[0].sync.cloudUpdatedAt, '2026-05-04T15:00:00.000Z')
+  assert.equal(animals[0].sync.deviceId, 'device-cloud')
+  assert.equal(storedEvents[0].sync.dirty, false)
+  assert.equal(storedEvents[0].sync.cloudUpdatedAt, '2026-05-04T15:00:00.000Z')
+  assert.deepEqual(storedEvents[0].animalIds, ['animal-cloud-1'])
+})
+
+test('does not overwrite dirty local records during cloud pull', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const animal = await createAnimal({
+    tag: 'Local 001',
+    status: 'active',
+  })
+
+  const result = await pullCloudSyncRecords('user-1', {
+    listCloudAnimalsChangedSince: async () => [
+      {
+        ...animal,
+        tag: 'Cloud 001',
+        deviceId: 'device-cloud',
+        serverUpdatedAt: { toDate: () => new Date('2026-05-04T15:30:00.000Z') },
+      },
+    ],
+    listCloudEventsChangedSince: async () => [],
+  })
+
+  assert.equal(result.pulled, 0)
+  assert.equal(result.skipped, 1)
+  assert.equal(result.conflicts, 1)
+
+  const storedAnimal = await withStore(STORE_NAMES.animals, 'readonly', (store) => store.get(animal.id))
+
+  assert.equal(storedAnimal.tag, 'Local 001')
+  assert.equal(storedAnimal.sync.dirty, true)
+})
+
+test('pulls cloud tombstones as clean local deletions', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const result = await pullCloudSyncRecords('user-1', {
+    listCloudAnimalsChangedSince: async () => [
+      {
+        id: 'animal-deleted-cloud',
+        tag: 'Deleted 001',
+        status: 'sold',
+        baseStatus: 'sold',
+        createdAt: '2026-05-01T00:00:00.000Z',
+        updatedAt: '2026-05-04T16:00:00.000Z',
+        deletedAt: '2026-05-04T16:00:00.000Z',
+        deviceId: 'device-cloud',
+        serverUpdatedAt: { toDate: () => new Date('2026-05-04T16:01:00.000Z') },
+      },
+    ],
+    listCloudEventsChangedSince: async () => [],
+  })
+
+  assert.equal(result.pulled, 1)
+
+  const visibleAnimals = await listAnimals()
+  const allAnimals = await listAnimals({ includeDeleted: true })
+
+  assert.deepEqual(visibleAnimals, [])
+  assert.equal(allAnimals[0].id, 'animal-deleted-cloud')
+  assert.equal(allAnimals[0].sync.dirty, false)
+  assert.equal(allAnimals[0].sync.deleted, true)
+})
+
+test('reports cloud pull failures in the combined premium sync result', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const result = await syncPremiumRecords('user-1', {
+    pushAnimalToCloud: async () => {
+      throw new Error('Should not be called')
+    },
+    pushEventToCloud: async () => {
+      throw new Error('Should not be called')
+    },
+    listCloudAnimalsChangedSince: async () => {
+      throw new Error('Firestore unavailable')
+    },
+    listCloudEventsChangedSince: async () => [],
+  })
+
+  assert.equal(result.attempted, 0)
+  assert.equal(result.failed, 1)
+  assert.equal(result.pulled, 0)
+  assert.equal(result.errors[0].collection, 'cloud-pull')
+  assert.equal(result.errors[0].error.message, 'Firestore unavailable')
+})
+
+test('stores per-account pull cursors after a successful cloud pull', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const seenAnimalSinceDates = []
+  const seenEventSinceDates = []
+
+  await pullCloudSyncRecords('user-1', {
+    listCloudAnimalsChangedSince: async (uid, sinceDate) => {
+      seenAnimalSinceDates.push({ uid, sinceDate })
+
+      return [
+        {
+          id: 'animal-cursor-1',
+          tag: 'Cursor 001',
+          status: 'active',
+          baseStatus: 'active',
+          createdAt: '2026-05-01T00:00:00.000Z',
+          updatedAt: '2026-05-04T16:00:00.000Z',
+          serverUpdatedAt: { toDate: () => new Date('2026-05-04T16:05:00.000Z') },
+        },
+      ]
+    },
+    listCloudEventsChangedSince: async (uid, sinceDate) => {
+      seenEventSinceDates.push({ uid, sinceDate })
+
+      return [
+        {
+          id: 'event-cursor-1',
+          animalId: 'animal-cursor-1',
+          animalIds: ['animal-cursor-1'],
+          scope: 'animals',
+          type: 'custom',
+          confirmationStatus: 'confirmed',
+          date: '2026-05-04',
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z',
+          serverUpdatedAt: { toDate: () => new Date('2026-05-04T16:06:00.000Z') },
+        },
+      ]
+    },
+  })
+
+  const syncState = await getAccountSyncState('user-1')
+
+  assert.equal(syncState.animalCloudCursor, '2026-05-04T16:05:00.000Z')
+  assert.equal(syncState.eventCloudCursor, '2026-05-04T16:06:00.000Z')
+
+  await pullCloudSyncRecords('user-1', {
+    listCloudAnimalsChangedSince: async (uid, sinceDate) => {
+      seenAnimalSinceDates.push({ uid, sinceDate })
+      return []
+    },
+    listCloudEventsChangedSince: async (uid, sinceDate) => {
+      seenEventSinceDates.push({ uid, sinceDate })
+      return []
+    },
+  })
+
+  assert.deepEqual(seenAnimalSinceDates, [
+    { uid: 'user-1', sinceDate: '' },
+    { uid: 'user-1', sinceDate: '2026-05-04T16:05:00.000Z' },
+  ])
+  assert.deepEqual(seenEventSinceDates, [
+    { uid: 'user-1', sinceDate: '' },
+    { uid: 'user-1', sinceDate: '2026-05-04T16:06:00.000Z' },
+  ])
+
+  const otherAccountState = await getAccountSyncState('user-2')
+
+  assert.equal(otherAccountState.animalCloudCursor, '')
+  assert.equal(otherAccountState.eventCloudCursor, '')
 })
