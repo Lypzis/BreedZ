@@ -188,12 +188,6 @@ const navItems = computed(() => [
     to: '/overview',
   },
   {
-    key: 'tutorial',
-    label: t('nav.tutorial'),
-    icon: 'school',
-    to: '/tutorial',
-  },
-  {
     key: 'settings',
     label: t('nav.settings'),
     icon: 'settings',
@@ -204,6 +198,12 @@ const navItems = computed(() => [
     label: t('nav.account'),
     icon: 'account_circle',
     to: '/account',
+  },
+  {
+    key: 'tutorial',
+    label: t('nav.tutorial'),
+    icon: 'school',
+    to: '/tutorial',
   },
 ])
 

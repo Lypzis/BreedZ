@@ -155,7 +155,7 @@ export const messages = {
         },
         {
           title: 'Back up your records',
-          description: 'Export Excel backups locally, or use premium sync to back up animals and events and bring them onto another device.',
+          description: 'Export Excel backups locally, or use account sync to back up animals and events and bring them onto another device.',
           chip: 'Backup',
         },
       ],
@@ -192,7 +192,7 @@ export const messages = {
         'Works fully offline',
         'Data saved on your device',
         'Export to Excel anytime',
-        'Premium sync brings records to another device when internet is available',
+        'Account sync brings records to another device when internet is available',
       ],
       premiumOverline: 'Free And Premium',
       premiumTitle: 'Start free, upgrade only when the herd outgrows it',
@@ -244,7 +244,7 @@ export const messages = {
         },
         {
           question: 'Does it work offline?',
-          answer: 'Yes. You can keep recording without an internet connection. Premium sync runs later when the device is online.',
+          answer: 'Yes. You can keep recording without an internet connection. Sync runs later when the device is online.',
         },
         {
           question: 'Is my data safe?',
@@ -261,7 +261,7 @@ export const messages = {
         },
         {
           question: 'Can I sync later?',
-          answer: 'Yes. Premium sync backs up animal and event changes to your account, then downloads them on another device when you sign in and go online.',
+          answer: 'Yes. Sync backs up animal and event changes to your account, then downloads them on another device when you sign in and go online.',
         },
       ],
     },
@@ -433,7 +433,7 @@ export const messages = {
       premiumStatusInactive: 'Premium is not active yet. Current subscription status: {status}.',
       monthlyPlanOverline: 'Monthly',
       monthlyPlanPrice: '$7 / month',
-      monthlyPlanDescription: 'Unlock unlimited animal registration and premium sync backup.',
+      monthlyPlanDescription: 'Unlock unlimited animal registration and account sync backup.',
       yearlyPlanOverline: 'Yearly',
       yearlyPlanPrice: '$70 / year',
       yearlyPlanDescription: 'Save more with the yearly premium plan and keep the same features unlocked.',
@@ -656,7 +656,7 @@ export const messages = {
       upgradeForSync: 'Upgrade to back up',
       localRecordsJoinTitle: 'Local records on this device',
       localRecordsJoinMessage:
-        'This device has {animals} animals and {events} events that are not linked to an account yet. Add them to this account so premium sync can back them up?',
+        'This device has {animals} animals and {events} events that are not linked to an account yet. Add them to this account so sync can back them up?',
       localRecordsJoinConfirm: 'Add to this account',
       localRecordsJoinCancel: 'Keep on this device',
       localRecordsJoined: 'Local records are ready to sync with this account.',
@@ -777,7 +777,7 @@ export const messages = {
             'Go to Settings to export an Excel backup or, with premium, sync animal and event changes so your account can bring them onto another device.',
           hints: [
             'Excel export is useful for a manual copy you can keep outside the app.',
-            'Premium sync runs when you are signed in, premium is active, and the device is online. Sign in on another device to download synced records there.',
+            'Sync runs when you are signed in, premium is active, and the device is online. Sign in on another device to download synced records there.',
             'Import replaces existing data. Export first to stay safe.',
           ],
         },
@@ -785,7 +785,7 @@ export const messages = {
       tips: [
         'Add records the same day to avoid losing dates and details.',
         'Use structured events for purchases, sales, and herd expenses before adding extra context in notes.',
-        'Use premium sync to keep records available on another device, or export a backup regularly if this device holds your main herd history.',
+        'Use sync to keep records available on another device, or export a backup regularly if this device holds your main herd history.',
       ],
     },
     homeShare: {
@@ -1330,7 +1330,7 @@ export const messages = {
       meta: {
         title: 'Privacy Policy',
         description:
-          'Read how BreedZ handles animal records, cattle breeding data, local storage, premium sync, and herd management information.',
+          'Read how BreedZ handles animal records, cattle breeding data, local storage, account sync, and herd management information.',
       },
       overline: 'Privacy',
       title: 'Privacy Policy',
@@ -1344,12 +1344,12 @@ export const messages = {
         {
           title: 'Where data is stored',
           body:
-            'BreedZ is offline-first. Your records are stored locally on the phone, tablet, or computer where you use the app unless you export them or use premium sync.',
+            'BreedZ is offline-first. Your records are stored locally on the phone, tablet, or computer where you use the app unless you export them or use account sync.',
         },
         {
-          title: 'Premium sync',
+          title: 'Account sync',
           body:
-            'If you sign in and premium sync is active, BreedZ may back up animal and event records to your account so they can be available across devices. Sync runs when the device is online and keeps local records available for offline use.',
+            'If you sign in and sync is active, BreedZ may back up animal and event records to your account so they can be available across devices. Sync runs when the device is online and keeps local records available for offline use.',
         },
         {
           title: 'Language preference cookie',
@@ -1379,7 +1379,7 @@ export const messages = {
       meta: {
         title: 'Terms of Use',
         description:
-          'Read the BreedZ terms for using the offline-first herd management app, premium sync, and cattle breeding recordkeeping tools.',
+          'Read the BreedZ terms for using the offline-first herd management app, account sync, and cattle breeding recordkeeping tools.',
       },
       overline: 'Terms',
       title: 'Terms of Use',
@@ -1408,7 +1408,7 @@ export const messages = {
         {
           title: 'Sync and backups',
           body:
-            'BreedZ stores records locally first. Premium sync and Excel export are provided to help protect records, but you remain responsible for keeping important farm records backed up and checking that synced or imported data is accurate.',
+            'BreedZ stores records locally first. Account sync and Excel export are provided to help protect records, but you remain responsible for keeping important farm records backed up and checking that synced or imported data is accurate.',
         },
         {
           title: 'Availability',
@@ -1593,7 +1593,7 @@ export const messages = {
         },
         {
           title: 'Fazer backup dos registros',
-          description: 'Exporte backups em Excel no dispositivo ou use a sincronização premium para salvar animais e eventos e trazê-los para outro dispositivo.',
+          description: 'Exporte backups em Excel no dispositivo ou use a sincronização da conta para salvar animais e eventos e trazê-los para outro dispositivo.',
           chip: 'Backup',
         },
       ],
@@ -1630,7 +1630,7 @@ export const messages = {
         'Funciona totalmente offline',
         'Os dados ficam salvos no seu dispositivo',
         'Exporte para Excel quando quiser',
-        'A sincronização premium leva os registros para outro dispositivo quando houver internet',
+        'A sincronização da conta leva os registros para outro dispositivo quando houver internet',
       ],
       premiumOverline: 'Grátis E Premium',
       premiumTitle: 'Comece grátis e faça upgrade só quando o rebanho pedir',
@@ -1682,7 +1682,7 @@ export const messages = {
         },
         {
           question: 'Funciona offline?',
-          answer: 'Sim. Você pode continuar registrando sem internet. A sincronização premium roda depois, quando o dispositivo estiver online.',
+          answer: 'Sim. Você pode continuar registrando sem internet. A sincronização roda depois, quando o dispositivo estiver online.',
         },
         {
           question: 'Meus dados estão seguros?',
@@ -1699,7 +1699,7 @@ export const messages = {
         },
         {
           question: 'Posso sincronizar depois?',
-          answer: 'Sim. A sincronização premium faz backup de alterações de animais e eventos na sua conta e baixa esses dados em outro dispositivo quando você entrar e estiver online.',
+          answer: 'Sim. A sincronização faz backup de alterações de animais e eventos na sua conta e baixa esses dados em outro dispositivo quando você entrar e estiver online.',
         },
       ],
     },
@@ -1873,7 +1873,7 @@ export const messages = {
       premiumStatusInactive: 'O premium ainda não está ativo. Status atual da assinatura: {status}.',
       monthlyPlanOverline: 'Mensal',
       monthlyPlanPrice: '$7 / mês',
-      monthlyPlanDescription: 'Libere cadastro ilimitado de animais e backup com sincronização premium.',
+      monthlyPlanDescription: 'Libere cadastro ilimitado de animais e backup com sincronização da conta.',
       yearlyPlanOverline: 'Anual',
       yearlyPlanPrice: '$70 / ano',
       yearlyPlanDescription: 'Economize mais com o premium anual e mantenha os mesmos recursos liberados.',
@@ -2095,7 +2095,7 @@ export const messages = {
       upgradeForSync: 'Assinar para fazer backup',
       localRecordsJoinTitle: 'Registros locais neste dispositivo',
       localRecordsJoinMessage:
-        'Este dispositivo tem {animals} animais e {events} eventos que ainda não estão vinculados a uma conta. Adicionar a esta conta para o premium fazer backup?',
+        'Este dispositivo tem {animals} animais e {events} eventos que ainda não estão vinculados a uma conta. Adicionar a esta conta para a sincronização fazer backup?',
       localRecordsJoinConfirm: 'Adicionar a esta conta',
       localRecordsJoinCancel: 'Manter neste dispositivo',
       localRecordsJoined: 'Os registros locais estão prontos para sincronizar com esta conta.',
@@ -2218,7 +2218,7 @@ export const messages = {
             'Vá em Configurações para exportar um backup em Excel ou, com premium, sincronizar alterações de animais e eventos para a conta trazê-los para outro dispositivo.',
           hints: [
             'A exportação em Excel é útil para manter uma cópia manual fora do app.',
-            'A sincronização premium roda quando você está logado, o premium está ativo e o dispositivo está online. Entre em outro dispositivo para baixar os registros sincronizados.',
+            'A sincronização roda quando você está logado, o premium está ativo e o dispositivo está online. Entre em outro dispositivo para baixar os registros sincronizados.',
             'Importar substitui os dados existentes. Exporte antes para ficar seguro.',
           ],
         },
@@ -2226,7 +2226,7 @@ export const messages = {
       tips: [
         'Registre tudo no mesmo dia para não perder datas e detalhes.',
         'Use eventos estruturados para compras, vendas e despesas antes de adicionar contexto nas observações.',
-        'Use a sincronização premium para manter os registros disponíveis em outro dispositivo, ou exporte backup com frequência se este dispositivo guarda o principal histórico do rebanho.',
+        'Use a sincronização para manter os registros disponíveis em outro dispositivo, ou exporte backup com frequência se este dispositivo guarda o principal histórico do rebanho.',
       ],
     },
     homeShare: {
@@ -2771,7 +2771,7 @@ export const messages = {
       meta: {
         title: 'Política de Privacidade',
         description:
-          'Leia como o BreedZ lida com registros animais, dados reprodutivos, armazenamento local, sincronização premium e informações de manejo do rebanho.',
+          'Leia como o BreedZ lida com registros animais, dados reprodutivos, armazenamento local, sincronização da conta e informações de manejo do rebanho.',
       },
       overline: 'Privacidade',
       title: 'Política de Privacidade',
@@ -2785,12 +2785,12 @@ export const messages = {
         {
           title: 'Onde os dados ficam',
           body:
-            'O BreedZ é offline-first. Seus registros ficam armazenados localmente no celular, tablet ou computador onde você usa o app, a menos que sejam exportados ou você use a sincronização premium.',
+            'O BreedZ é offline-first. Seus registros ficam armazenados localmente no celular, tablet ou computador onde você usa o app, a menos que sejam exportados ou você use a sincronização da conta.',
         },
         {
-          title: 'Sincronização premium',
+          title: 'Sincronização da conta',
           body:
-            'Se você fizer login e a sincronização premium estiver ativa, o BreedZ pode fazer backup de registros de animais e eventos na sua conta para que estejam disponíveis entre dispositivos. A sincronização roda quando o dispositivo está online e mantém os registros locais disponíveis para uso offline.',
+            'Se você fizer login e a sincronização estiver ativa, o BreedZ pode fazer backup de registros de animais e eventos na sua conta para que estejam disponíveis entre dispositivos. A sincronização roda quando o dispositivo está online e mantém os registros locais disponíveis para uso offline.',
         },
         {
           title: 'Cookie de preferência de idioma',
@@ -2820,7 +2820,7 @@ export const messages = {
       meta: {
         title: 'Termos de Uso',
         description:
-          'Leia os termos do BreedZ para uso do aplicativo offline-first de manejo do rebanho, sincronização premium e ferramentas de registro reprodutivo.',
+          'Leia os termos do BreedZ para uso do aplicativo offline-first de manejo do rebanho, sincronização da conta e ferramentas de registro reprodutivo.',
       },
       overline: 'Termos',
       title: 'Termos de Uso',
@@ -2849,7 +2849,7 @@ export const messages = {
         {
           title: 'Sincronização e backups',
           body:
-            'O BreedZ armazena os registros localmente primeiro. A sincronização premium e a exportação em Excel são fornecidas para ajudar a proteger os registros, mas você continua responsável por manter registros importantes da fazenda em backup e verificar se dados sincronizados ou importados estão corretos.',
+            'O BreedZ armazena os registros localmente primeiro. A sincronização da conta e a exportação em Excel são fornecidas para ajudar a proteger os registros, mas você continua responsável por manter registros importantes da fazenda em backup e verificar se dados sincronizados ou importados estão corretos.',
         },
         {
           title: 'Disponibilidade',
@@ -3161,7 +3161,7 @@ export const messages = {
       premiumStatusInactive: 'Premium todavía no está activo. Estado actual de la suscripción: {status}.',
       monthlyPlanOverline: 'Mensual',
       monthlyPlanPrice: '$7 / mes',
-      monthlyPlanDescription: 'Desbloquea registro ilimitado de animales y respaldo con sincronización premium.',
+      monthlyPlanDescription: 'Desbloquea registro ilimitado de animales y respaldo con sincronización de la cuenta.',
       yearlyPlanOverline: 'Anual',
       yearlyPlanPrice: '$70 / año',
       yearlyPlanDescription: 'Ahorra más con el premium anual y mantén las mismas funciones desbloqueadas.',
@@ -3388,7 +3388,7 @@ export const messages = {
       upgradeForSync: 'Pasarse a premium',
       localRecordsJoinTitle: 'Registros locales en este dispositivo',
       localRecordsJoinMessage:
-        'Este dispositivo tiene {animals} animales y {events} eventos que todavía no están vinculados a una cuenta. ¿Quieres agregarlos a esta cuenta para que premium los respalde?',
+        'Este dispositivo tiene {animals} animales y {events} eventos que todavía no están vinculados a una cuenta. ¿Quieres agregarlos a esta cuenta para que la sincronización los respalde?',
       localRecordsJoinConfirm: 'Agregar a esta cuenta',
       localRecordsJoinCancel: 'Mantener en este dispositivo',
       localRecordsJoined: 'Los registros locales están listos para sincronizarse con esta cuenta.',
@@ -3513,7 +3513,7 @@ export const messages = {
             'Ve a Ajustes para exportar un respaldo en Excel o, con premium, sincronizar cambios de animales y eventos para que tu cuenta los lleve a otro dispositivo.',
           hints: [
             'La exportación en Excel sirve para guardar una copia manual fuera de la app.',
-            'La sincronización premium se ejecuta cuando inicias sesión, premium está activo y el dispositivo está online. Inicia sesión en otro dispositivo para descargar los registros sincronizados.',
+            'La sincronización se ejecuta cuando inicias sesión, premium está activo y el dispositivo está online. Inicia sesión en otro dispositivo para descargar los registros sincronizados.',
             'Importar reemplaza los datos actuales. Exporta primero para estar seguro.',
           ],
         },
@@ -3521,7 +3521,7 @@ export const messages = {
       tips: [
         'Registra todo el mismo día para no perder fechas ni detalles.',
         'Usa eventos estructurados para compras, ventas y gastos antes de agregar contexto en notas.',
-        'Usa la sincronización premium para mantener registros disponibles en otro dispositivo, o exporta un respaldo con frecuencia si este dispositivo guarda el historial principal del rebaño.',
+        'Usa la sincronización para mantener registros disponibles en otro dispositivo, o exporta un respaldo con frecuencia si este dispositivo guarda el historial principal del rebaño.',
       ],
     },
     home: {
@@ -3570,7 +3570,7 @@ export const messages = {
         },
         {
           title: 'Respaldar tus datos',
-          description: 'Exporta respaldos en Excel o usa la sincronización premium para guardar animales y eventos y llevarlos a otro dispositivo.',
+          description: 'Exporta respaldos en Excel o usa la sincronización de la cuenta para guardar animales y eventos y llevarlos a otro dispositivo.',
           chip: 'Respaldo',
         },
       ],
@@ -3607,7 +3607,7 @@ export const messages = {
         'Funciona completamente offline',
         'Los datos se guardan en tu dispositivo',
         'Exporta a Excel cuando quieras',
-        'La sincronización premium lleva los registros a otro dispositivo cuando hay internet',
+        'La sincronización de la cuenta lleva los registros a otro dispositivo cuando hay internet',
       ],
       premiumOverline: 'Gratis Y Premium',
       premiumTitle: 'Empieza gratis y pásate a premium solo cuando el rebaño lo pida',
@@ -3659,7 +3659,7 @@ export const messages = {
         },
         {
           question: '¿Funciona offline?',
-          answer: 'Sí. Puedes seguir registrando sin internet. La sincronización premium se ejecuta después, cuando el dispositivo esté online.',
+          answer: 'Sí. Puedes seguir registrando sin internet. La sincronización se ejecuta después, cuando el dispositivo esté online.',
         },
         {
           question: '¿Mis datos están seguros?',
@@ -3676,7 +3676,7 @@ export const messages = {
         },
         {
           question: '¿Puedo sincronizar más adelante?',
-          answer: 'Sí. La sincronización premium respalda cambios de animales y eventos en tu cuenta y los descarga en otro dispositivo cuando inicias sesión y estás online.',
+          answer: 'Sí. La sincronización respalda cambios de animales y eventos en tu cuenta y los descarga en otro dispositivo cuando inicias sesión y estás online.',
         },
       ],
     },
@@ -4222,7 +4222,7 @@ export const messages = {
       meta: {
         title: 'Política de privacidad',
         description:
-          'Lee cómo BreedZ maneja registros animales, datos reproductivos, almacenamiento local, sincronización premium e información de manejo del ganado.',
+          'Lee cómo BreedZ maneja registros animales, datos reproductivos, almacenamiento local, sincronización de la cuenta e información de manejo del ganado.',
       },
       overline: 'Privacidad',
       title: 'Política de privacidad',
@@ -4236,12 +4236,12 @@ export const messages = {
         {
           title: 'Dónde se almacenan los datos',
           body:
-            'BreedZ es offline-first. Tus registros se almacenan localmente en el celular, tableta o computadora donde usas la app, salvo que los exportes o uses la sincronización premium.',
+            'BreedZ es offline-first. Tus registros se almacenan localmente en el celular, tableta o computadora donde usas la app, salvo que los exportes o uses la sincronización de la cuenta.',
         },
         {
-          title: 'Sincronización premium',
+          title: 'Sincronización de la cuenta',
           body:
-            'Si inicias sesión y la sincronización premium está activa, BreedZ puede respaldar registros de animales y eventos en tu cuenta para que estén disponibles entre dispositivos. La sincronización se ejecuta cuando el dispositivo está online y mantiene los registros locales disponibles para trabajar offline.',
+            'Si inicias sesión y la sincronización está activa, BreedZ puede respaldar registros de animales y eventos en tu cuenta para que estén disponibles entre dispositivos. La sincronización se ejecuta cuando el dispositivo está online y mantiene los registros locales disponibles para trabajar offline.',
         },
         {
           title: 'Cookie de preferencia de idioma',
@@ -4271,7 +4271,7 @@ export const messages = {
       meta: {
         title: 'Términos de uso',
         description:
-          'Lee los términos de BreedZ para usar la app offline-first de manejo del ganado, la sincronización premium y sus herramientas de registro reproductivo.',
+          'Lee los términos de BreedZ para usar la app offline-first de manejo del ganado, la sincronización de la cuenta y sus herramientas de registro reproductivo.',
       },
       overline: 'Términos',
       title: 'Términos de uso',
@@ -4300,7 +4300,7 @@ export const messages = {
         {
           title: 'Sincronización y respaldos',
           body:
-            'BreedZ almacena los registros localmente primero. La sincronización premium y la exportación en Excel se ofrecen para ayudar a proteger registros, pero sigues siendo responsable de mantener respaldos de los registros importantes de la finca y revisar que los datos sincronizados o importados sean correctos.',
+            'BreedZ almacena los registros localmente primero. La sincronización de la cuenta y la exportación en Excel se ofrecen para ayudar a proteger registros, pero sigues siendo responsable de mantener respaldos de los registros importantes de la finca y revisar que los datos sincronizados o importados sean correctos.',
         },
         {
           title: 'Disponibilidad',

@@ -67,17 +67,22 @@
 
         </q-banner>
 
-        <q-banner v-if="localRecordSyncNoticeVisible" rounded class="bg-warning text-white q-mb-md">
-          <template #avatar>
-            <q-icon name="privacy_tip" color="white" />
-          </template>
-          <div class="text-subtitle2 text-weight-bold">{{ localRecordSyncNoticeTitle }}</div>
-          <div class="text-caption q-mt-xs">
-            {{ localRecordSyncNoticeDescription }}
+        <q-banner v-if="localRecordSyncNoticeVisible" rounded class="bg-brown-1 text-brown-10 q-mb-md">
+          <div class="row no-wrap items-start q-col-gutter-sm">
+            <div class="col-auto">
+              <q-icon name="privacy_tip" color="brown-7" size="md" />
+            </div>
+            <div class="col">
+              <div class="text-subtitle2 text-weight-bold">{{ localRecordSyncNoticeTitle }}</div>
+              <div class="text-caption q-mt-xs">
+                {{ localRecordSyncNoticeDescription }}
+              </div>
+            </div>
           </div>
+
           <q-btn v-if="canJoinLocalRecordsFromSettings" unelevated color="primary" icon="link"
-            :label="t('settings.localRecordsJoinConfirm')" class="q-mt-md full-width"
-            :loading="isJoiningLocalRecords" @click="handleJoinLocalRecords" />
+            :label="t('settings.localRecordsJoinConfirm')" class="q-mt-md full-width" :loading="isJoiningLocalRecords"
+            @click="handleJoinLocalRecords" />
         </q-banner>
 
         <div class="row q-col-gutter-md">
