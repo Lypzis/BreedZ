@@ -57,8 +57,11 @@
 
         <q-card flat class="q-ma-md bg-green-1">
           <q-card-section>
-            <div class="text-subtitle2 text-weight-bold text-primary">{{ t('layout.localFirstTitle') }}</div>
-            <div class="text-caption text-grey-8">{{ t('layout.localFirstBody') }}</div>
+            <div class="row items-center no-wrap q-gutter-xs text-primary">
+              <q-icon :name="drawerSyncCard.icon" size="18px" />
+              <div class="text-subtitle2 text-weight-bold">{{ drawerSyncCard.title }}</div>
+            </div>
+            <div class="text-caption text-grey-8">{{ drawerSyncCard.body }}</div>
           </q-card-section>
         </q-card>
 
@@ -124,6 +127,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useNetworkStatus } from 'src/composables/useNetworkStatus'
 import { useI18nText } from 'src/i18n'
+import { useAuthStore } from 'src/stores/auth-store'
 import { buildLocalizedPath, isAppShellPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
@@ -132,6 +136,7 @@ const logoSmall = '/icons/favicon-48x48.png'
 const { locale, setLocale, t } = useI18nText()
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const { isOnline, isReady: networkStatusReady } = useNetworkStatus()
 
 const routeLocale = computed(() =>
@@ -141,6 +146,21 @@ const routeLocale = computed(() =>
 )
 const showNetworkStatusChip = computed(() => networkStatusReady.value && isAppShellPath(route.path))
 const dashboardPath = computed(() => '/')
+const drawerSyncCard = computed(() => {
+  if (authStore.isLoaded && authStore.isPremium) {
+    return {
+      icon: 'cloud_done',
+      title: t('layout.syncEnabledTitle'),
+      body: t('layout.syncEnabledBody'),
+    }
+  }
+
+  return {
+    icon: 'save',
+    title: t('layout.localFirstTitle'),
+    body: t('layout.localFirstBody'),
+  }
+})
 
 const navItems = computed(() => [
   {

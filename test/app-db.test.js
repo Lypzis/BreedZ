@@ -11,6 +11,11 @@ import {
 } from '../src/services/app-db.js'
 import { createAnimal, deleteAnimal, getAnimal, listAnimals } from '../src/services/animals-db.js'
 import { createPurchaseEventWithAnimals } from '../src/services/purchase-events-db.js'
+import {
+  getLocalRecordSyncReadiness,
+  joinLocalRecordsToAccount,
+  keepLocalRecordsOnDeviceForAccount,
+} from '../src/services/sync-ownership.js'
 import { getAccountSyncState } from '../src/services/sync-state.js'
 import {
   listPendingSyncRecords,
@@ -614,4 +619,49 @@ test('stores per-account pull cursors after a successful cloud pull', async (t) 
 
   assert.equal(otherAccountState.animalCloudCursor, '')
   assert.equal(otherAccountState.eventCloudCursor, '')
+})
+
+test('guards local records until they are joined to an account', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  await withStore(STORE_NAMES.animals, 'readwrite', (store) => {
+    store.put({
+      id: 'local-owner-1',
+      tag: 'Owner 001',
+      status: 'active',
+      baseStatus: 'active',
+      createdAt: '2026-05-04T00:00:00.000Z',
+      updatedAt: '2026-05-04T00:00:00.000Z',
+      sync: {
+        dirty: false,
+        deleted: false,
+      },
+    })
+  })
+
+  const firstReadiness = await getLocalRecordSyncReadiness('user-1')
+
+  assert.equal(firstReadiness.canSync, false)
+  assert.equal(firstReadiness.skippedReason, 'local-records-need-decision')
+  assert.equal(firstReadiness.animals, 1)
+
+  await keepLocalRecordsOnDeviceForAccount('user-1')
+
+  const keptReadiness = await getLocalRecordSyncReadiness('user-1')
+
+  assert.equal(keptReadiness.canSync, false)
+  assert.equal(keptReadiness.skippedReason, 'local-records-kept-on-device')
+
+  await joinLocalRecordsToAccount('user-1')
+
+  const joinedReadiness = await getLocalRecordSyncReadiness('user-1')
+  const otherAccountReadiness = await getLocalRecordSyncReadiness('user-2')
+  const storedAnimal = await withStore(STORE_NAMES.animals, 'readonly', (store) => store.get('local-owner-1'))
+
+  assert.equal(joinedReadiness.canSync, true)
+  assert.equal(joinedReadiness.status, 'owned-by-current-account')
+  assert.equal(storedAnimal.sync.dirty, true)
+  assert.equal(otherAccountReadiness.canSync, false)
+  assert.equal(otherAccountReadiness.skippedReason, 'local-records-owned-by-another-account')
 })

@@ -1,6 +1,7 @@
 import { readonly, ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth-store'
 import { getDeviceId } from './device-id.js'
+import { getLocalRecordSyncReadiness, markPulledRecordsOwnedByAccount } from './sync-ownership.js'
 import { syncPremiumRecords } from './sync-queue.js'
 
 const DEFAULT_DEBOUNCE_MS = 1200
@@ -57,6 +58,20 @@ async function runPremiumSync(reason = 'manual') {
     }
   }
 
+  const localRecordReadiness = await getLocalRecordSyncReadiness(authStore.user.uid)
+
+  if (!localRecordReadiness.canSync) {
+    return {
+      attempted: 0,
+      pushed: 0,
+      failed: 0,
+      skipped: localRecordReadiness.total,
+      errors: [],
+      skippedReason: localRecordReadiness.skippedReason,
+      localRecords: localRecordReadiness,
+    }
+  }
+
   if (syncPromise) {
     if (shouldQueueFollowUp(reason)) {
       pendingReason = pendingReason || reason
@@ -74,6 +89,11 @@ async function runPremiumSync(reason = 'manual') {
     .then((result) => {
       lastResult = result
       lastError = null
+
+      if ((result?.pulled ?? 0) > 0) {
+        void markPulledRecordsOwnedByAccount(authStore.user.uid)
+      }
+
       return result
     })
     .catch((error) => {
