@@ -10,7 +10,13 @@ import {
 import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
 import { getCurrentLocaleValue, t } from 'src/i18n'
 import { auth, db } from 'src/services/firebase'
-import { createDefaultSubscription, isPremiumSubscription } from 'src/utils/subscription'
+import {
+  cachePremiumEntitlement,
+  clearCachedPremiumEntitlement,
+  createDefaultSubscription,
+  isPremiumSubscription,
+  readCachedPremiumEntitlement,
+} from 'src/utils/subscription'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -75,15 +81,30 @@ export const useAuthStore = defineStore('auth', () => {
       (snapshot) => {
         if (!snapshot.exists()) {
           subscription.value = createDefaultSubscription(uid)
+          clearCachedPremiumEntitlement(uid)
           return
         }
 
-        subscription.value = {
+        const nextSubscription = {
           ...createDefaultSubscription(uid),
           ...snapshot.data(),
         }
+
+        subscription.value = nextSubscription
+
+        if (isPremiumSubscription(nextSubscription)) {
+          cachePremiumEntitlement(nextSubscription)
+        } else {
+          clearCachedPremiumEntitlement(uid)
+        }
       },
       (error) => {
+        const cachedSubscription = readCachedPremiumEntitlement(uid)
+
+        if (cachedSubscription) {
+          subscription.value = cachedSubscription
+        }
+
         errorMessage.value = error instanceof Error ? error.message : 'Failed to sync subscription.'
       },
     )
@@ -123,12 +144,14 @@ export const useAuthStore = defineStore('auth', () => {
         return
       }
 
+      subscription.value = readCachedPremiumEntitlement(firebaseUser.uid) ?? createDefaultSubscription(firebaseUser.uid)
+
       try {
         await ensureUserDocuments(firebaseUser)
-        watchSubscription(firebaseUser.uid)
       } catch (error) {
         errorMessage.value = getFriendlyAuthErrorMessage(error, 'account.loadFailed')
       } finally {
+        watchSubscription(firebaseUser.uid)
         isLoaded.value = true
       }
     })
