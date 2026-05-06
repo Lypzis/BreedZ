@@ -84,13 +84,20 @@ export const useAuthStore = defineStore('auth', () => {
           return
         }
 
-        subscription.value = {
+        const nextSubscription = {
           ...createDefaultSubscription(uid),
           ...snapshot.data(),
         }
-        writeCachedSubscription(subscription.value)
+        subscription.value = nextSubscription
+        writeCachedSubscription(nextSubscription)
       },
       (error) => {
+        const cachedSubscription = readCachedSubscription(uid)
+
+        if (cachedSubscription) {
+          subscription.value = cachedSubscription
+        }
+
         errorMessage.value = error instanceof Error ? error.message : 'Failed to sync subscription.'
       },
     )
@@ -140,10 +147,10 @@ export const useAuthStore = defineStore('auth', () => {
 
       try {
         await ensureUserDocuments(firebaseUser)
-        watchSubscription(firebaseUser.uid)
       } catch (error) {
         errorMessage.value = getFriendlyAuthErrorMessage(error, 'account.loadFailed')
       } finally {
+        watchSubscription(firebaseUser.uid)
         isLoaded.value = true
       }
     })

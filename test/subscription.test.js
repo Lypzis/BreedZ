@@ -1,6 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createDefaultSubscription, isPremiumSubscription } from '../src/utils/subscription.js'
+import {
+  createDefaultSubscription,
+  isPremiumSubscription,
+} from '../src/utils/subscription.js'
 
 test('creates a default free subscription shape', () => {
   assert.deepEqual(createDefaultSubscription('user-1'), {
