@@ -18,13 +18,17 @@ const props = defineProps({
   },
   md: {
     type: [String, Number],
-    default: 10,
+    default: 9,
   },
   lg: {
     type: [String, Number],
-    default: 8,
+    default: 6,
+  },
+  xl: {
+    type: [String, Number],
+    default: 4,
   },
 })
 
-const containerClass = computed(() => `col-12 col-md-${props.md} col-lg-${props.lg}`)
+const containerClass = computed(() => `col-12 col-md-${props.md} col-lg-${props.lg} col-xl-${props.xl}`)
 </script>

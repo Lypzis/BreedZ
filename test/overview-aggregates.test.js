@@ -62,8 +62,10 @@ test('builds overview counts and recorded balance from animals and events', () =
   })
   assert.deepEqual(summary.financials, {
     incomeTotal: 1700,
+    otherIncomeTotal: 200,
     purchaseTotal: 2000,
     salesTotal: 1500,
+    otherExpenseTotal: 450,
     recordedCosts: 2450,
     recordedBalance: -750,
   })

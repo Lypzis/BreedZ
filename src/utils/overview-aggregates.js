@@ -23,8 +23,10 @@ export function buildOverviewSummary(animals = [], events = []) {
   }
   const financials = {
     incomeTotal: 0,
+    otherIncomeTotal: 0,
     purchaseTotal: 0,
     salesTotal: 0,
+    otherExpenseTotal: 0,
     recordedCosts: 0,
     recordedBalance: 0,
   }
@@ -61,8 +63,16 @@ export function buildOverviewSummary(animals = [], events = []) {
       financials.salesTotal += amount
     }
 
+    if (type === 'other_income') {
+      financials.otherIncomeTotal += amount
+    }
+
     if (INCOME_EVENT_TYPES.has(type)) {
       financials.incomeTotal += amount
+    }
+
+    if (COST_EVENT_TYPES.has(type) && type !== 'purchase') {
+      financials.otherExpenseTotal += amount
     }
 
     if (COST_EVENT_TYPES.has(type)) {

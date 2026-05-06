@@ -2,126 +2,38 @@
   <AppPageShell>
     <q-card flat>
       <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">{{ t('guideCowPregnancy.overline') }}</div>
+        <div class="text-overline text-weight-bold text-primary">{{ t('guideBreedingRecordsApp.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
-          {{ t('guideCowPregnancy.title') }}
+          {{ t('guideBreedingRecordsApp.title') }}
         </h1>
         <div class="text-body1 text-grey-7">
-          {{ t('guideCowPregnancy.description') }}
+          {{ t('guideBreedingRecordsApp.description') }}
         </div>
       </q-card-section>
 
       <q-card-section>
         <q-banner rounded class="bg-green-1 text-primary">
           <template #avatar>
-            <q-icon name="event_available" color="primary" />
+            <q-icon name="fact_check" color="primary" />
           </template>
-          <span class="text-weight-bold">{{ t('guideCowPregnancy.shortAnswerLabel') }}</span>
-          {{ ` ${t('guideCowPregnancy.shortAnswer')}` }}
+          <span class="text-weight-bold">{{ t('guideBreedingRecordsApp.shortAnswerLabel') }}</span>
+          {{ ` ${t('guideBreedingRecordsApp.shortAnswer')}` }}
         </q-banner>
       </q-card-section>
 
       <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideCowPregnancy.quickTableOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.quickTableTitle') }}
-        </div>
-        <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideCowPregnancy.quickTableDescription') }}
-        </div>
-
-        <q-markup-table flat bordered class="text-left">
-          <thead>
-            <tr>
-              <th>{{ t('guideCowPregnancy.quickTableQuestion') }}</th>
-              <th>{{ t('guideCowPregnancy.quickTableAnswer') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in quickTableRows" :key="row.question">
-              <td>{{ row.question }}</td>
-              <td>{{ row.answer }}</td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideCowPregnancy.timelineOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.timelineTitle') }}
-        </div>
-        <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideCowPregnancy.timelineDescription') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="item in timelineItems" :key="item">
-            <q-item-section avatar>
-              <q-icon name="check_circle" color="primary" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ item }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-
-      <q-card-section>
         <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideCowPregnancy.variationOverline') }}
+          {{ t('guideBreedingRecordsApp.problemOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.variationTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="item in variationItems" :key="item">
-            <q-item-section avatar>
-              <q-icon name="info" color="accent" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ item }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideCowPregnancy.trackingOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.trackingTitle') }}
+          {{ t('guideBreedingRecordsApp.problemTitle') }}
         </div>
         <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideCowPregnancy.trackingDescription') }}
-        </div>
-
-        <div class="column q-gutter-md">
-          <q-card v-for="step in trackingSteps" :key="step.title" flat bordered>
-            <q-card-section>
-              <div class="text-subtitle1 text-weight-bold text-primary">{{ step.title }}</div>
-              <div class="text-body2 text-grey-7 q-mt-sm">{{ step.description }}</div>
-            </q-card-section>
-          </q-card>
-        </div>
-      </q-card-section>
-
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideCowPregnancy.mistakesOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.mistakesTitle') }}
+          {{ t('guideBreedingRecordsApp.problemDescription') }}
         </div>
 
         <q-list>
-          <q-item v-for="item in mistakeItems" :key="item">
+          <q-item v-for="item in problemItems" :key="item">
             <q-item-section avatar>
               <q-icon name="warning_amber" color="accent" />
             </q-item-section>
@@ -134,19 +46,80 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-primary">
-          {{ t('guideCowPregnancy.breedzOverline') }}
+          {{ t('guideBreedingRecordsApp.mustHaveOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.breedzTitle') }}
+          {{ t('guideBreedingRecordsApp.mustHaveTitle') }}
+        </div>
+
+        <div class="column q-gutter-md">
+          <q-card v-for="item in mustHaveItems" :key="item.title" flat bordered>
+            <q-card-section>
+              <div class="text-subtitle1 text-weight-bold text-primary">{{ item.title }}</div>
+              <div class="text-body2 text-grey-7 q-mt-sm">{{ item.description }}</div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideBreedingRecordsApp.workflowOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideBreedingRecordsApp.workflowTitle') }}
         </div>
         <div class="text-body1 text-grey-7 q-mb-md">
-          {{ t('guideCowPregnancy.breedzDescription') }}
+          {{ t('guideBreedingRecordsApp.workflowDescription') }}
+        </div>
+
+        <q-list>
+          <q-item v-for="item in workflowItems" :key="item">
+            <q-item-section avatar>
+              <q-icon name="task_alt" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ item }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-accent">
+          {{ t('guideBreedingRecordsApp.compareOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideBreedingRecordsApp.compareTitle') }}
+        </div>
+
+        <q-list>
+          <q-item v-for="item in compareItems" :key="item">
+            <q-item-section avatar>
+              <q-icon name="balance" color="accent" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ item }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideBreedingRecordsApp.breedzOverline') }}
+        </div>
+        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideBreedingRecordsApp.breedzTitle') }}
+        </div>
+        <div class="text-body1 text-grey-7 q-mb-md">
+          {{ t('guideBreedingRecordsApp.breedzDescription') }}
         </div>
 
         <q-list>
           <q-item v-for="item in breedzItems" :key="item">
             <q-item-section avatar>
-              <q-icon name="task_alt" color="primary" />
+              <q-icon name="devices" color="primary" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ item }}</q-item-label>
@@ -160,7 +133,7 @@
               unelevated
               color="primary"
               icon="open_in_new"
-              :label="t('guideCowPregnancy.openApp')"
+              :label="t('guideBreedingRecordsApp.openApp')"
               :to="dashboardPath"
               class="full-width"
             />
@@ -170,7 +143,7 @@
               outline
               color="primary"
               icon="event"
-              :label="t('guideCowPregnancy.openBreedingDatesGuide')"
+              :label="t('guideBreedingRecordsApp.openBreedingDatesGuide')"
               :to="breedingDatesGuidePath"
               class="full-width"
             />
@@ -180,10 +153,10 @@
 
       <q-card-section>
         <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideCowPregnancy.faqOverline') }}
+          {{ t('guideBreedingRecordsApp.faqOverline') }}
         </div>
         <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCowPregnancy.faqTitle') }}
+          {{ t('guideBreedingRecordsApp.faqTitle') }}
         </div>
 
         <q-list>
@@ -197,7 +170,7 @@
       </q-card-section>
 
       <GuideShareSection
-        :title="t('guideCowPregnancy.title')"
+        :title="t('guideBreedingRecordsApp.title')"
         :path="sharePath"
       />
     </q-card>
@@ -224,9 +197,9 @@ const routeLocale = computed(() =>
 
 useMeta(() =>
   buildPageMeta({
-    title: t('guideCowPregnancy.meta.title'),
-    description: t('guideCowPregnancy.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
+    title: t('guideBreedingRecordsApp.meta.title'),
+    description: t('guideBreedingRecordsApp.meta.description'),
+    path: buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
   }),
 )
 
@@ -235,13 +208,12 @@ const breedingDatesGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )
 const sharePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
+  buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
 )
-const quickTableRows = computed(() => tm('guideCowPregnancy.quickTableRows') ?? [])
-const timelineItems = computed(() => tm('guideCowPregnancy.timelineItems') ?? [])
-const variationItems = computed(() => tm('guideCowPregnancy.variationItems') ?? [])
-const trackingSteps = computed(() => tm('guideCowPregnancy.trackingSteps') ?? [])
-const mistakeItems = computed(() => tm('guideCowPregnancy.mistakeItems') ?? [])
-const breedzItems = computed(() => tm('guideCowPregnancy.breedzItems') ?? [])
-const faqs = computed(() => tm('guideCowPregnancy.faqs') ?? [])
+const problemItems = computed(() => tm('guideBreedingRecordsApp.problemItems') ?? [])
+const mustHaveItems = computed(() => tm('guideBreedingRecordsApp.mustHaveItems') ?? [])
+const workflowItems = computed(() => tm('guideBreedingRecordsApp.workflowItems') ?? [])
+const compareItems = computed(() => tm('guideBreedingRecordsApp.compareItems') ?? [])
+const breedzItems = computed(() => tm('guideBreedingRecordsApp.breedzItems') ?? [])
+const faqs = computed(() => tm('guideBreedingRecordsApp.faqs') ?? [])
 </script>

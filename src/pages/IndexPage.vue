@@ -194,7 +194,7 @@
         </div>
 
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6 col-lg">
+          <div class="col-12 col-md-6 col-lg-4">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
@@ -209,7 +209,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg">
+          <div class="col-12 col-md-6 col-lg-4">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
@@ -224,7 +224,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg">
+          <div class="col-12 col-md-6 col-lg-4">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
@@ -239,7 +239,7 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg">
+          <div class="col-12 col-md-6 col-lg-4">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.recordKeepingGuideTitle') }}</div>
@@ -254,7 +254,22 @@
             </q-card>
           </div>
 
-          <div class="col-12 col-md-6 col-lg">
+          <div class="col-12 col-md-6 col-lg-4">
+            <q-card flat bordered>
+              <q-card-section>
+                <div class="text-subtitle1 text-weight-bold">{{ t('home.breedingRecordsAppGuideTitle') }}</div>
+                <div class="text-body2 text-grey-7 q-mt-sm">
+                  {{ t('home.breedingRecordsAppGuideDescription') }}
+                </div>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openBreedingRecordsAppGuide')"
+                  :to="breedingRecordsAppGuidePath" />
+              </q-card-actions>
+            </q-card>
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4">
             <q-card flat bordered>
               <q-card-section>
                 <div class="text-subtitle1 text-weight-bold">{{ t('home.lostRecordsGuideTitle') }}</div>
@@ -355,6 +370,9 @@ const lineageGuidePath = computed(() =>
 )
 const recordKeepingGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
+)
+const breedingRecordsAppGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
 )
 const lostRecordsGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/lost-breeding-records-what-to-do'),

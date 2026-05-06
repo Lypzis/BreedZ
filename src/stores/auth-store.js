@@ -11,12 +11,11 @@ import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
 import { getCurrentLocaleValue, t } from 'src/i18n'
 import { auth, db } from 'src/services/firebase'
 import {
-  cachePremiumEntitlement,
-  clearCachedPremiumEntitlement,
-  createDefaultSubscription,
-  isPremiumSubscription,
-  readCachedPremiumEntitlement,
-} from 'src/utils/subscription'
+  clearCachedSubscription,
+  readCachedSubscription,
+  writeCachedSubscription,
+} from 'src/utils/subscription-cache'
+import { createDefaultSubscription, isPremiumSubscription } from 'src/utils/subscription'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -81,7 +80,7 @@ export const useAuthStore = defineStore('auth', () => {
       (snapshot) => {
         if (!snapshot.exists()) {
           subscription.value = createDefaultSubscription(uid)
-          clearCachedPremiumEntitlement(uid)
+          writeCachedSubscription(subscription.value)
           return
         }
 
@@ -89,17 +88,11 @@ export const useAuthStore = defineStore('auth', () => {
           ...createDefaultSubscription(uid),
           ...snapshot.data(),
         }
-
         subscription.value = nextSubscription
-
-        if (isPremiumSubscription(nextSubscription)) {
-          cachePremiumEntitlement(nextSubscription)
-        } else {
-          clearCachedPremiumEntitlement(uid)
-        }
+        writeCachedSubscription(nextSubscription)
       },
       (error) => {
-        const cachedSubscription = readCachedPremiumEntitlement(uid)
+        const cachedSubscription = readCachedSubscription(uid)
 
         if (cachedSubscription) {
           subscription.value = cachedSubscription
@@ -134,17 +127,23 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      const previousUid = user.value?.uid ?? ''
       user.value = firebaseUser
       clearError()
 
       if (!firebaseUser) {
         stopSubscriptionListener()
+        clearCachedSubscription(previousUid)
         subscription.value = createDefaultSubscription()
         isLoaded.value = true
         return
       }
 
-      subscription.value = readCachedPremiumEntitlement(firebaseUser.uid) ?? createDefaultSubscription(firebaseUser.uid)
+      subscription.value = createDefaultSubscription(firebaseUser.uid)
+      const cachedSubscription = readCachedSubscription(firebaseUser.uid)
+      if (cachedSubscription) {
+        subscription.value = cachedSubscription
+      }
 
       try {
         await ensureUserDocuments(firebaseUser)
@@ -200,6 +199,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await signOut(auth)
       stopSubscriptionListener()
+      clearCachedSubscription(user.value?.uid)
       user.value = null
       subscription.value = createDefaultSubscription()
     } catch (error) {

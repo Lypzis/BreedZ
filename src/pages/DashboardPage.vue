@@ -80,7 +80,7 @@
 
             <q-card-section>
               <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-sm-6">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="pets" color="primary" />
@@ -90,7 +90,7 @@
                   </q-banner>
                 </div>
 
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-sm-6">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="today" color="primary" />
@@ -100,7 +100,7 @@
                   </q-banner>
                 </div>
 
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-sm-6">
                   <q-banner rounded class="bg-green-1 text-primary">
                     <template #avatar>
                       <q-icon name="schedule" color="primary" />
@@ -110,7 +110,7 @@
                   </q-banner>
                 </div>
 
-                <div class="col-12 col-sm-6 col-lg-3">
+                <div class="col-12 col-sm-6">
                   <q-banner rounded class="bg-orange-1 text-warning">
                     <template #avatar>
                       <q-icon name="pending_actions" color="warning" />

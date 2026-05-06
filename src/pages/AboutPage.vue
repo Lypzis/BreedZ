@@ -1,23 +1,23 @@
 <template>
-  <AppPageShell :lg="7">
-        <q-card flat>
-          <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">{{ t('about.overline') }}</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('about.title') }}</div>
-            <div class="text-body1 text-grey-8 q-mb-lg">
-              {{ t('about.intro') }}
-            </div>
+  <AppPageShell>
+    <q-card flat>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">{{ t('about.overline') }}</div>
+        <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('about.title') }}</div>
+        <div class="text-body1 text-grey-8 q-mb-lg">
+          {{ t('about.intro') }}
+        </div>
 
-            <div class="column q-gutter-lg">
-              <div v-for="block in aboutBlocks" :key="block.title">
-                <div class="text-h6 text-weight-bold q-mb-sm">{{ block.title }}</div>
-                <div class="text-body1 text-grey-8">
-                  {{ block.body }}
-                </div>
-              </div>
+        <div class="column q-gutter-lg">
+          <div v-for="block in aboutBlocks" :key="block.title">
+            <div class="text-h6 text-weight-bold q-mb-sm">{{ block.title }}</div>
+            <div class="text-body1 text-grey-8">
+              {{ block.body }}
             </div>
-          </q-card-section>
-        </q-card>
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
   </AppPageShell>
 </template>
 
