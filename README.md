@@ -450,12 +450,45 @@ Current live guides:
 - [x] `best-cattle-record-keeping-methods`
 - [x] `lost-breeding-records-what-to-do`
 
+Search Console signal, May 2026:
+- Gestation queries are the largest current impression cluster, especially ES and EN:
+  - `how-long-is-cow-pregnancy` and localized gestation pages are getting impressions but ranking too low to earn clicks.
+  - Treat this as an optimization and supporting-tool opportunity before publishing many adjacent variants.
+- Commercial app intent is already appearing:
+  - `breeding records app`
+  - `breeding management app`
+  - `breeding record keeping app`
+  - `animal lineage tracking software`
+- Lineage pages have lower impressions but better early positions than gestation pages, so improve internal links and expand them carefully.
+- Technical cleanup:
+  - GSC showed `/pt-br/guides/track-cattle-breeding-dates`; confirm localized canonical paths, sitemap entries, and redirects so PT-BR guide URLs do not expose English slugs.
+
+New priority:
+
+1. Improve existing gestation pages before adding too many new gestation variants.
+2. Add a cattle gestation / calving date calculator page because current impressions show clear demand.
+3. Publish commercial-intent app pages:
+   - [x] `breeding-records-app`
+   - `breeding-management-app`
+   - `breeding-record-keeping-app`
+4. Strengthen recordkeeping and lineage pages:
+   - `cattle-record-keeping-system`
+   - `animal-lineage-tracking-software`
+   - `how-to-track-cattle-pedigree`
+5. Keep `herd-management-spreadsheet-vs-app` for later, after higher-intent cattle-specific pages are stronger.
+
 Cluster 1: Breeding tracking
 - [x] `how-long-is-cow-pregnancy`
 - [ ] `cattle-gestation-calculator`
+- [ ] `cow-calving-date-calculator`
 - [ ] `when-will-my-cow-calve`
 - [ ] `how-to-avoid-missing-calving-dates`
 - [ ] `signs-cow-is-ready-to-calve`
+- [x] Refresh existing gestation guide with:
+  - direct answer near the top
+  - days and months table
+  - common query wording from GSC
+  - internal links to breeding date tracking and calculator pages
 
 Cluster 2: Lineage and record keeping
 - [ ] `how-to-track-cattle-pedigree`
@@ -463,6 +496,10 @@ Cluster 2: Lineage and record keeping
 - [ ] `cattle-record-keeping-system`
 - [ ] `herd-management-spreadsheet-vs-app`
 - [ ] `best-way-to-track-cattle-records`
+- [x] `breeding-records-app`
+- [ ] `breeding-management-app`
+- [ ] `breeding-record-keeping-app`
+- [ ] `animal-lineage-tracking-software`
 
 Cluster 3: Offline farm reality
 - [ ] `cattle-app-offline`
@@ -477,12 +514,16 @@ Cluster 4: Pain-driven searches
 - [ ] `how-to-fix-messy-herd-records`
 
 Suggested publishing order:
-1. `how-long-is-cow-pregnancy`
-2. `how-to-avoid-missing-calving-dates`
-3. `how-to-track-cattle-pedigree`
-4. `best-cattle-record-keeping-methods`
-5. `cattle-app-offline`
-6. `forgot-cow-breeding-date`
+1. Refresh `how-long-is-cow-pregnancy` in EN, PT-BR, and ES using GSC query language.
+2. `cattle-gestation-calculator` / `cow-calving-date-calculator`
+3. `breeding-records-app`
+4. `breeding-management-app`
+5. `cattle-record-keeping-system`
+6. `animal-lineage-tracking-software`
+7. `how-to-track-cattle-pedigree`
+8. `how-to-avoid-missing-calving-dates`
+9. `cattle-app-offline`
+10. `forgot-cow-breeding-date`
 
 Execution checklist for each new guide:
 - [ ] Write the guide in English first

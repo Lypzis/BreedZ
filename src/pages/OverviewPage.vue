@@ -26,7 +26,7 @@
       <template v-else>
         <q-card-section>
           <div class="row q-col-gutter-md">
-            <div v-for="item in animalMetricCards" :key="item.key" class="col-6 col-lg-3">
+            <div v-for="item in animalMetricCards" :key="item.key" class="col-12 col-sm-6">
               <q-banner rounded class="bg-green-1 text-primary overview-metric">
                 <div class="row items-center no-wrap full-width">
 
@@ -135,6 +135,13 @@ const financialRows = computed(() => [
     value: amountLabel(overview.value.financials.salesTotal),
   },
   {
+    key: 'income',
+    icon: 'add_card',
+    color: 'positive',
+    label: t('overview.otherIncomeTotal'),
+    value: amountLabel(overview.value.financials.otherIncomeTotal),
+  },
+  {
     key: 'purchase',
     icon: 'shopping_cart',
     color: 'primary',
@@ -142,11 +149,11 @@ const financialRows = computed(() => [
     value: amountLabel(overview.value.financials.purchaseTotal),
   },
   {
-    key: 'costs',
+    key: 'expenses',
     icon: 'receipt_long',
     color: 'warning',
-    label: t('overview.recordedExpenses'),
-    value: amountLabel(overview.value.financials.recordedCosts),
+    label: t('overview.otherExpenses'),
+    value: amountLabel(overview.value.financials.otherExpenseTotal),
   },
   {
     key: 'balance',

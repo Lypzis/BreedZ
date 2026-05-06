@@ -10,6 +10,11 @@ import {
 import { doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore'
 import { getCurrentLocaleValue, t } from 'src/i18n'
 import { auth, db } from 'src/services/firebase'
+import {
+  clearCachedSubscription,
+  readCachedSubscription,
+  writeCachedSubscription,
+} from 'src/utils/subscription-cache'
 import { createDefaultSubscription, isPremiumSubscription } from 'src/utils/subscription'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -75,6 +80,7 @@ export const useAuthStore = defineStore('auth', () => {
       (snapshot) => {
         if (!snapshot.exists()) {
           subscription.value = createDefaultSubscription(uid)
+          writeCachedSubscription(subscription.value)
           return
         }
 
@@ -82,6 +88,7 @@ export const useAuthStore = defineStore('auth', () => {
           ...createDefaultSubscription(uid),
           ...snapshot.data(),
         }
+        writeCachedSubscription(subscription.value)
       },
       (error) => {
         errorMessage.value = error instanceof Error ? error.message : 'Failed to sync subscription.'
@@ -113,14 +120,22 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      const previousUid = user.value?.uid ?? ''
       user.value = firebaseUser
       clearError()
 
       if (!firebaseUser) {
         stopSubscriptionListener()
+        clearCachedSubscription(previousUid)
         subscription.value = createDefaultSubscription()
         isLoaded.value = true
         return
+      }
+
+      subscription.value = createDefaultSubscription(firebaseUser.uid)
+      const cachedSubscription = readCachedSubscription(firebaseUser.uid)
+      if (cachedSubscription) {
+        subscription.value = cachedSubscription
       }
 
       try {
@@ -177,6 +192,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await signOut(auth)
       stopSubscriptionListener()
+      clearCachedSubscription(user.value?.uid)
       user.value = null
       subscription.value = createDefaultSubscription()
     } catch (error) {

@@ -223,6 +223,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compare paper, spreadsheets, and digital tools to find a record-keeping method you will actually keep up on the farm.',
       openRecordKeepingGuide: 'Read the record-keeping guide',
+      breedingRecordsAppGuideTitle: 'Breeding records app for cattle',
+      breedingRecordsAppGuideDescription:
+        'See what a breeding records app should track and how to keep breeding dates, calving outcomes, and lineage connected.',
+      openBreedingRecordsAppGuide: 'Read the app guide',
       lostRecordsGuideTitle: 'Lost breeding records: what to do next',
       lostRecordsGuideDescription:
         'Recover what you can, mark uncertain dates clearly, and rebuild a system that prevents the same problem next season.',
@@ -317,8 +321,9 @@ export const messages = {
       financialTitle: 'Outcome summary',
       financialHint: 'Based only on event amounts entered in BreedZ.',
       salesTotal: 'Sales total',
+      otherIncomeTotal: 'Other income',
       purchaseTotal: 'Purchase total',
-      recordedExpenses: 'Recorded expenses',
+      otherExpenses: 'Other expenses',
       netRecordedResult: 'Net recorded result',
     },
     animalPicker: {
@@ -898,19 +903,43 @@ export const messages = {
     },
     guideCowPregnancy: {
       meta: {
-        title: 'How Long Is a Cow Pregnant?',
+        title: 'Cow Gestation Period: How Long Is a Cow Pregnant?',
         description:
-          'Learn how long cow pregnancy usually lasts, how to estimate calving dates, and why clear breeding records make herd planning easier.',
+          'Learn the cow gestation period in days and months, how to estimate calving dates, and why clear breeding records make herd planning easier.',
       },
       overline: 'Guide',
-      title: 'How Long Is a Cow Pregnant? Cow Gestation Explained',
+      title: 'Cow Gestation Period: How Long Is a Cow Pregnant?',
       description:
-        'Most cow pregnancies are estimated around 283 days, but real calving dates can vary. The useful answer is not just the number; it is knowing which date to track.',
+        'Most cow pregnancies are estimated around 283 days, or about nine months and one week. Real calving dates can vary, so the useful answer is knowing the number and the breeding date behind it.',
       shortAnswerLabel: 'Short answer:',
       shortAnswer:
-        'A cow is usually pregnant for about 283 days, or roughly nine months and one week.',
+        'A cow is usually pregnant for about 283 days, or roughly nine months and one week. Use that as the expected calving date, not a guaranteed day.',
       openApp: 'Start tracking your herd now',
       openBreedingDatesGuide: 'Read breeding dates guide',
+      quickTableOverline: 'Fast Reference',
+      quickTableTitle: 'Cow pregnancy length in days and months',
+      quickTableDescription:
+        'These are practical planning numbers for herd records. Individual cows may calve earlier or later.',
+      quickTableQuestion: 'Question',
+      quickTableAnswer: 'Practical answer',
+      quickTableRows: [
+        {
+          question: 'How long is a cow pregnant?',
+          answer: 'About 283 days on average.',
+        },
+        {
+          question: 'How many months is a cow pregnant?',
+          answer: 'Roughly nine months and one week.',
+        },
+        {
+          question: 'How many days are cows pregnant?',
+          answer: 'Use 283 days as the common planning estimate.',
+        },
+        {
+          question: 'When will my cow calve?',
+          answer: 'Add about 283 days to the breeding or insemination date, then watch a nearby calving window.',
+        },
+      ],
       timelineOverline: 'Pregnancy Timeline',
       timelineTitle: 'The basic cow pregnancy timeline',
       timelineDescription:
@@ -918,7 +947,7 @@ export const messages = {
       timelineItems: [
         'Record the breeding date as soon as it happens.',
         'Add about 283 days to estimate the expected calving date.',
-        'Start watching more closely as the expected date gets near.',
+        'Start watching more closely before and after the expected date.',
         'Keep the actual calving date in the animal history after birth.',
       ],
       variationOverline: 'Why Dates Vary',
@@ -976,6 +1005,10 @@ export const messages = {
       faqOverline: 'FAQ',
       faqTitle: 'Common questions about cow pregnancy length',
       faqs: [
+        {
+          question: 'How many days is a cow pregnant?',
+          answer: 'A common planning number is 283 days, but normal variation is possible.',
+        },
         {
           question: 'How many months is a cow pregnant?',
           answer: 'A practical estimate is about nine months and one week, or around 283 days.',
@@ -1170,6 +1203,115 @@ export const messages = {
         {
           question: 'What makes a record-keeping app better?',
           answer: 'Search, per-animal history, lineage links, and fast updates in the field usually make the biggest difference.',
+        },
+      ],
+    },
+    guideBreedingRecordsApp: {
+      meta: {
+        title: 'Breeding Records App for Cattle: What to Track',
+        description:
+          'Learn what a cattle breeding records app should track, how it compares with notebooks and spreadsheets, and how to keep breeding history useful.',
+      },
+      overline: 'Guide',
+      title: 'Breeding Records App for Cattle: What to Track',
+      description:
+        'A breeding records app should make daily herd work easier, not add another system to maintain. The goal is to keep breeding dates, calving outcomes, lineage, and animal history connected in one place.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'A good breeding records app should track each animal, breeding events, expected calving dates, births, dam and sire links, and follow-up notes, while staying easy to use in the field.',
+      openApp: 'Start tracking your herd now',
+      openBreedingDatesGuide: 'Read breeding dates guide',
+      problemOverline: 'The problem',
+      problemTitle: 'Breeding records get expensive when they are scattered',
+      problemDescription:
+        'Most farms do not lose breeding history all at once. It fades across notebooks, memory, phone photos, and partial spreadsheets until the next decision becomes guesswork.',
+      problemItems: [
+        'Breeding dates are recorded without the right cow attached.',
+        'Expected calving dates are calculated once and then forgotten.',
+        'Birth records are saved without clear dam or sire links.',
+        'Old notes are hard to search when a cow needs attention.',
+        'Offline field work gets skipped because the tool needs internet.',
+      ],
+      mustHaveOverline: 'What to track',
+      mustHaveTitle: 'What a cattle breeding records app should include',
+      mustHaveItems: [
+        {
+          title: 'Animal identity',
+          description:
+            'Each cow, heifer, bull, calf, or purchased animal needs one clear record with tag, name, status, breed, and useful notes.',
+        },
+        {
+          title: 'Breeding events',
+          description:
+            'The app should save the date, partner or sire when known, notes, and enough context to estimate a calving window later.',
+        },
+        {
+          title: 'Pregnancy and calving follow-up',
+          description:
+            'Expected calving dates, actual births, pending follow-up, and uncertain dates should stay connected to the animal timeline.',
+        },
+        {
+          title: 'Lineage',
+          description:
+            'Dam, sire, offspring, and breeding-pair history should be visible without rebuilding pedigree notes by hand.',
+        },
+        {
+          title: 'Farm activity around breeding',
+          description:
+            'Purchases, sales, health events, death records, and herd expenses matter because breeding decisions do not happen in isolation.',
+        },
+      ],
+      workflowOverline: 'Simple workflow',
+      workflowTitle: 'A practical breeding-record workflow',
+      workflowDescription:
+        'The best app is the one that supports a repeatable habit. Keep the workflow simple enough to use when the farm is busy.',
+      workflowItems: [
+        'Add or update the animal record first.',
+        'Log the breeding event the same day whenever possible.',
+        'Estimate the calving window from the breeding or insemination date.',
+        'Record the actual birth and link the calf to dam and sire when known.',
+        'Review each animal timeline before breeding, sale, or culling decisions.',
+      ],
+      compareOverline: 'App vs notebook vs spreadsheet',
+      compareTitle: 'When an app is better than paper or spreadsheets',
+      compareItems: [
+        'Paper is fast in the moment, but searching old breeding dates is slow.',
+        'Spreadsheets add structure, but they are easy to avoid on a phone in the field.',
+        'A breeding records app is strongest when it keeps each event tied to the animal automatically.',
+        'Offline access matters because many breeding, calving, and pasture decisions happen away from reliable internet.',
+      ],
+      breedzOverline: 'Using BreedZ',
+      breedzTitle: 'How BreedZ works as a breeding records app',
+      breedzDescription:
+        'BreedZ is built around cattle breeding records, clean animal timelines, lineage links, and offline-first farm use.',
+      breedzItems: [
+        'Create animal records with tag, name, sex, status, breed, and notes.',
+        'Record breeding, birth, purchase, sale, health, and expense events.',
+        'Link dam, sire, partners, and offspring as the herd history grows.',
+        'Keep working offline and use account sync or Excel export for backup.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about breeding records apps',
+      faqs: [
+        {
+          question: 'What is a breeding records app?',
+          answer:
+            'It is a tool for keeping breeding dates, animal timelines, calving outcomes, and lineage records organized so herd decisions are easier to review.',
+        },
+        {
+          question: 'Can I use a spreadsheet instead?',
+          answer:
+            'Yes, especially for small herds, but spreadsheets often become harder to update in the field and harder to connect to each animal history.',
+        },
+        {
+          question: 'Should breeding records work offline?',
+          answer:
+            'For farm work, yes. If records can only be updated with internet, important breeding or calving notes are easier to miss.',
+        },
+        {
+          question: 'What is the most important record to keep?',
+          answer:
+            'Start with a unique animal ID and the breeding date. From there, link expected calving, actual birth, dam, sire, and follow-up notes.',
         },
       ],
     },
@@ -1661,6 +1803,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compare caderno, planilha e app para escolher um método de registro que você realmente consiga manter na fazenda.',
       openRecordKeepingGuide: 'Ler o guia de registros',
+      breedingRecordsAppGuideTitle: 'App para registros de cobertura no gado',
+      breedingRecordsAppGuideDescription:
+        'Veja o que um app de registros deve acompanhar e como manter cobertura, parto e linhagem conectados.',
+      openBreedingRecordsAppGuide: 'Ler o guia do app',
       lostRecordsGuideTitle: 'Perdi registros de cobertura: o que fazer',
       lostRecordsGuideDescription:
         'Recupere o que for possível, marque datas incertas com clareza e refaça um sistema que evite o mesmo problema na próxima estação.',
@@ -1757,8 +1903,9 @@ export const messages = {
       financialTitle: 'Resumo de resultado',
       financialHint: 'Baseado apenas nos valores informados em eventos no BreedZ.',
       salesTotal: 'Total de vendas',
+      otherIncomeTotal: 'Outras receitas',
       purchaseTotal: 'Total de compras',
-      recordedExpenses: 'Despesas registradas',
+      otherExpenses: 'Outras despesas',
       netRecordedResult: 'Resultado líquido registrado',
     },
     animalPicker: {
@@ -2339,19 +2486,43 @@ export const messages = {
     },
     guideCowPregnancy: {
       meta: {
-        title: 'Quanto tempo dura a gestação da vaca?',
+        title: 'Gestação da vaca: quanto tempo dura em dias e meses?',
         description:
-          'Entenda quanto tempo dura a gestação da vaca, como estimar a data do parto e por que bons registros de cobertura ajudam no manejo.',
+          'Entenda quanto tempo dura a gestação da vaca em dias e meses, como estimar a data do parto e por que bons registros ajudam no manejo.',
       },
       overline: 'Guia',
-      title: 'Quanto tempo dura a gestação da vaca? Entenda a previsão do parto',
+      title: 'Gestação da vaca: quanto tempo dura em dias e meses?',
       description:
-        'A gestação da vaca costuma ser estimada em cerca de 283 dias, mas a data real do parto pode variar. O mais importante é saber qual data registrar e acompanhar.',
+        'A gestação da vaca costuma ser estimada em cerca de 283 dias, ou aproximadamente nove meses e uma semana. A data real do parto pode variar, então o mais importante é saber o número e a data de cobertura por trás dele.',
       shortAnswerLabel: 'Resposta curta:',
       shortAnswer:
-        'A vaca geralmente fica prenhe por cerca de 283 dias, ou aproximadamente nove meses e uma semana.',
+        'A vaca geralmente fica prenhe por cerca de 283 dias, ou aproximadamente nove meses e uma semana. Use isso como previsão de parto, não como um dia garantido.',
       openApp: 'Comece a acompanhar seu rebanho agora',
       openBreedingDatesGuide: 'Ler guia de datas de cobertura',
+      quickTableOverline: 'Referência rápida',
+      quickTableTitle: 'Duração da gestação da vaca em dias e meses',
+      quickTableDescription:
+        'Estes são números práticos para planejar o manejo e organizar registros. Cada vaca pode parir um pouco antes ou depois.',
+      quickTableQuestion: 'Pergunta',
+      quickTableAnswer: 'Resposta prática',
+      quickTableRows: [
+        {
+          question: 'Quanto tempo dura a gestação da vaca?',
+          answer: 'Cerca de 283 dias em média.',
+        },
+        {
+          question: 'Quantos meses dura a gestação da vaca?',
+          answer: 'Aproximadamente nove meses e uma semana.',
+        },
+        {
+          question: 'Quantos dias a vaca fica prenhe?',
+          answer: 'Use 283 dias como estimativa comum de planejamento.',
+        },
+        {
+          question: 'Quando minha vaca deve parir?',
+          answer: 'Some cerca de 283 dias à data de cobertura ou inseminação e acompanhe uma janela próxima ao parto.',
+        },
+      ],
       timelineOverline: 'Linha do tempo',
       timelineTitle: 'A linha do tempo básica da gestação bovina',
       timelineDescription:
@@ -2359,7 +2530,7 @@ export const messages = {
       timelineItems: [
         'Registre a data da cobertura assim que ela acontecer.',
         'Some cerca de 283 dias para estimar a data provável do parto.',
-        'Observe com mais atenção quando a data esperada estiver próxima.',
+        'Observe com mais atenção antes e depois da data esperada.',
         'Registre a data real do parto no histórico do animal depois do nascimento.',
       ],
       variationOverline: 'Por que varia',
@@ -2417,6 +2588,10 @@ export const messages = {
       faqOverline: 'FAQ',
       faqTitle: 'Perguntas comuns sobre duração da gestação da vaca',
       faqs: [
+        {
+          question: 'Quantos dias dura a gestação da vaca?',
+          answer: 'Um número comum para planejamento é 283 dias, mas pode haver variação normal.',
+        },
         {
           question: 'Quantos meses dura a gestação da vaca?',
           answer: 'Uma estimativa prática é cerca de nove meses e uma semana, ou em torno de 283 dias.',
@@ -2611,6 +2786,115 @@ export const messages = {
         {
           question: 'O que faz um app de registro ser melhor?',
           answer: 'Busca, histórico por animal, vínculo de linhagem e atualização rápida no campo costumam fazer a maior diferença.',
+        },
+      ],
+    },
+    guideBreedingRecordsApp: {
+      meta: {
+        title: 'Aplicativo para registros de cobertura no gado',
+        description:
+          'Veja o que um app para registros de cobertura no gado deve acompanhar, como ele se compara a cadernos e planilhas e como manter o histórico útil.',
+      },
+      overline: 'Guia',
+      title: 'Aplicativo para registros de cobertura no gado: o que acompanhar',
+      description:
+        'Um app de registros de cobertura deve facilitar a rotina da fazenda, não criar mais um sistema difícil de manter. O objetivo é manter datas de cobertura, previsão de parto, nascimentos, linhagem e histórico do animal conectados em um só lugar.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Um bom app de registros deve acompanhar cada animal, eventos de cobertura, datas prováveis de parto, nascimentos, vínculos de mãe e pai e observações de acompanhamento, sem ficar complicado no campo.',
+      openApp: 'Comece a acompanhar seu rebanho agora',
+      openBreedingDatesGuide: 'Ler guia de datas de cobertura',
+      problemOverline: 'O problema',
+      problemTitle: 'Registros de cobertura ficam caros quando estão espalhados',
+      problemDescription:
+        'A maioria das fazendas não perde o histórico reprodutivo de uma vez. Ele vai sumindo entre cadernos, memória, fotos no celular e planilhas pela metade até a próxima decisão virar chute.',
+      problemItems: [
+        'Datas de cobertura são anotadas sem ligar à vaca correta.',
+        'A previsão de parto é calculada uma vez e depois esquecida.',
+        'Nascimentos são registrados sem vínculo claro com mãe ou pai.',
+        'Anotações antigas são difíceis de encontrar quando uma vaca precisa de atenção.',
+        'O trabalho no campo é pulado quando a ferramenta depende de internet.',
+      ],
+      mustHaveOverline: 'O que acompanhar',
+      mustHaveTitle: 'O que um app para registros de cobertura deve incluir',
+      mustHaveItems: [
+        {
+          title: 'Identificação do animal',
+          description:
+            'Cada vaca, novilha, touro, bezerro ou animal comprado precisa de um registro claro com brinco, nome, status, raça e observações úteis.',
+        },
+        {
+          title: 'Eventos de cobertura',
+          description:
+            'O app deve salvar data, parceiro ou pai quando souber, observações e contexto suficiente para estimar a janela de parto depois.',
+        },
+        {
+          title: 'Acompanhamento de gestação e parto',
+          description:
+            'Datas prováveis de parto, nascimentos reais, pendências e datas incertas devem ficar conectados à linha do tempo do animal.',
+        },
+        {
+          title: 'Linhagem',
+          description:
+            'Mãe, pai, descendentes e histórico de pares reprodutivos devem aparecer sem reconstruir pedigree na mão.',
+        },
+        {
+          title: 'Atividades da fazenda ao redor da reprodução',
+          description:
+            'Compras, vendas, saúde, morte e despesas do rebanho importam porque decisões reprodutivas não acontecem isoladas.',
+        },
+      ],
+      workflowOverline: 'Fluxo simples',
+      workflowTitle: 'Um fluxo prático para registros de cobertura',
+      workflowDescription:
+        'O melhor app é aquele que sustenta um hábito repetível. Mantenha o processo simples o bastante para usar quando a fazenda estiver corrida.',
+      workflowItems: [
+        'Cadastre ou atualize o registro do animal primeiro.',
+        'Registre a cobertura no mesmo dia sempre que possível.',
+        'Estime a janela de parto a partir da cobertura ou inseminação.',
+        'Registre o nascimento real e ligue o bezerro à mãe e ao pai quando souber.',
+        'Revise a linha do tempo do animal antes de decisões de cobertura, venda ou descarte.',
+      ],
+      compareOverline: 'App vs caderno vs planilha',
+      compareTitle: 'Quando um app funciona melhor que papel ou planilha',
+      compareItems: [
+        'O papel é rápido na hora, mas procurar datas antigas de cobertura é lento.',
+        'Planilhas trazem estrutura, mas são fáceis de evitar no celular durante o trabalho no campo.',
+        'Um app de registros é mais forte quando mantém cada evento ligado ao animal automaticamente.',
+        'Acesso offline importa porque muitas decisões de cobertura, parto e pasto acontecem longe de internet confiável.',
+      ],
+      breedzOverline: 'Usando o BreedZ',
+      breedzTitle: 'Como o BreedZ funciona como app de registros de cobertura',
+      breedzDescription:
+        'O BreedZ foi feito para registros reprodutivos do gado, linhas do tempo limpas por animal, vínculos de linhagem e uso offline-first na fazenda.',
+      breedzItems: [
+        'Crie registros com brinco, nome, sexo, status, raça e observações.',
+        'Registre cobertura, nascimento, compra, venda, saúde e despesas.',
+        'Vincule mãe, pai, parceiros e descendentes conforme o histórico cresce.',
+        'Continue trabalhando offline e use sincronização da conta ou exportação em Excel para backup.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre apps de registros de cobertura',
+      faqs: [
+        {
+          question: 'O que é um app de registros de cobertura?',
+          answer:
+            'É uma ferramenta para organizar datas de cobertura, linhas do tempo dos animais, resultados de parto e linhagem para facilitar a revisão das decisões do rebanho.',
+        },
+        {
+          question: 'Posso usar uma planilha?',
+          answer:
+            'Sim, especialmente em rebanhos pequenos, mas planilhas costumam ficar mais difíceis de atualizar no campo e de ligar ao histórico de cada animal.',
+        },
+        {
+          question: 'Registros de cobertura devem funcionar offline?',
+          answer:
+            'Para a rotina da fazenda, sim. Se o registro só funciona com internet, observações importantes de cobertura ou parto ficam mais fáceis de perder.',
+        },
+        {
+          question: 'Qual é o registro mais importante para começar?',
+          answer:
+            'Comece com um ID único do animal e a data de cobertura. Depois ligue previsão de parto, nascimento real, mãe, pai e observações.',
         },
       ],
     },
@@ -3042,8 +3326,9 @@ export const messages = {
       financialTitle: 'Resumen de resultado',
       financialHint: 'Basado solo en importes ingresados en eventos de BreedZ.',
       salesTotal: 'Total de ventas',
+      otherIncomeTotal: 'Otros ingresos',
       purchaseTotal: 'Total de compras',
-      recordedExpenses: 'Gastos registrados',
+      otherExpenses: 'Otros gastos',
       netRecordedResult: 'Resultado neto registrado',
     },
     animalPicker: {
@@ -3638,6 +3923,10 @@ export const messages = {
       recordKeepingGuideDescription:
         'Compara cuaderno, hoja de cálculo y app para elegir un método de registro que de verdad puedas mantener en la finca.',
       openRecordKeepingGuide: 'Leer la guía de registros',
+      breedingRecordsAppGuideTitle: 'App para registros reproductivos del ganado',
+      breedingRecordsAppGuideDescription:
+        'Mira qué debe registrar una app y cómo mantener reproducción, partos y linaje conectados.',
+      openBreedingRecordsAppGuide: 'Leer la guía de la app',
       lostRecordsGuideTitle: 'Perdí registros reproductivos: qué hacer',
       lostRecordsGuideDescription:
         'Recupera lo que puedas, marca las fechas inciertas con claridad y reconstruye un sistema que evite el mismo problema la próxima temporada.',
@@ -3790,19 +4079,43 @@ export const messages = {
     },
     guideCowPregnancy: {
       meta: {
-        title: 'Cuánto dura la gestación de una vaca',
+        title: 'Gestación de una vaca: cuánto dura en días y meses',
         description:
-          'Aprende cuánto dura la gestación de una vaca, cómo estimar la fecha de parto y por qué los registros reproductivos claros ayudan al manejo.',
+          'Aprende cuánto dura la gestación de una vaca en días y meses, cómo estimar la fecha de parto y por qué los registros claros ayudan al manejo.',
       },
       overline: 'Guía',
-      title: '¿Cuánto dura la gestación de una vaca? Guía para estimar el parto',
+      title: 'Gestación de una vaca: cuánto dura en días y meses',
       description:
-        'La gestación de una vaca suele estimarse en unos 283 días, pero la fecha real de parto puede variar. Lo importante es saber qué fecha registrar y seguir.',
+        'La gestación de una vaca suele estimarse en unos 283 días, o aproximadamente nueve meses y una semana. La fecha real de parto puede variar, así que lo importante es conocer el número y la fecha reproductiva detrás de él.',
       shortAnswerLabel: 'Respuesta corta:',
       shortAnswer:
-        'Una vaca suele estar preñada alrededor de 283 días, o aproximadamente nueve meses y una semana.',
+        'Una vaca suele estar preñada alrededor de 283 días, o aproximadamente nueve meses y una semana. Úsalo como fecha probable de parto, no como un día garantizado.',
       openApp: 'Empieza a llevar el control de tu rebaño ahora',
       openBreedingDatesGuide: 'Leer guía de fechas reproductivas',
+      quickTableOverline: 'Referencia rápida',
+      quickTableTitle: 'Duración de la gestación de una vaca en días y meses',
+      quickTableDescription:
+        'Estos son números prácticos para planificar el manejo y ordenar registros. Cada vaca puede parir un poco antes o después.',
+      quickTableQuestion: 'Pregunta',
+      quickTableAnswer: 'Respuesta práctica',
+      quickTableRows: [
+        {
+          question: '¿Cuánto dura la gestación de una vaca?',
+          answer: 'Alrededor de 283 días en promedio.',
+        },
+        {
+          question: '¿Cuántos meses dura la gestación de una vaca?',
+          answer: 'Aproximadamente nueve meses y una semana.',
+        },
+        {
+          question: '¿Cuántos días está preñada una vaca?',
+          answer: 'Usa 283 días como estimación común de planificación.',
+        },
+        {
+          question: '¿Cuándo parirá mi vaca?',
+          answer: 'Suma unos 283 días a la fecha de monta o inseminación y observa una ventana cercana al parto.',
+        },
+      ],
       timelineOverline: 'Línea de tiempo',
       timelineTitle: 'La línea de tiempo básica de la gestación bovina',
       timelineDescription:
@@ -3810,7 +4123,7 @@ export const messages = {
       timelineItems: [
         'Registra la fecha de reproducción tan pronto como ocurra.',
         'Suma unos 283 días para estimar la fecha probable de parto.',
-        'Observa con más atención cuando se acerque la fecha esperada.',
+        'Observa con más atención antes y después de la fecha esperada.',
         'Registra la fecha real del parto en el historial del animal después del nacimiento.',
       ],
       variationOverline: 'Por qué varía',
@@ -3868,6 +4181,10 @@ export const messages = {
       faqOverline: 'FAQ',
       faqTitle: 'Preguntas comunes sobre la duración de la gestación de una vaca',
       faqs: [
+        {
+          question: '¿Cuántos días dura la gestación de una vaca?',
+          answer: 'Un número común de planificación es 283 días, pero puede haber variación normal.',
+        },
         {
           question: '¿Cuántos meses dura la gestación de una vaca?',
           answer: 'Una estimación práctica es unos nueve meses y una semana, o alrededor de 283 días.',
@@ -4062,6 +4379,115 @@ export const messages = {
         {
           question: '¿Qué hace mejor a una app de registros?',
           answer: 'La búsqueda, el historial por animal, los vínculos de linaje y la rapidez para actualizar en el campo suelen marcar la diferencia.',
+        },
+      ],
+    },
+    guideBreedingRecordsApp: {
+      meta: {
+        title: 'App para registros reproductivos del ganado',
+        description:
+          'Aprende qué debe registrar una app de reproducción ganadera, cómo se compara con cuadernos y hojas de cálculo y cómo mantener útil el historial.',
+      },
+      overline: 'Guía',
+      title: 'App para registros reproductivos del ganado: qué controlar',
+      description:
+        'Una app de registros reproductivos debe facilitar el trabajo diario, no crear otro sistema difícil de mantener. La meta es mantener fechas reproductivas, partos esperados, nacimientos, linaje e historial animal conectados en un solo lugar.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Una buena app debe registrar cada animal, eventos reproductivos, fechas probables de parto, nacimientos, vínculos de madre y padre y notas de seguimiento, sin volverse difícil de usar en el campo.',
+      openApp: 'Empieza a llevar el control de tu rebaño ahora',
+      openBreedingDatesGuide: 'Leer guía de fechas reproductivas',
+      problemOverline: 'El problema',
+      problemTitle: 'Los registros reproductivos cuestan más cuando están dispersos',
+      problemDescription:
+        'La mayoría de las fincas no pierde el historial reproductivo de golpe. Se va repartiendo entre cuadernos, memoria, fotos del móvil y hojas incompletas hasta que la próxima decisión se vuelve una suposición.',
+      problemItems: [
+        'Las fechas reproductivas se anotan sin vincularlas a la vaca correcta.',
+        'La fecha probable de parto se calcula una vez y luego se olvida.',
+        'Los nacimientos se guardan sin vínculo claro con madre o padre.',
+        'Las notas antiguas son difíciles de buscar cuando una vaca necesita atención.',
+        'El trabajo en campo se salta cuando la herramienta necesita internet.',
+      ],
+      mustHaveOverline: 'Qué registrar',
+      mustHaveTitle: 'Qué debe incluir una app de registros reproductivos',
+      mustHaveItems: [
+        {
+          title: 'Identidad del animal',
+          description:
+            'Cada vaca, novilla, toro, ternero o animal comprado necesita un registro claro con identificación, nombre, estado, raza y notas útiles.',
+        },
+        {
+          title: 'Eventos reproductivos',
+          description:
+            'La app debe guardar fecha, pareja o padre cuando se conozca, notas y suficiente contexto para estimar luego una ventana de parto.',
+        },
+        {
+          title: 'Seguimiento de preñez y parto',
+          description:
+            'Fechas probables de parto, nacimientos reales, pendientes y fechas inciertas deben quedar conectadas a la línea de tiempo del animal.',
+        },
+        {
+          title: 'Linaje',
+          description:
+            'Madre, padre, crías e historial de parejas reproductivas deberían verse sin reconstruir el pedigrí a mano.',
+        },
+        {
+          title: 'Actividad de la finca alrededor de la reproducción',
+          description:
+            'Compras, ventas, salud, muertes y gastos importan porque las decisiones reproductivas no ocurren aisladas.',
+        },
+      ],
+      workflowOverline: 'Flujo simple',
+      workflowTitle: 'Un flujo práctico para registros reproductivos',
+      workflowDescription:
+        'La mejor app es la que sostiene un hábito repetible. Mantén el proceso lo bastante simple para usarlo cuando la finca esté ocupada.',
+      workflowItems: [
+        'Agrega o actualiza primero el registro del animal.',
+        'Registra el evento reproductivo el mismo día siempre que sea posible.',
+        'Estima la ventana de parto desde la fecha de monta o inseminación.',
+        'Registra el nacimiento real y vincula el ternero con madre y padre cuando los conozcas.',
+        'Revisa la línea de tiempo del animal antes de decisiones de reproducción, venta o descarte.',
+      ],
+      compareOverline: 'App vs cuaderno vs hoja de cálculo',
+      compareTitle: 'Cuándo una app funciona mejor que papel u hojas de cálculo',
+      compareItems: [
+        'El papel es rápido en el momento, pero buscar fechas antiguas es lento.',
+        'Las hojas de cálculo dan estructura, pero es fácil evitarlas en el móvil durante el trabajo de campo.',
+        'Una app de registros es más fuerte cuando mantiene cada evento vinculado automáticamente al animal.',
+        'El acceso offline importa porque muchas decisiones de reproducción, parto y potrero ocurren lejos de internet confiable.',
+      ],
+      breedzOverline: 'Usando BreedZ',
+      breedzTitle: 'Cómo BreedZ funciona como app de registros reproductivos',
+      breedzDescription:
+        'BreedZ está hecho para registros reproductivos bovinos, líneas de tiempo claras por animal, vínculos de linaje y uso offline-first en la finca.',
+      breedzItems: [
+        'Crea registros con identificación, nombre, sexo, estado, raza y notas.',
+        'Registra reproducción, nacimiento, compra, venta, salud y gastos.',
+        'Vincula madre, padre, parejas y crías a medida que crece el historial.',
+        'Sigue trabajando offline y usa sincronización de la cuenta o exportación a Excel para respaldo.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre apps de registros reproductivos',
+      faqs: [
+        {
+          question: '¿Qué es una app de registros reproductivos?',
+          answer:
+            'Es una herramienta para organizar fechas reproductivas, líneas de tiempo de animales, resultados de parto y linaje para revisar mejor las decisiones del rebaño.',
+        },
+        {
+          question: '¿Puedo usar una hoja de cálculo?',
+          answer:
+            'Sí, especialmente en rebaños pequeños, pero las hojas suelen ser más difíciles de actualizar en campo y de conectar con el historial de cada animal.',
+        },
+        {
+          question: '¿Los registros reproductivos deben funcionar offline?',
+          answer:
+            'Para el trabajo de finca, sí. Si solo puedes registrar con internet, es más fácil perder notas importantes de reproducción o parto.',
+        },
+        {
+          question: '¿Cuál es el registro más importante para empezar?',
+          answer:
+            'Empieza con una identificación única del animal y la fecha reproductiva. Luego vincula parto esperado, nacimiento real, madre, padre y notas.',
         },
       ],
     },

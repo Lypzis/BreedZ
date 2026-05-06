@@ -1,28 +1,28 @@
 <template>
-  <AppPageShell :lg="7">
-        <q-card flat>
-          <q-card-section>
-            <div class="text-overline text-weight-bold text-primary">{{ t('contact.overline') }}</div>
-            <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('contact.title') }}</div>
-            <div class="text-body1 text-grey-8 q-mb-lg">
-              {{ t('contact.intro') }}
-            </div>
+  <AppPageShell>
+    <q-card flat>
+      <q-card-section>
+        <div class="text-overline text-weight-bold text-primary">{{ t('contact.overline') }}</div>
+        <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('contact.title') }}</div>
+        <div class="text-body1 text-grey-8 q-mb-lg">
+          {{ t('contact.intro') }}
+        </div>
 
-            <q-list>
-              <q-item v-for="(item, index) in contactItems" :key="item.email">
-                <q-item-section avatar>
-                  <q-icon :name="contactIcons[index] || 'mail'" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-weight-bold">{{ item.title }}</q-item-label>
-                  <q-item-label caption>
-                    <a :href="`mailto:${item.email}`" class="text-primary">{{ item.email }}</a>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
+        <q-list>
+          <q-item v-for="(item, index) in contactItems" :key="item.email">
+            <q-item-section avatar>
+              <q-icon :name="contactIcons[index] || 'mail'" color="primary" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-weight-bold">{{ item.title }}</q-item-label>
+              <q-item-label caption>
+                <a :href="`mailto:${item.email}`" class="text-primary">{{ item.email }}</a>
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-card>
   </AppPageShell>
 </template>
 
