@@ -79,6 +79,16 @@ export const useAuthStore = defineStore('auth', () => {
       subscriptionRef,
       (snapshot) => {
         if (!snapshot.exists()) {
+          if (snapshot.metadata.fromCache) {
+            const cachedSubscription = readCachedSubscription(uid)
+
+            if (cachedSubscription) {
+              subscription.value = cachedSubscription
+            }
+
+            return
+          }
+
           subscription.value = createDefaultSubscription(uid)
           writeCachedSubscription(subscription.value)
           return
