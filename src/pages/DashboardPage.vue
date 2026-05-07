@@ -1,8 +1,8 @@
 <template>
   <AppPageShell>
         <q-card flat>
-          <q-card-section class="row items-start justify-between q-col-gutter-md">
-            <div class="col-12 col-md">
+          <q-card-section class="row items-start q-col-gutter-md">
+            <div class="col-12">
               <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.overline') }}</div>
               <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('dashboard.title') }}</div>
               <div class="text-body1 text-grey-7">
@@ -10,8 +10,8 @@
               </div>
             </div>
 
-            <div class="col-12 col-md-auto">
-              <div class="row q-gutter-sm justify-end">
+            <div class="col-12">
+              <div class="row q-gutter-sm">
                 <q-btn
                   v-if="showFirstRunActions"
                   unelevated
