@@ -411,7 +411,11 @@ const syncStatusTitle = computed(() => {
   }
 
   if (pendingSyncTotal.value > 0) {
-    return t('settings.syncPendingTitle', { count: pendingSyncTotal.value })
+    const titleKey = pendingSyncTotal.value === 1
+      ? 'settings.syncPendingTitle'
+      : 'settings.syncPendingTitlePlural'
+
+    return t(titleKey, { count: pendingSyncTotal.value })
   }
 
   return t('settings.syncActiveTitle')
