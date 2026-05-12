@@ -23,7 +23,7 @@
             v-model="eventForm.type"
             outlined
             :label="t('events.eventType')"
-            :options="eventTypeOptions"
+            :options="groupedEventTypeOptions"
             emit-value
             map-options
           >
@@ -35,7 +35,15 @@
               />
             </template>
             <template #option="scope">
-              <q-item v-bind="scope.itemProps">
+              <q-separator v-if="scope.opt.separator" spaced />
+              <q-item-label
+                v-else-if="scope.opt.groupHeader"
+                header
+                class="text-overline text-weight-bold text-primary"
+              >
+                {{ scope.opt.label }}
+              </q-item-label>
+              <q-item v-else v-bind="scope.itemProps">
                 <q-item-section avatar>
                   <q-icon :name="scope.opt.icon" :color="scope.opt.color" />
                 </q-item-section>
@@ -144,7 +152,7 @@ import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import AnimalMultiPickerField from 'src/components/AnimalMultiPickerField.vue'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
-import { getEventTypeOptions } from 'src/constants/events'
+import { getEventTypeOptions, getGroupedEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import {
@@ -214,6 +222,7 @@ const eventForm = reactive(defaultEventForm())
 const isSyncingEventForm = ref(false)
 
 const eventTypeOptions = computed(() => getEventTypeOptions())
+const groupedEventTypeOptions = computed(() => getGroupedEventTypeOptions())
 const selectedEventTypeOption = computed(() =>
   eventTypeOptions.value.find((option) => option.value === eventForm.type) ?? null,
 )

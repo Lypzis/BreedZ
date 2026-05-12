@@ -38,6 +38,43 @@ const EVENT_TYPE_META = {
   other_income: { labelKey: 'eventTypes.other_income', icon: 'payments', color: 'positive' },
 }
 
+const EVENT_TYPE_GROUPS = [
+  {
+    labelKey: 'events.eventTypeGroupAnimalRecords',
+    types: [
+      'purchase',
+      'sale',
+      'vaccination',
+      'health_issue',
+      'death',
+      'custom',
+    ],
+  },
+  {
+    labelKey: 'events.eventTypeGroupLifecycle',
+    types: [
+      'breeding',
+      'pregnancy_check',
+      'expected_birth',
+      'birth',
+      'weaning',
+      'breeding_failed',
+      'abortion',
+    ],
+  },
+  {
+    labelKey: 'events.eventTypeGroupFarmWide',
+    types: [
+      'feed_cost',
+      'labor_cost',
+      'supply_cost',
+      'maintenance_cost',
+      'other_expense',
+      'other_income',
+    ],
+  },
+]
+
 export const HERD_SCOPE_EVENT_TYPES = new Set([
   'feed_cost',
   'labor_cost',
@@ -58,6 +95,31 @@ export function getEventTypeOptions() {
     color: meta.color,
     value,
   }))
+}
+
+export function getGroupedEventTypeOptions() {
+  return EVENT_TYPE_GROUPS.flatMap((group, index) => {
+    const header = {
+      disable: true,
+      groupHeader: true,
+      label: t(group.labelKey),
+    }
+    const separator = index > 0
+      ? [{ disable: true, separator: true }]
+      : []
+    const options = group.types.map((value) => {
+      const meta = EVENT_TYPE_META[value]
+
+      return {
+        label: t(meta.labelKey),
+        icon: meta.icon,
+        color: meta.color,
+        value,
+      }
+    })
+
+    return [...separator, header, ...options]
+  })
 }
 
 export function getEventTypeMeta(type) {
