@@ -2,7 +2,23 @@ import { t } from '../i18n/index.js'
 
 const EVENT_TYPE_META = {
   breeding: { labelKey: 'eventTypes.breeding', icon: 'favorite', color: 'primary' },
+  pregnancy_check: {
+    labelKey: 'eventTypes.pregnancy_check',
+    icon: 'fact_check',
+    color: 'primary',
+  },
+  breeding_failed: {
+    labelKey: 'eventTypes.breeding_failed',
+    icon: 'heart_broken',
+    color: 'warning',
+  },
+  abortion: {
+    labelKey: 'eventTypes.abortion',
+    icon: 'warning',
+    color: 'negative',
+  },
   birth: { labelKey: 'eventTypes.birth', icon: 'child_friendly', color: 'secondary' },
+  weaning: { labelKey: 'eventTypes.weaning', icon: 'child_care', color: 'secondary' },
   expected_birth: {
     labelKey: 'eventTypes.expected_birth',
     icon: 'event_repeat',

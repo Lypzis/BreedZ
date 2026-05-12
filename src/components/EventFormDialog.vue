@@ -69,6 +69,35 @@
             :dialog-title="t('events.pickPartner')"
             :empty-label="t('common.noAnimalSelected')"
           />
+          <q-select
+            v-if="eventForm.type === 'pregnancy_check'"
+            v-model="eventForm.pregnancyCheckResult"
+            outlined
+            :label="t('events.pregnancyCheckResult')"
+            :options="pregnancyCheckResultOptions"
+            emit-value
+            map-options
+          />
+          <q-select
+            v-if="eventForm.type === 'pregnancy_check'"
+            v-model="eventForm.pregnancyCheckMethod"
+            outlined
+            clearable
+            :label="t('events.pregnancyCheckMethod')"
+            :options="pregnancyCheckMethodOptions"
+            emit-value
+            map-options
+          />
+          <q-select
+            v-if="eventForm.type === 'pregnancy_check'"
+            v-model="eventForm.linkedBreedingEventId"
+            outlined
+            clearable
+            :label="t('events.linkedBreedingEvent')"
+            :options="linkedBreedingEventOptions"
+            emit-value
+            map-options
+          />
           <q-toggle
             v-if="showExpectedBirthPlanner"
             v-model="eventForm.expectedBirthEnabled"
@@ -117,6 +146,7 @@ import AnimalMultiPickerField from 'src/components/AnimalMultiPickerField.vue'
 import AnimalPickerField from 'src/components/AnimalPickerField.vue'
 import { getEventTypeOptions } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
+import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import {
   filterBreedingPartnerCandidates,
   validateBreedingPartnerSelection,
@@ -126,7 +156,7 @@ import {
   getEventAmountLabelKey,
   getEventSelectionMode,
 } from 'src/utils/event-participants'
-import { todayDateString } from 'src/utils/dates'
+import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { normalizeEventRecord, sanitizeNonNegativeAmountInput } from 'src/utils/event-records'
 
 const props = defineProps({
@@ -157,6 +187,14 @@ const props = defineProps({
   defaultAnimalId: {
     type: String,
     default: '',
+  },
+  initialType: {
+    type: String,
+    default: '',
+  },
+  initialDetails: {
+    type: Object,
+    default: () => ({}),
   },
   overline: {
     type: String,
@@ -201,6 +239,18 @@ const eventDateMin = computed(() => (eventForm.type === 'expected_birth' ? today
 const showExpectedBirthPlanner = computed(() =>
   eventForm.type === 'breeding',
 )
+const pregnancyCheckResultOptions = computed(() => [
+  { label: t('events.pregnancyCheckPregnant'), value: 'pregnant' },
+  { label: t('events.pregnancyCheckOpen'), value: 'open' },
+  { label: t('events.pregnancyCheckUnknown'), value: 'unknown' },
+])
+const pregnancyCheckMethodOptions = computed(() => [
+  { label: t('events.pregnancyCheckMethodPalpation'), value: 'palpation' },
+  { label: t('events.pregnancyCheckMethodUltrasound'), value: 'ultrasound' },
+  { label: t('events.pregnancyCheckMethodBloodTest'), value: 'blood_test' },
+  { label: t('events.pregnancyCheckMethodVisual'), value: 'visual' },
+  { label: t('events.pregnancyCheckMethodOther'), value: 'other' },
+])
 const multiAnimalPickerLabel = computed(() => {
   if (isHerdScopedEvent.value) {
     return t('events.pickAnimalsOptional')
@@ -225,15 +275,38 @@ const linkedExpectedBirthEvent = computed(() => {
   const linkedEvent = props.events.find((event) => event.id === props.event.linkedEventId) ?? null
   return linkedEvent?.type === 'expected_birth' ? linkedEvent : null
 })
+const linkedBreedingEventOptions = computed(() => {
+  const targetAnimalId = props.fixedAnimalId || eventForm.animalId
+
+  if (!targetAnimalId) {
+    return []
+  }
+
+  return props.events
+    .map((event) => normalizeEventRecord(event))
+    .filter((event) =>
+      event.type === 'breeding'
+      && event.animalIds.includes(targetAnimalId)
+      && (!props.event?.id || event.id !== props.event.id),
+    )
+    .sort((left, right) => String(right.date ?? '').localeCompare(String(left.date ?? '')))
+    .map((event) => ({
+      label: buildLinkedBreedingEventLabel(event, targetAnimalId),
+      value: event.id,
+    }))
+})
 
 function defaultEventForm() {
   return {
     animalId: '',
     animalIds: [],
-    type: 'breeding',
+    type: props.initialType || 'breeding',
     partnerAnimalId: '',
     expectedBirthEnabled: false,
     expectedBirthDate: '',
+    pregnancyCheckResult: props.initialDetails?.result ?? '',
+    pregnancyCheckMethod: props.initialDetails?.method ?? '',
+    linkedBreedingEventId: props.initialDetails?.linkedBreedingEventId ?? '',
     amount: '',
     date: todayDateString(),
     notes: '',
@@ -261,6 +334,9 @@ function syncForm() {
         normalizedEvent.type === 'breeding' && Boolean(linkedExpectedBirthEvent.value),
       expectedBirthDate:
         normalizedEvent.type === 'breeding' ? (linkedExpectedBirthEvent.value?.date ?? '') : '',
+      pregnancyCheckResult: normalizedEvent.details?.result ?? '',
+      pregnancyCheckMethod: normalizedEvent.details?.method ?? '',
+      linkedBreedingEventId: normalizedEvent.details?.linkedBreedingEventId ?? '',
       amount: normalizedEvent.amount != null ? String(normalizedEvent.amount) : '',
       date: normalizedEvent.date || todayDateString(),
       notes: normalizedEvent.notes ?? '',
@@ -356,6 +432,15 @@ function submitForm() {
     }
   }
 
+  if (eventForm.type === 'pregnancy_check' && !eventForm.pregnancyCheckResult) {
+    $q.notify({
+      color: 'negative',
+      message: t('events.pregnancyCheckResultRequired'),
+      position: 'top',
+    })
+    return
+  }
+
   let expectedBirthPlan = null
 
   if (showExpectedBirthPlanner.value && eventForm.expectedBirthEnabled) {
@@ -407,6 +492,7 @@ function submitForm() {
     scope: eventAnimalIds.length === 0 ? 'herd' : 'animals',
     type: eventForm.type,
     partnerAnimalId: eventForm.partnerAnimalId,
+    details: buildEventDetails(),
     amount: eventForm.amount,
     date: eventForm.date,
     notes: eventForm.notes,
@@ -430,6 +516,37 @@ function resolveExpectedBirthAnimalId(eventAnimalIds = []) {
 
 function updateAmountValue(value) {
   eventForm.amount = sanitizeNonNegativeAmountInput(value)
+}
+
+function buildEventDetails() {
+  const baseDetails = {
+    ...(props.event?.details ?? {}),
+    ...(props.initialDetails ?? {}),
+  }
+
+  if (eventForm.type !== 'pregnancy_check') {
+    return baseDetails
+  }
+
+  return {
+    ...baseDetails,
+    result: eventForm.pregnancyCheckResult,
+    method: eventForm.pregnancyCheckMethod ?? '',
+    linkedBreedingEventId: eventForm.linkedBreedingEventId ?? '',
+    linkedExpectedBirthEventId: baseDetails.linkedExpectedBirthEventId ?? '',
+  }
+}
+
+function buildLinkedBreedingEventLabel(event, targetAnimalId) {
+  const partnerAnimalId = event.animalIds.find((animalId) => animalId !== targetAnimalId) ?? ''
+  const partnerAnimal = props.animals.find((animal) => animal.id === partnerAnimalId) ?? null
+  const dateLabel = event.date ? formatDisplayDate(event.date) : t('common.dateNotSet')
+
+  if (!partnerAnimal) {
+    return dateLabel
+  }
+
+  return `${dateLabel} - ${formatAnimalDisplayName(partnerAnimal)}`
 }
 
 function buildSelectableEventAnimals(selectedIds = []) {
@@ -463,7 +580,15 @@ watch(
 )
 
 watch(
-  () => [props.event, props.events, props.defaultAnimalId, props.fixedAnimalId, props.animals],
+  () => [
+    props.event,
+    props.events,
+    props.defaultAnimalId,
+    props.fixedAnimalId,
+    props.animals,
+    props.initialType,
+    props.initialDetails,
+  ],
   () => {
     if (props.modelValue) {
       syncForm()
@@ -496,6 +621,12 @@ watch(
       eventForm.partnerAnimalId = ''
       eventForm.expectedBirthEnabled = false
       eventForm.expectedBirthDate = ''
+    }
+
+    if (value !== 'pregnancy_check') {
+      eventForm.pregnancyCheckResult = ''
+      eventForm.pregnancyCheckMethod = ''
+      eventForm.linkedBreedingEventId = ''
     }
 
     if (getEventSelectionMode(value) === 'multi' || getEventSelectionMode(value) === 'optionalMulti') {

@@ -1,5 +1,14 @@
 import { todayDateString } from './dates.js'
 
+const PREGNANCY_CHECK_RESULTS = new Set(['pregnant', 'open', 'unknown'])
+const PREGNANCY_CHECK_METHODS = new Set(['palpation', 'ultrasound', 'blood_test', 'visual', 'other'])
+export const EXPECTED_BIRTH_OUTCOME_TYPES = new Set([
+  'birth',
+  'breeding_failed',
+  'abortion',
+  'pregnancy_check',
+])
+
 function normalizeString(value, fallback = '') {
   return typeof value === 'string' ? value.trim() : fallback
 }
@@ -143,6 +152,70 @@ export function sanitizeNonNegativeAmountInput(value) {
   return sanitizedValue
 }
 
+function normalizeDetailsValue(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return {}
+  }
+
+  return { ...value }
+}
+
+export function normalizeEventDetails(type, details = {}) {
+  const normalizedType = normalizeString(type)
+  const normalizedDetails = normalizeDetailsValue(details)
+
+  if (normalizedType !== 'pregnancy_check') {
+    if (normalizedType === 'expected_birth') {
+      const resolutionStatus = normalizeString(normalizedDetails.resolutionStatus).toLowerCase()
+      const outcomeType = normalizeString(normalizedDetails.outcomeType).toLowerCase()
+
+      return {
+        ...normalizedDetails,
+        resolutionStatus: resolutionStatus === 'resolved' ? 'resolved' : '',
+        outcomeType: EXPECTED_BIRTH_OUTCOME_TYPES.has(outcomeType) ? outcomeType : '',
+        linkedOutcomeEventId: normalizeString(normalizedDetails.linkedOutcomeEventId),
+        resolvedAt: normalizeString(normalizedDetails.resolvedAt),
+      }
+    }
+
+    if (EXPECTED_BIRTH_OUTCOME_TYPES.has(normalizedType)) {
+      return {
+        ...normalizedDetails,
+        linkedBreedingEventId: normalizeString(normalizedDetails.linkedBreedingEventId),
+        linkedExpectedBirthEventId: normalizeString(normalizedDetails.linkedExpectedBirthEventId),
+      }
+    }
+
+    if (normalizedType === 'weaning') {
+      return {
+        ...normalizedDetails,
+        linkedBirthEventId: normalizeString(normalizedDetails.linkedBirthEventId),
+      }
+    }
+
+    return normalizedDetails
+  }
+
+  const result = normalizeString(normalizedDetails.result).toLowerCase()
+  const method = normalizeString(normalizedDetails.method).toLowerCase()
+
+  return {
+    ...normalizedDetails,
+    result: PREGNANCY_CHECK_RESULTS.has(result) ? result : '',
+    method: PREGNANCY_CHECK_METHODS.has(method) ? method : '',
+    linkedBreedingEventId: normalizeString(normalizedDetails.linkedBreedingEventId),
+    linkedExpectedBirthEventId: normalizeString(normalizedDetails.linkedExpectedBirthEventId),
+  }
+}
+
+export function isExpectedBirthResolved(event = {}) {
+  const normalizedEvent = normalizeEventRecord(event)
+
+  return normalizedEvent.type === 'expected_birth'
+    && normalizedEvent.details?.resolutionStatus === 'resolved'
+    && Boolean(normalizedEvent.details?.linkedOutcomeEventId)
+}
+
 export function deriveEventAnimalIds(event = {}) {
   const type = normalizeString(event.type)
   const normalizedAnimalIds = normalizeAnimalIdsValue(event.animalIds)
@@ -183,6 +256,7 @@ export function normalizeEventRecord(event = {}) {
     animalIds,
     animalId,
     partnerAnimalId,
+    details: normalizeEventDetails(type, event.details),
     linkedEventId: normalizeString(event.linkedEventId),
     confirmationStatus: normalizeConfirmationStatusValue(event.confirmationStatus, event.date),
     amount: normalizeEventAmount(event.amount),
@@ -206,12 +280,20 @@ export function isPendingEvent(event = {}) {
 export function isFutureScheduledEvent(event = {}, referenceDate = todayDateString()) {
   const normalizedEvent = normalizeEventRecord(event)
 
+  if (isExpectedBirthResolved(normalizedEvent)) {
+    return false
+  }
+
   return normalizedEvent.confirmationStatus === 'pending'
     && normalizeString(normalizedEvent.date) > normalizeString(referenceDate)
 }
 
 export function isEventNeedingConfirmation(event = {}, referenceDate = todayDateString()) {
   const normalizedEvent = normalizeEventRecord(event)
+
+  if (isExpectedBirthResolved(normalizedEvent)) {
+    return false
+  }
 
   return normalizedEvent.confirmationStatus === 'pending'
     && normalizeString(normalizedEvent.date) !== ''

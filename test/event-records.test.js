@@ -5,6 +5,7 @@ import {
   deriveEventAnimalIds,
   eventIncludesAnimal,
   isEventNeedingConfirmation,
+  isExpectedBirthResolved,
   isFutureScheduledEvent,
   normalizeEventAmount,
   normalizeEventRecord,
@@ -47,6 +48,104 @@ test('normalizes event records with canonical animalIds, legacy compatibility fi
   assert.equal(normalized.partnerAnimalId, '')
   assert.equal(normalized.linkedEventId, 'event-2')
   assert.equal(normalized.amount, 1250.5)
+})
+
+test('normalizes pregnancy check details while preserving unknown detail fields', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    type: 'pregnancy_check',
+    animalId: 'animal-1',
+    details: {
+      result: 'Pregnant',
+      method: 'ULTRASOUND',
+      linkedBreedingEventId: ' breeding-1 ',
+      extraNote: 'second trimester',
+    },
+  })
+
+  assert.deepEqual(normalized.animalIds, ['animal-1'])
+  assert.deepEqual(normalized.details, {
+    result: 'pregnant',
+    method: 'ultrasound',
+    linkedBreedingEventId: 'breeding-1',
+    linkedExpectedBirthEventId: '',
+    extraNote: 'second trimester',
+  })
+})
+
+test('preserves generic event details for forward compatibility', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    type: 'custom',
+    animalId: 'animal-1',
+    details: {
+      customField: 'kept',
+    },
+  })
+
+  assert.deepEqual(normalized.details, { customField: 'kept' })
+})
+
+test('normalizes expected birth resolution details and removes pending state from resolved records', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    type: 'expected_birth',
+    animalId: 'animal-1',
+    confirmationStatus: 'pending',
+    date: '2026-05-01',
+    details: {
+      resolutionStatus: 'Resolved',
+      outcomeType: 'BIRTH',
+      linkedOutcomeEventId: ' birth-1 ',
+      resolvedAt: ' 2026-04-28T12:00:00.000Z ',
+      note: 'calved early',
+    },
+  })
+
+  assert.deepEqual(normalized.details, {
+    resolutionStatus: 'resolved',
+    outcomeType: 'birth',
+    linkedOutcomeEventId: 'birth-1',
+    resolvedAt: '2026-04-28T12:00:00.000Z',
+    note: 'calved early',
+  })
+  assert.equal(isExpectedBirthResolved(normalized), true)
+  assert.equal(isFutureScheduledEvent(normalized, '2026-04-01'), false)
+  assert.equal(isEventNeedingConfirmation(normalized, '2026-05-02'), false)
+})
+
+test('normalizes lifecycle outcome links in event details', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    type: 'abortion',
+    animalId: 'animal-1',
+    details: {
+      linkedExpectedBirthEventId: ' expected-1 ',
+      linkedBreedingEventId: ' breeding-1 ',
+    },
+  })
+
+  assert.deepEqual(normalized.details, {
+    linkedExpectedBirthEventId: 'expected-1',
+    linkedBreedingEventId: 'breeding-1',
+  })
+})
+
+test('normalizes weaning links in event details', () => {
+  const normalized = normalizeEventRecord({
+    id: 'event-1',
+    type: 'weaning',
+    animalId: 'animal-1',
+    details: {
+      linkedBirthEventId: ' birth-1 ',
+      note: 'kept',
+    },
+  })
+
+  assert.deepEqual(normalized.details, {
+    linkedBirthEventId: 'birth-1',
+    note: 'kept',
+  })
 })
 
 test('normalizes herd-scoped events with no animal ids', () => {

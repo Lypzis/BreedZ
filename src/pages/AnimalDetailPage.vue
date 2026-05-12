@@ -79,6 +79,14 @@
           </template>
 
           <template #actions>
+            <q-btn
+              v-if="canRecordWeaning"
+              unelevated
+              color="primary"
+              icon="child_care"
+              :label="t('animalDetail.recordWeaning')"
+              @click="openWeaningDialog"
+            />
             <q-btn unelevated color="primary" icon="add" :label="t('common.addEvent')"
               :disable="animal.status !== 'active'" @click="openEventDialog" />
             <q-btn outline color="primary" icon="edit" :label="t('common.editAnimal')" @click="openEditDialog" />
@@ -181,10 +189,20 @@
                   <div class="text-body2 text-grey-7">
                     {{ breedingCountLabel(group.count) }}
                   </div>
-                  <div class="text-body2 text-grey-7">
-                    {{ t('animalDetail.lastBreeding', { date: formatDate(group.latestDate) }) }}
+	                  <div class="text-body2 text-grey-7">
+	                    {{ t('animalDetail.lastBreeding', { date: formatDate(group.latestDate) }) }}
+	                  </div>
+                  <div v-if="breedingLifecycleRows(group).length > 0" class="q-mt-sm column q-gutter-xs">
+                    <div
+                      v-for="row in breedingLifecycleRows(group)"
+                      :key="row.key"
+                      class="text-caption text-grey-8"
+                    >
+                      <span class="text-weight-medium">{{ row.label }}:</span>
+                      {{ row.value }}
+                    </div>
                   </div>
-                </div>
+	                </div>
 
                 <div v-if="group.partnerAnimal" class="col-auto self-center">
                   <q-btn flat round dense color="primary" icon="visibility" :aria-label="t('common.view')"
@@ -302,6 +320,17 @@
       :fixed-animal-id="animalId" :mode="eventFormMode"
       :overline="t('animalDetail.eventDialogOverline')" :title="eventDialogTitle" @purchase-selected="openPurchaseDialog"
       @submit="submitEvent" />
+    <EventFormDialog
+      v-model="isWeaningDialogOpen"
+      :animals="animals"
+      :events="events"
+      :fixed-animal-id="animalId"
+      initial-type="weaning"
+      :initial-details="weaningInitialDetails"
+      :overline="t('animalDetail.eventDialogOverline')"
+      :title="t('animalDetail.recordWeaning')"
+      @submit="submitWeaningEvent"
+    />
     <PurchaseEventDialog v-model="isPurchaseDialogOpen" :animals="animals" :current-animal-count="animals.length"
       :initial-animal-ids="initialPurchaseAnimalIds" :is-premium="isPremium" @submit="submitPurchaseEvent" />
 
@@ -491,6 +520,7 @@ const isParentPickerOpen = ref(false)
 const parentPickerType = ref('dam')
 const parentSearchTerm = ref('')
 const isEventDialogOpen = ref(false)
+const isWeaningDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const isBreedingOffspringDialogOpen = ref(false)
 const initialPurchaseAnimalIds = ref([])
@@ -583,6 +613,18 @@ const selectedBreedingGroup = computed(() =>
 const selectedEvent = computed(() =>
   events.value.find((event) => event.id === selectedEventId.value) ?? null,
 )
+const birthEventForAnimal = computed(() =>
+  animalEvents.value.find((event) => event.type === 'birth') ?? null,
+)
+const weaningEventForAnimal = computed(() =>
+  animalEvents.value.find((event) => event.type === 'weaning') ?? null,
+)
+const canRecordWeaning = computed(() =>
+  animal.value?.status === 'active' && !weaningEventForAnimal.value,
+)
+const weaningInitialDetails = computed(() => ({
+  linkedBirthEventId: birthEventForAnimal.value?.id ?? '',
+}))
 const selectedBreedingOffspringAnimals = computed(() => selectedBreedingGroup.value?.offspringAnimals ?? [])
 const offspringAnimals = computed(() => animalsStore.getOffspringForAnimal(animalId.value))
 const breedingOffspringPageCount = computed(() =>
@@ -668,6 +710,14 @@ function openEditEventDialog(event) {
   eventFormMode.value = 'edit'
   selectedEventId.value = event.id
   isEventDialogOpen.value = true
+}
+
+function openWeaningDialog() {
+  if (!canRecordWeaning.value) {
+    return
+  }
+
+  isWeaningDialogOpen.value = true
 }
 
 function openEditDialog() {
@@ -789,6 +839,29 @@ async function submitEvent(payload) {
     $q.notify({
       color: 'positive',
       message: isEditing ? t('animalDetail.eventUpdated') : t('animalDetail.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('animalDetail.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function submitWeaningEvent(payload) {
+  if (!animal.value) {
+    return
+  }
+
+  try {
+    await eventsStore.addEvent(payload)
+    await animalsStore.loadAnimals()
+    isWeaningDialogOpen.value = false
+    $q.notify({
+      color: 'positive',
+      message: t('animalDetail.eventAdded'),
       position: 'top',
     })
   } catch (error) {
@@ -931,6 +1004,72 @@ function breedingCountLabel(count) {
   return count === 1
     ? t('animalDetail.breedingCountOne')
     : t('animalDetail.breedingCountMany', { count })
+}
+
+function pregnancyCheckResultLabel(value) {
+  const labelKeys = {
+    pregnant: 'events.pregnancyCheckPregnant',
+    open: 'events.pregnancyCheckOpen',
+    unknown: 'events.pregnancyCheckUnknown',
+  }
+  const labelKey = labelKeys[value]
+
+  return labelKey ? t(labelKey) : ''
+}
+
+function breedingLifecycleStatusLabel(group) {
+  const pregnancyResult = group.pregnancyCheckEvent?.details?.result ?? ''
+
+  if (pregnancyResult === 'pregnant') {
+    return group.expectedBirthEvent
+      ? t('animalDetail.lifecycleStatusWaitingCalving')
+      : t('animalDetail.lifecycleStatusPregnant')
+  }
+
+  if (pregnancyResult === 'open') {
+    return t('animalDetail.lifecycleStatusOpen')
+  }
+
+  if (pregnancyResult === 'unknown') {
+    return t('animalDetail.lifecycleStatusUnknown')
+  }
+
+  if (group.expectedBirthEvent) {
+    return t('animalDetail.lifecycleStatusExpectedBirth')
+  }
+
+  return t('animalDetail.lifecycleStatusNeedsCheck')
+}
+
+function breedingLifecycleRows(group) {
+  const rows = []
+  const pregnancyResult = pregnancyCheckResultLabel(group.pregnancyCheckEvent?.details?.result)
+
+  if (pregnancyResult) {
+    rows.push({
+      key: 'pregnancy-check',
+      label: t('animalDetail.lifecyclePregnancyCheck'),
+      value: group.pregnancyCheckEvent?.date
+        ? `${pregnancyResult} - ${formatDate(group.pregnancyCheckEvent.date)}`
+        : pregnancyResult,
+    })
+  }
+
+  if (group.expectedBirthEvent) {
+    rows.push({
+      key: 'expected-birth',
+      label: t('animalDetail.lifecycleExpectedBirth'),
+      value: formatDate(group.expectedBirthEvent.date),
+    })
+  }
+
+  rows.push({
+    key: 'status',
+    label: t('animalDetail.lifecycleStatus'),
+    value: breedingLifecycleStatusLabel(group),
+  })
+
+  return rows
 }
 
 watch(breedingGroups, () => {

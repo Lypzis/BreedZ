@@ -149,6 +149,10 @@ Keep them as event types first. Avoid building a complicated state machine until
    - birth completes expected birth workflow
    - dashboard groups due and overdue breeding follow-ups
 
+### Completed Finish Item
+
+- Added a dedicated `weaning` shortcut from birth records and animal detail pages. The event keeps a link back to the birth record when one is available.
+
 ### Later
 
 - Rebreeding reminders after failed pregnancy

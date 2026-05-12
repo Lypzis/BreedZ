@@ -32,6 +32,45 @@ test('groups breeding events by partner and counts latest date', () => {
   assert.deepEqual(groups[1].offspringAnimals.map((animal) => animal.id), ['storm'])
 })
 
+test('adds lifecycle context from linked expected birth and pregnancy check events', () => {
+  const events = [
+    {
+      id: 'breeding-1',
+      animalId: 'current',
+      type: 'breeding',
+      partnerAnimalId: 'bella',
+      linkedEventId: 'expected-1',
+      date: '2026-02-15',
+    },
+    {
+      id: 'expected-1',
+      animalId: 'bella',
+      type: 'expected_birth',
+      linkedEventId: 'breeding-1',
+      date: '2026-11-25',
+    },
+    {
+      id: 'check-1',
+      animalId: 'bella',
+      type: 'pregnancy_check',
+      details: {
+        result: 'pregnant',
+        method: 'ultrasound',
+        linkedBreedingEventId: 'breeding-1',
+      },
+      date: '2026-03-20',
+    },
+  ]
+
+  const groups = groupBreedingsByPartner('current', animals, events)
+
+  assert.equal(groups.length, 1)
+  assert.equal(groups[0].latestEvent.id, 'breeding-1')
+  assert.equal(groups[0].expectedBirthEvent.id, 'expected-1')
+  assert.equal(groups[0].pregnancyCheckEvent.id, 'check-1')
+  assert.equal(groups[0].pregnancyCheckEvent.details.result, 'pregnant')
+})
+
 test('shows breeding history when current animal is the selected partner on the event', () => {
   const events = [
     { id: 'event-1', animalId: 'daisy', type: 'breeding', partnerAnimalId: 'current', date: '2025-03-05' },

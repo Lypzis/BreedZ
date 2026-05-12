@@ -540,6 +540,9 @@ I18n maintenance TODO:
   - Suggested shape: `src/i18n/messages/en.js`, `pt-BR.js`, `es.js`, plus a small `index.js`.
   - Keep this as a maintenance step, not an urgent blocker for the next guide.
 
+## Minor bugs found
+- [ ] Export excel let's you download without having any register of animals and events
+
 ## Configuration
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

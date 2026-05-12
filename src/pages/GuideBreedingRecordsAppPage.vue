@@ -9,6 +9,7 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideBreedingRecordsApp.description') }}
         </div>
+        <GuideWrittenDate />
       </q-card-section>
 
       <q-card-section>
@@ -169,6 +170,14 @@
         </q-list>
       </q-card-section>
 
+      <GuideSourcesSection :sources="sources" />
+
+      <GuideRelatedLink
+        :title="t('guideCattleRecordKeeping.title')"
+        :description="t('guideCattleRecordKeeping.description')"
+        :to="recordKeepingGuidePath"
+      />
+
       <GuideShareSection
         :title="t('guideBreedingRecordsApp.title')"
         :path="sharePath"
@@ -182,7 +191,10 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
+import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
+import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -207,9 +219,34 @@ const dashboardPath = computed(() => '/')
 const breedingDatesGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )
+const recordKeepingGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
+)
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
 )
+const sources = [
+  {
+    title: 'Production Records for Commercial Cow-Calf Operations',
+    publisher: 'University of Missouri Extension',
+    url: 'https://extension.missouri.edu/publications/g2045',
+  },
+  {
+    title: 'Cow-Calf Production Record Software',
+    publisher: 'Oklahoma State University Extension',
+    url: 'https://extension.okstate.edu/fact-sheets/cow-calf-production-record-software.html',
+  },
+  {
+    title: 'Calving Book',
+    publisher: 'North Dakota State University Extension',
+    url: 'https://www.ndsu.edu/agriculture/extension/publications/calving-book',
+  },
+  {
+    title: 'How to Evaluate Animal Performance in the Cow-Calf Herd',
+    publisher: 'University of Maryland Extension',
+    url: 'https://extension.umd.edu/resource/how-evaluate-animal-performance-cow-calf-herd',
+  },
+]
 const problemItems = computed(() => tm('guideBreedingRecordsApp.problemItems') ?? [])
 const mustHaveItems = computed(() => tm('guideBreedingRecordsApp.mustHaveItems') ?? [])
 const workflowItems = computed(() => tm('guideBreedingRecordsApp.workflowItems') ?? [])

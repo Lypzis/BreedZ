@@ -6,6 +6,10 @@ const VALID_EVENT_TYPES = new Set([
   'birth',
   'expected_birth',
   'breeding',
+  'pregnancy_check',
+  'breeding_failed',
+  'abortion',
+  'weaning',
   'purchase',
   'sale',
   'vaccination',
@@ -38,6 +42,35 @@ function normalizeString(value, fallback = '') {
 
 function normalizeTimestamp(value) {
   return isNonEmptyString(value) ? value : new Date().toISOString()
+}
+
+function normalizeDetails(value) {
+  if (!value) {
+    return {}
+  }
+
+  if (typeof value === 'object' && !Array.isArray(value)) {
+    return { ...value }
+  }
+
+  if (typeof value !== 'string') {
+    return {}
+  }
+
+  const normalizedValue = value.trim()
+
+  if (!normalizedValue) {
+    return {}
+  }
+
+  try {
+    const parsedValue = JSON.parse(normalizedValue)
+    return parsedValue && typeof parsedValue === 'object' && !Array.isArray(parsedValue)
+      ? parsedValue
+      : {}
+  } catch {
+    return {}
+  }
 }
 
 function normalizeBreederValue(value, legacyPurpose) {
@@ -188,6 +221,7 @@ export function validateAndNormalizeBackupPayload(payload) {
       scope,
       type,
       partnerAnimalId: type === 'breeding' ? partnerAnimalId : '',
+      details: normalizeDetails(event.details),
       linkedEventId: normalizeString(event.linkedEventId),
       confirmationStatus: normalizeString(event.confirmationStatus),
       amount: event.amount,

@@ -29,6 +29,7 @@ const EVENT_COLUMNS = [
   ['animalId', 'Animal ID'],
   ['scope', 'Scope'],
   ['type', 'Type'],
+  ['details', 'Details JSON'],
   ['linkedEventId', 'Linked Event ID'],
   ['confirmationStatus', 'Confirmation Status'],
   ['amount', 'Amount'],
@@ -48,6 +49,8 @@ function toSheetRows(items, columns) {
           ? (item[key] === true ? 'yes' : 'no')
           : key === 'animalIds'
             ? Array.isArray(item[key]) ? item[key].join(', ') : (item[key] ?? '')
+          : key === 'details'
+            ? JSON.stringify(item[key] ?? {})
           : (item[key] ?? ''),
       ]),
     ),

@@ -1,431 +1,181 @@
 <template>
   <AppPageShell>
-        <q-card flat>
-          <q-card-section class="row items-start q-col-gutter-md">
-            <div class="col-12">
-              <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.overline') }}</div>
-              <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('dashboard.title') }}</div>
-              <div class="text-body1 text-grey-7">
-                {{ t('dashboard.description') }}
+    <q-card flat>
+      <q-card-section class="row items-start q-col-gutter-md">
+        <div class="col-12">
+          <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.overline') }}</div>
+          <div class="text-h4 text-weight-bold q-mt-sm q-mb-sm">{{ t('dashboard.title') }}</div>
+          <div class="text-body1 text-grey-7">
+            {{ t('dashboard.description') }}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="row q-gutter-sm">
+            <q-btn v-if="showFirstRunActions" unelevated color="primary" icon="pets"
+              :label="t('dashboard.addFirstAnimal')" to="/animals" />
+            <q-btn v-else unelevated color="primary" icon="add" :label="t('common.addEvent')"
+              @click="openQuickEventDialog" />
+            <q-btn v-if="showFirstRunActions" outline color="primary" icon="assignment" :label="t('common.addEvent')"
+              @click="openQuickEventDialog" />
+            <q-btn v-if="showFirstRunActions" outline color="primary" icon="school" :label="t('home.openTutorial')"
+              to="/tutorial" />
+            <q-btn v-if="canShowSignInButton" outline color="primary" icon="login" :label="t('account.signIn')"
+              to="/account" />
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section v-if="loadErrorMessage" class="q-pt-none">
+        <q-banner rounded class="bg-red-1 text-negative">
+          {{ loadErrorMessage }}
+        </q-banner>
+      </q-card-section>
+
+      <q-card-section v-if="isBusy" class="q-py-xl">
+        <div class="row justify-center">
+          <q-spinner color="primary" size="40px" />
+        </div>
+      </q-card-section>
+
+      <template v-else>
+        <q-card-section v-if="showFirstRunActions" class="q-pt-none">
+          <q-banner rounded class="bg-grey-1 text-grey-8">
+            <template #avatar>
+              <q-icon name="info" color="primary" />
+            </template>
+            <div>{{ t('dashboard.firstRunHint') }}</div>
+          </q-banner>
+        </q-card-section>
+
+        <q-card-section>
+          <q-banner rounded class="bg-green-1 text-primary">
+            <template #avatar>
+              <q-icon name="pets" color="primary" />
+            </template>
+            <div class="row items-center q-col-gutter-sm">
+              <div class="col">
+                <div class="text-subtitle2 text-weight-bold">
+                  {{ t('dashboard.activeAnimalsTitle', { count: activeAnimals.length }) }}
+                </div>
+                <div class="text-caption text-grey-8">{{ t('dashboard.activeAnimalsCaption') }}</div>
+              </div>
+              <div class="col-auto">
+                <q-btn flat dense color="primary" icon="arrow_forward" to="/animals" />
               </div>
             </div>
+          </q-banner>
+        </q-card-section>
 
-            <div class="col-12">
-              <div class="row q-gutter-sm">
-                <q-btn
-                  v-if="showFirstRunActions"
-                  unelevated
-                  color="primary"
-                  icon="pets"
-                  :label="t('dashboard.addFirstAnimal')"
-                  to="/animals"
-                />
-                <q-btn
-                  v-else
-                  unelevated
-                  color="primary"
-                  icon="add"
-                  :label="t('common.addEvent')"
-                  @click="openQuickEventDialog"
-                />
-                <q-btn
-                  v-if="showFirstRunActions"
-                  outline
-                  color="primary"
-                  icon="assignment"
-                  :label="t('common.addEvent')"
-                  @click="openQuickEventDialog"
-                />
-                <q-btn
-                  v-if="showFirstRunActions"
-                  outline
-                  color="primary"
-                  icon="school"
-                  :label="t('home.openTutorial')"
-                  to="/tutorial"
-                />
-                <q-btn
-                  v-if="canShowSignInButton"
-                  outline
-                  color="primary"
-                  icon="login"
-                  :label="t('account.signIn')"
-                  to="/account"
-                />
-              </div>
-            </div>
-          </q-card-section>
+        <q-card-section>
+          <q-list>
+            <DashboardSectionPanel :title="t('dashboard.todayEventsTitle', { count: todayEvents.length })"
+              :caption="todayEventsCaption" :count="todayEvents.length" icon="today" avatar-color="primary"
+              :default-opened="false">
+              <DashboardEventPanelContent :events="todayEvents" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.todayEmpty')" empty-icon="event_available"
+                showing-text-key="dashboard.showingToday" :notes-fallback="t('common.noExtraNotesAdded')"
+                :show-date="false" @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-          <q-card-section v-if="loadErrorMessage" class="q-pt-none">
-            <q-banner rounded class="bg-red-1 text-negative">
-              {{ loadErrorMessage }}
-            </q-banner>
-          </q-card-section>
+            <DashboardSectionPanel :title="t('dashboard.upcomingEventsTitle', { count: upcomingEvents.length })"
+              :caption="t('dashboard.upcomingEventsCaption')" :count="upcomingEvents.length" icon="schedule"
+              avatar-color="primary" :default-opened="false">
+              <DashboardEventPanelContent :events="upcomingEvents" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.upcomingEmpty')" empty-icon="event"
+                showing-text-key="dashboard.showingUpcoming" :show-notes="false" @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-          <q-card-section v-if="isBusy" class="q-py-xl">
-            <div class="row justify-center">
-              <q-spinner color="primary" size="40px" />
-            </div>
-          </q-card-section>
+            <DashboardSectionPanel
+              :title="t('dashboard.needsConfirmationEventsTitle', { count: needsConfirmationEvents.length })"
+              :caption="t('dashboard.needsConfirmationEventsCaption')" :count="needsConfirmationEvents.length"
+              icon="pending_actions" avatar-color="warning" chip-color="orange-1" chip-text-color="warning"
+              :default-opened="false">
+              <DashboardEventPanelContent :events="needsConfirmationEvents" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.needsConfirmationEmpty')"
+                empty-icon="task_alt" showing-text-key="dashboard.showingNeedsConfirmation" :show-notes="false"
+                @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-          <template v-else>
-            <q-card-section v-if="showFirstRunActions" class="q-pt-none">
-              <q-banner rounded class="bg-grey-1 text-grey-8">
-                <template #avatar>
-                  <q-icon name="info" color="primary" />
-                </template>
-                <div>{{ t('dashboard.firstRunHint') }}</div>
-              </q-banner>
-            </q-card-section>
+            <DashboardSectionPanel :title="t('dashboard.pregnancyChecksDueTitle', { count: pregnancyChecksDue.length })"
+              :caption="t('dashboard.pregnancyChecksDueCaption')" :count="pregnancyChecksDue.length" icon="fact_check"
+              avatar-color="primary" :default-opened="false">
+              <DashboardEventPanelContent :events="pregnancyChecksDue" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.pregnancyChecksDueEmpty')"
+                empty-icon="task_alt" showing-text-key="dashboard.showingPregnancyChecksDue" :show-notes="false"
+                @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-            <q-card-section>
-              <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-6">
-                  <q-banner rounded class="bg-green-1 text-primary">
-                    <template #avatar>
-                      <q-icon name="pets" color="primary" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.activeAnimalsTitle', { count: activeAnimals.length }) }}</div>
-                    <div class="text-caption text-grey-8">{{ t('dashboard.activeAnimalsCaption') }}</div>
-                  </q-banner>
-                </div>
+            <DashboardSectionPanel
+              :title="t('dashboard.overdueExpectedBirthsTitle', { count: overdueExpectedBirths.length })"
+              :caption="t('dashboard.overdueExpectedBirthsCaption')" :count="overdueExpectedBirths.length"
+              icon="event_busy" avatar-color="warning" chip-color="orange-1" chip-text-color="warning"
+              :default-opened="false">
+              <DashboardEventPanelContent :events="overdueExpectedBirths" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.overdueExpectedBirthsEmpty')"
+                empty-icon="task_alt" showing-text-key="dashboard.showingOverdueExpectedBirths" :show-notes="false"
+                @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-                <div class="col-12 col-sm-6">
-                  <q-banner rounded class="bg-green-1 text-primary">
-                    <template #avatar>
-                      <q-icon name="today" color="primary" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.todayEventsTitle', { count: todayEvents.length }) }}</div>
-                    <div class="text-caption text-grey-8">{{ todayEventsCaption }}</div>
-                  </q-banner>
-                </div>
+            <DashboardSectionPanel
+              :title="t('dashboard.expectedBirthsDueSoonTitle', { count: expectedBirthsDueSoon.length })"
+              :caption="t('dashboard.expectedBirthsDueSoonCaption')" :count="expectedBirthsDueSoon.length"
+              icon="event_repeat" avatar-color="secondary"
+              :default-opened="false">
+              <DashboardEventPanelContent :events="expectedBirthsDueSoon" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.expectedBirthsDueSoonEmpty')"
+                empty-icon="event_available" showing-text-key="dashboard.showingExpectedBirthsDueSoon"
+                :show-notes="false" @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-                <div class="col-12 col-sm-6">
-                  <q-banner rounded class="bg-green-1 text-primary">
-                    <template #avatar>
-                      <q-icon name="schedule" color="primary" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.upcomingEventsTitle', { count: upcomingEvents.length }) }}</div>
-                    <div class="text-caption text-grey-8">{{ t('dashboard.upcomingEventsCaption') }}</div>
-                  </q-banner>
-                </div>
+            <DashboardSectionPanel
+              :title="t('dashboard.unresolvedBreedingsTitle', { count: unresolvedBreedings.length })"
+              :caption="t('dashboard.unresolvedBreedingsCaption')" :count="unresolvedBreedings.length" icon="favorite"
+              avatar-color="primary" :default-opened="false">
+              <DashboardEventPanelContent :events="unresolvedBreedings" :animal-resolver="animalById"
+                :detail-target="eventDetailTarget" :empty-text="t('dashboard.unresolvedBreedingsEmpty')"
+                empty-icon="task_alt" showing-text-key="dashboard.showingUnresolvedBreedings" :show-notes="false"
+                @open="openEventDetail" />
+            </DashboardSectionPanel>
 
-                <div class="col-12 col-sm-6">
-                  <q-banner rounded class="bg-orange-1 text-warning">
-                    <template #avatar>
-                      <q-icon name="pending_actions" color="warning" />
-                    </template>
-                    <div class="text-subtitle2 text-weight-bold">{{ t('dashboard.needsConfirmationEventsTitle', { count: needsConfirmationEvents.length }) }}</div>
-                    <div class="text-caption text-grey-8">{{ t('dashboard.needsConfirmationEventsCaption') }}</div>
-                  </q-banner>
-                </div>
-              </div>
-            </q-card-section>
+            <DashboardSectionPanel
+              :title="t('dashboard.needsSetupTitleWithCount', { count: animalsWithoutEvents.length })"
+              :caption="t('dashboard.needsSetupCaption')" :count="animalsWithoutEvents.length" icon="assignment"
+              avatar-color="primary" :default-opened="false">
+              <DashboardAnimalPanelContent :animals="animalsWithoutEvents"
+                :caption-suffix="t('dashboard.needsSetupCaption')" :detail-target="animalDetailTarget"
+                :empty-text="t('dashboard.needsSetupEmpty')" showing-text-key="dashboard.showingNeedsSetup"
+                @open="openAnimalDetail" />
+            </DashboardSectionPanel>
+          </q-list>
+        </q-card-section>
+      </template>
+    </q-card>
 
-            <q-card-section >
-              <div class="row items-center justify-between q-col-gutter-sm">
-                <div class="col">
-                  <div class="text-overline text-weight-bold text-accent">{{ t('dashboard.todayOverline') }}</div>
-                  <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.todaySectionTitle') }}</div>
-                </div>
-                <div v-if="todayEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
-                </div>
-              </div>
-
-              <q-banner v-if="todayEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                <template #avatar>
-                  <q-icon name="event_available" color="primary" />
-                </template>
-                {{ t('dashboard.todayEmpty') }}
-              </q-banner>
-
-              <template v-else>
-                <PagedListControls
-                  :current-page="todayCurrentPage"
-                  :list-mode="todayListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="todayPageCount"
-                  :page-size="todayPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingToday', { shown: displayedTodayEventsCount, total: todayEvents.length })"
-                  :show-pagination="false"
-                  @update:current-page="todayCurrentPage = $event"
-                  @update:list-mode="todayListMode = $event"
-                  @update:page-size="todayPageSize = $event"
-                />
-
-                <q-list separator>
-                  <EventListItem
-                    v-for="event in displayedTodayEvents"
-                    :key="event.id"
-                    :event="event"
-                    :animal-resolver="animalById"
-                    :detail-target="eventDetailTarget(event)"
-                    :notes-fallback="t('common.noExtraNotesAdded')"
-                    :show-animal-meta="false"
-                    :show-date="false"
-                    item-class="q-py-md"
-                    :side-top="false"
-                    @open="openEventDetail"
-                  />
-                </q-list>
-
-                <PagedListControls
-                  :current-page="todayCurrentPage"
-                  :list-mode="todayListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="todayPageCount"
-                  :page-size="todayPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingToday', { shown: displayedTodayEventsCount, total: todayEvents.length })"
-                  :show-header="false"
-                  @update:current-page="todayCurrentPage = $event"
-                  @update:list-mode="todayListMode = $event"
-                  @update:page-size="todayPageSize = $event"
-                />
-              </template>
-            </q-card-section>
-
-            <q-card-section >
-              <div class="row items-center justify-between q-col-gutter-sm">
-                <div class="col">
-                  <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.upcomingOverline') }}</div>
-                  <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.upcomingSectionTitle') }}</div>
-                </div>
-                <div v-if="upcomingEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
-                </div>
-              </div>
-
-              <q-banner v-if="upcomingEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                <template #avatar>
-                  <q-icon name="event" color="primary" />
-                </template>
-                {{ t('dashboard.upcomingEmpty') }}
-              </q-banner>
-
-              <template v-else>
-                <PagedListControls
-                  :current-page="upcomingCurrentPage"
-                  :list-mode="upcomingListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="upcomingPageCount"
-                  :page-size="upcomingPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingUpcoming', { shown: displayedUpcomingEventsCount, total: upcomingEvents.length })"
-                  :show-pagination="false"
-                  @update:current-page="upcomingCurrentPage = $event"
-                  @update:list-mode="upcomingListMode = $event"
-                  @update:page-size="upcomingPageSize = $event"
-                />
-
-                <q-list separator>
-                  <EventListItem
-                    v-for="event in displayedUpcomingEvents"
-                    :key="event.id"
-                    :event="event"
-                    :animal-resolver="animalById"
-                    :detail-target="eventDetailTarget(event)"
-                    :show-animal-meta="false"
-                    :show-notes="false"
-                    item-class="q-py-md"
-                    :side-top="false"
-                    @open="openEventDetail"
-                  />
-                </q-list>
-
-                <PagedListControls
-                  :current-page="upcomingCurrentPage"
-                  :list-mode="upcomingListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="upcomingPageCount"
-                  :page-size="upcomingPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingUpcoming', { shown: displayedUpcomingEventsCount, total: upcomingEvents.length })"
-                  :show-header="false"
-                  @update:current-page="upcomingCurrentPage = $event"
-                  @update:list-mode="upcomingListMode = $event"
-                  @update:page-size="upcomingPageSize = $event"
-                />
-              </template>
-            </q-card-section>
-
-            <q-card-section >
-              <div class="row items-center justify-between q-col-gutter-sm">
-                <div class="col">
-                  <div class="text-overline text-weight-bold text-warning">{{ t('dashboard.needsConfirmationOverline') }}</div>
-                  <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.needsConfirmationSectionTitle') }}</div>
-                </div>
-                <div v-if="needsConfirmationEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllEvents')" to="/events" />
-                </div>
-              </div>
-
-              <q-banner v-if="needsConfirmationEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                <template #avatar>
-                  <q-icon name="task_alt" color="primary" />
-                </template>
-                {{ t('dashboard.needsConfirmationEmpty') }}
-              </q-banner>
-
-              <template v-else>
-                <PagedListControls
-                  :current-page="needsConfirmationCurrentPage"
-                  :list-mode="needsConfirmationListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="needsConfirmationPageCount"
-                  :page-size="needsConfirmationPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingNeedsConfirmation', { shown: displayedNeedsConfirmationEventsCount, total: needsConfirmationEvents.length })"
-                  :show-pagination="false"
-                  @update:current-page="needsConfirmationCurrentPage = $event"
-                  @update:list-mode="needsConfirmationListMode = $event"
-                  @update:page-size="needsConfirmationPageSize = $event"
-                />
-
-                <q-list separator>
-                  <EventListItem
-                    v-for="event in displayedNeedsConfirmationEvents"
-                    :key="event.id"
-                    :event="event"
-                    :animal-resolver="animalById"
-                    :detail-target="eventDetailTarget(event)"
-                    :show-animal-meta="false"
-                    :show-notes="false"
-                    item-class="q-py-md"
-                    :side-top="false"
-                    @open="openEventDetail"
-                  />
-                </q-list>
-
-                <PagedListControls
-                  :current-page="needsConfirmationCurrentPage"
-                  :list-mode="needsConfirmationListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="needsConfirmationPageCount"
-                  :page-size="needsConfirmationPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingNeedsConfirmation', { shown: displayedNeedsConfirmationEventsCount, total: needsConfirmationEvents.length })"
-                  :show-header="false"
-                  @update:current-page="needsConfirmationCurrentPage = $event"
-                  @update:list-mode="needsConfirmationListMode = $event"
-                  @update:page-size="needsConfirmationPageSize = $event"
-                />
-              </template>
-            </q-card-section>
-
-            <q-card-section >
-              <div class="row items-center justify-between q-col-gutter-sm">
-                <div class="col">
-                  <div class="text-overline text-weight-bold text-primary">{{ t('dashboard.needsSetupOverline') }}</div>
-                  <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('dashboard.needsSetupTitle') }}</div>
-                </div>
-                <div v-if="animalsWithoutEvents.length > dashboardSectionLimit" class="col-auto">
-                  <q-btn flat dense color="primary" :label="t('dashboard.viewAllAnimals')" to="/animals" />
-                </div>
-              </div>
-
-              <q-banner v-if="animalsWithoutEvents.length === 0" rounded class="bg-grey-1 text-grey-8">
-                <template #avatar>
-                  <q-icon name="task_alt" color="primary" />
-                </template>
-                {{ t('dashboard.needsSetupEmpty') }}
-              </q-banner>
-
-              <template v-else>
-                <PagedListControls
-                  :current-page="needsSetupCurrentPage"
-                  :list-mode="needsSetupListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="needsSetupPageCount"
-                  :page-size="needsSetupPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingNeedsSetup', { shown: displayedNeedsSetupAnimalsCount, total: animalsWithoutEvents.length })"
-                  :show-pagination="false"
-                  @update:current-page="needsSetupCurrentPage = $event"
-                  @update:list-mode="needsSetupListMode = $event"
-                  @update:page-size="needsSetupPageSize = $event"
-                />
-
-                <q-list separator>
-                  <AnimalListItem
-                    v-for="animal in displayedNeedsSetupAnimals"
-                    :key="animal.id"
-                    :animal="animal"
-                    :caption-suffix="t('dashboard.needsSetupCaption')"
-                    :detail-target="animalDetailTarget(animal)"
-                    :show-age="false"
-                    :show-breeder="false"
-                    :show-sex="false"
-                    :show-status="false"
-                    item-class="q-py-md"
-                    :side-top="false"
-                    @open="openAnimalDetail"
-                  />
-                </q-list>
-
-                <PagedListControls
-                  :current-page="needsSetupCurrentPage"
-                  :list-mode="needsSetupListMode"
-                  :list-mode-options="listModeOptions"
-                  :page-count="needsSetupPageCount"
-                  :page-size="needsSetupPageSize"
-                  :page-size-options="pageSizeOptions"
-                  :per-page-label="t('common.perPage')"
-                  :showing-text="t('dashboard.showingNeedsSetup', { shown: displayedNeedsSetupAnimalsCount, total: animalsWithoutEvents.length })"
-                  :show-header="false"
-                  @update:current-page="needsSetupCurrentPage = $event"
-                  @update:list-mode="needsSetupListMode = $event"
-                  @update:page-size="needsSetupPageSize = $event"
-                />
-              </template>
-            </q-card-section>
-
-          </template>
-        </q-card>
-    <EventFormDialog
-      v-model="isQuickEventDialogOpen"
-      :animals="activeAnimals"
-      :events="events"
-      :overline="t('dashboard.overline')"
-      :title="t('dashboard.quickAddTitle')"
-      @purchase-selected="openPurchaseDialog"
-      @submit="submitQuickEvent"
-    />
-    <PurchaseEventDialog
-      v-model="isPurchaseDialogOpen"
-      :animals="animals"
-      :current-animal-count="animals.length"
-      :initial-animal-ids="initialPurchaseAnimalIds"
-      :is-premium="isPremium"
-      @submit="submitPurchaseEvent"
-    />
+    <EventFormDialog v-model="isQuickEventDialogOpen" :animals="activeAnimals" :events="events"
+      :overline="t('dashboard.overline')" :title="t('dashboard.quickAddTitle')" @purchase-selected="openPurchaseDialog"
+      @submit="submitQuickEvent" />
+    <PurchaseEventDialog v-model="isPurchaseDialogOpen" :animals="animals" :current-animal-count="animals.length"
+      :initial-animal-ids="initialPurchaseAnimalIds" :is-premium="isPremium" @submit="submitPurchaseEvent" />
   </AppPageShell>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
-import AnimalListItem from 'src/components/AnimalListItem.vue'
-import EventListItem from 'src/components/EventListItem.vue'
+import DashboardAnimalPanelContent from 'src/components/DashboardAnimalPanelContent.vue'
+import DashboardEventPanelContent from 'src/components/DashboardEventPanelContent.vue'
+import DashboardSectionPanel from 'src/components/DashboardSectionPanel.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
-import PagedListControls from 'src/components/PagedListControls.vue'
 import PurchaseEventDialog from 'src/components/PurchaseEventDialog.vue'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
 import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
+import { buildDashboardLifecycleSections } from 'src/utils/dashboard-lifecycle'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { getEventAnimalIds, isEventNeedingConfirmation, isFutureScheduledEvent } from 'src/utils/event-records'
 
@@ -453,28 +203,6 @@ const isQuickEventDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
-const dashboardSectionLimit = 5
-const todayListMode = ref('paged')
-const todayCurrentPage = ref(1)
-const todayPageSize = ref(5)
-const upcomingListMode = ref('paged')
-const upcomingCurrentPage = ref(1)
-const upcomingPageSize = ref(5)
-const needsConfirmationListMode = ref('paged')
-const needsConfirmationCurrentPage = ref(1)
-const needsConfirmationPageSize = ref(5)
-const needsSetupListMode = ref('paged')
-const needsSetupCurrentPage = ref(1)
-const needsSetupPageSize = ref(5)
-const pageSizeOptions = [
-  { label: '5', value: 5 },
-  { label: '10', value: 10 },
-  { label: '25', value: 25 },
-]
-const listModeOptions = computed(() => [
-  { label: t('common.pages'), value: 'paged' },
-  { label: t('common.viewAll'), value: 'all' },
-])
 
 const hasAnimals = computed(() => animals.value.length > 0)
 const showFirstRunActions = computed(() => animalsStore.isLoaded && !hasAnimals.value)
@@ -498,57 +226,29 @@ function sortEventsByDateAsc(items) {
 const todayEvents = computed(() =>
   today.value
     ? sortEventsByDateAsc(
-        events.value.filter(
-          (event) => event.date === today.value && !isEventNeedingConfirmation(event, today.value),
-        ),
-      )
+      events.value.filter(
+        (event) => event.date === today.value && !isEventNeedingConfirmation(event, today.value),
+      ),
+    )
     : [],
 )
-const todayPageCount = computed(() =>
-  Math.max(1, Math.ceil(todayEvents.value.length / todayPageSize.value)),
-)
-const paginatedTodayEvents = computed(() => {
-  const start = (todayCurrentPage.value - 1) * todayPageSize.value
-  return todayEvents.value.slice(start, start + todayPageSize.value)
-})
-const displayedTodayEvents = computed(() =>
-  todayListMode.value === 'paged' ? paginatedTodayEvents.value : todayEvents.value,
-)
-const displayedTodayEventsCount = computed(() => displayedTodayEvents.value.length)
 const upcomingEvents = computed(() =>
   today.value
     ? sortEventsByDateAsc(events.value.filter((event) => isFutureScheduledEvent(event, today.value)))
     : [],
 )
-const upcomingPageCount = computed(() =>
-  Math.max(1, Math.ceil(upcomingEvents.value.length / upcomingPageSize.value)),
-)
-const paginatedUpcomingEvents = computed(() => {
-  const start = (upcomingCurrentPage.value - 1) * upcomingPageSize.value
-  return upcomingEvents.value.slice(start, start + upcomingPageSize.value)
-})
-const displayedUpcomingEvents = computed(() =>
-  upcomingListMode.value === 'paged' ? paginatedUpcomingEvents.value : upcomingEvents.value,
-)
-const displayedUpcomingEventsCount = computed(() => displayedUpcomingEvents.value.length)
 const needsConfirmationEvents = computed(() =>
   today.value
     ? sortEventsByDateAsc(events.value.filter((event) => isEventNeedingConfirmation(event, today.value)))
     : [],
 )
-const needsConfirmationPageCount = computed(() =>
-  Math.max(1, Math.ceil(needsConfirmationEvents.value.length / needsConfirmationPageSize.value)),
+const lifecycleSections = computed(() =>
+  today.value ? buildDashboardLifecycleSections(events.value, today.value) : null,
 )
-const paginatedNeedsConfirmationEvents = computed(() => {
-  const start = (needsConfirmationCurrentPage.value - 1) * needsConfirmationPageSize.value
-  return needsConfirmationEvents.value.slice(start, start + needsConfirmationPageSize.value)
-})
-const displayedNeedsConfirmationEvents = computed(() =>
-  needsConfirmationListMode.value === 'paged'
-    ? paginatedNeedsConfirmationEvents.value
-    : needsConfirmationEvents.value,
-)
-const displayedNeedsConfirmationEventsCount = computed(() => displayedNeedsConfirmationEvents.value.length)
+const pregnancyChecksDue = computed(() => lifecycleSections.value?.pregnancyChecksDue ?? [])
+const expectedBirthsDueSoon = computed(() => lifecycleSections.value?.expectedBirthsDueSoon ?? [])
+const overdueExpectedBirths = computed(() => lifecycleSections.value?.overdueExpectedBirths ?? [])
+const unresolvedBreedings = computed(() => lifecycleSections.value?.unresolvedBreedings ?? [])
 const animalsWithoutEvents = computed(() => {
   const animalIdsWithEvents = new Set(
     events.value.flatMap((event) => getEventAnimalIds(event)),
@@ -556,20 +256,6 @@ const animalsWithoutEvents = computed(() => {
 
   return activeAnimals.value.filter((animal) => !animalIdsWithEvents.has(animal.id))
 })
-const needsSetupPageCount = computed(() =>
-  Math.max(1, Math.ceil(animalsWithoutEvents.value.length / needsSetupPageSize.value)),
-)
-const paginatedNeedsSetupAnimals = computed(() => {
-  const start = (needsSetupCurrentPage.value - 1) * needsSetupPageSize.value
-  return animalsWithoutEvents.value.slice(start, start + needsSetupPageSize.value)
-})
-const displayedNeedsSetupAnimals = computed(() =>
-  needsSetupListMode.value === 'paged'
-    ? paginatedNeedsSetupAnimals.value
-    : animalsWithoutEvents.value,
-)
-const displayedNeedsSetupAnimalsCount = computed(() => displayedNeedsSetupAnimals.value.length)
-
 function openQuickEventDialog() {
   isQuickEventDialogOpen.value = true
 }
@@ -629,46 +315,6 @@ function animalDetailTarget(animal) {
 function openAnimalDetail(animal) {
   void router.push(animalDetailTarget(animal))
 }
-
-watch([todayEvents, todayListMode, todayPageSize], () => {
-  todayCurrentPage.value = 1
-})
-
-watch(todayPageCount, () => {
-  if (todayCurrentPage.value > todayPageCount.value) {
-    todayCurrentPage.value = todayPageCount.value
-  }
-})
-
-watch([upcomingEvents, upcomingListMode, upcomingPageSize], () => {
-  upcomingCurrentPage.value = 1
-})
-
-watch(upcomingPageCount, () => {
-  if (upcomingCurrentPage.value > upcomingPageCount.value) {
-    upcomingCurrentPage.value = upcomingPageCount.value
-  }
-})
-
-watch([needsConfirmationEvents, needsConfirmationListMode, needsConfirmationPageSize], () => {
-  needsConfirmationCurrentPage.value = 1
-})
-
-watch(needsConfirmationPageCount, () => {
-  if (needsConfirmationCurrentPage.value > needsConfirmationPageCount.value) {
-    needsConfirmationCurrentPage.value = needsConfirmationPageCount.value
-  }
-})
-
-watch([animalsWithoutEvents, needsSetupListMode, needsSetupPageSize], () => {
-  needsSetupCurrentPage.value = 1
-})
-
-watch(needsSetupPageCount, () => {
-  if (needsSetupCurrentPage.value > needsSetupPageCount.value) {
-    needsSetupCurrentPage.value = needsSetupPageCount.value
-  }
-})
 
 onMounted(async () => {
   hasHydrated.value = true

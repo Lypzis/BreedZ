@@ -9,6 +9,7 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideBreedingDates.description') }}
         </div>
+        <GuideWrittenDate />
       </q-card-section>
 
       <q-card-section>
@@ -192,6 +193,14 @@
         </q-list>
       </q-card-section>
 
+      <GuideSourcesSection :sources="sources" />
+
+      <GuideRelatedLink
+        :title="t('guideCowPregnancy.title')"
+        :description="t('guideCowPregnancy.description')"
+        :to="cowPregnancyGuidePath"
+      />
+
       <GuideShareSection
         :title="t('guideBreedingDates.title')"
         :path="sharePath"
@@ -205,7 +214,10 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
+import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
+import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -227,9 +239,34 @@ useMeta(() =>
 )
 
 const dashboardPath = computed(() => '/')
+const cowPregnancyGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
+)
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )
+const sources = [
+  {
+    title: 'Beef & Dairy Cattle Gestation and Calving Date Calculator',
+    publisher: 'University of Wisconsin-Madison Division of Extension',
+    url: 'https://livestock.extension.wisc.edu/articles/beef-dairy-cattle-gestation-and-calving-date-calculator/',
+  },
+  {
+    title: 'Calving Book',
+    publisher: 'North Dakota State University Extension',
+    url: 'https://www.ndsu.edu/agriculture/extension/publications/calving-book',
+  },
+  {
+    title: 'Pregnancy Determination in Cattle',
+    publisher: 'Merck Veterinary Manual',
+    url: 'https://www.merckvetmanual.com/management-and-nutrition/management-of-reproduction-cattle/pregnancy-determination-in-cattle',
+  },
+  {
+    title: 'Overview of Prolonged Gestation in Cattle and Sheep',
+    publisher: 'Merck Veterinary Manual',
+    url: 'https://www.merckvetmanual.com/reproductive-system/prolonged-gestation-in-cattle-and-sheep/overview-of-prolonged-gestation-in-cattle-and-sheep',
+  },
+]
 const problemItems = computed(() => tm('guideBreedingDates.problemItems') ?? [])
 const logicSteps = computed(() => tm('guideBreedingDates.logicSteps') ?? [])
 const commonWaysItems = computed(() => tm('guideBreedingDates.commonWaysItems') ?? [])

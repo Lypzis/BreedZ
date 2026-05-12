@@ -11,6 +11,10 @@ test('uses breeding mode only for breeding events', () => {
   assert.equal(getEventSelectionMode('breeding'), 'breeding')
   assert.equal(getEventSelectionMode('feed_cost'), 'optionalMulti')
   assert.equal(getEventSelectionMode('birth'), 'single')
+  assert.equal(getEventSelectionMode('pregnancy_check'), 'single')
+  assert.equal(getEventSelectionMode('breeding_failed'), 'single')
+  assert.equal(getEventSelectionMode('abortion'), 'single')
+  assert.equal(getEventSelectionMode('weaning'), 'single')
   assert.equal(getEventSelectionMode('sale'), 'multi')
 })
 
@@ -19,6 +23,23 @@ test('builds single, breeding, and multi event animal ids correctly', () => {
     buildEventAnimalIds({
       type: 'birth',
       animalId: 'animal-1',
+    }),
+    ['animal-1'],
+  )
+
+  assert.deepEqual(
+    buildEventAnimalIds({
+      type: 'pregnancy_check',
+      animalId: 'animal-1',
+    }),
+    ['animal-1'],
+  )
+
+  assert.deepEqual(
+    buildEventAnimalIds({
+      type: 'abortion',
+      animalId: 'animal-1',
+      animalIds: ['animal-2'],
     }),
     ['animal-1'],
   )

@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { confirmEvent, createEvent, deleteEvent, listEvents, updateEvent } from 'src/services/events-db'
 import { createPurchaseEventWithAnimals } from 'src/services/purchase-events-db'
 import { requestPremiumSync } from 'src/services/sync-scheduler'
-import { eventIncludesAnimal } from 'src/utils/event-records'
+import { EXPECTED_BIRTH_OUTCOME_TYPES, eventIncludesAnimal, isExpectedBirthResolved } from 'src/utils/event-records'
 
 export const useEventsStore = defineStore('events', () => {
   const events = ref([])
@@ -26,6 +26,58 @@ export const useEventsStore = defineStore('events', () => {
     return events.value.find((event) => event.id === id) ?? null
   }
 
+  async function resolveExpectedBirthWithOutcome(expectedBirthId, outcomeEvent) {
+    const expectedBirthEvent = findEventById(expectedBirthId)
+
+    if (!expectedBirthEvent || expectedBirthEvent.type !== 'expected_birth') {
+      return null
+    }
+
+    if (isExpectedBirthResolved(expectedBirthEvent)) {
+      return expectedBirthEvent
+    }
+
+    return updateEvent(expectedBirthEvent.id, {
+      details: {
+        ...(expectedBirthEvent.details ?? {}),
+        resolutionStatus: 'resolved',
+        outcomeType: outcomeEvent.type,
+        linkedOutcomeEventId: outcomeEvent.id,
+        resolvedAt: new Date().toISOString(),
+      },
+      confirmationStatus: 'confirmed',
+    })
+  }
+
+  async function clearExpectedBirthResolutionForOutcome(outcomeEvent) {
+    const expectedBirthId = outcomeEvent?.details?.linkedExpectedBirthEventId ?? ''
+
+    if (!expectedBirthId) {
+      return null
+    }
+
+    const expectedBirthEvent = findEventById(expectedBirthId)
+
+    if (
+      !expectedBirthEvent
+      || expectedBirthEvent.type !== 'expected_birth'
+      || expectedBirthEvent.details?.linkedOutcomeEventId !== outcomeEvent.id
+    ) {
+      return null
+    }
+
+    return updateEvent(expectedBirthEvent.id, {
+      details: {
+        ...(expectedBirthEvent.details ?? {}),
+        resolutionStatus: '',
+        outcomeType: '',
+        linkedOutcomeEventId: '',
+        resolvedAt: '',
+      },
+      confirmationStatus: 'pending',
+    })
+  }
+
   async function loadEvents() {
     isLoading.value = true
     errorMessage.value = ''
@@ -44,6 +96,7 @@ export const useEventsStore = defineStore('events', () => {
   async function addEvent(payload) {
     const { expectedBirthPlan = null, ...primaryPayload } = payload ?? {}
     const createdEvents = []
+    let updatedExpectedBirth = null
     let event = await createEvent(primaryPayload)
     createdEvents.push(event)
 
@@ -68,9 +121,62 @@ export const useEventsStore = defineStore('events', () => {
       createdEvents.push(linkedEvent)
     }
 
-    events.value = sortEvents([...createdEvents, ...events.value])
+    if (
+      event.type === 'pregnancy_check'
+      && event.details?.result === 'open'
+      && event.details?.linkedExpectedBirthEventId
+    ) {
+      updatedExpectedBirth = await resolveExpectedBirthWithOutcome(
+        event.details.linkedExpectedBirthEventId,
+        event,
+      )
+    }
+
+    events.value = sortEvents([
+      ...createdEvents,
+      ...events.value.map((currentEvent) =>
+        currentEvent.id === updatedExpectedBirth?.id ? updatedExpectedBirth : currentEvent,
+      ),
+    ])
     requestPremiumSync('event-created')
     return event
+  }
+
+  async function addExpectedBirthOutcome(expectedBirthId, payload) {
+    const expectedBirthEvent = findEventById(expectedBirthId)
+
+    if (!expectedBirthEvent || expectedBirthEvent.type !== 'expected_birth') {
+      throw new Error('Expected birth event not found.')
+    }
+
+    if (!EXPECTED_BIRTH_OUTCOME_TYPES.has(payload?.type) || payload.type === 'pregnancy_check') {
+      throw new Error('Unsupported expected birth outcome.')
+    }
+
+    if (isExpectedBirthResolved(expectedBirthEvent)) {
+      throw new Error('Expected birth is already resolved.')
+    }
+
+    const outcomeEvent = await createEvent({
+      ...payload,
+      linkedEventId: payload.linkedEventId || expectedBirthEvent.id,
+      details: {
+        ...(payload.details ?? {}),
+        linkedExpectedBirthEventId: expectedBirthEvent.id,
+        linkedBreedingEventId: expectedBirthEvent.linkedEventId ?? '',
+      },
+    })
+    const updatedExpectedBirth = await resolveExpectedBirthWithOutcome(expectedBirthEvent.id, outcomeEvent)
+
+    events.value = sortEvents([
+      outcomeEvent,
+      ...events.value.map((event) =>
+        event.id === updatedExpectedBirth?.id ? updatedExpectedBirth : event,
+      ),
+    ])
+    requestPremiumSync('expected-birth-resolved')
+
+    return { outcomeEvent, expectedBirth: updatedExpectedBirth }
   }
 
   async function addPurchaseEvent(payload) {
@@ -188,8 +294,16 @@ export const useEventsStore = defineStore('events', () => {
       }
     }
 
+    const updatedExpectedBirth = await clearExpectedBirthResolutionForOutcome(event)
+
     await deleteEvent(id)
-    events.value = events.value.filter((event) => event.id !== id)
+    events.value = sortEvents(
+      events.value
+        .filter((currentEvent) => currentEvent.id !== id)
+        .map((currentEvent) =>
+          currentEvent.id === updatedExpectedBirth?.id ? updatedExpectedBirth : currentEvent,
+        ),
+    )
     requestPremiumSync('event-deleted')
   }
 
@@ -213,6 +327,7 @@ export const useEventsStore = defineStore('events', () => {
     isLoading,
     totalEvents,
     addEvent,
+    addExpectedBirthOutcome,
     addPurchaseEvent,
     confirmEventById,
     editEvent,

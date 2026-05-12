@@ -3,10 +3,9 @@ import { normalizeEventRecord } from './event-records.js'
 export function groupBreedingsByPartner(currentAnimalId, animals, events) {
   const animalsById = new Map(animals.map((animal) => [animal.id, animal]))
   const breedingGroups = new Map()
+  const normalizedEvents = events.map((event) => normalizeEventRecord(event))
 
-  for (const rawEvent of events) {
-    const event = normalizeEventRecord(rawEvent)
-
+  for (const event of normalizedEvents) {
     if (
       event.type !== 'breeding'
       || event.animalIds.length < 2
@@ -26,8 +25,11 @@ export function groupBreedingsByPartner(currentAnimalId, animals, events) {
       partnerAnimal: animalsById.get(otherAnimalId) ?? null,
       count: 0,
       latestDate: '',
+      latestEvent: null,
       events: [],
       offspringAnimals: [],
+      expectedBirthEvent: null,
+      pregnancyCheckEvent: null,
     }
 
     existingGroup.count += 1
@@ -35,12 +37,33 @@ export function groupBreedingsByPartner(currentAnimalId, animals, events) {
 
     if ((event.date ?? '') > existingGroup.latestDate) {
       existingGroup.latestDate = event.date ?? ''
+      existingGroup.latestEvent = event
     }
 
     breedingGroups.set(otherAnimalId, existingGroup)
   }
 
   for (const group of breedingGroups.values()) {
+    const breedingEventIds = new Set(group.events.map((event) => event.id).filter(Boolean))
+    const latestBreedingEventId = group.latestEvent?.id ?? ''
+
+    group.expectedBirthEvent = normalizedEvents
+      .filter((event) =>
+        event.type === 'expected_birth'
+        && (
+          (latestBreedingEventId && event.linkedEventId === latestBreedingEventId)
+          || (group.latestEvent?.linkedEventId && event.id === group.latestEvent.linkedEventId)
+        ),
+      )
+      .sort((left, right) => String(right.date ?? '').localeCompare(String(left.date ?? '')))[0] ?? null
+
+    group.pregnancyCheckEvent = normalizedEvents
+      .filter((event) =>
+        event.type === 'pregnancy_check'
+        && breedingEventIds.has(event.details?.linkedBreedingEventId),
+      )
+      .sort((left, right) => String(right.date ?? '').localeCompare(String(left.date ?? '')))[0] ?? null
+
     group.offspringAnimals = animals
       .filter((animal) =>
         (animal.damId === currentAnimalId && animal.sireId === group.partnerAnimalId)

@@ -113,6 +113,7 @@ export async function createEvent(input) {
     scope: input.scope,
     type: input.type,
     partnerAnimalId: input.partnerAnimalId,
+    details: input.details,
     linkedEventId: input.linkedEventId,
     confirmationStatus: resolveConfirmationStatus(input),
     amount: input.amount,
@@ -142,11 +143,12 @@ export async function updateEvent(id, input) {
     scope: input.scope ?? existingEvent.scope,
     type: input.type ?? existingEvent.type,
     partnerAnimalId: input.partnerAnimalId ?? existingEvent.partnerAnimalId,
+    details: input.details ?? existingEvent.details,
     linkedEventId: input.linkedEventId ?? existingEvent.linkedEventId,
     confirmationStatus: resolveConfirmationStatus(input, existingEvent),
     amount: input.amount ?? existingEvent.amount,
     date: input.date ?? existingEvent.date,
-    notes: input.notes?.trim() ?? '',
+    notes: input.notes === undefined ? existingEvent.notes : (input.notes?.trim() ?? ''),
     updatedAt: new Date().toISOString(),
   }))
 

@@ -9,6 +9,7 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideCowPregnancy.description') }}
         </div>
+        <GuideWrittenDate />
       </q-card-section>
 
       <q-card-section>
@@ -196,6 +197,14 @@
         </q-list>
       </q-card-section>
 
+      <GuideSourcesSection :sources="sources" />
+
+      <GuideRelatedLink
+        :title="t('guideBreedingDates.title')"
+        :description="t('guideBreedingDates.description')"
+        :to="breedingDatesGuidePath"
+      />
+
       <GuideShareSection
         :title="t('guideCowPregnancy.title')"
         :path="sharePath"
@@ -209,7 +218,10 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
+import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
+import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -237,6 +249,28 @@ const breedingDatesGuidePath = computed(() =>
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
 )
+const sources = [
+  {
+    title: 'Beef & Dairy Cattle Gestation and Calving Date Calculator',
+    publisher: 'University of Wisconsin-Madison Division of Extension',
+    url: 'https://livestock.extension.wisc.edu/articles/beef-dairy-cattle-gestation-and-calving-date-calculator/',
+  },
+  {
+    title: 'Calving Book',
+    publisher: 'North Dakota State University Extension',
+    url: 'https://www.ndsu.edu/agriculture/extension/publications/calving-book',
+  },
+  {
+    title: 'Pregnancy Determination in Cattle',
+    publisher: 'Merck Veterinary Manual',
+    url: 'https://www.merckvetmanual.com/management-and-nutrition/management-of-reproduction-cattle/pregnancy-determination-in-cattle',
+  },
+  {
+    title: 'Management of Calving in Cattle',
+    publisher: 'Merck Veterinary Manual',
+    url: 'https://www.merckvetmanual.com/management-and-nutrition/management-of-reproduction-cattle/management-of-calving-in-cattle',
+  },
+]
 const quickTableRows = computed(() => tm('guideCowPregnancy.quickTableRows') ?? [])
 const timelineItems = computed(() => tm('guideCowPregnancy.timelineItems') ?? [])
 const variationItems = computed(() => tm('guideCowPregnancy.variationItems') ?? [])
