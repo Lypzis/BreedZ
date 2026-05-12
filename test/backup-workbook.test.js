@@ -55,14 +55,19 @@ test('round-trips backup data through the Excel workbook format', () => {
       {
         id: 'event-1',
         animalId: 'animal-1',
-        animalIds: ['animal-1', 'animal-2'],
-        type: 'breeding',
+        animalIds: ['animal-1'],
+        type: 'pregnancy_check',
+        details: {
+          result: 'pregnant',
+          method: 'ultrasound',
+          linkedBreedingEventId: 'event-breeding',
+        },
         linkedEventId: 'event-2',
         confirmationStatus: 'confirmed',
         amount: 1250.5,
-        partnerAnimalId: 'animal-2',
+        partnerAnimalId: '',
         date: '2026-04-03',
-        notes: 'Healthy pairing',
+        notes: 'Healthy check',
         createdAt: '2026-04-03T12:00:00.000Z',
         updatedAt: '2026-04-03T12:00:00.000Z',
       },
@@ -79,9 +84,12 @@ test('round-trips backup data through the Excel workbook format', () => {
   assert.equal(normalizedPayload.animals[0].weight, '420')
   assert.equal(normalizedPayload.animals[0].baseStatus, 'active')
   assert.equal(normalizedPayload.events.length, 1)
-  assert.deepEqual(normalizedPayload.events[0].animalIds, ['animal-1', 'animal-2'])
-  assert.equal(normalizedPayload.events[0].partnerAnimalId, 'animal-2')
-  assert.equal(normalizedPayload.events[0].type, 'breeding')
+  assert.deepEqual(normalizedPayload.events[0].animalIds, ['animal-1'])
+  assert.equal(normalizedPayload.events[0].partnerAnimalId, '')
+  assert.equal(normalizedPayload.events[0].type, 'pregnancy_check')
+  assert.equal(normalizedPayload.events[0].details.result, 'pregnant')
+  assert.equal(normalizedPayload.events[0].details.method, 'ultrasound')
+  assert.equal(normalizedPayload.events[0].details.linkedBreedingEventId, 'event-breeding')
   assert.equal(normalizedPayload.events[0].linkedEventId, 'event-2')
   assert.equal(normalizedPayload.events[0].confirmationStatus, 'confirmed')
   assert.equal(normalizedPayload.events[0].amount, 1250.5)

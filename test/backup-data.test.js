@@ -141,6 +141,77 @@ test('accepts herd-scoped financial events without animals in backup payloads', 
   assert.equal(result.events[0].amount, 800)
 })
 
+test('accepts pregnancy check events with structured details in backup payloads', () => {
+  const result = validateAndNormalizeBackupPayload({
+    animals: [
+      {
+        id: 'animal-1',
+        tag: 'Cow 001',
+        species: 'Cattle',
+      },
+    ],
+    events: [
+      {
+        id: 'event-1',
+        animalId: 'animal-1',
+        type: 'pregnancy_check',
+        details: {
+          result: 'pregnant',
+          method: 'ultrasound',
+          linkedBreedingEventId: 'event-breeding',
+        },
+        date: '2026-04-03',
+      },
+    ],
+  })
+
+  assert.equal(result.events[0].type, 'pregnancy_check')
+  assert.deepEqual(result.events[0].details, {
+    result: 'pregnant',
+    method: 'ultrasound',
+    linkedBreedingEventId: 'event-breeding',
+    linkedExpectedBirthEventId: '',
+  })
+})
+
+test('accepts breeding lifecycle outcome events in backup payloads', () => {
+  const result = validateAndNormalizeBackupPayload({
+    animals: [
+      {
+        id: 'animal-1',
+        tag: 'Cow 001',
+        species: 'Cattle',
+      },
+    ],
+    events: [
+      {
+        id: 'event-failed',
+        animalId: 'animal-1',
+        type: 'breeding_failed',
+        date: '2026-04-03',
+      },
+      {
+        id: 'event-loss',
+        animalId: 'animal-1',
+        type: 'abortion',
+        date: '2026-04-04',
+      },
+      {
+        id: 'event-weaning',
+        animalId: 'animal-1',
+        type: 'weaning',
+        date: '2026-04-05',
+      },
+    ],
+  })
+
+  assert.deepEqual(
+    result.events.map((event) => event.type),
+    ['breeding_failed', 'abortion', 'weaning'],
+  )
+  assert.deepEqual(result.events[0].animalIds, ['animal-1'])
+})
+
 test('rejects an event that references a missing animal', () => {
   assert.throws(
     () =>

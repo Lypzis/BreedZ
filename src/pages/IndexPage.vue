@@ -37,34 +37,42 @@
       </q-card-section>
 
       <q-card-section>
-        <div class="row items-center q-col-gutter-lg">
-          <div class="col-12 col-md-5">
-            <q-img :src="logoFull" :alt="t('brand.name')" fit="contain" no-spinner class="landing-hero-image" />
-          </div>
-          <div class="col-12 col-md-7">
-            <div class="text-overline text-weight-bold text-primary">
-              {{ t('home.appOverline') }}
+        <q-card class="q-pa-lg">
+          <div class="row items-center q-col-gutter-lg">
+            <div class="col-12 col-md-6 self-center landing-hero-media">
+              <q-img :src="logoFull" :alt="t('brand.name')" fit="contain" no-spinner class="landing-hero-image" />
             </div>
-            <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-              {{ t('home.appTitle') }}
-            </div>
+            <div class="col-12 col-md-6">
+              <div class="text-overline text-weight-bold text-primary">
+                {{ t('home.appOverline') }}
+              </div>
+              <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+                {{ t('home.appTitle') }}
+              </div>
 
-            <q-list>
-              <q-item v-for="item in appItems" :key="item.title">
-                <q-item-section avatar>
-                  <q-icon :name="item.icon" color="primary" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-weight-medium">{{ item.title }}</q-item-label>
-                  <q-item-label caption>{{ item.description }}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-chip dense color="green-1" text-color="primary">{{ item.chip }}</q-chip>
-                </q-item-section>
-              </q-item>
-            </q-list>
+              <q-list>
+                <q-item v-for="item in appItems" :key="item.title" class="q-px-none">
+                  <q-item-section>
+                    <div class="row items-center justify-between q-col-gutter-sm">
+                      <div class="row items-center q-col-gutter-sm">
+                        <div class="col-auto">
+                          <q-icon :name="item.icon" color="primary" />
+                        </div>
+                        <div class="col">
+                          <q-item-label class="text-weight-medium">{{ item.title }}</q-item-label>
+                        </div>
+                      </div>
+
+                    </div>
+                    <q-item-label caption class="q-mt-xs">
+                      {{ item.description }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </div>
-        </div>
+        </q-card>
       </q-card-section>
 
       <q-card-section>
@@ -129,14 +137,8 @@
           </q-item>
         </q-list>
 
-        <q-btn
-          unelevated
-          color="primary"
-          icon="school"
-          :label="t('home.openTutorial')"
-          :to="tutorialPath"
-          class="q-mt-md"
-        />
+        <q-btn unelevated color="primary" icon="school" :label="t('home.openTutorial')" :to="tutorialPath"
+          class="q-mt-md" />
       </q-card-section>
 
       <q-card-section>
@@ -417,6 +419,11 @@ const appItems = computed(() =>
 </script>
 
 <style scoped>
+.landing-hero-media {
+  display: flex;
+  align-items: center;
+}
+
 .landing-hero-image {
   max-width: 320px;
   margin: 0 auto;

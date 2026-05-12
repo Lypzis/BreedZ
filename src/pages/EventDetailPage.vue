@@ -52,6 +52,46 @@
 
           <template #actions>
             <q-btn
+              v-if="canRecordWeaning"
+              unelevated
+              color="primary"
+              icon="child_care"
+              :label="t('events.recordWeaning')"
+              @click="openWeaningDialog"
+            />
+            <q-btn
+              v-if="canRecordExpectedBirthOutcome"
+              unelevated
+              color="primary"
+              icon="child_friendly"
+              :label="t('events.recordBirthOutcome')"
+              @click="openExpectedBirthOutcomeDialog('birth')"
+            />
+            <q-btn
+              v-if="canRecordExpectedBirthOutcome"
+              outline
+              color="warning"
+              icon="heart_broken"
+              :label="t('events.recordFailedOutcome')"
+              @click="openExpectedBirthOutcomeDialog('breeding_failed')"
+            />
+            <q-btn
+              v-if="canRecordExpectedBirthOutcome"
+              outline
+              color="negative"
+              icon="warning"
+              :label="t('events.recordPregnancyLossOutcome')"
+              @click="openExpectedBirthOutcomeDialog('abortion')"
+            />
+            <q-btn
+              v-if="canRecordPregnancyCheck"
+              unelevated
+              color="primary"
+              icon="fact_check"
+              :label="t('events.recordPregnancyCheck')"
+              @click="openPregnancyCheckDialog"
+            />
+            <q-btn
               v-if="canConfirmEvent"
               unelevated
               color="primary"
@@ -122,6 +162,65 @@
           @update:current-page="affectedAnimalsPage = $event" @update:list-mode="affectedAnimalsListMode = $event"
           @update:page-size="affectedAnimalsPageSize = $event" />
 
+        <q-card-section v-if="pregnancyCheckDetailRows.length > 0">
+          <q-banner rounded class="bg-green-1 text-primary">
+            <template #avatar>
+              <q-icon name="fact_check" color="primary" />
+            </template>
+            <div class="column q-gutter-xs">
+              <div v-for="row in pregnancyCheckDetailRows" :key="row.label" class="text-body2">
+                <span class="text-weight-medium">{{ row.label }}:</span>
+                {{ row.value }}
+              </div>
+            </div>
+          </q-banner>
+        </q-card-section>
+
+        <q-card-section v-if="expectedBirthResolutionRows.length > 0">
+          <q-banner rounded class="bg-green-1 text-primary">
+            <template #avatar>
+              <q-icon name="task_alt" color="primary" />
+            </template>
+            <div class="column q-gutter-xs">
+              <div v-for="row in expectedBirthResolutionRows" :key="row.label" class="text-body2">
+                <span class="text-weight-medium">{{ row.label }}:</span>
+                {{ row.value }}
+              </div>
+            </div>
+          </q-banner>
+        </q-card-section>
+
+        <q-card-section v-if="linkedLifecycleRows.length > 0">
+          <div class="text-overline text-weight-bold text-primary">{{ t('events.linkedRecordsOverline') }}</div>
+          <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('events.linkedRecordsTitle') }}</div>
+
+          <q-list bordered separator>
+            <q-item v-for="row in linkedLifecycleRows" :key="row.event.id">
+              <q-item-section avatar>
+                <q-avatar :color="row.meta.color" text-color="white" :icon="row.meta.icon" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label class="text-weight-medium">{{ row.title }}</q-item-label>
+                <q-item-label caption>{{ row.caption }}</q-item-label>
+              </q-item-section>
+
+              <q-item-section side>
+                <q-btn
+                  flat
+                  round
+                  dense
+                  color="primary"
+                  icon="visibility"
+                  :aria-label="t('events.openLinkedRecord')"
+                  :title="t('events.openLinkedRecord')"
+                  :to="`/events/${row.event.id}`"
+                />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+
         <q-card-section v-if="event.notes">
           <q-banner rounded class="bg-grey-1 text-grey-8">
             <template #avatar>
@@ -135,6 +234,39 @@
 
     <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :events="events" :event="event" mode="edit"
       :title="t('events.editEvent')" @submit="submitEvent" />
+    <EventFormDialog
+      v-model="isPregnancyCheckDialogOpen"
+      :animals="animals"
+      :events="events"
+      initial-type="pregnancy_check"
+      :initial-details="pregnancyCheckInitialDetails"
+      :default-animal-id="pregnancyCheckAnimalId"
+      :overline="t('events.detailOverline')"
+      :title="t('events.recordPregnancyCheck')"
+      @submit="submitPregnancyCheck"
+    />
+    <EventFormDialog
+      v-model="isExpectedBirthOutcomeDialogOpen"
+      :animals="animals"
+      :events="events"
+      :initial-type="expectedBirthOutcomeType"
+      :initial-details="expectedBirthOutcomeInitialDetails"
+      :default-animal-id="expectedBirthOutcomeAnimalId"
+      :overline="t('events.detailOverline')"
+      :title="expectedBirthOutcomeTitle"
+      @submit="submitExpectedBirthOutcome"
+    />
+    <EventFormDialog
+      v-model="isWeaningDialogOpen"
+      :animals="animals"
+      :events="events"
+      initial-type="weaning"
+      :initial-details="weaningInitialDetails"
+      :default-animal-id="weaningAnimalId"
+      :overline="t('events.detailOverline')"
+      :title="t('events.recordWeaning')"
+      @submit="submitWeaning"
+    />
   </AppPageShell>
 </template>
 
@@ -160,7 +292,7 @@ import {
 } from 'src/utils/event-display'
 import { getEventAmountLabelKey } from 'src/utils/event-participants'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
-import { isEventNeedingConfirmation, isFutureScheduledEvent } from 'src/utils/event-records'
+import { isEventNeedingConfirmation, isExpectedBirthResolved, isFutureScheduledEvent } from 'src/utils/event-records'
 
 const route = useRoute()
 const router = useRouter()
@@ -173,6 +305,10 @@ const { animals, errorMessage: animalsErrorMessage, isLoading: animalsLoading } 
 const { errorMessage: eventsErrorMessage, events, isLoading: eventsLoading } = storeToRefs(eventsStore)
 
 const isEventDialogOpen = ref(false)
+const isPregnancyCheckDialogOpen = ref(false)
+const isExpectedBirthOutcomeDialogOpen = ref(false)
+const isWeaningDialogOpen = ref(false)
+const expectedBirthOutcomeType = ref('birth')
 const affectedAnimalsListMode = ref('paged')
 const affectedAnimalsPage = ref(1)
 const affectedAnimalsPageSize = ref(10)
@@ -185,9 +321,58 @@ const affectedAnimals = computed(() => getEventAnimals(event.value, animalById))
 const amountDisplay = computed(() => formatEventAmount(event.value?.amount))
 const amountLabel = computed(() => t(getEventAmountLabelKey(event.value?.type)))
 const canConfirmEvent = computed(() => event.value && isEventNeedingConfirmation(event.value, todayDateString()))
+const pregnancyCheckAnimalId = computed(() => resolvePregnancyCheckAnimalId(event.value))
+const expectedBirthOutcomeAnimalId = computed(() =>
+  event.value?.type === 'expected_birth' ? (event.value.animalIds[0] ?? event.value.animalId ?? '') : '',
+)
+const weaningAnimalId = computed(() =>
+  event.value?.type === 'birth' ? (event.value.animalIds[0] ?? event.value.animalId ?? '') : '',
+)
+const canRecordPregnancyCheck = computed(() =>
+  event.value?.type === 'breeding' && Boolean(pregnancyCheckAnimalId.value),
+)
+const canRecordExpectedBirthOutcome = computed(() =>
+  event.value?.type === 'expected_birth'
+    && !isExpectedBirthResolved(event.value)
+    && Boolean(expectedBirthOutcomeAnimalId.value),
+)
+const canRecordWeaning = computed(() =>
+  event.value?.type === 'birth'
+    && Boolean(weaningAnimalId.value)
+    && !linkedWeaningEvent.value,
+)
+const pregnancyCheckInitialDetails = computed(() => ({
+  linkedBreedingEventId: event.value?.type === 'breeding' ? event.value.id : '',
+  linkedExpectedBirthEventId: event.value?.type === 'breeding' ? (event.value.linkedEventId ?? '') : '',
+}))
+const expectedBirthOutcomeInitialDetails = computed(() => ({
+  linkedExpectedBirthEventId: event.value?.type === 'expected_birth' ? event.value.id : '',
+  linkedBreedingEventId: event.value?.type === 'expected_birth' ? (event.value.linkedEventId ?? '') : '',
+}))
+const weaningInitialDetails = computed(() => ({
+  linkedBirthEventId: event.value?.type === 'birth' ? event.value.id : '',
+}))
+const expectedBirthOutcomeTitle = computed(() => {
+  const titleKeys = {
+    birth: 'events.recordBirthOutcome',
+    breeding_failed: 'events.recordFailedOutcome',
+    abortion: 'events.recordPregnancyLossOutcome',
+  }
+
+  return t(titleKeys[expectedBirthOutcomeType.value] ?? 'events.addEvent')
+})
 const eventStateChip = computed(() => {
   if (!event.value) {
     return null
+  }
+
+  if (isExpectedBirthResolved(event.value)) {
+    return {
+      color: 'green-1',
+      textColor: 'primary',
+      icon: 'task_alt',
+      label: t('events.resolvedState'),
+    }
   }
 
   if (isEventNeedingConfirmation(event.value, todayDateString())) {
@@ -209,6 +394,215 @@ const eventStateChip = computed(() => {
   }
 
   return null
+})
+const linkedPregnancyCheckBreedingEvent = computed(() => {
+  const linkedBreedingEventId = event.value?.details?.linkedBreedingEventId ?? ''
+
+  if (!linkedBreedingEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedBreedingEventId && item.type === 'breeding') ?? null
+})
+const linkedExpectedBirthEvent = computed(() => {
+  if (event.value?.type !== 'breeding') {
+    return null
+  }
+
+  const linkedEventId = event.value.linkedEventId ?? ''
+
+  if (!linkedEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedEventId && item.type === 'expected_birth') ?? null
+})
+const linkedExpectedBirthBreedingEvent = computed(() => {
+  if (event.value?.type !== 'expected_birth') {
+    return null
+  }
+
+  const linkedEventId = event.value.linkedEventId ?? ''
+
+  if (!linkedEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedEventId && item.type === 'breeding') ?? null
+})
+const linkedOutcomeEvent = computed(() => {
+  if (event.value?.type !== 'expected_birth') {
+    return null
+  }
+
+  const linkedOutcomeEventId = event.value.details?.linkedOutcomeEventId ?? ''
+
+  if (!linkedOutcomeEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedOutcomeEventId) ?? null
+})
+const linkedOutcomeExpectedBirthEvent = computed(() => {
+  const linkedExpectedBirthEventId = event.value?.details?.linkedExpectedBirthEventId ?? ''
+
+  if (!linkedExpectedBirthEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedExpectedBirthEventId && item.type === 'expected_birth') ?? null
+})
+const linkedOutcomeBreedingEvent = computed(() => {
+  if (!['birth', 'breeding_failed', 'abortion'].includes(event.value?.type)) {
+    return null
+  }
+
+  const linkedBreedingEventId = event.value?.details?.linkedBreedingEventId ?? ''
+
+  if (!linkedBreedingEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedBreedingEventId && item.type === 'breeding') ?? null
+})
+const linkedWeaningEvent = computed(() => {
+  if (event.value?.type !== 'birth') {
+    return null
+  }
+
+  return events.value.find((item) =>
+    item.type === 'weaning'
+    && item.details?.linkedBirthEventId === event.value.id,
+  ) ?? null
+})
+const linkedWeaningBirthEvent = computed(() => {
+  if (event.value?.type !== 'weaning') {
+    return null
+  }
+
+  const linkedBirthEventId = event.value.details?.linkedBirthEventId ?? ''
+
+  if (!linkedBirthEventId) {
+    return null
+  }
+
+  return events.value.find((item) => item.id === linkedBirthEventId && item.type === 'birth') ?? null
+})
+const linkedLifecycleRows = computed(() => {
+  const rows = []
+
+  if (linkedExpectedBirthEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedExpectedBirthEvent.value,
+      title: t('events.linkedExpectedBirth'),
+    }))
+  }
+
+  if (linkedExpectedBirthBreedingEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedExpectedBirthBreedingEvent.value,
+      title: t('events.linkedBreedingRecord'),
+    }))
+  }
+
+  if (linkedOutcomeEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedOutcomeEvent.value,
+      title: t('events.linkedOutcomeRecord'),
+    }))
+  }
+
+  if (linkedOutcomeExpectedBirthEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedOutcomeExpectedBirthEvent.value,
+      title: t('events.linkedExpectedBirth'),
+    }))
+  }
+
+  if (linkedOutcomeBreedingEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedOutcomeBreedingEvent.value,
+      title: t('events.linkedBreedingRecord'),
+    }))
+  }
+
+  if (linkedWeaningEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedWeaningEvent.value,
+      title: t('events.linkedWeaningRecord'),
+    }))
+  }
+
+  if (linkedWeaningBirthEvent.value) {
+    rows.push(buildLinkedLifecycleRow({
+      event: linkedWeaningBirthEvent.value,
+      title: t('events.linkedBirthRecord'),
+    }))
+  }
+
+  return rows
+})
+const expectedBirthResolutionRows = computed(() => {
+  if (!isExpectedBirthResolved(event.value)) {
+    return []
+  }
+
+  const outcomeType = linkedOutcomeEvent.value?.type ?? event.value?.details?.outcomeType ?? ''
+  const outcomeLabel = outcomeType ? getEventTypeMeta(outcomeType).label : ''
+  const rows = [
+    {
+      label: t('events.expectedBirthResolutionStatus'),
+      value: t('events.expectedBirthResolved'),
+    },
+  ]
+
+  if (outcomeLabel) {
+    rows.push({
+      label: t('events.expectedBirthOutcome'),
+      value: outcomeLabel,
+    })
+  }
+
+  if (event.value?.details?.resolvedAt) {
+    rows.push({
+      label: t('events.expectedBirthResolvedAt'),
+      value: formatDate(event.value.details.resolvedAt),
+    })
+  }
+
+  return rows
+})
+const pregnancyCheckDetailRows = computed(() => {
+  if (event.value?.type !== 'pregnancy_check') {
+    return []
+  }
+
+  const rows = []
+  const resultLabel = pregnancyCheckResultLabel(event.value.details?.result)
+  const methodLabel = pregnancyCheckMethodLabel(event.value.details?.method)
+
+  if (resultLabel) {
+    rows.push({
+      label: t('events.pregnancyCheckResult'),
+      value: resultLabel,
+    })
+  }
+
+  if (methodLabel) {
+    rows.push({
+      label: t('events.pregnancyCheckMethod'),
+      value: methodLabel,
+    })
+  }
+
+  if (linkedPregnancyCheckBreedingEvent.value) {
+    rows.push({
+      label: t('events.linkedBreedingEvent'),
+      value: formatDate(linkedPregnancyCheckBreedingEvent.value.date),
+    })
+  }
+
+  return rows
 })
 const pageSizeOptions = [
   { label: '10', value: 10 },
@@ -277,6 +671,17 @@ function animalDisplayName(animal) {
   return formatAnimalDisplayName(animal)
 }
 
+function buildLinkedLifecycleRow({ event: linkedEvent, title }) {
+  const meta = getEventTypeMeta(linkedEvent.type)
+
+  return {
+    event: linkedEvent,
+    meta,
+    title,
+    caption: t('events.linkedRecordDate', { date: formatDate(linkedEvent.date) }),
+  }
+}
+
 function openAnimalDetail(animal) {
   void router.push({ path: `/animals/${animal.id}`, query: { from: 'events' } })
 }
@@ -287,6 +692,31 @@ function openEditDialog() {
   }
 
   isEventDialogOpen.value = true
+}
+
+function openPregnancyCheckDialog() {
+  if (!canRecordPregnancyCheck.value) {
+    return
+  }
+
+  isPregnancyCheckDialogOpen.value = true
+}
+
+function openExpectedBirthOutcomeDialog(type) {
+  if (!canRecordExpectedBirthOutcome.value) {
+    return
+  }
+
+  expectedBirthOutcomeType.value = type
+  isExpectedBirthOutcomeDialogOpen.value = true
+}
+
+function openWeaningDialog() {
+  if (!canRecordWeaning.value) {
+    return
+  }
+
+  isWeaningDialogOpen.value = true
 }
 
 async function submitEvent(payload) {
@@ -301,6 +731,75 @@ async function submitEvent(payload) {
     $q.notify({
       color: 'positive',
       message: t('events.eventUpdated'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function submitWeaning(payload) {
+  if (!event.value) {
+    return
+  }
+
+  try {
+    await eventsStore.addEvent(payload)
+    await animalsStore.loadAnimals()
+    isWeaningDialogOpen.value = false
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function submitExpectedBirthOutcome(payload) {
+  if (!event.value) {
+    return
+  }
+
+  try {
+    await eventsStore.addExpectedBirthOutcome(event.value.id, payload)
+    await animalsStore.loadAnimals()
+    isExpectedBirthOutcomeDialogOpen.value = false
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function submitPregnancyCheck(payload) {
+  if (!event.value) {
+    return
+  }
+
+  try {
+    await eventsStore.addEvent(payload)
+    await animalsStore.loadAnimals()
+    isPregnancyCheckDialogOpen.value = false
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
       position: 'top',
     })
   } catch (error) {
@@ -340,6 +839,43 @@ function formatDate(value) {
   }
 
   return formatDisplayDate(value)
+}
+
+function resolvePregnancyCheckAnimalId(breedingEvent) {
+  if (breedingEvent?.type !== 'breeding') {
+    return ''
+  }
+
+  const relatedAnimals = breedingEvent.animalIds
+    .map((animalId) => animalsStore.getAnimalById(animalId))
+    .filter(Boolean)
+  const femaleAnimal = relatedAnimals.find((animal) => animal.sex === 'female')
+
+  return femaleAnimal?.id ?? breedingEvent.animalIds[0] ?? ''
+}
+
+function pregnancyCheckResultLabel(value) {
+  const resultLabelKeys = {
+    pregnant: 'events.pregnancyCheckPregnant',
+    open: 'events.pregnancyCheckOpen',
+    unknown: 'events.pregnancyCheckUnknown',
+  }
+  const key = resultLabelKeys[value]
+
+  return key ? t(key) : ''
+}
+
+function pregnancyCheckMethodLabel(value) {
+  const methodLabelKeys = {
+    palpation: 'events.pregnancyCheckMethodPalpation',
+    ultrasound: 'events.pregnancyCheckMethodUltrasound',
+    blood_test: 'events.pregnancyCheckMethodBloodTest',
+    visual: 'events.pregnancyCheckMethodVisual',
+    other: 'events.pregnancyCheckMethodOther',
+  }
+  const key = methodLabelKeys[value]
+
+  return key ? t(key) : ''
 }
 
 function confirmDeleteEvent() {

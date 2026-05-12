@@ -9,6 +9,7 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideCattleRecordKeeping.description') }}
         </div>
+        <GuideWrittenDate />
       </q-card-section>
 
       <q-card-section>
@@ -186,6 +187,14 @@
         </q-list>
       </q-card-section>
 
+      <GuideSourcesSection :sources="sources" />
+
+      <GuideRelatedLink
+        :title="t('guideBreedingRecordsApp.title')"
+        :description="t('guideBreedingRecordsApp.description')"
+        :to="breedingRecordsAppGuidePath"
+      />
+
       <GuideShareSection
         :title="t('guideCattleRecordKeeping.title')"
         :path="sharePath"
@@ -199,7 +208,10 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
+import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
+import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -221,9 +233,34 @@ useMeta(() =>
 )
 
 const dashboardPath = computed(() => '/')
+const breedingRecordsAppGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
+)
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
 )
+const sources = [
+  {
+    title: 'Record Keeping for the Beef Herd',
+    publisher: 'University of Maryland Extension',
+    url: 'https://extension.umd.edu/resource/record-keeping-beef-herd/',
+  },
+  {
+    title: 'How to Evaluate Animal Performance in the Cow-Calf Herd',
+    publisher: 'University of Maryland Extension',
+    url: 'https://extension.umd.edu/resource/how-evaluate-animal-performance-cow-calf-herd/',
+  },
+  {
+    title: 'Cow-Calf Production Record Software',
+    publisher: 'Oklahoma State University Extension',
+    url: 'https://extension.okstate.edu/fact-sheets/cow-calf-production-record-software.html',
+  },
+  {
+    title: 'Managing What You Measure',
+    publisher: 'North Dakota State University Extension',
+    url: 'https://www.ndsu.edu/agriculture/extension/publications/managing-what-you-measure-current-and-historical-cow-herd-appraisal',
+  },
+]
 const problemItems = computed(() => tm('guideCattleRecordKeeping.problemItems') ?? [])
 const methods = computed(() => tm('guideCattleRecordKeeping.methods') ?? [])
 const bestItems = computed(() => tm('guideCattleRecordKeeping.bestItems') ?? [])

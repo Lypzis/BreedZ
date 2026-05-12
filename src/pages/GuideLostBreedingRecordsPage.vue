@@ -9,6 +9,7 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideLostBreedingRecords.description') }}
         </div>
+        <GuideWrittenDate />
       </q-card-section>
 
       <q-card-section>
@@ -169,6 +170,14 @@
         </q-list>
       </q-card-section>
 
+      <GuideSourcesSection :sources="sources" />
+
+      <GuideRelatedLink
+        :title="t('guideBreedingRecordsApp.title')"
+        :description="t('guideBreedingRecordsApp.description')"
+        :to="breedingRecordsAppGuidePath"
+      />
+
       <GuideShareSection
         :title="t('guideLostBreedingRecords.title')"
         :path="sharePath"
@@ -182,7 +191,10 @@ import { computed } from 'vue'
 import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
+import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
+import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 import { buildPageMeta } from 'src/utils/seo-meta'
@@ -206,7 +218,32 @@ useMeta(() =>
 )
 
 const dashboardPath = computed(() => '/')
+const breedingRecordsAppGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
+)
 const sharePath = computed(() => buildLocalizedPath(routeLocale.value, GUIDE_PATH))
+const sources = [
+  {
+    title: 'Record Keeping for the Beef Herd',
+    publisher: 'University of Maryland Extension',
+    url: 'https://extension.umd.edu/resource/record-keeping-beef-herd/',
+  },
+  {
+    title: 'Calving Records 101',
+    publisher: 'South Dakota State University Extension',
+    url: 'https://extension.sdstate.edu/calving-records-101',
+  },
+  {
+    title: 'Whole Herd Reporting',
+    publisher: 'Beef Improvement Federation Guidelines',
+    url: 'https://guidelines.beefimprovement.org/index.php/Whole_Herd_Reporting',
+  },
+  {
+    title: 'Cow-Calf Standardized Performance Analysis (SPA)',
+    publisher: 'Oklahoma State University Extension',
+    url: 'https://extension.okstate.edu/fact-sheets/cow-calf-standardized-performance-analysis-spa-1.html',
+  },
+]
 const firstItems = computed(() => tm('guideLostBreedingRecords.firstItems') ?? [])
 const rebuildSteps = computed(() => tm('guideLostBreedingRecords.rebuildSteps') ?? [])
 const estimateItems = computed(() => tm('guideLostBreedingRecords.estimateItems') ?? [])

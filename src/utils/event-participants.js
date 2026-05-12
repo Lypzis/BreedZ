@@ -34,7 +34,14 @@ export function getEventSelectionMode(type) {
     return 'breeding'
   }
 
-  if (type === 'birth' || type === 'expected_birth') {
+  if (
+    type === 'birth'
+    || type === 'expected_birth'
+    || type === 'pregnancy_check'
+    || type === 'breeding_failed'
+    || type === 'abortion'
+    || type === 'weaning'
+  ) {
     return 'single'
   }
 
