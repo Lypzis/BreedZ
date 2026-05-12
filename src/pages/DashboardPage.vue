@@ -87,6 +87,7 @@
             </DashboardSectionPanel>
 
             <DashboardSectionPanel
+              v-if="needsConfirmationEvents.length"
               :title="t('dashboard.needsConfirmationEventsTitle', { count: needsConfirmationEvents.length })"
               :caption="t('dashboard.needsConfirmationEventsCaption')" :count="needsConfirmationEvents.length"
               icon="pending_actions" avatar-color="warning" chip-color="orange-1" chip-text-color="warning"
@@ -97,7 +98,8 @@
                 @open="openEventDetail" />
             </DashboardSectionPanel>
 
-            <DashboardSectionPanel :title="t('dashboard.pregnancyChecksDueTitle', { count: pregnancyChecksDue.length })"
+            <DashboardSectionPanel v-if="pregnancyChecksDue.length"
+              :title="t('dashboard.pregnancyChecksDueTitle', { count: pregnancyChecksDue.length })"
               :caption="t('dashboard.pregnancyChecksDueCaption')" :count="pregnancyChecksDue.length" icon="fact_check"
               avatar-color="primary" :default-opened="false">
               <DashboardEventPanelContent :events="pregnancyChecksDue" :animal-resolver="animalById"
@@ -107,6 +109,7 @@
             </DashboardSectionPanel>
 
             <DashboardSectionPanel
+              v-if="overdueExpectedBirths.length"
               :title="t('dashboard.overdueExpectedBirthsTitle', { count: overdueExpectedBirths.length })"
               :caption="t('dashboard.overdueExpectedBirthsCaption')" :count="overdueExpectedBirths.length"
               icon="event_busy" avatar-color="warning" chip-color="orange-1" chip-text-color="warning"
@@ -118,6 +121,7 @@
             </DashboardSectionPanel>
 
             <DashboardSectionPanel
+              v-if="expectedBirthsDueSoon.length"
               :title="t('dashboard.expectedBirthsDueSoonTitle', { count: expectedBirthsDueSoon.length })"
               :caption="t('dashboard.expectedBirthsDueSoonCaption')" :count="expectedBirthsDueSoon.length"
               icon="event_repeat" avatar-color="secondary"
@@ -129,6 +133,7 @@
             </DashboardSectionPanel>
 
             <DashboardSectionPanel
+              v-if="unresolvedBreedings.length"
               :title="t('dashboard.unresolvedBreedingsTitle', { count: unresolvedBreedings.length })"
               :caption="t('dashboard.unresolvedBreedingsCaption')" :count="unresolvedBreedings.length" icon="favorite"
               avatar-color="primary" :default-opened="false">
@@ -139,6 +144,7 @@
             </DashboardSectionPanel>
 
             <DashboardSectionPanel
+              v-if="animalsWithoutEvents.length"
               :title="t('dashboard.needsSetupTitleWithCount', { count: animalsWithoutEvents.length })"
               :caption="t('dashboard.needsSetupCaption')" :count="animalsWithoutEvents.length" icon="assignment"
               avatar-color="primary" :default-opened="false">
