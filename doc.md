@@ -171,6 +171,19 @@ The app currently lets users manually add expected birth dates. The README alrea
 
 When saving a breeding event, suggest a default expected birth date if the female animal's species is known.
 
+Status: complete for this pass.
+
+Completed:
+- species-based expected birth suggestions in `EventFormDialog`
+- manual expected birth date override protection
+- guided birth dialog used for both standalone birth events and expected birth outcomes
+- expected birth outcome flow that resolves the expected birth when birth is recorded
+- newborn animal creation from a birth event
+- existing offspring linking from a birth event
+- editable dam and sire pickers with sex filtering
+- parent links and empty birth dates updated for existing offspring selected in a birth event
+- standalone birth events allowed without a linked breeding event
+
 ### Implementation Steps
 
 1. Add gestation rules:
@@ -206,6 +219,9 @@ When saving a breeding event, suggest a default expected birth date if the femal
 - Calving window instead of single date
 - Breed-specific gestation adjustments
 - Public gestation calculator page connected to the app
+- Multiple-offspring polish, such as twin-specific labels and clearer counts
+- Birth outcome review screen before save for larger births
+- Reproductive performance metrics such as conception rate, birth rate, and days open
 
 ## 4. Reminders And Notifications
 

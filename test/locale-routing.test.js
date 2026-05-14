@@ -13,4 +13,8 @@ test('localized public paths remain localized', () => {
     buildLocalizedPath('es', '/guides/how-long-is-cow-pregnancy'),
     '/es/guias/cuanto-dura-la-gestacion-de-una-vaca',
   )
+  assert.equal(
+    buildLocalizedPath('pt-BR', '/guides/cattle-gestation-calculator'),
+    '/pt-br/guias/calculadora-de-gestacao-bovina',
+  )
 })

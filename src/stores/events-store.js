@@ -1,5 +1,6 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { createBirthEventWithAnimals, createBirthOutcomeWithAnimals } from 'src/services/birth-events-db'
 import { confirmEvent, createEvent, deleteEvent, listEvents, updateEvent } from 'src/services/events-db'
 import { createPurchaseEventWithAnimals } from 'src/services/purchase-events-db'
 import { requestPremiumSync } from 'src/services/sync-scheduler'
@@ -179,6 +180,46 @@ export const useEventsStore = defineStore('events', () => {
     return { outcomeEvent, expectedBirth: updatedExpectedBirth }
   }
 
+  async function addBirthOutcomeWithAnimals(expectedBirthId, payload) {
+    const expectedBirthEvent = findEventById(expectedBirthId)
+
+    if (!expectedBirthEvent || expectedBirthEvent.type !== 'expected_birth') {
+      throw new Error('Expected birth event not found.')
+    }
+
+    if (isExpectedBirthResolved(expectedBirthEvent)) {
+      throw new Error('Expected birth is already resolved.')
+    }
+
+    const { event, animals, expectedBirth } = await createBirthOutcomeWithAnimals(expectedBirthEvent, {
+      ...payload,
+      details: {
+        ...(payload?.details ?? {}),
+        linkedExpectedBirthEventId: expectedBirthEvent.id,
+        linkedBreedingEventId: expectedBirthEvent.linkedEventId ?? '',
+      },
+    })
+
+    events.value = sortEvents([
+      event,
+      ...events.value.map((currentEvent) =>
+        currentEvent.id === expectedBirth?.id ? expectedBirth : currentEvent,
+      ),
+    ])
+    requestPremiumSync('birth-created')
+
+    return { event, animals, expectedBirth }
+  }
+
+  async function addBirthEventWithAnimals(payload) {
+    const { event, animals } = await createBirthEventWithAnimals(payload)
+
+    events.value = sortEvents([event, ...events.value])
+    requestPremiumSync('birth-created')
+
+    return { event, animals }
+  }
+
   async function addPurchaseEvent(payload) {
     const { event, animals } = await createPurchaseEventWithAnimals(payload)
     events.value = sortEvents([event, ...events.value])
@@ -327,6 +368,8 @@ export const useEventsStore = defineStore('events', () => {
     isLoading,
     totalEvents,
     addEvent,
+    addBirthEventWithAnimals,
+    addBirthOutcomeWithAnimals,
     addExpectedBirthOutcome,
     addPurchaseEvent,
     confirmEventById,

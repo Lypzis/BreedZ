@@ -195,7 +195,13 @@
           <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">{{ t('events.linkedRecordsTitle') }}</div>
 
           <q-list bordered separator>
-            <q-item v-for="row in linkedLifecycleRows" :key="row.event.id">
+            <q-item
+              v-for="row in linkedLifecycleRows"
+              :key="row.event.id"
+              clickable
+              v-ripple
+              @click="openLinkedLifecycleRecord(row.event)"
+            >
               <q-item-section avatar>
                 <q-avatar :color="row.meta.color" text-color="white" :icon="row.meta.icon" />
               </q-item-section>
@@ -214,7 +220,7 @@
                   icon="visibility"
                   :aria-label="t('events.openLinkedRecord')"
                   :title="t('events.openLinkedRecord')"
-                  :to="`/events/${row.event.id}`"
+                  @click.stop="openLinkedLifecycleRecord(row.event)"
                 />
               </q-item-section>
             </q-item>
@@ -256,6 +262,16 @@
       :title="expectedBirthOutcomeTitle"
       @submit="submitExpectedBirthOutcome"
     />
+    <BirthOutcomeDialog
+      v-model="isBirthOutcomeDialogOpen"
+      :animals="animals"
+      :current-animal-count="animals.length"
+      :dam-animal="expectedBirthDamAnimal"
+      :sire-animal="expectedBirthSireAnimal"
+      show-initial-newborn
+      :is-premium="isPremium"
+      @submit="submitBirthOutcome"
+    />
     <EventFormDialog
       v-model="isWeaningDialogOpen"
       :animals="animals"
@@ -277,6 +293,7 @@ import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalListItem from 'src/components/AnimalListItem.vue'
+import BirthOutcomeDialog from 'src/components/BirthOutcomeDialog.vue'
 import DetailHeader from 'src/components/DetailHeader.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
@@ -284,6 +301,7 @@ import { useHistoryAwareBack } from 'src/composables/useHistoryBack'
 import { getEventTypeMeta } from 'src/constants/events'
 import { useI18nText } from 'src/i18n'
 import { useAnimalsStore } from 'src/stores/animals-store'
+import { useAuthStore } from 'src/stores/auth-store'
 import { useEventsStore } from 'src/stores/events-store'
 import { formatAnimalDisplayName } from 'src/utils/animal-display'
 import {
@@ -299,14 +317,17 @@ const router = useRouter()
 const $q = useQuasar()
 const { t } = useI18nText()
 const animalsStore = useAnimalsStore()
+const authStore = useAuthStore()
 const eventsStore = useEventsStore()
 
 const { animals, errorMessage: animalsErrorMessage, isLoading: animalsLoading } = storeToRefs(animalsStore)
+const { isPremium } = storeToRefs(authStore)
 const { errorMessage: eventsErrorMessage, events, isLoading: eventsLoading } = storeToRefs(eventsStore)
 
 const isEventDialogOpen = ref(false)
 const isPregnancyCheckDialogOpen = ref(false)
 const isExpectedBirthOutcomeDialogOpen = ref(false)
+const isBirthOutcomeDialogOpen = ref(false)
 const isWeaningDialogOpen = ref(false)
 const expectedBirthOutcomeType = ref('birth')
 const affectedAnimalsListMode = ref('paged')
@@ -429,6 +450,23 @@ const linkedExpectedBirthBreedingEvent = computed(() => {
   }
 
   return events.value.find((item) => item.id === linkedEventId && item.type === 'breeding') ?? null
+})
+const expectedBirthDamAnimal = computed(() =>
+  expectedBirthOutcomeAnimalId.value ? animalsStore.getAnimalById(expectedBirthOutcomeAnimalId.value) : null,
+)
+const expectedBirthSireAnimal = computed(() => {
+  const breedingEvent = linkedExpectedBirthBreedingEvent.value
+
+  if (!breedingEvent) {
+    return null
+  }
+
+  const relatedAnimals = breedingEvent.animalIds
+    .map((animalId) => animalsStore.getAnimalById(animalId))
+    .filter(Boolean)
+  const maleAnimal = relatedAnimals.find((animal) => animal.sex === 'male')
+
+  return maleAnimal ?? relatedAnimals.find((animal) => animal.id !== expectedBirthDamAnimal.value?.id) ?? null
 })
 const linkedOutcomeEvent = computed(() => {
   if (event.value?.type !== 'expected_birth') {
@@ -686,6 +724,10 @@ function openAnimalDetail(animal) {
   void router.push({ path: `/animals/${animal.id}`, query: { from: 'events' } })
 }
 
+function openLinkedLifecycleRecord(linkedEvent) {
+  void router.push(`/events/${linkedEvent.id}`)
+}
+
 function openEditDialog() {
   if (!event.value) {
     return
@@ -704,6 +746,11 @@ function openPregnancyCheckDialog() {
 
 function openExpectedBirthOutcomeDialog(type) {
   if (!canRecordExpectedBirthOutcome.value) {
+    return
+  }
+
+  if (type === 'birth') {
+    isBirthOutcomeDialogOpen.value = true
     return
   }
 
@@ -774,6 +821,29 @@ async function submitExpectedBirthOutcome(payload) {
     await eventsStore.addExpectedBirthOutcome(event.value.id, payload)
     await animalsStore.loadAnimals()
     isExpectedBirthOutcomeDialogOpen.value = false
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
+}
+
+async function submitBirthOutcome(payload) {
+  if (!event.value) {
+    return
+  }
+
+  try {
+    await eventsStore.addBirthOutcomeWithAnimals(event.value.id, payload)
+    await animalsStore.loadAnimals()
+    isBirthOutcomeDialogOpen.value = false
     $q.notify({
       color: 'positive',
       message: t('events.eventAdded'),

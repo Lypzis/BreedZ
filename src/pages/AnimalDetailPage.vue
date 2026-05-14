@@ -79,16 +79,16 @@
           </template>
 
           <template #actions>
+            <q-btn unelevated color="primary" icon="add" :label="t('common.addEvent')"
+              :disable="animal.status !== 'active'" @click="openEventDialog" />
             <q-btn
               v-if="canRecordWeaning"
-              unelevated
+              outline
               color="primary"
               icon="child_care"
               :label="t('animalDetail.recordWeaning')"
               @click="openWeaningDialog"
             />
-            <q-btn unelevated color="primary" icon="add" :label="t('common.addEvent')"
-              :disable="animal.status !== 'active'" @click="openEventDialog" />
             <q-btn outline color="primary" icon="edit" :label="t('common.editAnimal')" @click="openEditDialog" />
           </template>
         </DetailHeader>
@@ -318,7 +318,8 @@
     </q-card>
     <EventFormDialog v-model="isEventDialogOpen" :animals="animals" :events="events" :event="selectedEvent"
       :fixed-animal-id="animalId" :mode="eventFormMode"
-      :overline="t('animalDetail.eventDialogOverline')" :title="eventDialogTitle" @purchase-selected="openPurchaseDialog"
+      :overline="t('animalDetail.eventDialogOverline')" :title="eventDialogTitle" @birth-selected="openBirthDialog"
+      @purchase-selected="openPurchaseDialog"
       @submit="submitEvent" />
     <EventFormDialog
       v-model="isWeaningDialogOpen"
@@ -333,6 +334,8 @@
     />
     <PurchaseEventDialog v-model="isPurchaseDialogOpen" :animals="animals" :current-animal-count="animals.length"
       :initial-animal-ids="initialPurchaseAnimalIds" :is-premium="isPremium" @submit="submitPurchaseEvent" />
+    <BirthOutcomeDialog v-model="isBirthDialogOpen" :animals="animals" :current-animal-count="animals.length"
+      :initial-animal-ids="initialBirthAnimalIds" :is-premium="isPremium" @submit="submitBirthEvent" />
 
     <q-dialog v-model="isBreedingOffspringDialogOpen">
       <q-card style="width: 100%; max-width: 720px">
@@ -483,6 +486,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
 import AnimalFormDialog from 'src/components/AnimalFormDialog.vue'
+import BirthOutcomeDialog from 'src/components/BirthOutcomeDialog.vue'
 import DetailHeader from 'src/components/DetailHeader.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
 import EventListItem from 'src/components/EventListItem.vue'
@@ -520,9 +524,11 @@ const isParentPickerOpen = ref(false)
 const parentPickerType = ref('dam')
 const parentSearchTerm = ref('')
 const isEventDialogOpen = ref(false)
+const isBirthDialogOpen = ref(false)
 const isWeaningDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
 const isBreedingOffspringDialogOpen = ref(false)
+const initialBirthAnimalIds = ref([])
 const initialPurchaseAnimalIds = ref([])
 const eventFormMode = ref('create')
 const selectedEventId = ref('')
@@ -878,6 +884,34 @@ function openPurchaseDialog(payload = {}) {
   eventFormMode.value = 'create'
   selectedEventId.value = ''
   isPurchaseDialogOpen.value = true
+}
+
+function openBirthDialog() {
+  initialBirthAnimalIds.value = []
+  eventFormMode.value = 'create'
+  selectedEventId.value = ''
+  isBirthDialogOpen.value = true
+}
+
+async function submitBirthEvent(payload) {
+  try {
+    await eventsStore.addBirthEventWithAnimals(payload)
+    await animalsStore.loadAnimals()
+    isBirthDialogOpen.value = false
+    initialBirthAnimalIds.value = []
+
+    $q.notify({
+      color: 'positive',
+      message: t('animalDetail.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('animalDetail.eventSaveFailed'),
+      position: 'top',
+    })
+  }
 }
 
 async function submitPurchaseEvent(payload) {

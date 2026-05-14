@@ -12,7 +12,7 @@ import { formatDisplayDate } from 'src/utils/dates'
 const props = defineProps({
   date: {
     type: String,
-    default: '2026-05-12',
+    default: '2026-05-14',
   },
 })
 
