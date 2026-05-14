@@ -168,6 +168,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  requiredSex: {
+    type: String,
+    default: '',
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -197,6 +201,7 @@ const resolvedEmptyLabel = computed(() => props.emptyLabel || t('common.noAnimal
 const filteredAnimals = computed(() =>
   filterAnimalCandidates({
     animals: props.animals,
+    requiredSex: props.requiredSex,
     query: searchTerm.value,
   }),
 )

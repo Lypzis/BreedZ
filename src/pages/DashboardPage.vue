@@ -159,8 +159,11 @@
     </q-card>
 
     <EventFormDialog v-model="isQuickEventDialogOpen" :animals="activeAnimals" :events="events"
-      :overline="t('dashboard.overline')" :title="t('dashboard.quickAddTitle')" @purchase-selected="openPurchaseDialog"
+      :overline="t('dashboard.overline')" :title="t('dashboard.quickAddTitle')" @birth-selected="openBirthDialog"
+      @purchase-selected="openPurchaseDialog"
       @submit="submitQuickEvent" />
+    <BirthOutcomeDialog v-model="isBirthDialogOpen" :animals="animals" :current-animal-count="animals.length"
+      :initial-animal-ids="initialBirthAnimalIds" :is-premium="isPremium" @submit="submitBirthEvent" />
     <PurchaseEventDialog v-model="isPurchaseDialogOpen" :animals="animals" :current-animal-count="animals.length"
       :initial-animal-ids="initialPurchaseAnimalIds" :is-premium="isPremium" @submit="submitPurchaseEvent" />
   </AppPageShell>
@@ -172,6 +175,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import BirthOutcomeDialog from 'src/components/BirthOutcomeDialog.vue'
 import DashboardAnimalPanelContent from 'src/components/DashboardAnimalPanelContent.vue'
 import DashboardEventPanelContent from 'src/components/DashboardEventPanelContent.vue'
 import DashboardSectionPanel from 'src/components/DashboardSectionPanel.vue'
@@ -206,7 +210,9 @@ const {
 const { isLoaded: isAuthLoaded, isPremium, isSignedIn } = storeToRefs(authStore)
 
 const isQuickEventDialogOpen = ref(false)
+const isBirthDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
+const initialBirthAnimalIds = ref([])
 const initialPurchaseAnimalIds = ref([])
 const hasHydrated = ref(false)
 
@@ -284,6 +290,27 @@ async function submitQuickEvent(payload) {
 function openPurchaseDialog(payload = {}) {
   initialPurchaseAnimalIds.value = payload.animalIds ?? []
   isPurchaseDialogOpen.value = true
+}
+
+function openBirthDialog(payload = {}) {
+  initialBirthAnimalIds.value = payload.animalIds ?? []
+  isBirthDialogOpen.value = true
+}
+
+async function submitBirthEvent(payload) {
+  try {
+    await eventsStore.addBirthEventWithAnimals(payload)
+    await animalsStore.loadAnimals()
+    isBirthDialogOpen.value = false
+    initialBirthAnimalIds.value = []
+    $q.notify({ color: 'positive', message: t('dashboard.eventAdded'), position: 'top' })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('dashboard.eventSaveFailed'),
+      position: 'top',
+    })
+  }
 }
 
 async function submitPurchaseEvent(payload) {

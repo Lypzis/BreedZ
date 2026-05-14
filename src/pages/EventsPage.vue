@@ -212,8 +212,17 @@
       :event="selectedEvent"
       :mode="eventFormMode"
       :title="eventDialogTitle"
+      @birth-selected="openBirthDialog"
       @purchase-selected="openPurchaseDialog"
       @submit="submitEvent"
+    />
+    <BirthOutcomeDialog
+      v-model="isBirthDialogOpen"
+      :animals="animals"
+      :current-animal-count="animals.length"
+      :initial-animal-ids="initialBirthAnimalIds"
+      :is-premium="isPremium"
+      @submit="submitBirthEvent"
     />
     <PurchaseEventDialog
       v-model="isPurchaseDialogOpen"
@@ -232,6 +241,7 @@ import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import BirthOutcomeDialog from 'src/components/BirthOutcomeDialog.vue'
 import EventListItem from 'src/components/EventListItem.vue'
 import EventFormDialog from 'src/components/EventFormDialog.vue'
 import PagedListControls from 'src/components/PagedListControls.vue'
@@ -256,7 +266,9 @@ const { isPremium } = storeToRefs(authStore)
 const { errorMessage: eventsErrorMessage, events, isLoading: eventsLoading } = storeToRefs(eventsStore)
 
 const isEventDialogOpen = ref(false)
+const isBirthDialogOpen = ref(false)
 const isPurchaseDialogOpen = ref(false)
+const initialBirthAnimalIds = ref([])
 const initialPurchaseAnimalIds = ref([])
 const eventFormMode = ref('create')
 const selectedEventId = ref('')
@@ -374,6 +386,34 @@ function openPurchaseDialog(payload = {}) {
   eventFormMode.value = 'create'
   selectedEventId.value = ''
   isPurchaseDialogOpen.value = true
+}
+
+function openBirthDialog(payload = {}) {
+  initialBirthAnimalIds.value = payload.animalIds ?? []
+  eventFormMode.value = 'create'
+  selectedEventId.value = ''
+  isBirthDialogOpen.value = true
+}
+
+async function submitBirthEvent(payload) {
+  try {
+    await eventsStore.addBirthEventWithAnimals(payload)
+    await animalsStore.loadAnimals()
+    isBirthDialogOpen.value = false
+    initialBirthAnimalIds.value = []
+
+    $q.notify({
+      color: 'positive',
+      message: t('events.eventAdded'),
+      position: 'top',
+    })
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      message: error instanceof Error ? error.message : t('events.eventSaveFailed'),
+      position: 'top',
+    })
+  }
 }
 
 async function submitPurchaseEvent(payload) {

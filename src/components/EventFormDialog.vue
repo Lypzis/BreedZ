@@ -114,11 +114,14 @@
           />
           <q-input
             v-if="showExpectedBirthPlanner && eventForm.expectedBirthEnabled"
-            v-model="eventForm.expectedBirthDate"
+            :model-value="eventForm.expectedBirthDate"
             outlined
             type="date"
             :label="t('events.expectedBirthDate')"
             :min="todayDateString()"
+            :hint="expectedBirthDateHint"
+            :persistent-hint="Boolean(expectedBirthDateHint)"
+            @update:model-value="updateExpectedBirthDate"
           />
           <q-input
             v-model="eventForm.date"
@@ -164,6 +167,10 @@ import {
   getEventAmountLabelKey,
   getEventSelectionMode,
 } from 'src/utils/event-participants'
+import {
+  buildExpectedBirthDate,
+  shouldApplyExpectedBirthSuggestion,
+} from 'src/utils/gestation'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
 import { normalizeEventRecord, sanitizeNonNegativeAmountInput } from 'src/utils/event-records'
 
@@ -214,12 +221,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['purchaseSelected', 'submit', 'update:modelValue'])
+const emit = defineEmits(['birthSelected', 'purchaseSelected', 'submit', 'update:modelValue'])
 
 const $q = useQuasar()
 const { t } = useI18nText()
 const eventForm = reactive(defaultEventForm())
 const isSyncingEventForm = ref(false)
+const isExpectedBirthDateManuallyEdited = ref(false)
+const lastSuggestedExpectedBirthDate = ref('')
 
 const eventTypeOptions = computed(() => getEventTypeOptions())
 const groupedEventTypeOptions = computed(() => getGroupedEventTypeOptions())
@@ -248,6 +257,27 @@ const eventDateMin = computed(() => (eventForm.type === 'expected_birth' ? today
 const showExpectedBirthPlanner = computed(() =>
   eventForm.type === 'breeding',
 )
+const expectedBirthAnimal = computed(() => {
+  if (!showExpectedBirthPlanner.value) {
+    return null
+  }
+
+  const animalId = resolveExpectedBirthAnimalId(buildCurrentEventAnimalIds())
+
+  return props.animals.find((animal) => animal.id === animalId) ?? null
+})
+const suggestedExpectedBirthDate = computed(() =>
+  expectedBirthAnimal.value
+    ? buildExpectedBirthDate(eventForm.date, expectedBirthAnimal.value.species)
+    : '',
+)
+const expectedBirthDateHint = computed(() => {
+  if (!suggestedExpectedBirthDate.value) {
+    return ''
+  }
+
+  return `${t('events.expectedBirthSuggestedHint')} ${t('events.expectedBirthAdjustHint')}`
+})
 const pregnancyCheckResultOptions = computed(() => [
   { label: t('events.pregnancyCheckPregnant'), value: 'pregnant' },
   { label: t('events.pregnancyCheckOpen'), value: 'open' },
@@ -359,6 +389,8 @@ function syncForm() {
   }
 
   nextTick(() => {
+    lastSuggestedExpectedBirthDate.value = suggestedExpectedBirthDate.value
+    isExpectedBirthDateManuallyEdited.value = Boolean(eventForm.expectedBirthDate)
     isSyncingEventForm.value = false
   })
 }
@@ -523,6 +555,56 @@ function resolveExpectedBirthAnimalId(eventAnimalIds = []) {
   return femaleAnimals[0].id ?? ''
 }
 
+function buildCurrentEventAnimalIds(type = eventForm.type) {
+  return buildEventAnimalIds({
+    type,
+    animalId: eventForm.animalId,
+    animalIds: eventForm.animalIds,
+    partnerAnimalId: eventForm.partnerAnimalId,
+    fixedAnimalId: props.fixedAnimalId,
+  })
+}
+
+function updateExpectedBirthDate(value) {
+  eventForm.expectedBirthDate = value
+
+  if (!isSyncingEventForm.value) {
+    isExpectedBirthDateManuallyEdited.value = true
+  }
+}
+
+function applyExpectedBirthSuggestion({ force = false } = {}) {
+  if (
+    isSyncingEventForm.value
+    || !showExpectedBirthPlanner.value
+    || !eventForm.expectedBirthEnabled
+  ) {
+    return
+  }
+
+  const previousSuggestedDate = lastSuggestedExpectedBirthDate.value
+  const nextSuggestedDate = suggestedExpectedBirthDate.value
+  lastSuggestedExpectedBirthDate.value = nextSuggestedDate
+
+  if (!nextSuggestedDate) {
+    return
+  }
+
+  const canApplySuggestion = shouldApplyExpectedBirthSuggestion({
+    currentDate: eventForm.expectedBirthDate,
+    force,
+    isManuallyEdited: isExpectedBirthDateManuallyEdited.value,
+    previousSuggestedDate,
+  })
+
+  if (!canApplySuggestion) {
+    return
+  }
+
+  eventForm.expectedBirthDate = nextSuggestedDate
+  isExpectedBirthDateManuallyEdited.value = false
+}
+
 function updateAmountValue(value) {
   eventForm.amount = sanitizeNonNegativeAmountInput(value)
 }
@@ -626,10 +708,18 @@ watch(
       return
     }
 
+    if (value === 'birth' && props.mode === 'create') {
+      emit('birthSelected', { animalIds: currentAnimalIds })
+      closeDialog()
+      return
+    }
+
     if (value !== 'breeding') {
       eventForm.partnerAnimalId = ''
       eventForm.expectedBirthEnabled = false
       eventForm.expectedBirthDate = ''
+      isExpectedBirthDateManuallyEdited.value = false
+      lastSuggestedExpectedBirthDate.value = ''
     }
 
     if (value !== 'pregnancy_check') {
@@ -646,6 +736,34 @@ watch(
 
     eventForm.animalId = currentAnimalIds[0] ?? (hasFixedAnimal.value ? props.fixedAnimalId : '')
     eventForm.animalIds = []
+  },
+)
+
+watch(
+  () => eventForm.expectedBirthEnabled,
+  (value) => {
+    if (isSyncingEventForm.value) {
+      return
+    }
+
+    if (!value) {
+      isExpectedBirthDateManuallyEdited.value = false
+      lastSuggestedExpectedBirthDate.value = ''
+      return
+    }
+
+    if (!eventForm.expectedBirthDate) {
+      isExpectedBirthDateManuallyEdited.value = false
+    }
+
+    applyExpectedBirthSuggestion({ force: !eventForm.expectedBirthDate })
+  },
+)
+
+watch(
+  suggestedExpectedBirthDate,
+  () => {
+    applyExpectedBirthSuggestion()
   },
 )
 

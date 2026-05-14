@@ -10,6 +10,7 @@ import {
   withStore,
 } from '../src/services/app-db.js'
 import { createAnimal, deleteAnimal, getAnimal, listAnimals } from '../src/services/animals-db.js'
+import { createBirthEventWithAnimals, createBirthOutcomeWithAnimals } from '../src/services/birth-events-db.js'
 import { createPurchaseEventWithAnimals } from '../src/services/purchase-events-db.js'
 import {
   getLocalRecordSyncReadiness,
@@ -138,6 +139,122 @@ test('creates purchased animals and one shared purchase event in IndexedDB', asy
 
   assert.equal('sync' in stripLocalSyncMetadataFromRecords(storedAnimals)[0], false)
   assert.equal('sync' in stripLocalSyncMetadataFromRecords(storedEvents)[0], false)
+})
+
+test('creates birth outcome with newborn animals and resolves expected birth', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  await withStore(STORE_NAMES.events, 'readwrite', (store) => {
+    store.put({
+      id: 'expected-1',
+      animalId: 'cow-1',
+      animalIds: ['cow-1'],
+      type: 'expected_birth',
+      linkedEventId: 'breeding-1',
+      date: '2026-05-20',
+      confirmationStatus: 'pending',
+    })
+  })
+
+  const expectedBirthEvent = await withStore(
+    STORE_NAMES.events,
+    'readonly',
+    (store) => store.get('expected-1'),
+  )
+  const { animals, event, expectedBirth } = await createBirthOutcomeWithAnimals(expectedBirthEvent, {
+    newAnimals: [
+      {
+        tag: 'Calf 001',
+        species: 'Cattle',
+        sex: 'female',
+        damId: 'cow-1',
+        sireId: 'bull-1',
+      },
+    ],
+    date: '2026-05-21',
+    notes: 'Healthy calf',
+  })
+
+  assert.equal(animals.length, 1)
+  assert.equal(animals[0].tag, 'Calf 001')
+  assert.equal(animals[0].birthDate, '2026-05-21')
+  assert.equal(animals[0].damId, 'cow-1')
+  assert.equal(animals[0].sireId, 'bull-1')
+  assert.equal(event.type, 'birth')
+  assert.deepEqual(event.animalIds, [animals[0].id])
+  assert.equal(event.details.linkedExpectedBirthEventId, 'expected-1')
+  assert.equal(event.details.linkedBreedingEventId, 'breeding-1')
+  assert.equal(expectedBirth.details.resolutionStatus, 'resolved')
+  assert.equal(expectedBirth.details.outcomeType, 'birth')
+  assert.equal(expectedBirth.details.linkedOutcomeEventId, event.id)
+  assert.equal(expectedBirth.confirmationStatus, 'confirmed')
+
+  const storedEvents = await withStore(STORE_NAMES.events, 'readonly', (store) => store.getAll())
+  assert.equal(storedEvents.length, 2)
+  assert.equal(storedEvents.find((item) => item.id === event.id).sync.dirty, true)
+  assert.equal(storedEvents.find((item) => item.id === 'expected-1').sync.dirty, true)
+})
+
+test('creates standalone birth event with newborn animals', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  const { animals, event, expectedBirth } = await createBirthEventWithAnimals({
+    newAnimals: [
+      {
+        tag: 'Standalone Calf',
+        species: 'Cattle',
+        sex: 'male',
+      },
+    ],
+    date: '2026-05-22',
+  })
+
+  assert.equal(animals.length, 1)
+  assert.equal(animals[0].birthDate, '2026-05-22')
+  assert.equal(event.type, 'birth')
+  assert.equal(event.linkedEventId, '')
+  assert.equal(event.details.linkedExpectedBirthEventId, '')
+  assert.deepEqual(event.animalIds, [animals[0].id])
+  assert.equal(expectedBirth, null)
+})
+
+test('updates existing offspring lineage when creating a birth event', async (t) => {
+  await deleteDatabase()
+  t.after(deleteDatabase)
+
+  await withStore(STORE_NAMES.animals, 'readwrite', (store) => {
+    store.put({
+      id: 'calf-1',
+      tag: 'Existing Calf',
+      status: 'active',
+      baseStatus: 'active',
+      birthDate: '',
+      damId: '',
+      sireId: '',
+      createdAt: '2026-05-01T00:00:00.000Z',
+      updatedAt: '2026-05-01T00:00:00.000Z',
+    })
+  })
+
+  await createBirthEventWithAnimals({
+    existingAnimalIds: ['calf-1'],
+    damId: 'cow-1',
+    sireId: 'bull-1',
+    date: '2026-05-22',
+  })
+
+  const updatedCalf = await withStore(
+    STORE_NAMES.animals,
+    'readonly',
+    (store) => store.get('calf-1'),
+  )
+
+  assert.equal(updatedCalf.birthDate, '2026-05-22')
+  assert.equal(updatedCalf.damId, 'cow-1')
+  assert.equal(updatedCalf.sireId, 'bull-1')
+  assert.equal(updatedCalf.sync.dirty, true)
 })
 
 test('soft-deletes animals as local tombstones for sync', async (t) => {
