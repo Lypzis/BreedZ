@@ -466,7 +466,7 @@ Search Console signal, May 2026:
 New priority:
 
 1. Improve existing gestation pages before adding too many new gestation variants.
-2. Add a cattle gestation / calving date calculator page because current impressions show clear demand.
+2. Add a cattle gestation / calving date calculator page because current impressions show clear demand. `[done: cattle-gestation-calculator]`
 3. Publish commercial-intent app pages:
    - [x] `breeding-records-app`
    - `breeding-management-app`
@@ -479,8 +479,8 @@ New priority:
 
 Cluster 1: Breeding tracking
 - [x] `how-long-is-cow-pregnancy`
-- [ ] `cattle-gestation-calculator`
-- [ ] `cow-calving-date-calculator`
+- [x] `cattle-gestation-calculator`
+- [ ] `cow-calving-date-calculator` (covered in the calculator copy for now; only split into a second URL if search data later justifies it)
 - [ ] `when-will-my-cow-calve`
 - [ ] `how-to-avoid-missing-calving-dates`
 - [ ] `signs-cow-is-ready-to-calve`
