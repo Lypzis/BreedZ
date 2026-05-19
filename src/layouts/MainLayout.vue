@@ -39,7 +39,10 @@
       <div class="fit column no-wrap">
         <q-item clickable :to="dashboardPath" class="bg-green-1 q-py-md">
           <q-item-section>
-            <q-item-label class="text-h6 text-weight-bold text-primary">{{ t('brand.name') }}</q-item-label>
+            <q-item-label class="row items-baseline justify-between no-wrap full-width">
+              <span class="text-h6 text-weight-bold text-primary">{{ t('brand.name') }}</span>
+              <span class="text-caption text-grey-7">{{ appVersionLabel }}</span>
+            </q-item-label>
           </q-item-section>
         </q-item>
 
@@ -71,6 +74,14 @@
           <q-separator class="q-mb-sm" />
 
           <q-list>
+            <q-item clickable :to="localizedPath('/guides')" class="rounded-borders">
+              <q-item-section avatar>
+                <q-icon name="library_books" color="primary" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ t('footer.guides') }}</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item clickable :to="localizedPath('/contact')" class="rounded-borders">
               <q-item-section avatar>
                 <q-icon name="mail" color="primary" />
@@ -128,6 +139,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useNetworkStatus } from 'src/composables/useNetworkStatus'
 import { useI18nText } from 'src/i18n'
 import { useAuthStore } from 'src/stores/auth-store'
+import { buildAppVersionLabel } from 'src/utils/app-version'
 import { buildLocalizedPath, isAppShellPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const logoIcon = '/icons/favicon-96x96.png'
@@ -138,6 +150,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const { isOnline, isReady: networkStatusReady } = useNetworkStatus()
+const appVersionLabel = buildAppVersionLabel()
 
 const routeLocale = computed(() =>
   typeof route.params.locale === 'string' && route.params.locale

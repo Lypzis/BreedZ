@@ -194,97 +194,8 @@
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('home.guidesDescription') }}
         </div>
-
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('guideBreedingDates.title') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.breedingGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openBreedingGuide')"
-                  :to="breedingGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('home.cowPregnancyGuideTitle') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.cowPregnancyGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openCowPregnancyGuide')"
-                  :to="cowPregnancyGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('home.lineageGuideTitle') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.lineageGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openLineageGuide')"
-                  :to="lineageGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('home.recordKeepingGuideTitle') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.recordKeepingGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openRecordKeepingGuide')"
-                  :to="recordKeepingGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('home.breedingRecordsAppGuideTitle') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.breedingRecordsAppGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openBreedingRecordsAppGuide')"
-                  :to="breedingRecordsAppGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-4">
-            <q-card flat bordered>
-              <q-card-section>
-                <div class="text-subtitle1 text-weight-bold">{{ t('home.lostRecordsGuideTitle') }}</div>
-                <div class="text-body2 text-grey-7 q-mt-sm">
-                  {{ t('home.lostRecordsGuideDescription') }}
-                </div>
-              </q-card-section>
-              <q-card-actions align="right">
-                <q-btn flat color="primary" icon="open_in_new" :label="t('home.openLostRecordsGuide')"
-                  :to="lostRecordsGuidePath" />
-              </q-card-actions>
-            </q-card>
-          </div>
+        <div>
+          <q-btn outline color="primary" icon="menu_book" :label="t('home.openGuidesHub')" :to="guidesHubPath" />
         </div>
       </q-card-section>
 
@@ -361,24 +272,7 @@ useMeta(() =>
 const dashboardPath = computed(() => '/')
 const tutorialPath = computed(() => '/tutorial')
 const sharePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
-const breedingGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
-)
-const cowPregnancyGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
-)
-const lineageGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/how-to-track-cattle-lineage'),
-)
-const recordKeepingGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/best-cattle-record-keeping-methods'),
-)
-const breedingRecordsAppGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
-)
-const lostRecordsGuidePath = computed(() =>
-  buildLocalizedPath(routeLocale.value, '/guides/lost-breeding-records-what-to-do'),
-)
+const guidesHubPath = computed(() => buildLocalizedPath(routeLocale.value, '/guides'))
 
 const {
   installButtonLabel,
@@ -392,7 +286,7 @@ const {
 const breedingProblems = computed(() => tm('home.problemItems') ?? [])
 const recordFeatures = computed(() =>
   (tm('home.featuresItems') ?? []).map((label, index) => ({
-    icon: ['pets', 'family_restroom', 'event', 'save'][index] ?? 'task_alt',
+    icon: ['pets', 'favorite', 'event_repeat', 'payments', 'family_restroom', 'history'][index] ?? 'task_alt',
     label,
   })),
 )
