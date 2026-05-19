@@ -35,8 +35,10 @@ const localeConfigs = [
 const localizedPublicPaths = {
   en: {
     '/': '/',
+    '/guides': '/guides',
     '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
     '/guides/how-long-is-cow-pregnancy': '/guides/how-long-is-cow-pregnancy',
+    '/guides/cattle-gestation-calculator': '/guides/cattle-gestation-calculator',
     '/guides/how-to-track-cattle-lineage': '/guides/how-to-track-cattle-lineage',
     '/guides/best-cattle-record-keeping-methods': '/guides/best-cattle-record-keeping-methods',
     '/guides/breeding-records-app': '/guides/breeding-records-app',
@@ -48,8 +50,10 @@ const localizedPublicPaths = {
   },
   'pt-BR': {
     '/': '/',
+    '/guides': '/guias',
     '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
     '/guides/how-long-is-cow-pregnancy': '/guias/quanto-tempo-dura-a-gestacao-da-vaca',
+    '/guides/cattle-gestation-calculator': '/guias/calculadora-de-gestacao-bovina',
     '/guides/how-to-track-cattle-lineage': '/guias/como-acompanhar-linhagem-no-gado',
     '/guides/best-cattle-record-keeping-methods': '/guias/melhores-metodos-para-registro-do-gado',
     '/guides/breeding-records-app': '/guias/aplicativo-para-registros-de-cobertura-no-gado',
@@ -61,8 +65,10 @@ const localizedPublicPaths = {
   },
   es: {
     '/': '/',
+    '/guides': '/guias',
     '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
     '/guides/how-long-is-cow-pregnancy': '/guias/cuanto-dura-la-gestacion-de-una-vaca',
+    '/guides/cattle-gestation-calculator': '/guias/calculadora-de-gestacion-bovina',
     '/guides/how-to-track-cattle-lineage': '/guias/como-rastrear-el-linaje-del-ganado',
     '/guides/best-cattle-record-keeping-methods': '/guias/mejores-metodos-para-llevar-registros-del-ganado',
     '/guides/breeding-records-app': '/guias/app-para-registros-reproductivos-del-ganado',
@@ -81,6 +87,11 @@ const publicPages = [
     descriptionKey: 'home.meta.description',
   },
   {
+    path: '/guides',
+    titleKey: 'guidesHub.meta.title',
+    descriptionKey: 'guidesHub.meta.description',
+  },
+  {
     path: '/guides/track-cattle-breeding-dates',
     titleKey: 'guideBreedingDates.meta.title',
     descriptionKey: 'guideBreedingDates.meta.description',
@@ -89,6 +100,11 @@ const publicPages = [
     path: '/guides/how-long-is-cow-pregnancy',
     titleKey: 'guideCowPregnancy.meta.title',
     descriptionKey: 'guideCowPregnancy.meta.description',
+  },
+  {
+    path: '/guides/cattle-gestation-calculator',
+    titleKey: 'guideCattleGestationCalculator.meta.title',
+    descriptionKey: 'guideCattleGestationCalculator.meta.description',
   },
   {
     path: '/guides/how-to-track-cattle-lineage',

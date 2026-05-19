@@ -24,6 +24,7 @@ export const messages = {
       home: 'Home',
     },
     footer: {
+      guides: 'Guides',
       terms: 'Terms',
       privacy: 'Privacy',
       contact: 'Contact',
@@ -115,14 +116,14 @@ export const messages = {
     },
     home: {
       meta: {
-        title: 'Track Cattle Records, Breeding, Lineage & Backups',
+        title: 'Track Cattle Breeding, Lineage, Calving & Backups',
         description:
-          'BreedZ is an offline-first herd management app for cattle breeding records, animal history, lineage tracking, backups, sync, and farm recordkeeping in the field.',
+          'BreedZ is an offline-first herd management app for cattle breeding records, pregnancy checks, expected births, lineage tracking, backups, sync, and farm recordkeeping in the field.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Track cattle breeding, lineage, and herd records. Even offline.',
+      heroTitle: 'Track cattle breeding from pairing to birth. Even offline.',
       heroSubtitle:
-        'Keep breeding history, parents, offspring, and daily records in one offline-first app. Start locally, then sync your records across devices when needed.',
+        'Keep breeding history, pregnancy checks, expected births, parents, offspring, weaning, and daily records in one offline-first app. Start locally, then sync your records across devices when needed.',
       installApp: 'Install app',
       installed: 'Installed',
       seeHowItWorks: 'See how it works',
@@ -133,7 +134,7 @@ export const messages = {
       installHintDefault:
         'On mobile, open the browser 3-dot menu and use Install app or Add to Home screen. On desktop, use the install icon in the browser bar when it appears.',
       installStatusInstalled: 'BreedZ is already installed on this device.',
-      heroBanner: 'Designed for real farm use: simple, offline, and built to keep lineage, breeding history, and backups organized.',
+      heroBanner: 'Designed for real farm use: simple, offline, and built to keep breeding follow-up, lineage, and backups organized.',
       appOverline: 'Inside The App',
       appTitle: 'What BreedZ already helps you do',
       appItems: [
@@ -148,8 +149,8 @@ export const messages = {
           chip: 'Lineage',
         },
         {
-          title: 'Record herd events',
-          description: 'Log breeding, purchases, sales, health records, and herd-wide expenses.',
+          title: 'Follow the breeding cycle',
+          description: 'Log breeding, pregnancy checks, expected births, birth outcomes, and weaning.',
           chip: 'Events',
         },
         {
@@ -175,10 +176,11 @@ export const messages = {
       featuresOverline: 'What You Get',
       featuresTitle: 'Keep the whole herd organized without spreadsheet cleanup',
       featuresDescription:
-        'Built for cattle breeding records, lineage tracking, offspring history, and practical herd management on the farm.',
+        'Built for cattle breeding records, pregnancy follow-up, lineage tracking, offspring history, and practical herd management on the farm.',
       featuresItems: [
         'Track each animal',
-        'Record breeding events',
+        'Record breeding events and pregnancy checks',
+        'Track expected births, birth outcomes, and weaning',
         'Track purchases, sales, and expenses',
         'Track births and lineage',
         'Full history per animal',
@@ -187,7 +189,8 @@ export const messages = {
       howItWorksTitle: 'Simple to use in the field',
       howItWorksItems: [
         'Add your animals',
-        'Record breeding, purchases, sales, expenses, and notes',
+        'Record breeding, pregnancy checks, expected births, purchases, sales, expenses, and notes',
+        'Resolve births, failed breedings, pregnancy loss, and weaning when they happen',
         'Check history and outcomes anytime',
       ],
       offlineOverline: 'Offline First',
@@ -211,7 +214,8 @@ export const messages = {
       guidesOverline: 'Guides',
       guidesTitle: 'Learn the recordkeeping side of better breeding',
       guidesDescription:
-        'Use the guides below to tighten breeding dates, lineage records, and day-to-day decisions in the herd.',
+        'Browse practical guides for breeding dates, expected births, lineage records, and day-to-day decisions in the herd.',
+      openGuidesHub: 'Browse guides',
       breedingGuideDescription:
         'Learn a simple process for tracking breeding dates, expected calving timing, and herd follow-up without scattered notes.',
       openBreedingGuide: 'Read the breeding dates guide',
@@ -255,6 +259,11 @@ export const messages = {
           answer: 'Yes. You can keep recording without an internet connection. Sync runs later when the device is online.',
         },
         {
+          question: 'Can BreedZ track the full breeding cycle?',
+          answer:
+            'Yes. You can record breeding, pregnancy checks, expected births, birth outcomes, failed breedings, pregnancy loss, weaning, and lineage links.',
+        },
+        {
           question: 'Is my data safe?',
           answer: 'Your records are saved on this device. You can export Excel backups, and premium users can sync animals and events to their account.',
         },
@@ -272,6 +281,28 @@ export const messages = {
           answer: 'Yes. Sync backs up animal and event changes to your account, then downloads them on another device when you sign in and go online.',
         },
       ],
+    },
+    guidesHub: {
+      meta: {
+        title: 'Cattle Breeding And Recordkeeping Guides',
+        description:
+          'Browse BreedZ guides for cattle breeding dates, cow pregnancy, gestation calculators, lineage, recordkeeping methods, and recovery from lost breeding records.',
+      },
+      overline: 'Guides',
+      title: 'Cattle breeding and recordkeeping guides',
+      description:
+        'Use these practical guides to organize breeding dates, expected calving, lineage, app workflows, and recovery when records get messy.',
+      breedingOverline: 'Breeding Dates',
+      breedingTitle: 'Breeding dates and calving',
+      recordsOverline: 'Recordkeeping',
+      recordsTitle: 'Lineage and herd records',
+      workflowOverline: 'App Workflows',
+      workflowTitle: 'App choices and record recovery',
+      gestationCalculatorDescription:
+        'Use a cattle gestation calculator to estimate expected calving dates, then keep the result connected to your records.',
+      openGuide: 'Read guide',
+      appCtaTitle: 'Ready to track your own herd?',
+      appCtaDescription: 'Open BreedZ to start recording animals, breeding history, expected births, and lineage.',
     },
     dashboard: {
       overline: 'Dashboard',
@@ -1803,6 +1834,7 @@ export const messages = {
       home: 'Início',
     },
     footer: {
+      guides: 'Guias',
       terms: 'Termos',
       privacy: 'Privacidade',
       contact: 'Contato',
@@ -1894,14 +1926,14 @@ export const messages = {
     },
     home: {
       meta: {
-        title: 'Controle registros, reprodução, linhagem e backups do gado',
+        title: 'Controle reprodução, linhagem, partos e backups do gado',
         description:
-          'BreedZ é um aplicativo offline-first de manejo do rebanho para registros reprodutivos, histórico animal, linhagem, backups, sincronização e anotações no campo.',
+          'BreedZ é um aplicativo offline-first de manejo do rebanho para registros reprodutivos, diagnóstico de gestação, previsão de parto, linhagem, backups, sincronização e anotações no campo.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Controle reprodução, linhagem e registros do rebanho. Mesmo offline.',
+      heroTitle: 'Controle a reprodução do gado da cobertura ao parto. Mesmo offline.',
       heroSubtitle:
-        'Mantenha histórico reprodutivo, pais, descendentes e registros do dia a dia em um app offline-first. Comece localmente e sincronize seus registros entre dispositivos quando precisar.',
+        'Mantenha histórico reprodutivo, diagnóstico de gestação, previsão de parto, pais, descendentes, desmame e registros do dia a dia em um app offline-first. Comece localmente e sincronize seus registros entre dispositivos quando precisar.',
       installApp: 'Instalar app',
       installed: 'Instalado',
       seeHowItWorks: 'Ver como funciona',
@@ -1912,7 +1944,7 @@ export const messages = {
       installHintDefault:
         'No celular, abra o menu de 3 pontos do navegador e use Instalar app ou Adicionar à tela inicial. No desktop, use o ícone de instalação na barra do navegador quando ele aparecer.',
       installStatusInstalled: 'O BreedZ já está instalado neste dispositivo.',
-      heroBanner: 'Feito para uso real na fazenda: simples, offline e com linhagem, histórico reprodutivo e backups organizados.',
+      heroBanner: 'Feito para uso real na fazenda: simples, offline e com acompanhamento reprodutivo, linhagem e backups organizados.',
       appOverline: 'Dentro do App',
       appTitle: 'O que o BreedZ já ajuda você a fazer',
       appItems: [
@@ -1927,8 +1959,8 @@ export const messages = {
           chip: 'Linhagem',
         },
         {
-          title: 'Registrar eventos do rebanho',
-          description: 'Anote cobertura, compras, vendas, saúde e despesas do rebanho.',
+          title: 'Acompanhar o ciclo reprodutivo',
+          description: 'Anote cobertura, diagnóstico de gestação, previsão de parto, nascimento e desmame.',
           chip: 'Eventos',
         },
         {
@@ -1954,10 +1986,11 @@ export const messages = {
       featuresOverline: 'O Que Você Ganha',
       featuresTitle: 'Mantenha o rebanho organizado sem depender de planilhas confusas',
       featuresDescription:
-        'Feito para registros reprodutivos, linhagem, histórico de descendentes e manejo prático do rebanho na fazenda.',
+        'Feito para registros reprodutivos, acompanhamento de gestação, linhagem, histórico de descendentes e manejo prático do rebanho na fazenda.',
       featuresItems: [
         'Acompanhe cada animal',
-        'Registre eventos reprodutivos',
+        'Registre coberturas e diagnósticos de gestação',
+        'Acompanhe previsão de parto, nascimento e desmame',
         'Acompanhe compras, vendas e despesas',
         'Acompanhe nascimentos e linhagem',
         'Tenha histórico completo por animal',
@@ -1966,7 +1999,8 @@ export const messages = {
       howItWorksTitle: 'Simples de usar no campo',
       howItWorksItems: [
         'Cadastre seus animais',
-        'Registre coberturas, compras, vendas, despesas e observações',
+        'Registre coberturas, diagnósticos de gestação, previsões de parto, compras, vendas, despesas e observações',
+        'Finalize partos, falhas reprodutivas, perdas de gestação e desmame quando acontecerem',
         'Consulte histórico e resultados a qualquer momento',
       ],
       offlineOverline: 'Offline First',
@@ -1990,7 +2024,8 @@ export const messages = {
       guidesOverline: 'Guias',
       guidesTitle: 'Aprenda a parte do registro que melhora a reprodução',
       guidesDescription:
-        'Use os guias abaixo para organizar melhor datas de cobertura, linhagem e decisões do dia a dia no rebanho.',
+        'Veja guias práticos sobre datas de cobertura, previsão de parto, linhagem e decisões do dia a dia no rebanho.',
+      openGuidesHub: 'Ver guias',
       breedingGuideDescription:
         'Aprenda um processo simples para acompanhar datas de cobertura, previsão de parto e seguimento do rebanho sem anotações espalhadas.',
       openBreedingGuide: 'Ler o guia de datas de cobertura',
@@ -2034,6 +2069,11 @@ export const messages = {
           answer: 'Sim. Você pode continuar registrando sem internet. A sincronização roda depois, quando o dispositivo estiver online.',
         },
         {
+          question: 'O BreedZ acompanha o ciclo reprodutivo completo?',
+          answer:
+            'Sim. Você pode registrar cobertura, diagnóstico de gestação, previsão de parto, nascimento, falha reprodutiva, perda de gestação, desmame e vínculos de linhagem.',
+        },
+        {
           question: 'Meus dados estão seguros?',
           answer: 'Seus registros ficam salvos neste dispositivo. Você pode exportar backups em Excel, e usuários premium podem sincronizar animais e eventos com a conta.',
         },
@@ -2051,6 +2091,28 @@ export const messages = {
           answer: 'Sim. A sincronização faz backup de alterações de animais e eventos na sua conta e baixa esses dados em outro dispositivo quando você entrar e estiver online.',
         },
       ],
+    },
+    guidesHub: {
+      meta: {
+        title: 'Guias de reprodução e registros do gado',
+        description:
+          'Veja guias do BreedZ sobre datas de cobertura, gestação da vaca, calculadora de gestação, linhagem, métodos de registro e recuperação de registros perdidos.',
+      },
+      overline: 'Guias',
+      title: 'Guias de reprodução e registros do gado',
+      description:
+        'Use estes guias práticos para organizar datas de cobertura, previsão de parto, linhagem, fluxos no app e recuperação quando os registros ficam confusos.',
+      breedingOverline: 'Datas de cobertura',
+      breedingTitle: 'Cobertura, gestação e parto',
+      recordsOverline: 'Registros',
+      recordsTitle: 'Linhagem e registros do rebanho',
+      workflowOverline: 'Fluxos no app',
+      workflowTitle: 'Escolha do app e recuperação de registros',
+      gestationCalculatorDescription:
+        'Use uma calculadora de gestação bovina para estimar a data provável do parto e manter o resultado ligado aos registros.',
+      openGuide: 'Ler guia',
+      appCtaTitle: 'Pronto para acompanhar seu rebanho?',
+      appCtaDescription: 'Abra o BreedZ para registrar animais, histórico reprodutivo, partos previstos e linhagem.',
     },
     dashboard: {
       overline: 'Painel',
@@ -3585,6 +3647,7 @@ export const messages = {
       home: 'Inicio',
     },
     footer: {
+      guides: 'Guías',
       terms: 'Términos',
       privacy: 'Privacidad',
       contact: 'Contacto',
@@ -4290,14 +4353,14 @@ export const messages = {
     },
     home: {
       meta: {
-        title: 'Gestiona registros, reproducción, linaje y respaldos del ganado',
+        title: 'Gestiona reproducción, linaje, partos y respaldos del ganado',
         description:
-          'BreedZ es una app offline-first para manejo del ganado con registros reproductivos, historial animal, trazabilidad de linaje, respaldos, sincronización y control de campo.',
+          'BreedZ es una app offline-first para manejo del ganado con registros reproductivos, revisiones de preñez, partos esperados, linaje, respaldos, sincronización y control de campo.',
       },
       overline: 'BreedZ',
-      heroTitle: 'Controla reproducción, linaje y registros del ganado. Incluso sin conexión.',
+      heroTitle: 'Controla la reproducción del ganado desde la monta hasta el parto. Incluso sin conexión.',
       heroSubtitle:
-        'Mantén historial reproductivo, padres, descendencia y registros diarios en una app offline-first. Empieza localmente y sincroniza tus registros entre dispositivos cuando lo necesites.',
+        'Mantén historial reproductivo, revisiones de preñez, partos esperados, padres, descendencia, destete y registros diarios en una app offline-first. Empieza localmente y sincroniza tus registros entre dispositivos cuando lo necesites.',
       installApp: 'Instalar app',
       installed: 'Instalada',
       seeHowItWorks: 'Ver cómo funciona',
@@ -4308,7 +4371,7 @@ export const messages = {
       installHintDefault:
         'En el celular, abre el menú de 3 puntos del navegador y usa Instalar app o Añadir a pantalla de inicio. En escritorio, usa el ícono de instalación en la barra del navegador cuando aparezca.',
       installStatusInstalled: 'BreedZ ya está instalado en este dispositivo.',
-      heroBanner: 'Hecho para uso real en la finca: simple, offline y con linaje, historial reproductivo y respaldos bien organizados.',
+      heroBanner: 'Hecho para uso real en la finca: simple, offline y con seguimiento reproductivo, linaje y respaldos bien organizados.',
       appOverline: 'Dentro de la app',
       appTitle: 'Lo que BreedZ ya te ayuda a hacer',
       appItems: [
@@ -4323,8 +4386,8 @@ export const messages = {
           chip: 'Linaje',
         },
         {
-          title: 'Registrar eventos del ganado',
-          description: 'Anota reproducción, compras, ventas, salud y gastos del rebaño.',
+          title: 'Seguir el ciclo reproductivo',
+          description: 'Registra reproducción, revisiones de preñez, partos esperados, nacimientos y destete.',
           chip: 'Eventos',
         },
         {
@@ -4350,10 +4413,11 @@ export const messages = {
       featuresOverline: 'Lo que obtienes',
       featuresTitle: 'Mantén el rebaño organizado sin depender de hojas caóticas',
       featuresDescription:
-        'Pensado para registros reproductivos bovinos, linaje, historial de descendencia y manejo práctico del ganado en la finca.',
+        'Pensado para registros reproductivos bovinos, seguimiento de preñez, linaje, historial de descendencia y manejo práctico del ganado en la finca.',
       featuresItems: [
         'Registrar cada animal',
-        'Anotar eventos reproductivos',
+        'Registrar eventos reproductivos y revisiones de preñez',
+        'Seguir partos esperados, nacimientos y destete',
         'Seguir compras, ventas y gastos',
         'Seguir partos y linaje',
         'Historial completo por animal',
@@ -4362,7 +4426,8 @@ export const messages = {
       howItWorksTitle: 'Simple de usar en el campo',
       howItWorksItems: [
         'Agrega tus animales',
-        'Registra reproducción, compras, ventas, gastos y notas',
+        'Registra reproducción, revisiones de preñez, partos esperados, compras, ventas, gastos y notas',
+        'Resuelve nacimientos, fallos reproductivos, pérdidas de preñez y destete cuando ocurran',
         'Consulta historial y resultados cuando lo necesites',
       ],
       offlineOverline: 'Offline first',
@@ -4386,7 +4451,8 @@ export const messages = {
       guidesOverline: 'Guías',
       guidesTitle: 'Aprende la parte del registro que mejora la reproducción',
       guidesDescription:
-        'Usa las guías de abajo para ordenar mejor fechas reproductivas, linaje y decisiones diarias dentro del rebaño.',
+        'Explora guías prácticas sobre fechas reproductivas, partos esperados, linaje y decisiones diarias dentro del rebaño.',
+      openGuidesHub: 'Ver guías',
       breedingGuideDescription:
         'Aprende un proceso simple para registrar fechas de reproducción, estimar partos y hacer seguimiento del rebaño sin notas dispersas.',
       openBreedingGuide: 'Leer la guía de fechas reproductivas',
@@ -4430,6 +4496,11 @@ export const messages = {
           answer: 'Sí. Puedes seguir registrando sin internet. La sincronización se ejecuta después, cuando el dispositivo esté online.',
         },
         {
+          question: '¿BreedZ sigue el ciclo reproductivo completo?',
+          answer:
+            'Sí. Puedes registrar reproducción, revisiones de preñez, partos esperados, nacimientos, fallos reproductivos, pérdidas de preñez, destete y vínculos de linaje.',
+        },
+        {
           question: '¿Mis datos están seguros?',
           answer: 'Tus registros se guardan en este dispositivo. Puedes exportar respaldos en Excel, y los usuarios premium pueden sincronizar animales y eventos con su cuenta.',
         },
@@ -4447,6 +4518,28 @@ export const messages = {
           answer: 'Sí. La sincronización respalda cambios de animales y eventos en tu cuenta y los descarga en otro dispositivo cuando inicias sesión y estás online.',
         },
       ],
+    },
+    guidesHub: {
+      meta: {
+        title: 'Guías de reproducción y registros del ganado',
+        description:
+          'Explora guías de BreedZ sobre fechas reproductivas, gestación de vacas, calculadora de gestación, linaje, métodos de registro y recuperación de registros perdidos.',
+      },
+      overline: 'Guías',
+      title: 'Guías de reproducción y registros del ganado',
+      description:
+        'Usa estas guías prácticas para ordenar fechas reproductivas, partos esperados, linaje, flujos de la app y recuperación cuando los registros se vuelven confusos.',
+      breedingOverline: 'Fechas reproductivas',
+      breedingTitle: 'Reproducción, gestación y parto',
+      recordsOverline: 'Registros',
+      recordsTitle: 'Linaje y registros del rebaño',
+      workflowOverline: 'Flujos de la app',
+      workflowTitle: 'Elección de app y recuperación de registros',
+      gestationCalculatorDescription:
+        'Usa una calculadora de gestación bovina para estimar la fecha esperada de parto y mantener el resultado conectado a tus registros.',
+      openGuide: 'Leer guía',
+      appCtaTitle: '¿Listo para registrar tu rebaño?',
+      appCtaDescription: 'Abre BreedZ para registrar animales, historial reproductivo, partos esperados y linaje.',
     },
     homeShare: {
       overline: 'Compartir',

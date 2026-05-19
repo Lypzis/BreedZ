@@ -1,5 +1,5 @@
 function readEnvValue(name, fallback = '') {
-  const value = import.meta.env?.[name]
+  const value = process.env?.[name] ?? import.meta.env?.[name]
 
   if (typeof value !== 'string') {
     return fallback

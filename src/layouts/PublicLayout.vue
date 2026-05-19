@@ -29,6 +29,7 @@
     <q-footer bordered class="bg-white text-grey-8">
       <div class="row items-center justify-between q-col-gutter-md q-px-md q-py-sm">
         <div class="col-12 col-md-auto row items-center q-gutter-md footer-links">
+          <router-link :to="localizedPath('/guides')">{{ t('footer.guides') }}</router-link>
           <router-link :to="localizedPath('/about')">{{ t('footer.about') }}</router-link>
           <router-link :to="localizedPath('/contact')">{{ t('footer.contact') }}</router-link>
           <router-link :to="localizedPath('/privacy')">{{ t('footer.privacy') }}</router-link>

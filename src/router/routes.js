@@ -20,6 +20,7 @@ const routes = [
     component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'guides', component: () => import('pages/GuideHubPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', component: () => import('pages/GuideBreedingDatesPage.vue') },
       { path: 'guides/how-long-is-cow-pregnancy', component: () => import('pages/GuideCowPregnancyPage.vue') },
       { path: 'guides/cattle-gestation-calculator', component: () => import('pages/GuideCattleGestationCalculatorPage.vue') },
@@ -38,6 +39,8 @@ const routes = [
     component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'guides', redirect: '/pt-br/guias' },
+      { path: 'guias', component: () => import('pages/GuideHubPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', redirect: '/pt-br/guias/acompanhar-datas-de-cobertura-no-gado' },
       { path: 'guias/acompanhar-datas-de-cobertura-no-gado', component: () => import('pages/GuideBreedingDatesPage.vue') },
       { path: 'guides/how-long-is-cow-pregnancy', redirect: '/pt-br/guias/quanto-tempo-dura-a-gestacao-da-vaca' },
@@ -67,6 +70,8 @@ const routes = [
     component: () => import('layouts/PublicLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'guides', redirect: '/es/guias' },
+      { path: 'guias', component: () => import('pages/GuideHubPage.vue') },
       { path: 'guides/track-cattle-breeding-dates', redirect: '/es/guias/registrar-fechas-de-reproduccion-del-ganado' },
       { path: 'guias/registrar-fechas-de-reproduccion-del-ganado', component: () => import('pages/GuideBreedingDatesPage.vue') },
       { path: 'guides/how-long-is-cow-pregnancy', redirect: '/es/guias/cuanto-dura-la-gestacion-de-una-vaca' },

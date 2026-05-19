@@ -15,6 +15,7 @@ const LOCALE_TO_ROUTE_SEGMENT = {
 const LOCALIZED_PUBLIC_PATHS = {
   en: {
     '/': '/',
+    '/guides': '/guides',
     '/guides/track-cattle-breeding-dates': '/guides/track-cattle-breeding-dates',
     '/guides/how-long-is-cow-pregnancy': '/guides/how-long-is-cow-pregnancy',
     '/guides/cattle-gestation-calculator': '/guides/cattle-gestation-calculator',
@@ -29,6 +30,7 @@ const LOCALIZED_PUBLIC_PATHS = {
   },
   'pt-BR': {
     '/': '/',
+    '/guides': '/guias',
     '/guides/track-cattle-breeding-dates': '/guias/acompanhar-datas-de-cobertura-no-gado',
     '/guides/how-long-is-cow-pregnancy': '/guias/quanto-tempo-dura-a-gestacao-da-vaca',
     '/guides/cattle-gestation-calculator': '/guias/calculadora-de-gestacao-bovina',
@@ -43,6 +45,7 @@ const LOCALIZED_PUBLIC_PATHS = {
   },
   es: {
     '/': '/',
+    '/guides': '/guias',
     '/guides/track-cattle-breeding-dates': '/guias/registrar-fechas-de-reproduccion-del-ganado',
     '/guides/how-long-is-cow-pregnancy': '/guias/cuanto-dura-la-gestacion-de-una-vaca',
     '/guides/cattle-gestation-calculator': '/guias/calculadora-de-gestacion-bovina',
