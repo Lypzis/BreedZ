@@ -148,19 +148,19 @@ Live guide cluster:
 - `cattle-gestation-calculator`
 - `how-to-track-cattle-lineage`
 - `best-cattle-record-keeping-methods`
+- `breeding-management-app`
 - `breeding-records-app`
 - `lost-breeding-records-what-to-do`
 
 Next guide priorities:
 
-1. `breeding-management-app`
-2. `breeding-record-keeping-app`
-3. `cattle-record-keeping-system`
-4. `animal-lineage-tracking-software`
-5. `how-to-track-cattle-pedigree`
-6. `how-to-avoid-missing-calving-dates`
-7. `cattle-app-offline`
-8. `forgot-cow-breeding-date`
+1. `breeding-record-keeping-app`
+2. `cattle-record-keeping-system`
+3. `animal-lineage-tracking-software`
+4. `how-to-track-cattle-pedigree`
+5. `how-to-avoid-missing-calving-dates`
+6. `cattle-app-offline`
+7. `forgot-cow-breeding-date`
 
 Guide checklist:
 
@@ -189,7 +189,7 @@ Reminders:
 Known follow-ups:
 
 - Split the large `src/i18n/messages.js` into per-locale files.
-- Add a guides hub once the guide library is larger.
+- Keep the guides hub updated as each page ships.
 - Add a guard for exporting empty Excel backups.
 - Add more Netlify function tests.
 

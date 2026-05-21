@@ -145,6 +145,12 @@ const guideGroups = computed(() => [
     titleKey: 'guidesHub.workflowTitle',
     guides: [
       {
+        titleKey: 'guideBreedingManagementApp.title',
+        descriptionKey: 'guidesHub.breedingManagementAppDescription',
+        icon: 'event_repeat',
+        to: guidePath('/guides/breeding-management-app'),
+      },
+      {
         titleKey: 'home.breedingRecordsAppGuideTitle',
         descriptionKey: 'home.breedingRecordsAppGuideDescription',
         icon: 'phone_iphone',

@@ -373,3 +373,143 @@ Release Discipline:
 - keep each feature slice small enough to test manually
 - add model/service tests for every data-shape change
 - avoid major UI expansion without a clear farm workflow behind it
+
+## Landing Overall Polishment
+
+Goal: make the landing page feel more product-led and professional while keeping the guides simple, readable, and article-like.
+
+Hero Upgrade:
+
+- increase the first viewport to roughly `75-80svh`
+- keep the current first message near the top:
+  - BreedZ
+  - Track cattle breeding from pairing to birth. Even offline.
+  - Keep breeding history, pregnancy checks, expected births, parents, offspring, weaning, and daily records in one offline-first app. Start locally, then sync your records across devices when needed.
+- use white text over a real farm / field / cattle background image
+- add a dark overlay so text remains readable
+- keep the background recognizable; avoid making it so blurred that it feels generic
+- leave a hint of the next section visible below the hero when possible
+
+Hero Bottom Layout:
+
+- move the primary buttons to the lower-left side of the hero
+- move the trust note to the lower-right side
+- keep the trust note short and calm, for example:
+  - Offline-first. Local records. Sync when you need it.
+- keep buttons practical and visible:
+  - Install app
+  - Open dashboard
+
+Product Proof After Hero:
+
+- add product screenshots after the hero, not inside the hero first pass
+- prioritize screenshots from `demo-data/product_screenshots/`
+- use clean demo data instead of empty states
+- first screenshots to consider:
+  - dashboard lifecycle panels
+  - animal detail / timeline
+  - birth outcome flow
+  - lineage / parent-offspring view
+  - sync / settings card
+
+Inside The App Section:
+
+- replace the current contained checklist with alternating feature bands
+- section header should pair the BreedZ logo/icon with:
+  - Inside The App
+  - What BreedZ already helps you do
+- each band should combine a short feature explanation with a visual proof point
+- alternate text and visual sides so the section has rhythm without becoming busy
+- planned bands:
+  - Track each animal: animal register or animal detail screenshot
+  - Keep lineage linked: parent / offspring detail screenshot
+  - Follow the breeding cycle: expected birth or birth outcome flow
+  - See what needs attention: dashboard lifecycle panels
+  - Back up your records: sync / export settings card
+
+Screenshot / Mockup Direction:
+
+- use real BreedZ screenshots as the core proof
+- combine those screenshots with farm-use context where helpful:
+  - tablet mockup in a pasture, barn, truck, or working area
+  - farmer holding a tablet with the BreedZ screen visible
+  - phone or tablet on a fence rail, tailgate, or farm desk
+- keep the app UI readable inside the mockup; crisp product proof matters more than cinematic imagery
+- avoid repeating the same farmer-with-tablet composition for every feature
+- use contextual mockups mostly on the landing and commercial SEO pages
+- keep educational guide pages mostly simple and source-focused
+
+Problem Section:
+
+- simplify this section because it sits below the stronger hero and product-proof hierarchy
+- avoid cards or a heavy checklist layout here
+- use a compact two-column section:
+  - left: one grounded image of paper-note friction, such as handwritten cattle records, a notebook on a truck hood, loose farm notes, or someone trying to reconcile paper notes
+  - right: short problem copy
+- keep the current idea but tighten the bullets:
+  - Miss breeding windows and follow-up checks
+  - Search old notes when one animal needs attention
+  - Lose confidence in birth dates, lineage, and outcomes
+  - Keep records scattered across paper, chat, and memory
+- visual goal: the user should understand the pain in one glance without this section competing with the app-feature section above
+
+What You Get Section:
+
+- use this as the positive after-state after the problem section
+- keep the section simpler than the main product-proof section
+- use a two-column layout:
+  - left: current benefit copy and concise feature list
+  - right: a satisfied farmer holding a tablet with BreedZ visible
+- prefer a real BreedZ dashboard or animal timeline screenshot inside the tablet instead of only the logo
+- the logo can still appear subtly through the app header/drawer or tablet screen if natural
+- visual goal: show the shift from messy records to an organized herd in hand
+- keep the background clean/light so this section feels calm and confident, not overly staged
+
+How It Works Section:
+
+- turn the current numbered list into a visual 4-step process
+- use a `2x2` step-card grid on desktop and stacked cards on mobile
+- avoid another full-width alternating layout here because the Inside The App section already uses that rhythm
+- each card should include:
+  - number badge
+  - short title
+  - one-sentence description
+  - product screenshot or contextual mockup
+- suggested cards:
+  - 1. Add your animals: animal form, animal list, or animal detail screenshot
+  - 2. Record events: event form, grouped event selector, breeding form, or pregnancy check form
+  - 3. Resolve lifecycle outcomes: birth outcome dialog, expected birth linked records, or weaning action
+  - 4. Review history anytime: animal timeline or dashboard lifecycle panels
+- keep the tutorial CTA below the grid, either left-aligned with the content or centered depending on visual balance
+- visual goal: make the workflow feel quick and concrete, not like another text checklist
+
+Offline First Section:
+
+- keep this section practical and reassuring
+- use a two-column layout with the current offline-first copy on the left
+- preferred image on the right:
+  - tablet or phone resting on a fence rail with BreedZ open
+  - cattle, pasture, or working farm background visible behind it
+  - subtle field-use feeling without needing to show a literal internet outage
+- alternate acceptable image:
+  - tablet on a truck tailgate with pasture in the background
+- avoid reusing the same smiling farmer/tablet composition from the What You Get section
+- keep the app UI readable enough to prove it is BreedZ
+- visual goal: show that records can be checked where farm work happens, then synced or exported later
+
+Free And Premium Section:
+
+- avoid using a Stripe checkout or billing screen as the main visual
+- the section should sell the farmer-facing value, not the payment provider
+- preferred image on the right:
+  - two devices with BreedZ open, showing the same herd or dashboard
+  - include a subtle sync / backup status card if possible
+  - make the app UI readable enough to communicate multi-device sync
+- keep any Stripe trust mention as small supporting text only, such as secure billing handled through Stripe
+- visual goal: make premium feel like unlimited herd records plus records available on another device, not like a checkout flow
+
+Tone:
+
+- polished but not flashy
+- practical cattle-breeding tool, not generic SaaS marketing
+- the landing can be more visual; the guide pages should stay simple and source-focused
