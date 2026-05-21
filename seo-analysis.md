@@ -269,9 +269,9 @@ Why BreedZ can win:
 
 Recommended next pages:
 
-1. `breeding-management-app`
-2. `breeding-record-keeping-app`
-3. `cattle-record-keeping-system`
+1. `breeding-record-keeping-app`
+2. `cattle-record-keeping-system`
+3. `animal-lineage-tracking-software`
 
 Angle:
 
@@ -328,9 +328,9 @@ Angle:
 
 ### Phase 1: Fill commercial-intent pages
 
-1. `breeding-management-app`
-2. `breeding-record-keeping-app`
-3. `cattle-record-keeping-system`
+1. `breeding-record-keeping-app`
+2. `cattle-record-keeping-system`
+3. `animal-lineage-tracking-software`
 
 Goal:
 
@@ -395,11 +395,21 @@ Suggested link paths:
 
 Competitors use visual product proof. BreedZ should add screenshots to pages where product claims matter:
 
-- dashboard lifecycle panels
-- breeding event detail
-- expected birth outcome
-- lineage / breeding pair history
-- sync status
+- Dashboard: show today, upcoming, and needs-attention panels with realistic demo data. This proves BreedZ helps with follow-up, not only storage.
+- Animal detail / timeline: show one animal with breeding, pregnancy check, expected birth, birth, and weaning records. This is the strongest general product screenshot.
+- Birth outcome flow: show the dialog where a birth can create or link newborn animals and parent records. Use this for lifecycle and breeding-management pages.
+- Lineage / parent-offspring view: show dam, sire, offspring, or linked breeding records on animal detail. Use this for lineage and pedigree search intent.
+- Sync / settings card: show a clean backed-up or ready-to-sync state. Use this for premium, backup, offline, and multi-device claims.
+
+Where to use them:
+
+- Landing page: dashboard plus animal timeline first.
+- `breeding-management-app`: dashboard lifecycle panels plus birth outcome flow.
+- `breeding-records-app`: animal timeline plus event form or event detail.
+- `cattle-record-keeping-system`: dashboard plus export/sync/settings proof.
+- `animal-lineage-tracking-software`: lineage and parent-offspring views.
+
+Keep informational guides mostly simple. Add screenshots mainly to commercial-intent pages where the user is comparing tools, and use clean demo data instead of empty states.
 
 ### Add FAQ sections based on intent
 
@@ -463,7 +473,7 @@ Those are competitor-heavy claims and BreedZ does not need them to grow right no
 
 ## Priority Checklist
 
-- [ ] Publish `breeding-management-app`
+- [x] Publish `breeding-management-app`
 - [ ] Publish `breeding-record-keeping-app`
 - [ ] Publish `cattle-record-keeping-system`
 - [ ] Publish `cattle-breeding-record-keeping-system`
@@ -471,5 +481,5 @@ Those are competitor-heavy claims and BreedZ does not need them to grow right no
 - [ ] Publish `cattle-app-offline`
 - [ ] Add product screenshots to commercial pages
 - [ ] Add FAQ schema later if the current SEO setup supports structured data cleanly
-- [ ] Build localized guides hub after 10+ guide pages
+- [x] Build localized guides hub
 - [ ] Split i18n messages before the guide library grows much more

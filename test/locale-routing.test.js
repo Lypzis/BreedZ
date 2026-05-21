@@ -17,6 +17,10 @@ test('localized public paths remain localized', () => {
     buildLocalizedPath('pt-BR', '/guides/cattle-gestation-calculator'),
     '/pt-br/guias/calculadora-de-gestacao-bovina',
   )
+  assert.equal(
+    buildLocalizedPath('es', '/guides/breeding-management-app'),
+    '/es/guias/app-para-manejo-reproductivo-del-ganado',
+  )
   assert.equal(buildLocalizedPath('pt-BR', '/guides'), '/pt-br/guias')
   assert.equal(buildLocalizedPath('es', '/guides'), '/es/guias')
 })

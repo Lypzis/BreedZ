@@ -300,6 +300,8 @@ export const messages = {
       workflowTitle: 'App choices and record recovery',
       gestationCalculatorDescription:
         'Use a cattle gestation calculator to estimate expected calving dates, then keep the result connected to your records.',
+      breedingManagementAppDescription:
+        'See how a breeding management app should connect breeding dates, pregnancy checks, expected births, outcomes, weaning, and lineage follow-up.',
       openGuide: 'Read guide',
       appCtaTitle: 'Ready to track your own herd?',
       appCtaDescription: 'Open BreedZ to start recording animals, breeding history, expected births, and lineage.',
@@ -1429,6 +1431,120 @@ export const messages = {
         },
       ],
     },
+    guideBreedingManagementApp: {
+      meta: {
+        title: 'Breeding Management App for Cattle: What It Should Do',
+        description:
+          'Learn what a cattle breeding management app should support: breeding records, pregnancy checks, expected births, birth outcomes, weaning, lineage, reminders, offline use, and sync.',
+      },
+      overline: 'Guide',
+      title: 'Breeding Management App for Cattle: What It Should Do',
+      description:
+        'A breeding management app should do more than store notes. It should help turn each breeding record into the next practical action, from pregnancy check to calving outcome and weaning.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Choose a breeding management app that connects breeding dates, partners, pregnancy checks, expected births, birth outcomes, offspring, weaning, and follow-up reminders in one animal timeline.',
+      openApp: 'Start managing breeding records',
+      openRecordsGuide: 'Read records app guide',
+      problemOverline: 'The problem',
+      problemTitle: 'Breeding management breaks when follow-up is separate',
+      problemDescription:
+        'A breeding date is only the first step. The real value comes from knowing what should happen next, which animals need attention, and whether the breeding cycle ended with a clear outcome.',
+      problemItems: [
+        'Breeding dates are saved, but pregnancy checks are not scheduled or reviewed.',
+        'Expected birth dates are calculated once and then disappear from daily work.',
+        'Birth outcomes are recorded without linking calves back to dam and sire.',
+        'Open, failed, lost, or uncertain outcomes stay mixed with active pregnancies.',
+        'Weaning and follow-up records are handled later with no connection to the birth record.',
+        'The app needs internet exactly when the farm work is happening in the field.',
+      ],
+      workflowOverline: 'Workflow',
+      workflowTitle: 'The breeding cycle your app should support',
+      workflowItems: [
+        {
+          title: 'Breeding recorded',
+          description:
+            'Save the breeding date, breeding partner or group when known, method, notes, and the female involved.',
+        },
+        {
+          title: 'Pregnancy follow-up',
+          description:
+            'Keep pregnancy checks connected to the breeding record so open, pregnant, and uncertain animals are easy to separate.',
+        },
+        {
+          title: 'Expected birth or calving window',
+          description:
+            'Use the breeding date to estimate a due window, then keep that due record visible until it is resolved.',
+        },
+        {
+          title: 'Outcome recorded',
+          description:
+            'Record birth, loss, open result, or another outcome so old expected births do not stay active forever.',
+        },
+        {
+          title: 'Offspring and weaning',
+          description:
+            'Link newborns to dam and sire when possible, then keep weaning and later lifecycle records attached to the same history.',
+        },
+      ],
+      mustHaveOverline: 'Must-have features',
+      mustHaveTitle: 'What a breeding management app should include',
+      mustHaveItems: [
+        'Animal identity with tag, name, sex, status, breed, and notes.',
+        'Breeding records linked to the correct animal and partner or group.',
+        'Pregnancy check records with clear results and follow-up dates.',
+        'Expected birth records that can be confirmed, changed, or resolved.',
+        'Birth outcomes that can create or link offspring records.',
+        'Failed, lost, open, and uncertain outcomes so the timeline stays honest.',
+        'Weaning records and other lifecycle follow-ups.',
+        'Dashboard sections for due, overdue, and unresolved breeding work.',
+        'Offline access, export, and account sync for backup and multi-device use.',
+      ],
+      avoidOverline: 'What to avoid',
+      avoidTitle: 'Signs the app may not fit breeding work',
+      avoidItems: [
+        'It stores notes but does not show the next action.',
+        'It has a calculator, but the date is not connected to the animal record.',
+        'It treats birth, calf identity, dam, sire, and weaning as separate chores.',
+        'It requires a reliable connection for normal field recording.',
+        'It is so broad that common breeding actions take too many taps.',
+      ],
+      breedzOverline: 'Using BreedZ',
+      breedzTitle: 'How BreedZ handles breeding management',
+      breedzDescription:
+        'BreedZ is built around an offline-first animal timeline so breeding, pregnancy checks, expected births, outcomes, and lineage stay connected without turning the app into a heavy farm suite.',
+      breedzItems: [
+        'Log breeding, pregnancy checks, expected births, births, losses, weaning, sale, purchase, health, income, and expenses.',
+        'Use lifecycle links to move from breeding to expected birth to outcome without losing context.',
+        'Create or link newborn animals from birth outcomes and keep dam and sire records connected.',
+        'Review dashboard sections for due, overdue, unresolved, and upcoming records.',
+        'Work offline first, then export or sync records when the account is ready.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about breeding management apps',
+      faqs: [
+        {
+          question: 'What is a breeding management app?',
+          answer:
+            'It is an app that helps manage the whole breeding cycle, not only save a breeding date. It should connect service, pregnancy check, expected birth, outcome, offspring, and follow-up records.',
+        },
+        {
+          question: 'How is it different from a breeding records app?',
+          answer:
+            'A records app focuses on storing history. A management app should also surface what needs action, such as pregnancy checks due, expected births due soon, and unresolved outcomes.',
+        },
+        {
+          question: 'Does it need to work offline?',
+          answer:
+            'For farm work, yes. Breeding, calving, pasture, and weaning notes often happen away from strong internet, so offline recording prevents gaps.',
+        },
+        {
+          question: 'Should it track weaning too?',
+          answer:
+            'Yes, when offspring are kept or reviewed later. Weaning closes an important part of the lifecycle and helps keep calf history connected to the dam.',
+        },
+      ],
+    },
     guideBreedingRecordsApp: {
       meta: {
         title: 'Breeding Records App for Cattle: What to Track',
@@ -2110,6 +2226,8 @@ export const messages = {
       workflowTitle: 'Escolha do app e recuperação de registros',
       gestationCalculatorDescription:
         'Use uma calculadora de gestação bovina para estimar a data provável do parto e manter o resultado ligado aos registros.',
+      breedingManagementAppDescription:
+        'Veja como um app de manejo reprodutivo deve conectar cobertura, diagnóstico de gestação, previsão de parto, resultados, desmame e linhagem.',
       openGuide: 'Ler guia',
       appCtaTitle: 'Pronto para acompanhar seu rebanho?',
       appCtaDescription: 'Abra o BreedZ para registrar animais, histórico reprodutivo, partos previstos e linhagem.',
@@ -3239,6 +3357,120 @@ export const messages = {
         {
           question: 'O que faz um app de registro ser melhor?',
           answer: 'Busca, histórico por animal, vínculo de linhagem e atualização rápida no campo costumam fazer a maior diferença.',
+        },
+      ],
+    },
+    guideBreedingManagementApp: {
+      meta: {
+        title: 'Aplicativo de manejo reprodutivo do gado: o que deve fazer',
+        description:
+          'Veja o que um aplicativo de manejo reprodutivo do gado deve apoiar: registros de cobertura, diagnóstico de gestação, previsão de parto, resultados, desmame, linhagem, lembretes, uso offline e sincronização.',
+      },
+      overline: 'Guia',
+      title: 'Aplicativo de manejo reprodutivo do gado: o que deve fazer',
+      description:
+        'Um app de manejo reprodutivo deve fazer mais do que guardar anotações. Ele deve transformar cada registro de cobertura na próxima ação prática, do diagnóstico de gestação ao resultado do parto e ao desmame.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Escolha um app de manejo reprodutivo que conecte datas de cobertura, parceiro ou lote, diagnóstico de gestação, previsão de parto, resultados, crias, desmame e lembretes em uma linha do tempo por animal.',
+      openApp: 'Começar a manejar registros reprodutivos',
+      openRecordsGuide: 'Ler guia de app de registros',
+      problemOverline: 'O problema',
+      problemTitle: 'O manejo reprodutivo falha quando o acompanhamento fica separado',
+      problemDescription:
+        'A data de cobertura é só o primeiro passo. O valor real vem de saber o que deve acontecer depois, quais animais precisam de atenção e se o ciclo reprodutivo terminou com um resultado claro.',
+      problemItems: [
+        'Datas de cobertura são salvas, mas diagnósticos de gestação não são agendados ou revisados.',
+        'Previsões de parto são calculadas uma vez e depois somem da rotina.',
+        'Resultados de nascimento são registrados sem ligar bezerros à mãe e ao pai.',
+        'Resultados vazios, perdas ou incertezas ficam misturados com gestações ativas.',
+        'Desmame e acompanhamento posterior ficam para depois sem ligação com o nascimento.',
+        'O app precisa de internet justamente quando o trabalho está acontecendo no campo.',
+      ],
+      workflowOverline: 'Fluxo',
+      workflowTitle: 'O ciclo reprodutivo que o app deve apoiar',
+      workflowItems: [
+        {
+          title: 'Cobertura registrada',
+          description:
+            'Salve data de cobertura, parceiro ou lote quando souber, método, observações e a fêmea envolvida.',
+        },
+        {
+          title: 'Acompanhamento de gestação',
+          description:
+            'Mantenha diagnósticos de gestação ligados à cobertura para separar com facilidade animais vazios, prenhes e incertos.',
+        },
+        {
+          title: 'Previsão de parto',
+          description:
+            'Use a data de cobertura para estimar uma janela provável e mantenha esse registro visível até ser resolvido.',
+        },
+        {
+          title: 'Resultado registrado',
+          description:
+            'Registre nascimento, perda, resultado vazio ou outro desfecho para que partos previstos antigos não fiquem ativos para sempre.',
+        },
+        {
+          title: 'Cria e desmame',
+          description:
+            'Ligue recém-nascidos à mãe e ao pai quando possível e mantenha desmame e outros registros do ciclo no mesmo histórico.',
+        },
+      ],
+      mustHaveOverline: 'Recursos essenciais',
+      mustHaveTitle: 'O que um app de manejo reprodutivo deve incluir',
+      mustHaveItems: [
+        'Identificação do animal com brinco, nome, sexo, status, raça e observações.',
+        'Registros de cobertura ligados ao animal correto e ao parceiro ou lote.',
+        'Diagnósticos de gestação com resultado claro e datas de acompanhamento.',
+        'Previsões de parto que podem ser confirmadas, alteradas ou resolvidas.',
+        'Resultados de nascimento que podem criar ou vincular registros de crias.',
+        'Resultados de perda, vazio, falha e incerteza para manter a linha do tempo honesta.',
+        'Registros de desmame e outros acompanhamentos do ciclo de vida.',
+        'Painel com registros vencidos, próximos e ciclos reprodutivos sem resolução.',
+        'Acesso offline, exportação e sincronização de conta para backup e uso em vários dispositivos.',
+      ],
+      avoidOverline: 'O que evitar',
+      avoidTitle: 'Sinais de que o app talvez não sirva para reprodução',
+      avoidItems: [
+        'Ele guarda anotações, mas não mostra a próxima ação.',
+        'Ele tem calculadora, mas a data não fica conectada ao animal.',
+        'Ele trata nascimento, cria, mãe, pai e desmame como tarefas soltas.',
+        'Ele exige conexão confiável para registrar a rotina no campo.',
+        'Ele é tão amplo que ações reprodutivas comuns exigem muitos toques.',
+      ],
+      breedzOverline: 'Usando o BreedZ',
+      breedzTitle: 'Como o BreedZ lida com manejo reprodutivo',
+      breedzDescription:
+        'O BreedZ foi construído em torno de uma linha do tempo offline-first por animal, mantendo cobertura, diagnóstico de gestação, parto previsto, resultados e linhagem conectados sem virar um sistema pesado.',
+      breedzItems: [
+        'Registre cobertura, diagnóstico de gestação, parto previsto, nascimento, perdas, desmame, venda, compra, saúde, receitas e despesas.',
+        'Use vínculos de ciclo de vida para ir da cobertura ao parto previsto e ao resultado sem perder contexto.',
+        'Crie ou vincule animais recém-nascidos a partir de resultados de parto e mantenha mãe e pai conectados.',
+        'Revise no painel registros vencidos, próximos, sem resolução e que precisam de atenção.',
+        'Trabalhe offline primeiro e depois exporte ou sincronize os registros quando a conta estiver pronta.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre apps de manejo reprodutivo',
+      faqs: [
+        {
+          question: 'O que é um app de manejo reprodutivo?',
+          answer:
+            'É um app que ajuda a manejar o ciclo reprodutivo inteiro, não apenas salvar uma data de cobertura. Ele deve conectar cobertura, diagnóstico, parto previsto, resultado, cria e acompanhamento.',
+        },
+        {
+          question: 'Qual a diferença para um app de registros de cobertura?',
+          answer:
+            'Um app de registros foca em guardar histórico. Um app de manejo também deve mostrar o que precisa de ação, como diagnósticos vencidos, partos próximos e resultados sem resolução.',
+        },
+        {
+          question: 'Ele precisa funcionar offline?',
+          answer:
+            'Para a rotina da fazenda, sim. Cobertura, parto, pasto e desmame muitas vezes acontecem longe de internet forte, então o modo offline evita lacunas.',
+        },
+        {
+          question: 'Também deve acompanhar desmame?',
+          answer:
+            'Sim, quando as crias serão mantidas ou revisadas depois. O desmame fecha uma parte importante do ciclo e ajuda a manter o histórico da cria ligado à mãe.',
         },
       ],
     },
@@ -4537,6 +4769,8 @@ export const messages = {
       workflowTitle: 'Elección de app y recuperación de registros',
       gestationCalculatorDescription:
         'Usa una calculadora de gestación bovina para estimar la fecha esperada de parto y mantener el resultado conectado a tus registros.',
+      breedingManagementAppDescription:
+        'Mira cómo una app de manejo reproductivo debe conectar reproducción, revisión de preñez, parto esperado, resultados, destete y linaje.',
       openGuide: 'Leer guía',
       appCtaTitle: '¿Listo para registrar tu rebaño?',
       appCtaDescription: 'Abre BreedZ para registrar animales, historial reproductivo, partos esperados y linaje.',
@@ -5062,6 +5296,120 @@ export const messages = {
         {
           question: '¿Qué hace mejor a una app de registros?',
           answer: 'La búsqueda, el historial por animal, los vínculos de linaje y la rapidez para actualizar en el campo suelen marcar la diferencia.',
+        },
+      ],
+    },
+    guideBreedingManagementApp: {
+      meta: {
+        title: 'App de manejo reproductivo del ganado: qué debería hacer',
+        description:
+          'Aprende qué debe apoyar una app de manejo reproductivo del ganado: registros reproductivos, revisión de preñez, parto esperado, resultados, destete, linaje, recordatorios, uso offline y sincronización.',
+      },
+      overline: 'Guía',
+      title: 'App de manejo reproductivo del ganado: qué debería hacer',
+      description:
+        'Una app de manejo reproductivo debe hacer más que guardar notas. Debe convertir cada registro reproductivo en la siguiente acción práctica, desde la revisión de preñez hasta el resultado del parto y el destete.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Elige una app de manejo reproductivo que conecte fechas reproductivas, pareja o grupo, revisión de preñez, parto esperado, resultados, crías, destete y recordatorios en una línea de tiempo por animal.',
+      openApp: 'Empezar a manejar registros reproductivos',
+      openRecordsGuide: 'Leer guía de app de registros',
+      problemOverline: 'El problema',
+      problemTitle: 'El manejo reproductivo falla cuando el seguimiento queda separado',
+      problemDescription:
+        'La fecha reproductiva es solo el primer paso. El valor real viene de saber qué debe pasar después, qué animales necesitan atención y si el ciclo reproductivo terminó con un resultado claro.',
+      problemItems: [
+        'Las fechas reproductivas se guardan, pero las revisiones de preñez no se programan ni se revisan.',
+        'Los partos esperados se calculan una vez y luego desaparecen del trabajo diario.',
+        'Los resultados de nacimiento se registran sin vincular terneros con madre y padre.',
+        'Resultados vacíos, fallidos, perdidos o inciertos quedan mezclados con preñeces activas.',
+        'El destete y el seguimiento posterior quedan para después sin conexión con el nacimiento.',
+        'La app necesita internet justo cuando el trabajo ocurre en el campo.',
+      ],
+      workflowOverline: 'Flujo',
+      workflowTitle: 'El ciclo reproductivo que la app debe apoyar',
+      workflowItems: [
+        {
+          title: 'Reproducción registrada',
+          description:
+            'Guarda la fecha reproductiva, pareja o grupo cuando se conozca, método, notas y la hembra involucrada.',
+        },
+        {
+          title: 'Seguimiento de preñez',
+          description:
+            'Mantén las revisiones de preñez conectadas al registro reproductivo para separar fácilmente animales vacíos, preñados e inciertos.',
+        },
+        {
+          title: 'Parto esperado',
+          description:
+            'Usa la fecha reproductiva para estimar una ventana probable y mantén ese registro visible hasta resolverlo.',
+        },
+        {
+          title: 'Resultado registrado',
+          description:
+            'Registra nacimiento, pérdida, resultado vacío u otro desenlace para que los partos esperados antiguos no sigan activos para siempre.',
+        },
+        {
+          title: 'Cría y destete',
+          description:
+            'Vincula recién nacidos con madre y padre cuando sea posible y mantén destete y otros registros del ciclo en el mismo historial.',
+        },
+      ],
+      mustHaveOverline: 'Funciones esenciales',
+      mustHaveTitle: 'Qué debe incluir una app de manejo reproductivo',
+      mustHaveItems: [
+        'Identidad del animal con identificación, nombre, sexo, estado, raza y notas.',
+        'Registros reproductivos vinculados al animal correcto y a la pareja o grupo.',
+        'Revisiones de preñez con resultado claro y fechas de seguimiento.',
+        'Partos esperados que se puedan confirmar, cambiar o resolver.',
+        'Resultados de nacimiento que puedan crear o vincular registros de crías.',
+        'Resultados de pérdida, vacío, falla e incertidumbre para mantener honesta la línea de tiempo.',
+        'Registros de destete y otros seguimientos del ciclo de vida.',
+        'Panel con registros vencidos, próximos y ciclos reproductivos sin resolución.',
+        'Acceso offline, exportación y sincronización de cuenta para respaldo y uso en varios dispositivos.',
+      ],
+      avoidOverline: 'Qué evitar',
+      avoidTitle: 'Señales de que la app quizá no encaja con reproducción',
+      avoidItems: [
+        'Guarda notas, pero no muestra la siguiente acción.',
+        'Tiene calculadora, pero la fecha no queda conectada al animal.',
+        'Trata nacimiento, cría, madre, padre y destete como tareas sueltas.',
+        'Exige conexión confiable para registrar el trabajo normal en campo.',
+        'Es tan amplia que las acciones reproductivas comunes requieren demasiados toques.',
+      ],
+      breedzOverline: 'Usando BreedZ',
+      breedzTitle: 'Cómo BreedZ maneja el ciclo reproductivo',
+      breedzDescription:
+        'BreedZ está construido alrededor de una línea de tiempo offline-first por animal, manteniendo reproducción, revisión de preñez, parto esperado, resultados y linaje conectados sin convertirse en un sistema pesado.',
+      breedzItems: [
+        'Registra reproducción, revisión de preñez, parto esperado, nacimiento, pérdidas, destete, venta, compra, salud, ingresos y gastos.',
+        'Usa vínculos del ciclo de vida para pasar de reproducción a parto esperado y resultado sin perder contexto.',
+        'Crea o vincula animales recién nacidos desde resultados de parto y mantiene madre y padre conectados.',
+        'Revisa en el panel registros vencidos, próximos, sin resolución y que necesitan atención.',
+        'Trabaja offline primero y luego exporta o sincroniza los registros cuando la cuenta esté lista.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre apps de manejo reproductivo',
+      faqs: [
+        {
+          question: '¿Qué es una app de manejo reproductivo?',
+          answer:
+            'Es una app que ayuda a manejar todo el ciclo reproductivo, no solo guardar una fecha. Debe conectar reproducción, revisión, parto esperado, resultado, cría y seguimiento.',
+        },
+        {
+          question: '¿En qué se diferencia de una app de registros reproductivos?',
+          answer:
+            'Una app de registros se centra en guardar historial. Una app de manejo también debe mostrar qué necesita acción, como revisiones vencidas, partos próximos y resultados sin resolver.',
+        },
+        {
+          question: '¿Debe funcionar offline?',
+          answer:
+            'Para el trabajo de finca, sí. Reproducción, parto, potrero y destete muchas veces ocurren lejos de internet fuerte, así que el modo offline evita huecos.',
+        },
+        {
+          question: '¿También debe registrar destete?',
+          answer:
+            'Sí, cuando las crías se mantienen o se revisan después. El destete cierra una parte importante del ciclo y ayuda a mantener la historia de la cría conectada a la madre.',
         },
       ],
     },
