@@ -317,19 +317,18 @@ Completed Guides:
 - `cattle-gestation-calculator`
 - `how-to-track-cattle-lineage`
 - `best-cattle-record-keeping-methods`
+- `cattle-breeding-record-keeping-system`
 - `breeding-records-app`
 - `lost-breeding-records-what-to-do`
 
 Current SEO Priority:
 
-1. `breeding-management-app`
-2. `breeding-record-keeping-app`
-3. `cattle-record-keeping-system`
-4. `animal-lineage-tracking-software`
-5. `how-to-track-cattle-pedigree`
-6. `how-to-avoid-missing-calving-dates`
-7. `cattle-app-offline`
-8. `forgot-cow-breeding-date`
+1. `cattle-record-keeping-system`
+2. `animal-lineage-tracking-software`
+3. `how-to-track-cattle-pedigree`
+4. `how-to-avoid-missing-calving-dates`
+5. `cattle-app-offline`
+6. `forgot-cow-breeding-date`
 
 Rules For New Guides:
 

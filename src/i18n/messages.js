@@ -154,6 +154,11 @@ export const messages = {
           chip: 'Events',
         },
         {
+          title: 'Record farm transactions',
+          description: 'Track purchases, sales, expenses, and other income beside the herd history.',
+          chip: 'Money',
+        },
+        {
           title: 'See what needs attention',
           description: 'Use the dashboard and overview for today, herd totals, and recorded outcomes.',
           chip: 'Overview',
@@ -192,6 +197,12 @@ export const messages = {
         'Record breeding, pregnancy checks, expected births, purchases, sales, expenses, and notes',
         'Resolve births, failed breedings, pregnancy loss, and weaning when they happen',
         'Check history and outcomes anytime',
+      ],
+      howItWorksStepTitles: [
+        'Add your animals',
+        'Record events',
+        'Resolve lifecycle outcomes',
+        'Review history anytime',
       ],
       offlineOverline: 'Offline First',
       offlineTitle: 'Built for farms without reliable internet',
@@ -302,6 +313,8 @@ export const messages = {
         'Use a cattle gestation calculator to estimate expected calving dates, then keep the result connected to your records.',
       breedingManagementAppDescription:
         'See how a breeding management app should connect breeding dates, pregnancy checks, expected births, outcomes, weaning, and lineage follow-up.',
+      breedingRecordKeepingSystemDescription:
+        'Build a simple cattle breeding recordkeeping system around animal identity, breeding dates, pregnancy follow-up, calving outcomes, offspring, and weaning.',
       openGuide: 'Read guide',
       appCtaTitle: 'Ready to track your own herd?',
       appCtaDescription: 'Open BreedZ to start recording animals, breeding history, expected births, and lineage.',
@@ -1545,6 +1558,112 @@ export const messages = {
         },
       ],
     },
+    guideCattleBreedingRecordKeepingSystem: {
+      meta: {
+        title: 'Cattle Breeding Record Keeping System: What to Track',
+        description:
+          'Learn how to build a cattle breeding record keeping system for animal identity, breeding dates, pregnancy checks, expected calving, birth outcomes, offspring, and weaning.',
+      },
+      overline: 'Guide',
+      title: 'Cattle Breeding Record Keeping System: What to Track',
+      description:
+        'A cattle breeding record keeping system does not need to be complicated. It needs a clear structure that keeps every breeding decision connected to the animal, the follow-up, and the final outcome.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Start with animal identity, then connect breeding date, sire or breeding group, pregnancy check, expected calving date, actual birth outcome, calf record, and weaning record in one timeline.',
+      openApp: 'Start tracking your herd',
+      openManagementGuide: 'Read management app guide',
+      structureOverline: 'System structure',
+      structureTitle: 'The records every cattle breeding system should connect',
+      structureItems: [
+        {
+          title: 'Animal identity',
+          description:
+            'Use a consistent tag or ID for every animal. The rest of the system only works if breeding, calving, health, sale, and offspring records point to the same animal.',
+        },
+        {
+          title: 'Breeding record',
+          description:
+            'Save the breeding date, female, sire or breeding group when known, method, and notes. This is the anchor for pregnancy checks and expected calving.',
+        },
+        {
+          title: 'Pregnancy follow-up',
+          description:
+            'Record pregnancy checks as their own follow-up, with a clear result such as pregnant, open, uncertain, or needs recheck.',
+        },
+        {
+          title: 'Expected calving record',
+          description:
+            'Estimate a due date or calving window from the breeding record, then keep it visible until the outcome is confirmed.',
+        },
+        {
+          title: 'Birth outcome and calf link',
+          description:
+            'When calving happens, record the outcome and link the calf to dam and sire when possible. This keeps lineage useful later.',
+        },
+        {
+          title: 'Weaning and next decisions',
+          description:
+            'Close the early lifecycle with weaning, sale, keeper, loss, or replacement notes so the record supports the next season.',
+        },
+      ],
+      workflowOverline: 'Workflow',
+      workflowTitle: 'A simple breeding record workflow',
+      workflowItems: [
+        'Add or confirm the cow or heifer before the breeding season starts.',
+        'Record breeding or exposure as soon as it happens or as soon as the group is known.',
+        'Schedule or record the pregnancy check instead of leaving it as a memory task.',
+        'Create the expected calving record and watch the due window.',
+        'Resolve the expected calving record with birth, loss, open result, or another clear outcome.',
+        'Create or link calf records and keep dam, sire, birth date, sex, and notes connected.',
+        'Record weaning or the next herd decision before the calf history gets separated.',
+      ],
+      mistakesOverline: 'Common mistakes',
+      mistakesTitle: 'Where breeding records usually fall apart',
+      mistakeItems: [
+        'Using a tag number in one place and a nickname in another without a stable animal ID.',
+        'Recording a breeding date but not the pregnancy check or calving outcome.',
+        'Writing expected calving dates in a calendar without linking them back to the cow.',
+        'Recording a calf without dam and sire context.',
+        'Keeping paper notes, spreadsheets, chat messages, and app records active at the same time.',
+        'Waiting until the end of the season to clean up uncertain records.',
+      ],
+      breedzOverline: 'Using BreedZ',
+      breedzTitle: 'How BreedZ keeps the system practical',
+      breedzDescription:
+        'BreedZ keeps the breeding recordkeeping system inside one offline-first animal timeline, so the structure stays useful without becoming a heavy enterprise record system.',
+      breedzItems: [
+        'Track each animal with tag, name, sex, status, birth date, parents, and notes.',
+        'Log breeding, pregnancy checks, expected births, birth outcomes, losses, weaning, sales, purchases, health, income, and expenses.',
+        'Move from expected birth to birth outcome and create or link calf records from the same flow.',
+        'Use dashboard sections to see due, overdue, unresolved, and upcoming records.',
+        'Export Excel backups or use account sync when you need records on another device.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Common questions about cattle breeding record systems',
+      faqs: [
+        {
+          question: 'What is the minimum cattle breeding record system?',
+          answer:
+            'At minimum, keep animal ID, breeding date, sire or breeding group, pregnancy result, expected calving date, actual outcome, calf ID, and weaning or next decision.',
+        },
+        {
+          question: 'Can a spreadsheet work?',
+          answer:
+            'Yes, for small herds and simple records. It becomes harder when you need reminders, parent links, birth outcomes, offline entry, and multiple devices.',
+        },
+        {
+          question: 'Should every calf have dam and sire records?',
+          answer:
+            'Dam should be recorded whenever possible. Sire may be exact, estimated, or unknown depending on the breeding setup, but the system should make that uncertainty clear.',
+        },
+        {
+          question: 'How often should records be updated?',
+          answer:
+            'Update them when the work happens. Breeding, pregnancy checks, calving, loss, sale, and weaning records are much more reliable when captured close to the event.',
+        },
+      ],
+    },
     guideBreedingRecordsApp: {
       meta: {
         title: 'Breeding Records App for Cattle: What to Track',
@@ -2080,6 +2199,11 @@ export const messages = {
           chip: 'Eventos',
         },
         {
+          title: 'Registrar movimentações da fazenda',
+          description: 'Acompanhe compras, vendas, despesas e outras receitas junto ao histórico do rebanho.',
+          chip: 'Financeiro',
+        },
+        {
           title: 'Ver o que precisa de atenção',
           description: 'Use o painel e a visão geral para hoje, totais do rebanho e resultados registrados.',
           chip: 'Visão geral',
@@ -2118,6 +2242,12 @@ export const messages = {
         'Registre coberturas, diagnósticos de gestação, previsões de parto, compras, vendas, despesas e observações',
         'Finalize partos, falhas reprodutivas, perdas de gestação e desmame quando acontecerem',
         'Consulte histórico e resultados a qualquer momento',
+      ],
+      howItWorksStepTitles: [
+        'Cadastre seus animais',
+        'Registre eventos',
+        'Finalize ciclos reprodutivos',
+        'Revise o histórico quando quiser',
       ],
       offlineOverline: 'Offline First',
       offlineTitle: 'Feito para fazendas com internet instável',
@@ -2228,6 +2358,8 @@ export const messages = {
         'Use uma calculadora de gestação bovina para estimar a data provável do parto e manter o resultado ligado aos registros.',
       breedingManagementAppDescription:
         'Veja como um app de manejo reprodutivo deve conectar cobertura, diagnóstico de gestação, previsão de parto, resultados, desmame e linhagem.',
+      breedingRecordKeepingSystemDescription:
+        'Monte um sistema simples de registros reprodutivos do gado com identificação animal, datas de cobertura, acompanhamento de gestação, parto, crias e desmame.',
       openGuide: 'Ler guia',
       appCtaTitle: 'Pronto para acompanhar seu rebanho?',
       appCtaDescription: 'Abra o BreedZ para registrar animais, histórico reprodutivo, partos previstos e linhagem.',
@@ -3474,6 +3606,112 @@ export const messages = {
         },
       ],
     },
+    guideCattleBreedingRecordKeepingSystem: {
+      meta: {
+        title: 'Sistema de registros reprodutivos do gado: o que acompanhar',
+        description:
+          'Aprenda a montar um sistema de registros reprodutivos do gado com identificação animal, cobertura, diagnóstico de gestação, previsão de parto, nascimento, crias e desmame.',
+      },
+      overline: 'Guia',
+      title: 'Sistema de registros reprodutivos do gado: o que acompanhar',
+      description:
+        'Um sistema de registros reprodutivos do gado não precisa ser complicado. Ele precisa de uma estrutura clara que mantenha cada decisão de cobertura ligada ao animal, ao acompanhamento e ao resultado final.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Comece pela identificação animal e conecte data de cobertura, touro ou lote, diagnóstico de gestação, previsão de parto, resultado do nascimento, registro da cria e desmame na mesma linha do tempo.',
+      openApp: 'Começar a acompanhar o rebanho',
+      openManagementGuide: 'Ler guia de manejo reprodutivo',
+      structureOverline: 'Estrutura',
+      structureTitle: 'Os registros que um sistema reprodutivo do gado deve conectar',
+      structureItems: [
+        {
+          title: 'Identificação animal',
+          description:
+            'Use um brinco ou ID consistente para cada animal. O restante do sistema só funciona se cobertura, parto, saúde, venda e crias apontarem para o mesmo animal.',
+        },
+        {
+          title: 'Registro de cobertura',
+          description:
+            'Salve data de cobertura, fêmea, touro ou lote quando souber, método e observações. Esse é o ponto de partida para diagnóstico e previsão de parto.',
+        },
+        {
+          title: 'Acompanhamento de gestação',
+          description:
+            'Registre diagnósticos de gestação como acompanhamento próprio, com resultado claro como prenhe, vazia, incerta ou precisa de nova checagem.',
+        },
+        {
+          title: 'Previsão de parto',
+          description:
+            'Estime a data ou janela provável a partir da cobertura e mantenha esse registro visível até o resultado ser confirmado.',
+        },
+        {
+          title: 'Resultado do nascimento e vínculo da cria',
+          description:
+            'Quando o parto acontecer, registre o resultado e vincule a cria à mãe e ao pai quando possível. Isso mantém a linhagem útil depois.',
+        },
+        {
+          title: 'Desmame e próximas decisões',
+          description:
+            'Feche o início do ciclo com desmame, venda, retenção, perda ou observações de reposição para apoiar a próxima estação.',
+        },
+      ],
+      workflowOverline: 'Fluxo',
+      workflowTitle: 'Um fluxo simples para registros reprodutivos',
+      workflowItems: [
+        'Adicione ou confirme a vaca ou novilha antes do início da estação de cobertura.',
+        'Registre a cobertura ou exposição assim que acontecer ou quando o lote for conhecido.',
+        'Agende ou registre o diagnóstico de gestação em vez de deixar isso na memória.',
+        'Crie a previsão de parto e acompanhe a janela provável.',
+        'Resolva o parto previsto com nascimento, perda, resultado vazio ou outro desfecho claro.',
+        'Crie ou vincule a cria e mantenha mãe, pai, data de nascimento, sexo e observações conectados.',
+        'Registre desmame ou a próxima decisão antes que o histórico da cria se separe.',
+      ],
+      mistakesOverline: 'Erros comuns',
+      mistakesTitle: 'Onde os registros reprodutivos costumam falhar',
+      mistakeItems: [
+        'Usar brinco em um lugar e apelido em outro sem um ID animal estável.',
+        'Registrar a cobertura, mas não o diagnóstico de gestação ou o resultado do parto.',
+        'Anotar previsões de parto em um calendário sem ligação com a vaca.',
+        'Registrar uma cria sem contexto de mãe e pai.',
+        'Manter papel, planilha, mensagens e app ativos ao mesmo tempo.',
+        'Esperar o fim da estação para organizar registros incertos.',
+      ],
+      breedzOverline: 'Usando o BreedZ',
+      breedzTitle: 'Como o BreedZ mantém o sistema prático',
+      breedzDescription:
+        'O BreedZ mantém o sistema de registros reprodutivos em uma linha do tempo offline-first por animal, para que a estrutura seja útil sem virar um sistema pesado.',
+      breedzItems: [
+        'Acompanhe cada animal com brinco, nome, sexo, status, nascimento, pais e observações.',
+        'Registre cobertura, diagnóstico de gestação, parto previsto, nascimento, perdas, desmame, vendas, compras, saúde, receitas e despesas.',
+        'Passe do parto previsto ao resultado e crie ou vincule a cria no mesmo fluxo.',
+        'Use o painel para ver registros vencidos, próximos, sem resolução e futuros.',
+        'Exporte backups em Excel ou use sincronização de conta quando precisar levar registros para outro dispositivo.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Perguntas comuns sobre sistemas de registros reprodutivos',
+      faqs: [
+        {
+          question: 'Qual é o sistema mínimo de registros reprodutivos do gado?',
+          answer:
+            'No mínimo, mantenha ID animal, data de cobertura, touro ou lote, resultado do diagnóstico, previsão de parto, resultado real, ID da cria e desmame ou próxima decisão.',
+        },
+        {
+          question: 'Uma planilha pode funcionar?',
+          answer:
+            'Sim, para rebanhos pequenos e registros simples. Fica mais difícil quando você precisa de lembretes, vínculos de pais, resultados de parto, entrada offline e vários dispositivos.',
+        },
+        {
+          question: 'Toda cria precisa ter mãe e pai registrados?',
+          answer:
+            'A mãe deve ser registrada sempre que possível. O pai pode ser exato, estimado ou desconhecido conforme o manejo, mas o sistema deve deixar essa incerteza clara.',
+        },
+        {
+          question: 'Com que frequência os registros devem ser atualizados?',
+          answer:
+            'Atualize quando o trabalho acontece. Cobertura, diagnóstico, parto, perda, venda e desmame são mais confiáveis quando registrados perto do evento.',
+        },
+      ],
+    },
     guideBreedingRecordsApp: {
       meta: {
         title: 'Aplicativo para registros de cobertura no gado',
@@ -4623,6 +4861,11 @@ export const messages = {
           chip: 'Eventos',
         },
         {
+          title: 'Registrar movimientos de la finca',
+          description: 'Sigue compras, ventas, gastos y otros ingresos junto al historial del rebaño.',
+          chip: 'Dinero',
+        },
+        {
           title: 'Ver qué necesita atención',
           description: 'Usa el panel y el resumen para hoy, totales del rebaño y resultados registrados.',
           chip: 'Resumen',
@@ -4661,6 +4904,12 @@ export const messages = {
         'Registra reproducción, revisiones de preñez, partos esperados, compras, ventas, gastos y notas',
         'Resuelve nacimientos, fallos reproductivos, pérdidas de preñez y destete cuando ocurran',
         'Consulta historial y resultados cuando lo necesites',
+      ],
+      howItWorksStepTitles: [
+        'Agrega tus animales',
+        'Registra eventos',
+        'Resuelve ciclos reproductivos',
+        'Revisa el historial cuando quieras',
       ],
       offlineOverline: 'Offline first',
       offlineTitle: 'Hecho para fincas sin internet confiable',
@@ -4771,6 +5020,8 @@ export const messages = {
         'Usa una calculadora de gestación bovina para estimar la fecha esperada de parto y mantener el resultado conectado a tus registros.',
       breedingManagementAppDescription:
         'Mira cómo una app de manejo reproductivo debe conectar reproducción, revisión de preñez, parto esperado, resultados, destete y linaje.',
+      breedingRecordKeepingSystemDescription:
+        'Arma un sistema simple de registros reproductivos del ganado con identidad animal, fechas reproductivas, seguimiento de preñez, parto, crías y destete.',
       openGuide: 'Leer guía',
       appCtaTitle: '¿Listo para registrar tu rebaño?',
       appCtaDescription: 'Abre BreedZ para registrar animales, historial reproductivo, partos esperados y linaje.',
@@ -5410,6 +5661,112 @@ export const messages = {
           question: '¿También debe registrar destete?',
           answer:
             'Sí, cuando las crías se mantienen o se revisan después. El destete cierra una parte importante del ciclo y ayuda a mantener la historia de la cría conectada a la madre.',
+        },
+      ],
+    },
+    guideCattleBreedingRecordKeepingSystem: {
+      meta: {
+        title: 'Sistema de registros reproductivos del ganado: qué controlar',
+        description:
+          'Aprende a armar un sistema de registros reproductivos del ganado con identidad animal, reproducción, revisión de preñez, parto esperado, nacimiento, crías y destete.',
+      },
+      overline: 'Guía',
+      title: 'Sistema de registros reproductivos del ganado: qué controlar',
+      description:
+        'Un sistema de registros reproductivos del ganado no tiene que ser complicado. Necesita una estructura clara que mantenga cada decisión reproductiva conectada al animal, al seguimiento y al resultado final.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Empieza con identidad animal y conecta fecha reproductiva, toro o grupo, revisión de preñez, parto esperado, resultado del nacimiento, registro de la cría y destete en una sola línea de tiempo.',
+      openApp: 'Empezar a registrar el rebaño',
+      openManagementGuide: 'Leer guía de manejo reproductivo',
+      structureOverline: 'Estructura',
+      structureTitle: 'Los registros que un sistema reproductivo del ganado debe conectar',
+      structureItems: [
+        {
+          title: 'Identidad animal',
+          description:
+            'Usa una identificación o arete consistente para cada animal. El resto del sistema solo funciona si reproducción, parto, salud, venta y crías apuntan al mismo animal.',
+        },
+        {
+          title: 'Registro reproductivo',
+          description:
+            'Guarda fecha reproductiva, hembra, toro o grupo cuando se conozca, método y notas. Este es el punto de partida para revisión de preñez y parto esperado.',
+        },
+        {
+          title: 'Seguimiento de preñez',
+          description:
+            'Registra revisiones de preñez como seguimiento propio, con resultado claro como preñada, vacía, incierta o necesita nueva revisión.',
+        },
+        {
+          title: 'Parto esperado',
+          description:
+            'Estima la fecha o ventana probable desde el registro reproductivo y mantén ese registro visible hasta confirmar el resultado.',
+        },
+        {
+          title: 'Resultado del nacimiento y vínculo de la cría',
+          description:
+            'Cuando ocurra el parto, registra el resultado y vincula la cría con madre y padre cuando sea posible. Así el linaje sigue siendo útil.',
+        },
+        {
+          title: 'Destete y próximas decisiones',
+          description:
+            'Cierra el inicio del ciclo con destete, venta, retención, pérdida o notas de reemplazo para apoyar la próxima temporada.',
+        },
+      ],
+      workflowOverline: 'Flujo',
+      workflowTitle: 'Un flujo simple para registros reproductivos',
+      workflowItems: [
+        'Agrega o confirma la vaca o vaquilla antes de iniciar la temporada reproductiva.',
+        'Registra reproducción o exposición cuando ocurra o cuando se conozca el grupo.',
+        'Programa o registra la revisión de preñez en vez de dejarla como tarea de memoria.',
+        'Crea el parto esperado y vigila la ventana probable.',
+        'Resuelve el parto esperado con nacimiento, pérdida, resultado vacío u otro desenlace claro.',
+        'Crea o vincula la cría y mantén madre, padre, fecha de nacimiento, sexo y notas conectados.',
+        'Registra destete o la próxima decisión antes de que la historia de la cría se separe.',
+      ],
+      mistakesOverline: 'Errores comunes',
+      mistakesTitle: 'Dónde suelen fallar los registros reproductivos',
+      mistakeItems: [
+        'Usar número de arete en un lugar y apodo en otro sin una identificación animal estable.',
+        'Registrar la reproducción, pero no la revisión de preñez ni el resultado del parto.',
+        'Anotar partos esperados en un calendario sin conexión con la vaca.',
+        'Registrar una cría sin contexto de madre y padre.',
+        'Mantener papel, hoja de cálculo, mensajes y app activos al mismo tiempo.',
+        'Esperar al final de la temporada para ordenar registros inciertos.',
+      ],
+      breedzOverline: 'Usando BreedZ',
+      breedzTitle: 'Cómo BreedZ mantiene práctico el sistema',
+      breedzDescription:
+        'BreedZ mantiene el sistema de registros reproductivos en una línea de tiempo offline-first por animal, para que la estructura siga siendo útil sin convertirse en un sistema pesado.',
+      breedzItems: [
+        'Registra cada animal con identificación, nombre, sexo, estado, nacimiento, padres y notas.',
+        'Registra reproducción, revisión de preñez, parto esperado, nacimiento, pérdidas, destete, ventas, compras, salud, ingresos y gastos.',
+        'Pasa del parto esperado al resultado y crea o vincula la cría en el mismo flujo.',
+        'Usa el panel para ver registros vencidos, próximos, sin resolver y futuros.',
+        'Exporta respaldos en Excel o usa sincronización de cuenta cuando necesites llevar registros a otro dispositivo.',
+      ],
+      faqOverline: 'FAQ',
+      faqTitle: 'Preguntas comunes sobre sistemas de registros reproductivos',
+      faqs: [
+        {
+          question: '¿Cuál es el sistema mínimo de registros reproductivos del ganado?',
+          answer:
+            'Como mínimo, mantén ID animal, fecha reproductiva, toro o grupo, resultado de revisión, parto esperado, resultado real, ID de la cría y destete o próxima decisión.',
+        },
+        {
+          question: '¿Puede funcionar una hoja de cálculo?',
+          answer:
+            'Sí, para rebaños pequeños y registros simples. Se vuelve más difícil cuando necesitas recordatorios, vínculos de padres, resultados de parto, entrada offline y varios dispositivos.',
+        },
+        {
+          question: '¿Toda cría necesita madre y padre registrados?',
+          answer:
+            'La madre debería registrarse siempre que sea posible. El padre puede ser exacto, estimado o desconocido según el manejo, pero el sistema debe dejar clara esa incertidumbre.',
+        },
+        {
+          question: '¿Con qué frecuencia se deben actualizar los registros?',
+          answer:
+            'Actualízalos cuando ocurre el trabajo. Reproducción, revisión, parto, pérdida, venta y destete son más confiables cuando se registran cerca del evento.',
         },
       ],
     },
