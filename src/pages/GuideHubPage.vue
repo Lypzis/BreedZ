@@ -138,6 +138,12 @@ const guideGroups = computed(() => [
         icon: 'assignment',
         to: guidePath('/guides/best-cattle-record-keeping-methods'),
       },
+      {
+        titleKey: 'guideCattleBreedingRecordKeepingSystem.title',
+        descriptionKey: 'guidesHub.breedingRecordKeepingSystemDescription',
+        icon: 'fact_check',
+        to: guidePath('/guides/cattle-breeding-record-keeping-system'),
+      },
     ],
   },
   {

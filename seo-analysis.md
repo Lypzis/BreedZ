@@ -476,7 +476,7 @@ Those are competitor-heavy claims and BreedZ does not need them to grow right no
 - [x] Publish `breeding-management-app`
 - [ ] Publish `breeding-record-keeping-app`
 - [ ] Publish `cattle-record-keeping-system`
-- [ ] Publish `cattle-breeding-record-keeping-system`
+- [x] Publish `cattle-breeding-record-keeping-system`
 - [ ] Publish `forgot-cow-breeding-date`
 - [ ] Publish `cattle-app-offline`
 - [ ] Add product screenshots to commercial pages

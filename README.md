@@ -148,19 +148,19 @@ Live guide cluster:
 - `cattle-gestation-calculator`
 - `how-to-track-cattle-lineage`
 - `best-cattle-record-keeping-methods`
+- `cattle-breeding-record-keeping-system`
 - `breeding-management-app`
 - `breeding-records-app`
 - `lost-breeding-records-what-to-do`
 
 Next guide priorities:
 
-1. `breeding-record-keeping-app`
-2. `cattle-record-keeping-system`
-3. `animal-lineage-tracking-software`
-4. `how-to-track-cattle-pedigree`
-5. `how-to-avoid-missing-calving-dates`
-6. `cattle-app-offline`
-7. `forgot-cow-breeding-date`
+1. `cattle-record-keeping-system`
+2. `animal-lineage-tracking-software`
+3. `how-to-track-cattle-pedigree`
+4. `how-to-avoid-missing-calving-dates`
+5. `cattle-app-offline`
+6. `forgot-cow-breeding-date`
 
 Guide checklist:
 
