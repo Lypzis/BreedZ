@@ -91,6 +91,39 @@ Start the Stripe webhook listener locally:
 npm run dev:stripe
 ```
 
+## CI/CD
+
+GitHub Actions workflows live in [.github/workflows](./.github/workflows):
+
+- `ci.yml` runs on pull requests and pushes to `main`. It installs dependencies, copies `.env.example` to `.env` for placeholder build config, runs lint, runs tests, and builds the Netlify SSR bundle.
+
+Netlify owns deployment for this project:
+
+- Netlify builds from `main` using the environment variables configured in Netlify.
+- Do not duplicate Netlify deploys from GitHub Actions unless Netlify auto-deploys are disabled.
+- Protect `main` in GitHub, require pull requests, and require the `CI / Lint, Test, Build` status check before merge. That keeps failing CI from reaching the branch Netlify deploys.
+- Direct pushes to `main` can still trigger Netlify before CI finishes, so keep direct pushes disabled for the production branch.
+
+Keep Firebase, Stripe, and Firebase Admin values in Netlify environment variables:
+
+```text
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+VITE_FIREBASE_MEASUREMENT_ID
+VITE_FIREBASE_APP_CHECK_SITE_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+STRIPE_MONTHLY_PRICE_ID
+STRIPE_YEARLY_PRICE_ID
+FIREBASE_ADMIN_PROJECT_ID
+FIREBASE_ADMIN_CLIENT_EMAIL
+FIREBASE_ADMIN_PRIVATE_KEY
+```
+
 ## Architecture Notes
 
 Local data:
@@ -120,9 +153,20 @@ Tests:
 - There are tests for event normalization, backup compatibility, filtering, status reconciliation, birth outcomes, lifecycle calculations, sync behavior, and premium limits.
 - Browser-level and IndexedDB transaction simulation coverage can still improve.
 
+## AI-First Project Notes
+
+Codex-facing project instructions live in [AGENTS.md](./AGENTS.md). Repo-specific skills live under [.agents/skills](./.agents/skills):
+
+- `$breedz-frontend`: Quasar/Vue UI, app shell, dashboard, forms, public pages, and PWA-facing UI.
+- `$breedz-offline-data`: IndexedDB, backup/import, lifecycle rules, lineage, sync metadata, and Firestore sync.
+- `$breedz-seo-i18n`: localized public pages, guide routes, sitemap, SEO metadata, and translations.
+- `$breedz-netlify-firebase-stripe`: Netlify Functions, SSR deploy behavior, Firebase, Stripe, and premium state.
+- `$breedz-roadmap`: product direction, roadmap priorities, landing strategy, and farm workflow scope.
+- `$breedz-secrets-hygiene`: environment variables, provider secrets, client/server config boundaries, and leak response.
+
 ## Active Product Roadmap
 
-See [doc.md](./doc.md) for the full product roadmap.
+The agent-facing roadmap lives in [AGENTS.md](./AGENTS.md) and [.agents/skills/breedz-roadmap/SKILL.md](./.agents/skills/breedz-roadmap/SKILL.md).
 
 Current priorities:
 

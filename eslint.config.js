@@ -41,13 +41,9 @@ export default [
 
       globals: {
         ...globals.browser,
-        ...globals.node, // SSR, Electron, config files
+        ...globals.node, // SSR and config files
         process: 'readonly', // process.env.*
         ga: 'readonly', // Google Analytics
-        cordova: 'readonly',
-        Capacitor: 'readonly',
-        chrome: 'readonly', // BEX related
-        browser: 'readonly', // BEX related
       },
     },
 

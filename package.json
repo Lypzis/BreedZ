@@ -16,7 +16,6 @@
     "dev:stripe": "stripe listen --forward-to http://localhost:8888/.netlify/functions/stripe-webhook",
     "build": "quasar build",
     "build:pwa": "quasar build -m pwa",
-    "build:public-pages": "node scripts/generate-static-public-pages.mjs",
     "build:ssr": "quasar build -m ssr",
     "build:netlify": "npm run build:ssr && rm -rf dist/ssr/node_modules && node scripts/prepare-netlify-ssr-runtime.mjs && node scripts/prepare-netlify-ssr-redirects.mjs",
     "dev:netlify": "npm run build:netlify && netlify dev -d dist/ssr/client -f netlify/functions --framework '#custom'",
