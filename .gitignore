@@ -2,6 +2,7 @@
 .thumbs.db
 node_modules
 demo-data
+deno.lock
 
 # Quasar core related directories
 .quasar
