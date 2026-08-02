@@ -2,10 +2,31 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import {
+  addDaysToDateString,
+  buildGestationWatchWindow,
   buildExpectedBirthDate,
   getGestationDaysForSpecies,
   shouldApplyExpectedBirthSuggestion,
 } from '../src/utils/gestation.js'
+
+test('adds custom gestation days without local timezone drift', () => {
+  assert.equal(addDaysToDateString('2026-04-01', 283), '2027-01-09')
+  assert.equal(addDaysToDateString('2026-02-30', 283), '')
+  assert.equal(addDaysToDateString('2026-04-01', Number.NaN), '')
+})
+
+test('builds the calculator estimate and seven-day watch window', () => {
+  assert.deepEqual(buildGestationWatchWindow('2026-04-01', 283, 7), {
+    estimatedDate: '2027-01-09',
+    windowStart: '2027-01-02',
+    windowEnd: '2027-01-16',
+  })
+  assert.deepEqual(buildGestationWatchWindow('bad-date', 283, 7), {
+    estimatedDate: '',
+    windowStart: '',
+    windowEnd: '',
+  })
+})
 
 test('builds cattle expected birth date from the 283 day average', () => {
   assert.equal(buildExpectedBirthDate('2026-04-01', 'Cattle'), '2027-01-09')

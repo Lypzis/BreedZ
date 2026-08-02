@@ -1,7 +1,8 @@
 <template>
   <AppPageShell>
-    <q-card flat>
-      <q-card-section>
+    <q-card flat tag="article">
+      <q-card-section tag="header">
+        <GuideBreadcrumbs :title="t('guideCattleLineage.title')" />
         <div class="text-overline text-weight-bold text-primary">{{ t('guideCattleLineage.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
           {{ t('guideCattleLineage.title') }}
@@ -9,16 +10,16 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideCattleLineage.description') }}
         </div>
-        <GuideWrittenDate />
+        <GuideAttribution :published-at="guide.publishedAt" :modified-at="guide.modifiedAt" />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideCattleLineage.hookOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.hookTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleLineage.hookDescription') }}
         </div>
@@ -35,13 +36,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideCattleLineage.realFarmsOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.realFarmsTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleLineage.realFarmsDescription') }}
         </div>
@@ -65,13 +66,13 @@
         </q-banner>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleLineage.systemOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.systemTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleLineage.systemDescription') }}
         </div>
@@ -101,13 +102,13 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleLineage.changesOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.changesTitle') }}
-        </div>
+        </h2>
 
         <q-list>
           <q-item v-for="item in changesItems" :key="item">
@@ -128,13 +129,13 @@
         </q-banner>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleLineage.toolsOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.toolsTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleLineage.toolsDescription') }}
         </div>
@@ -160,13 +161,13 @@
         />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideCattleLineage.takeawayOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleLineage.takeawayTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleLineage.takeawayDescription') }}
         </div>
@@ -196,16 +197,16 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideAttribution from 'src/components/GuideAttribution.vue'
+import GuideBreadcrumbs from 'src/components/GuideBreadcrumbs.vue'
 import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
 import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
-import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
+import { useGuideMeta } from 'src/composables/useGuideMeta'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
-import { buildPageMeta } from 'src/utils/seo-meta'
 
 const { t, tm } = useI18nText()
 const route = useRoute()
@@ -215,13 +216,7 @@ const routeLocale = computed(() =>
     : localeFromPath(route.path) || 'en',
 )
 
-useMeta(() =>
-  buildPageMeta({
-    title: t('guideCattleLineage.meta.title'),
-    description: t('guideCattleLineage.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/guides/how-to-track-cattle-lineage'),
-  }),
-)
+const guide = useGuideMeta('cattleLineage', t, routeLocale)
 
 const dashboardPath = computed(() => '/')
 const breedingRecordsAppGuidePath = computed(() =>

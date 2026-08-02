@@ -49,6 +49,37 @@ function formatDateString(value) {
   return `${year}-${month}-${day}`
 }
 
+export function addDaysToDateString(value, days) {
+  const parsedDate = parseDateString(value)
+  const normalizedDays = Number(days)
+
+  if (!parsedDate || !Number.isFinite(normalizedDays)) {
+    return ''
+  }
+
+  parsedDate.setUTCDate(parsedDate.getUTCDate() + normalizedDays)
+  return formatDateString(parsedDate)
+}
+
+export function buildGestationWatchWindow(breedingDate, gestationDays = 283, windowDays = 7) {
+  const estimatedDate = addDaysToDateString(breedingDate, gestationDays)
+  const normalizedWindowDays = Number(windowDays)
+
+  if (!estimatedDate || !Number.isFinite(normalizedWindowDays) || normalizedWindowDays < 0) {
+    return {
+      estimatedDate: '',
+      windowStart: '',
+      windowEnd: '',
+    }
+  }
+
+  return {
+    estimatedDate,
+    windowStart: addDaysToDateString(estimatedDate, -normalizedWindowDays),
+    windowEnd: addDaysToDateString(estimatedDate, normalizedWindowDays),
+  }
+}
+
 export function getGestationDaysForSpecies(species) {
   const normalizedSpecies = normalizeSpecies(species)
 
@@ -71,9 +102,7 @@ export function buildExpectedBirthDate(breedingDate, species) {
     return ''
   }
 
-  parsedBreedingDate.setUTCDate(parsedBreedingDate.getUTCDate() + gestationDays)
-
-  return formatDateString(parsedBreedingDate)
+  return addDaysToDateString(formatDateString(parsedBreedingDate), gestationDays)
 }
 
 export function shouldApplyExpectedBirthSuggestion({

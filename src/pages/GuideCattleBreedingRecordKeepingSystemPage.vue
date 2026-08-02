@@ -1,7 +1,8 @@
 <template>
   <AppPageShell>
-    <q-card flat>
-      <q-card-section>
+    <q-card flat tag="article">
+      <q-card-section tag="header">
+        <GuideBreadcrumbs :title="t('guideCattleBreedingRecordKeepingSystem.title')" />
         <div class="text-overline text-weight-bold text-primary">{{ t('guideCattleBreedingRecordKeepingSystem.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
           {{ t('guideCattleBreedingRecordKeepingSystem.title') }}
@@ -9,10 +10,10 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideCattleBreedingRecordKeepingSystem.description') }}
         </div>
-        <GuideWrittenDate date="2026-06-02" />
+        <GuideAttribution :published-at="guide.publishedAt" :modified-at="guide.modifiedAt" />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <q-banner rounded class="bg-green-1 text-primary">
           <template #avatar>
             <q-icon name="assignment" color="primary" />
@@ -22,31 +23,31 @@
         </q-banner>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleBreedingRecordKeepingSystem.structureOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleBreedingRecordKeepingSystem.structureTitle') }}
-        </div>
+        </h2>
 
         <div class="column q-gutter-md">
           <q-card v-for="item in structureItems" :key="item.title" flat bordered>
             <q-card-section>
-              <div class="text-subtitle1 text-weight-bold text-primary">{{ item.title }}</div>
+              <h3 class="text-subtitle1 text-weight-bold text-primary q-my-none">{{ item.title }}</h3>
               <div class="text-body2 text-grey-7 q-mt-sm">{{ item.description }}</div>
             </q-card-section>
           </q-card>
         </div>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleBreedingRecordKeepingSystem.workflowOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleBreedingRecordKeepingSystem.workflowTitle') }}
-        </div>
+        </h2>
 
         <q-list>
           <q-item v-for="item in workflowItems" :key="item">
@@ -60,13 +61,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideCattleBreedingRecordKeepingSystem.mistakesOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleBreedingRecordKeepingSystem.mistakesTitle') }}
-        </div>
+        </h2>
 
         <q-list>
           <q-item v-for="item in mistakeItems" :key="item">
@@ -80,13 +81,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleBreedingRecordKeepingSystem.breedzOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleBreedingRecordKeepingSystem.breedzTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleBreedingRecordKeepingSystem.breedzDescription') }}
         </div>
@@ -126,23 +127,11 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideCattleBreedingRecordKeepingSystem.faqOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCattleBreedingRecordKeepingSystem.faqTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="faq in faqs" :key="faq.question">
-            <q-item-section>
-              <q-item-label class="text-weight-bold">{{ faq.question }}</q-item-label>
-              <q-item-label caption class="text-grey-7">{{ faq.answer }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
+      <GuideFaqSection
+        :overline="t('guideCattleBreedingRecordKeepingSystem.faqOverline')"
+        :title="t('guideCattleBreedingRecordKeepingSystem.faqTitle')"
+        :faqs="faqs"
+      />
 
       <GuideSourcesSection :sources="sources" />
 
@@ -162,16 +151,17 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideAttribution from 'src/components/GuideAttribution.vue'
+import GuideBreadcrumbs from 'src/components/GuideBreadcrumbs.vue'
+import GuideFaqSection from 'src/components/GuideFaqSection.vue'
 import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
 import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
-import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
+import { useGuideMeta } from 'src/composables/useGuideMeta'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
-import { buildPageMeta } from 'src/utils/seo-meta'
 
 const { t, tm } = useI18nText()
 const route = useRoute()
@@ -181,13 +171,7 @@ const routeLocale = computed(() =>
     : localeFromPath(route.path) || 'en',
 )
 
-useMeta(() =>
-  buildPageMeta({
-    title: t('guideCattleBreedingRecordKeepingSystem.meta.title'),
-    description: t('guideCattleBreedingRecordKeepingSystem.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/guides/cattle-breeding-record-keeping-system'),
-  }),
-)
+const guide = useGuideMeta('cattleBreedingRecordKeepingSystem', t, routeLocale)
 
 const dashboardPath = computed(() => '/')
 const managementGuidePath = computed(() =>

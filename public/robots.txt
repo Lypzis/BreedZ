@@ -1,4 +1,10 @@
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Disallow: /
+
 User-agent: *
 Allow: /
 
-# Add a sitemap URL here after the production domain is final.
+Sitemap: https://breedz.app/sitemap.xml

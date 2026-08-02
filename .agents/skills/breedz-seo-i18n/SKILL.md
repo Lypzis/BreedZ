@@ -36,6 +36,9 @@ Write English first, then keep PT-BR and ES aligned.
 - Add localized routes for every supported locale.
 - Update `public/sitemap.xml` when public routes change.
 - Use existing SEO helpers for canonical, Open Graph, and Twitter metadata.
+- Use the guide manifest and `buildGuideMeta` for guide publication dates, localized alternates, Article data, and breadcrumbs.
+- Keep visible author, published, and updated information aligned with Article structured data.
+- Keep visible FAQs useful for readers, but do not add FAQ or HowTo structured data unless a supported search feature returns and the visible content qualifies.
 - Add one useful related-guide link when appropriate.
 - Add sources when trust matters, especially for gestation, health, veterinary-adjacent, or regulatory content.
 - Keep public pages readable without turning them into generic marketing copy.
@@ -236,7 +239,8 @@ Avoid for now:
 - [ ] Publish `forgot-cow-breeding-date`
 - [ ] Publish `cattle-app-offline`
 - [ ] Add product screenshots to commercial pages
-- [ ] Add FAQ schema later if the current SEO setup supports structured data cleanly
+- [x] Add Article, breadcrumb, author, and localized alternate metadata to guides
+- [x] Keep FAQ schema out of the current implementation because Google no longer exposes the FAQ rich-result feature
 - [x] Build localized guides hub
 - [ ] Split i18n messages before the guide library grows much more
 

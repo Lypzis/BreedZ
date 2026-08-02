@@ -1,7 +1,7 @@
 <template>
   <AppPageShell>
     <q-card flat>
-      <q-card-section>
+      <q-card-section tag="header">
         <div class="text-overline text-weight-bold text-primary">{{ t('guidesHub.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
           {{ t('guidesHub.title') }}
@@ -11,13 +11,13 @@
         </div>
       </q-card-section>
 
-      <q-card-section v-for="group in guideGroups" :key="group.titleKey">
+      <q-card-section v-for="group in guideGroups" :key="group.titleKey" tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t(group.overlineKey) }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t(group.titleKey) }}
-        </div>
+        </h2>
 
         <div class="row q-col-gutter-md">
           <div v-for="guide in group.guides" :key="guide.to" class="col-12 col-md-6">
@@ -43,7 +43,7 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <q-banner rounded class="bg-green-1 text-primary">
           <template #avatar>
             <q-icon name="dashboard" color="primary" />
@@ -88,6 +88,8 @@ useMeta(() =>
     title: t('guidesHub.meta.title'),
     description: t('guidesHub.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/guides'),
+    locale: routeLocale.value,
+    internalPath: '/guides',
   }),
 )
 

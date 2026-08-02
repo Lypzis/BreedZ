@@ -942,9 +942,17 @@ export const messages = {
       error: "Sharing isn't available right now. Try copying the link instead.",
       nativeShareText: 'This guide may help with herd recordkeeping.',
       whatsAppText: 'Found this useful for herd recordkeeping: {title}\n{url}',
-      writtenOn: 'Written on {date}',
       relatedOverline: 'Related guide',
       readRelatedGuide: 'Read related guide',
+    },
+    guideArticle: {
+      by: 'By',
+      authorName: 'Victor V. Piccoli (Lypzis)',
+      authorRole: 'Founder',
+      publishedOn: 'Published',
+      updatedOn: 'Updated',
+      breadcrumbLabel: 'Guide navigation',
+      guides: 'Guides',
     },
     guideSources: {
       overline: 'Sources',
@@ -962,6 +970,26 @@ export const messages = {
       title: 'How to Track Cattle Breeding Dates (Simple Guide)',
       description:
         'Missing breeding dates means guessing calving windows, pregnancy-check timing, rebreeding decisions, and whether a late cow is truly overdue or the record is wrong.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Record the animal ID, breeding date or exposure window, sire or AI service, and how certain the date is. Then connect the pregnancy check, expected calving window, birth outcome, calf, and weaning instead of leaving the breeding date by itself.',
+      minimumRecordOverline: 'Minimum useful record',
+      minimumRecordTitle: 'What to record when a cow is bred',
+      minimumRecordDescription:
+        'A useful breeding record follows the decision from service to outcome. If the exact date is unknown, save the best supported window and say that it is estimated rather than inventing one day.',
+      minimumRecordColumn: 'Record',
+      minimumWhyColumn: 'Why it matters',
+      minimumNextColumn: 'Next action',
+      minimumRecordRows: [
+        { record: 'Animal ID or tag', why: 'Keeps the service tied to the correct cow.', next: 'Review that animal timeline.' },
+        { record: 'Breeding date or exposure window', why: 'Provides the basis for pregnancy and calving follow-up.', next: 'Mark whether the date is exact or estimated.' },
+        { record: 'Sire, bull group, or AI service', why: 'Preserves breeding-pair and lineage context.', next: 'Confirm the partner when records become available.' },
+        { record: 'Pregnancy result and expected calving window', why: 'Separates confirmed pregnancies from unresolved services.', next: 'Watch the due window and schedule follow-up.' },
+        { record: 'Birth outcome, calf, and weaning', why: 'Closes the breeding cycle instead of leaving an old open record.', next: 'Link the calf and record the actual outcome.' },
+      ],
+      screenshotAlt: 'BreedZ breeding event form showing an animal, breeding partner, date, and expected birth details',
+      screenshotCaption:
+        'BreedZ keeps the service details attached to the animal so the expected birth and later outcome can stay in the same history.',
       openApp: 'Start tracking your herd now',
       openTutorial: 'Open tutorial',
       problemOverline: 'Why It Matters',
@@ -1185,6 +1213,17 @@ export const messages = {
       title: 'Cattle Gestation Calculator',
       description:
         'Enter a breeding or insemination date to estimate the expected cow calving date. The common cattle planning estimate is 283 days, but the result should be treated as a management date, not a guaranteed birth day.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Add 283 days to the breeding or insemination date for a common cattle planning estimate. The seven days before and after that date are a BreedZ watch window, not a guaranteed biological range or a replacement for herd-specific veterinary guidance.',
+      gestationDaysError: 'Use a value from 250 to 310 days.',
+      exampleOverline: 'Worked example',
+      exampleTitle: 'From breeding date to a record you can follow',
+      exampleDescription:
+        'A breeding date of April 1 plus 283 days gives an estimated calving date of January 9. BreedZ would show January 2 through January 16 as a practical watch window, while the actual birth date remains the final record.',
+      screenshotAlt: 'BreedZ expected-birth record connected to a cattle breeding event',
+      screenshotCaption:
+        'The estimate is most useful when it stays connected to the cow, the breeding event, pregnancy follow-up, and the actual birth outcome.',
       calculatorOverline: 'Calving Date Calculator',
       calculatorTitle: 'Estimate the expected calving date',
       calculatorDescription:
@@ -1789,7 +1828,34 @@ export const messages = {
         'Lost breeding records are stressful because they turn calving windows, pregnancy checks, and rebreeding decisions into guesses. The fix is to recover the strongest facts first, label uncertainty honestly, and rebuild a better system from today forward.',
       shortAnswerLabel: 'Short answer:',
       shortAnswer:
-        'Do not invent exact dates. Gather every clue, estimate a date range when needed, mark uncertain records clearly, and start keeping each future breeding event tied to the animal.',
+        'Do not invent an exact breeding date. Rebuild the record from the strongest evidence you still have, save a supported date or exposure window as estimated, and leave the date unknown when the evidence cannot support one.',
+      evidenceOverline: 'Evidence first',
+      evidenceTitle: 'Use the strongest evidence you can verify',
+      evidenceDescription:
+        'Work down this list and stop where the evidence stops. A less precise but honest window is more useful than a confident-looking date that cannot be supported.',
+      evidenceItems: [
+        { title: '1. Confirmed service or AI record', description: 'Use the recorded date when the animal ID and service can be verified.' },
+        { title: '2. Observed breeding date', description: 'Use the observation and note who recorded it or where it was found.' },
+        { title: '3. Bull-exposure window', description: 'Save the start and end of exposure instead of choosing an arbitrary day inside the window.' },
+        { title: '4. Pregnancy findings', description: 'Use the finding to narrow management follow-up, not to claim an exact service date it cannot prove.' },
+        { title: '5. Estimated window', description: 'Document the calculation, source, and uncertainty when only a practical range is supportable.' },
+        { title: '6. Unknown', description: 'Leave the breeding date unknown when no reliable evidence supports a date or range.' },
+      ],
+      screenshotAlt: 'Paper cattle notes beside a tablet, showing why breeding records need a recoverable system',
+      screenshotCaption:
+        'Paper notes can still provide useful evidence, but the recovered date, source, and uncertainty should be moved into the animal history before the note is lost again.',
+      saveOverline: 'Save the uncertainty',
+      saveTitle: 'What to enter in BreedZ when the date is uncertain',
+      saveDescription:
+        'Keep the original evidence in the note and use only the precision it supports. This lets the next person understand why the record exists and how much confidence to place in it.',
+      saveEvidenceColumn: 'Evidence available',
+      saveDateColumn: 'Date field',
+      saveNoteColumn: 'Note to keep',
+      saveRows: [
+        { evidence: 'One verified service date', date: 'Use the exact date.', note: 'Record the source or service reference.' },
+        { evidence: 'A known exposure period', date: 'Use the supported estimated date or window used for planning.', note: 'Keep the full exposure start/end dates and mark the estimate clearly.' },
+        { evidence: 'No supportable date', date: 'Leave it unknown.', note: 'Record what was checked and plan pregnancy or calving follow-up without a fake date.' },
+      ],
       openApp: 'Start rebuilding your herd records',
       firstOverline: 'First response',
       firstTitle: 'What to do first when breeding records are missing',
@@ -1907,6 +1973,15 @@ export const messages = {
             'BreedZ is built around a reliable offline-first workflow for day-to-day herd records. From that foundation, it is expanding carefully into backup, sync, and broader management tools without compromising field usability.',
         },
       ],
+      founderOverline: 'Author and founder',
+      founderTitle: 'Victor V. Piccoli (Lypzis)',
+      founderRole: 'Founder of BreedZ',
+      founderBody:
+        'Victor builds BreedZ around practical, offline-first livestock recordkeeping: keeping animal identity, breeding history, expected births, outcomes, and lineage connected without turning field work into office work.',
+      editorialOverline: 'Editorial method',
+      editorialTitle: 'How BreedZ guides are prepared',
+      editorialBody:
+        'BreedZ guides explain recordkeeping and product workflows from the perspective of the app builder. Veterinary-adjacent facts are checked against the named extension and veterinary references shown on each guide. BreedZ is not veterinary advice, and the guides do not replace a veterinarian who knows the herd.',
     },
     contact: {
       meta: {
@@ -2990,9 +3065,17 @@ export const messages = {
       error: 'O compartilhamento não está disponível agora. Tente copiar o link.',
       nativeShareText: 'Este guia pode ajudar no controle do rebanho.',
       whatsAppText: 'Achei este guia útil para o controle do rebanho: {title}\n{url}',
-      writtenOn: 'Publicado em {date}',
       relatedOverline: 'Guia relacionado',
       readRelatedGuide: 'Ler guia relacionado',
+    },
+    guideArticle: {
+      by: 'Por',
+      authorName: 'Victor V. Piccoli (Lypzis)',
+      authorRole: 'Fundador',
+      publishedOn: 'Publicado em',
+      updatedOn: 'Atualizado em',
+      breadcrumbLabel: 'Navegação do guia',
+      guides: 'Guias',
     },
     guideSources: {
       overline: 'Fontes',
@@ -3010,6 +3093,26 @@ export const messages = {
       title: 'Como acompanhar datas de cobertura no gado (guia simples)',
       description:
         'Perder datas de cobertura faz você adivinhar a janela de parto, o momento do diagnóstico de gestação, decisões de recobertura e se uma vaca atrasada está realmente vencida ou se o registro está incompleto.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Registre o ID do animal, a data da cobertura ou janela de exposição, o touro ou serviço de IA e o grau de certeza da data. Depois conecte diagnóstico de gestação, janela esperada de parto, resultado do parto, bezerro e desmame em vez de deixar a cobertura isolada.',
+      minimumRecordOverline: 'Registro mínimo útil',
+      minimumRecordTitle: 'O que registrar quando uma vaca é coberta',
+      minimumRecordDescription:
+        'Um registro útil acompanha a decisão da cobertura até o resultado. Se a data exata for desconhecida, salve a janela mais bem sustentada e marque que é estimada, sem inventar um dia.',
+      minimumRecordColumn: 'Registro',
+      minimumWhyColumn: 'Por que importa',
+      minimumNextColumn: 'Próxima ação',
+      minimumRecordRows: [
+        { record: 'ID ou brinco do animal', why: 'Mantém a cobertura ligada à vaca correta.', next: 'Revise a linha do tempo desse animal.' },
+        { record: 'Data da cobertura ou janela de exposição', why: 'Serve de base para o diagnóstico e o acompanhamento do parto.', next: 'Marque se a data é exata ou estimada.' },
+        { record: 'Touro, lote de touros ou serviço de IA', why: 'Preserva o contexto do acasalamento e da linhagem.', next: 'Confirme o parceiro quando houver registros.' },
+        { record: 'Resultado do diagnóstico e janela de parto', why: 'Separa gestações confirmadas de coberturas sem resolução.', next: 'Acompanhe a janela e programe o retorno.' },
+        { record: 'Resultado do parto, bezerro e desmame', why: 'Fecha o ciclo reprodutivo em vez de deixar um registro antigo aberto.', next: 'Vincule o bezerro e registre o resultado real.' },
+      ],
+      screenshotAlt: 'Formulário de cobertura do BreedZ com animal, parceiro, data e detalhes do parto esperado',
+      screenshotCaption:
+        'O BreedZ mantém os dados da cobertura ligados ao animal para que o parto esperado e o resultado posterior fiquem no mesmo histórico.',
       openApp: 'Comece a acompanhar seu rebanho agora',
       openTutorial: 'Abrir tutorial',
       problemOverline: 'Por que isso importa',
@@ -3233,6 +3336,17 @@ export const messages = {
       title: 'Calculadora de gestação bovina',
       description:
         'Informe a data de cobertura ou inseminação para estimar a data provável do parto. A estimativa comum para bovinos é de 283 dias, mas o resultado deve ser tratado como uma data de manejo, não como um dia garantido.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Some 283 dias à data de cobertura ou inseminação para uma estimativa comum de manejo em bovinos. Os sete dias antes e depois são uma janela de atenção do BreedZ, não uma faixa biológica garantida nem substituto da orientação veterinária para o rebanho.',
+      gestationDaysError: 'Use um valor entre 250 e 310 dias.',
+      exampleOverline: 'Exemplo prático',
+      exampleTitle: 'Da data de cobertura a um registro que pode ser acompanhado',
+      exampleDescription:
+        'Uma cobertura em 1 de abril mais 283 dias resulta em parto estimado para 9 de janeiro. O BreedZ mostra de 2 a 16 de janeiro como janela prática de atenção, enquanto a data real do parto continua sendo o registro final.',
+      screenshotAlt: 'Registro de parto esperado no BreedZ ligado a um evento de cobertura bovina',
+      screenshotCaption:
+        'A estimativa é mais útil quando continua ligada à vaca, à cobertura, ao acompanhamento da gestação e ao resultado real do parto.',
       calculatorOverline: 'Calculadora de parto',
       calculatorTitle: 'Estime a data provável do parto',
       calculatorDescription:
@@ -3837,7 +3951,34 @@ export const messages = {
         'Perder registros de cobertura assusta porque transforma previsão de parto, diagnóstico de gestação e decisões de recobertura em chute. A saída é recuperar primeiro os fatos mais fortes, marcar a incerteza com honestidade e reconstruir um sistema melhor a partir de hoje.',
       shortAnswerLabel: 'Resposta curta:',
       shortAnswer:
-        'Não invente datas exatas. Reúna pistas, estime uma janela quando precisar, marque registros incertos com clareza e passe a manter cada cobertura ligada ao animal.',
+        'Não invente uma data exata de cobertura. Reconstrua o registro com a evidência mais forte que ainda existe, salve uma data ou janela de exposição sustentada como estimada e deixe a data desconhecida quando não houver base suficiente.',
+      evidenceOverline: 'Evidência primeiro',
+      evidenceTitle: 'Use a evidência mais forte que conseguir confirmar',
+      evidenceDescription:
+        'Desça esta lista e pare onde a evidência parar. Uma janela honesta, mesmo menos precisa, é mais útil do que uma data aparentemente exata sem sustentação.',
+      evidenceItems: [
+        { title: '1. Registro confirmado de cobertura ou IA', description: 'Use a data registrada quando o animal e o serviço puderem ser confirmados.' },
+        { title: '2. Cobertura observada', description: 'Use a observação e anote quem registrou ou onde ela foi encontrada.' },
+        { title: '3. Janela de exposição ao touro', description: 'Salve início e fim da exposição em vez de escolher um dia arbitrário dentro dela.' },
+        { title: '4. Achados do diagnóstico de gestação', description: 'Use o achado para orientar o manejo, sem afirmar uma data exata que ele não consegue provar.' },
+        { title: '5. Janela estimada', description: 'Documente cálculo, fonte e incerteza quando apenas uma faixa prática puder ser sustentada.' },
+        { title: '6. Desconhecida', description: 'Deixe a data desconhecida quando nenhuma evidência confiável sustentar uma data ou faixa.' },
+      ],
+      screenshotAlt: 'Anotações de gado em papel ao lado de um tablet, mostrando a necessidade de registros recuperáveis',
+      screenshotCaption:
+        'O papel ainda pode fornecer evidência útil, mas a data recuperada, a fonte e a incerteza devem entrar no histórico do animal antes que a anotação se perca de novo.',
+      saveOverline: 'Salve a incerteza',
+      saveTitle: 'O que colocar no BreedZ quando a data é incerta',
+      saveDescription:
+        'Mantenha a evidência original nas observações e use apenas a precisão que ela sustenta. Assim, a próxima pessoa entende por que o registro existe e quanta confiança deve ter nele.',
+      saveEvidenceColumn: 'Evidência disponível',
+      saveDateColumn: 'Campo de data',
+      saveNoteColumn: 'Observação a manter',
+      saveRows: [
+        { evidence: 'Uma cobertura confirmada', date: 'Use a data exata.', note: 'Registre a fonte ou referência do serviço.' },
+        { evidence: 'Um período conhecido de exposição', date: 'Use a data ou janela estimada adotada no manejo.', note: 'Mantenha início e fim completos e marque a estimativa com clareza.' },
+        { evidence: 'Nenhuma data sustentável', date: 'Deixe desconhecida.', note: 'Anote o que foi verificado e planeje o acompanhamento sem criar uma data falsa.' },
+      ],
       openApp: 'Comece a reconstruir seus registros',
       firstOverline: 'Primeira resposta',
       firstTitle: 'O que fazer primeiro quando registros de cobertura somem',
@@ -3955,6 +4096,15 @@ export const messages = {
             'O BreedZ é construído em torno de um fluxo offline-first confiável para os registros do dia a dia do rebanho. A partir dessa base, ele está avançando com cuidado para backup, sincronização e ferramentas mais amplas de gestão, sem comprometer o uso no campo.',
         },
       ],
+      founderOverline: 'Autor e fundador',
+      founderTitle: 'Victor V. Piccoli (Lypzis)',
+      founderRole: 'Fundador do BreedZ',
+      founderBody:
+        'Victor desenvolve o BreedZ em torno de registros pecuários práticos e offline-first: mantendo identificação animal, histórico reprodutivo, partos esperados, resultados e linhagem conectados sem transformar o trabalho no campo em trabalho de escritório.',
+      editorialOverline: 'Método editorial',
+      editorialTitle: 'Como os guias do BreedZ são preparados',
+      editorialBody:
+        'Os guias do BreedZ explicam registros e fluxos do produto pela perspectiva de quem desenvolve o aplicativo. Informações próximas da área veterinária são conferidas nas referências de extensão rural e veterinária indicadas em cada guia. O BreedZ não oferece orientação veterinária, e os guias não substituem o veterinário que conhece o rebanho.',
     },
     contact: {
       meta: {
@@ -5048,9 +5198,17 @@ export const messages = {
       error: 'Compartir no está disponible ahora mismo. Prueba a copiar el enlace.',
       nativeShareText: 'Esta guía puede ayudar con los registros del rebaño.',
       whatsAppText: 'Me resultó útil esta guía para los registros del rebaño: {title}\n{url}',
-      writtenOn: 'Publicado el {date}',
       relatedOverline: 'Guía relacionada',
       readRelatedGuide: 'Leer guía relacionada',
+    },
+    guideArticle: {
+      by: 'Por',
+      authorName: 'Victor V. Piccoli (Lypzis)',
+      authorRole: 'Fundador',
+      publishedOn: 'Publicado el',
+      updatedOn: 'Actualizado el',
+      breadcrumbLabel: 'Navegación de la guía',
+      guides: 'Guías',
     },
     guideSources: {
       overline: 'Fuentes',
@@ -5068,6 +5226,26 @@ export const messages = {
       title: 'Cómo registrar fechas de reproducción del ganado (guía simple)',
       description:
         'Perder fechas reproductivas te obliga a adivinar la ventana de parto, el momento de revisar preñez, las decisiones de volver a cruzar y si una vaca atrasada está realmente vencida o si el registro está incompleto.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Registra la identificación del animal, la fecha de servicio o ventana de exposición, el toro o servicio de IA y el grado de certeza de la fecha. Después conecta la revisión de preñez, ventana esperada de parto, resultado, cría y destete en vez de dejar el servicio aislado.',
+      minimumRecordOverline: 'Registro mínimo útil',
+      minimumRecordTitle: 'Qué registrar cuando se sirve una vaca',
+      minimumRecordDescription:
+        'Un registro útil sigue la decisión desde el servicio hasta el resultado. Si no conoces la fecha exacta, guarda la ventana mejor respaldada y márcala como estimada, sin inventar un día.',
+      minimumRecordColumn: 'Registro',
+      minimumWhyColumn: 'Por qué importa',
+      minimumNextColumn: 'Siguiente acción',
+      minimumRecordRows: [
+        { record: 'Identificación o arete', why: 'Mantiene el servicio ligado a la vaca correcta.', next: 'Revisa la línea de tiempo de ese animal.' },
+        { record: 'Fecha de servicio o ventana de exposición', why: 'Da la base para el seguimiento de preñez y parto.', next: 'Marca si la fecha es exacta o estimada.' },
+        { record: 'Toro, grupo de toros o servicio de IA', why: 'Conserva el contexto del apareamiento y el linaje.', next: 'Confirma la pareja cuando haya registros.' },
+        { record: 'Resultado de preñez y ventana de parto', why: 'Separa preñeces confirmadas de servicios sin resolver.', next: 'Vigila la ventana y programa seguimiento.' },
+        { record: 'Resultado del parto, cría y destete', why: 'Cierra el ciclo en vez de dejar un registro antiguo abierto.', next: 'Vincula la cría y registra el resultado real.' },
+      ],
+      screenshotAlt: 'Formulario de reproducción de BreedZ con animal, pareja, fecha y detalles del parto esperado',
+      screenshotCaption:
+        'BreedZ mantiene los datos del servicio ligados al animal para que el parto esperado y el resultado posterior queden en el mismo historial.',
       openApp: 'Empieza a llevar el control de tu rebaño ahora',
       openTutorial: 'Abrir tutorial',
       problemOverline: 'Por qué importa',
@@ -5291,6 +5469,17 @@ export const messages = {
       title: 'Calculadora de gestación bovina',
       description:
         'Ingresa la fecha de monta o inseminación para estimar la fecha esperada de parto. La estimación común para bovinos es de 283 días, pero el resultado debe tratarse como una fecha de manejo, no como un día garantizado.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Suma 283 días a la fecha de servicio o inseminación como estimación común de planificación bovina. Los siete días anteriores y posteriores son una ventana de atención de BreedZ, no un rango biológico garantizado ni un reemplazo de la orientación veterinaria para el rebaño.',
+      gestationDaysError: 'Usa un valor entre 250 y 310 días.',
+      exampleOverline: 'Ejemplo práctico',
+      exampleTitle: 'De la fecha de servicio a un registro que puedes seguir',
+      exampleDescription:
+        'Un servicio del 1 de abril más 283 días da un parto estimado para el 9 de enero. BreedZ muestra del 2 al 16 de enero como ventana práctica de atención, mientras la fecha real del parto sigue siendo el registro final.',
+      screenshotAlt: 'Registro de parto esperado en BreedZ conectado a un evento reproductivo bovino',
+      screenshotCaption:
+        'La estimación es más útil cuando sigue conectada a la vaca, el servicio, el seguimiento de preñez y el resultado real del parto.',
       calculatorOverline: 'Calculadora de parto',
       calculatorTitle: 'Estima la fecha esperada de parto',
       calculatorDescription:
@@ -5895,7 +6084,34 @@ export const messages = {
         'Perder registros reproductivos preocupa porque convierte ventanas de parto, revisiones de preñez y decisiones de volver a cruzar en suposiciones. La solución es recuperar primero los hechos más fuertes, marcar la incertidumbre con honestidad y reconstruir un sistema mejor desde hoy.',
       shortAnswerLabel: 'Respuesta corta:',
       shortAnswer:
-        'No inventes fechas exactas. Reúne pistas, estima un rango cuando haga falta, marca los registros inciertos con claridad y mantén cada reproducción ligada al animal.',
+        'No inventes una fecha exacta de servicio. Reconstruye el registro con la evidencia más fuerte que todavía tengas, guarda una fecha o ventana respaldada como estimada y deja la fecha como desconocida cuando la evidencia no alcance.',
+      evidenceOverline: 'Primero la evidencia',
+      evidenceTitle: 'Usa la evidencia más fuerte que puedas verificar',
+      evidenceDescription:
+        'Baja por esta lista y detente donde se detenga la evidencia. Una ventana honesta, aunque menos precisa, es más útil que una fecha aparentemente exacta sin respaldo.',
+      evidenceItems: [
+        { title: '1. Registro confirmado de servicio o IA', description: 'Usa la fecha registrada cuando se puedan verificar el animal y el servicio.' },
+        { title: '2. Servicio observado', description: 'Usa la observación y anota quién la registró o dónde se encontró.' },
+        { title: '3. Ventana de exposición al toro', description: 'Guarda el inicio y el final de la exposición en vez de elegir un día arbitrario.' },
+        { title: '4. Hallazgos de la revisión de preñez', description: 'Úsalos para orientar el seguimiento, no para afirmar una fecha exacta que no pueden probar.' },
+        { title: '5. Ventana estimada', description: 'Documenta el cálculo, la fuente y la incertidumbre cuando solo se pueda respaldar un rango práctico.' },
+        { title: '6. Desconocida', description: 'Deja la fecha desconocida cuando ninguna evidencia confiable respalde una fecha o rango.' },
+      ],
+      screenshotAlt: 'Notas ganaderas en papel junto a una tableta, mostrando por qué los registros deben ser recuperables',
+      screenshotCaption:
+        'El papel todavía puede aportar evidencia útil, pero la fecha recuperada, la fuente y la incertidumbre deben pasar al historial del animal antes de que la nota vuelva a perderse.',
+      saveOverline: 'Guarda la incertidumbre',
+      saveTitle: 'Qué ingresar en BreedZ cuando la fecha es incierta',
+      saveDescription:
+        'Conserva la evidencia original en las notas y usa solo la precisión que respalda. Así, la siguiente persona entiende por qué existe el registro y cuánta confianza debe darle.',
+      saveEvidenceColumn: 'Evidencia disponible',
+      saveDateColumn: 'Campo de fecha',
+      saveNoteColumn: 'Nota que debes conservar',
+      saveRows: [
+        { evidence: 'Una fecha de servicio verificada', date: 'Usa la fecha exacta.', note: 'Registra la fuente o referencia del servicio.' },
+        { evidence: 'Un período conocido de exposición', date: 'Usa la fecha o ventana estimada adoptada para planificar.', note: 'Conserva el inicio y final completos y marca claramente la estimación.' },
+        { evidence: 'Ninguna fecha respaldable', date: 'Déjala desconocida.', note: 'Anota qué revisaste y planifica el seguimiento sin crear una fecha falsa.' },
+      ],
       openApp: 'Empieza a reconstruir tus registros',
       firstOverline: 'Primera respuesta',
       firstTitle: 'Qué hacer primero cuando faltan registros reproductivos',
@@ -6013,6 +6229,15 @@ export const messages = {
             'BreedZ está construido sobre un flujo offline-first confiable para los registros diarios del rebaño. Desde esa base, está avanzando con cuidado hacia respaldo, sincronización y herramientas más amplias de gestión, sin comprometer el uso en campo.',
         },
       ],
+      founderOverline: 'Autor y fundador',
+      founderTitle: 'Victor V. Piccoli (Lypzis)',
+      founderRole: 'Fundador de BreedZ',
+      founderBody:
+        'Victor desarrolla BreedZ alrededor de registros ganaderos prácticos y offline-first: mantiene conectados la identificación animal, el historial reproductivo, los partos esperados, los resultados y el linaje sin convertir el trabajo de campo en trabajo de oficina.',
+      editorialOverline: 'Método editorial',
+      editorialTitle: 'Cómo se preparan las guías de BreedZ',
+      editorialBody:
+        'Las guías de BreedZ explican registros y flujos del producto desde la perspectiva de quien desarrolla la aplicación. Los datos cercanos al ámbito veterinario se revisan con las referencias de extensión agropecuaria y veterinaria indicadas en cada guía. BreedZ no ofrece asesoramiento veterinario y las guías no sustituyen al veterinario que conoce el rebaño.',
     },
     contact: {
       meta: {
