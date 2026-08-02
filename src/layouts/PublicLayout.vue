@@ -48,10 +48,12 @@
 </template>
 
 <script setup>
+import { useMeta } from 'quasar'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
+import { buildLocalizedAlternateLinks } from 'src/utils/seo-meta'
 
 const logoIcon = '/icons/favicon-96x96.png'
 const logoSmall = '/icons/favicon-48x48.png'
@@ -75,6 +77,10 @@ const localeOptions = computed(() => [
 const homePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
 
 const selectedLocale = ref(routeLocale.value)
+
+useMeta(() => ({
+  link: buildLocalizedAlternateLinks(route.path),
+}))
 
 watch(routeLocale, (value) => {
   if (selectedLocale.value !== value) {

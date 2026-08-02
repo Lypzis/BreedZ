@@ -1,7 +1,8 @@
 <template>
   <AppPageShell>
-    <q-card flat>
-      <q-card-section>
+    <q-card flat tag="article">
+      <q-card-section tag="header">
+        <GuideBreadcrumbs :title="t('guideLostBreedingRecords.title')" />
         <div class="text-overline text-weight-bold text-primary">{{ t('guideLostBreedingRecords.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
           {{ t('guideLostBreedingRecords.title') }}
@@ -9,10 +10,10 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideLostBreedingRecords.description') }}
         </div>
-        <GuideWrittenDate />
+        <GuideAttribution :published-at="guide.publishedAt" :modified-at="guide.modifiedAt" />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <q-banner rounded class="bg-green-1 text-primary">
           <template #avatar>
             <q-icon name="fact_check" color="primary" />
@@ -22,13 +23,46 @@
         </q-banner>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideLostBreedingRecords.evidenceOverline') }}
+        </div>
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideLostBreedingRecords.evidenceTitle') }}
+        </h2>
+        <p class="text-body1 text-grey-7 q-mb-md">
+          {{ t('guideLostBreedingRecords.evidenceDescription') }}
+        </p>
+        <ol class="q-pl-lg q-my-none">
+          <li v-for="item in evidenceItems" :key="item.title" class="q-mb-md">
+            <h3 class="text-subtitle1 text-weight-bold text-primary q-my-none">{{ item.title }}</h3>
+            <p class="text-body2 text-grey-7 q-mt-xs q-mb-none">{{ item.description }}</p>
+          </li>
+        </ol>
+      </q-card-section>
+
+      <q-card-section tag="section">
+        <figure class="q-ma-none">
+          <q-img
+            src="/images/landing/paper-notes.webp"
+            :alt="t('guideLostBreedingRecords.screenshotAlt')"
+            fit="cover"
+            :ratio="4 / 3"
+            class="rounded-borders"
+          />
+          <figcaption class="text-caption text-grey-7 q-mt-sm">
+            {{ t('guideLostBreedingRecords.screenshotCaption') }}
+          </figcaption>
+        </figure>
+      </q-card-section>
+
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideLostBreedingRecords.firstOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideLostBreedingRecords.firstTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideLostBreedingRecords.firstDescription') }}
         </div>
@@ -45,13 +79,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideLostBreedingRecords.rebuildOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideLostBreedingRecords.rebuildTitle') }}
-        </div>
+        </h2>
         <div class="column q-gutter-md">
           <q-card
             v-for="step in rebuildSteps"
@@ -60,7 +94,7 @@
             bordered
           >
             <q-card-section>
-              <div class="text-subtitle1 text-weight-bold text-primary">{{ step.title }}</div>
+              <h3 class="text-subtitle1 text-weight-bold text-primary q-my-none">{{ step.title }}</h3>
               <div class="text-body2 text-grey-7 q-mt-sm">{{ step.description }}</div>
               <q-list v-if="step.items?.length" dense class="q-mt-sm">
                 <q-item v-for="item in step.items" :key="item">
@@ -77,13 +111,13 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideLostBreedingRecords.estimateOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideLostBreedingRecords.estimateTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideLostBreedingRecords.estimateDescription') }}
         </div>
@@ -100,13 +134,39 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideLostBreedingRecords.saveOverline') }}
+        </div>
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideLostBreedingRecords.saveTitle') }}
+        </h2>
+        <p class="text-body1 text-grey-7 q-mb-md">{{ t('guideLostBreedingRecords.saveDescription') }}</p>
+        <q-markup-table flat bordered wrap-cells class="text-left">
+          <thead>
+            <tr>
+              <th>{{ t('guideLostBreedingRecords.saveEvidenceColumn') }}</th>
+              <th>{{ t('guideLostBreedingRecords.saveDateColumn') }}</th>
+              <th>{{ t('guideLostBreedingRecords.saveNoteColumn') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in saveRows" :key="row.evidence">
+              <td>{{ row.evidence }}</td>
+              <td>{{ row.date }}</td>
+              <td>{{ row.note }}</td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </q-card-section>
+
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideLostBreedingRecords.avoidOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideLostBreedingRecords.avoidTitle') }}
-        </div>
+        </h2>
 
         <q-list>
           <q-item v-for="item in avoidItems" :key="item">
@@ -120,13 +180,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideLostBreedingRecords.systemOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideLostBreedingRecords.systemTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideLostBreedingRecords.systemDescription') }}
         </div>
@@ -152,23 +212,11 @@
         />
       </q-card-section>
 
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideLostBreedingRecords.faqOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideLostBreedingRecords.faqTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="faq in faqs" :key="faq.question">
-            <q-item-section>
-              <q-item-label class="text-weight-bold">{{ faq.question }}</q-item-label>
-              <q-item-label caption class="text-grey-7">{{ faq.answer }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
+      <GuideFaqSection
+        :overline="t('guideLostBreedingRecords.faqOverline')"
+        :title="t('guideLostBreedingRecords.faqTitle')"
+        :faqs="faqs"
+      />
 
       <GuideSourcesSection :sources="sources" />
 
@@ -176,6 +224,12 @@
         :title="t('guideBreedingRecordsApp.title')"
         :description="t('guideBreedingRecordsApp.description')"
         :to="breedingRecordsAppGuidePath"
+      />
+
+      <GuideRelatedLink
+        :title="t('guideBreedingDates.title')"
+        :description="t('guideBreedingDates.description')"
+        :to="breedingDatesGuidePath"
       />
 
       <GuideShareSection
@@ -188,16 +242,17 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideAttribution from 'src/components/GuideAttribution.vue'
+import GuideBreadcrumbs from 'src/components/GuideBreadcrumbs.vue'
+import GuideFaqSection from 'src/components/GuideFaqSection.vue'
 import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
 import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
-import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
+import { useGuideMeta } from 'src/composables/useGuideMeta'
 import { useI18nText } from 'src/i18n'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
-import { buildPageMeta } from 'src/utils/seo-meta'
 
 const GUIDE_PATH = '/guides/lost-breeding-records-what-to-do'
 
@@ -209,17 +264,14 @@ const routeLocale = computed(() =>
     : localeFromPath(route.path) || 'en',
 )
 
-useMeta(() =>
-  buildPageMeta({
-    title: t('guideLostBreedingRecords.meta.title'),
-    description: t('guideLostBreedingRecords.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, GUIDE_PATH),
-  }),
-)
+const guide = useGuideMeta('lostBreedingRecords', t, routeLocale)
 
 const dashboardPath = computed(() => '/')
 const breedingRecordsAppGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/breeding-records-app'),
+)
+const breedingDatesGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )
 const sharePath = computed(() => buildLocalizedPath(routeLocale.value, GUIDE_PATH))
 const sources = [
@@ -245,9 +297,11 @@ const sources = [
   },
 ]
 const firstItems = computed(() => tm('guideLostBreedingRecords.firstItems') ?? [])
+const evidenceItems = computed(() => tm('guideLostBreedingRecords.evidenceItems') ?? [])
 const rebuildSteps = computed(() => tm('guideLostBreedingRecords.rebuildSteps') ?? [])
 const estimateItems = computed(() => tm('guideLostBreedingRecords.estimateItems') ?? [])
 const avoidItems = computed(() => tm('guideLostBreedingRecords.avoidItems') ?? [])
 const systemItems = computed(() => tm('guideLostBreedingRecords.systemItems') ?? [])
+const saveRows = computed(() => tm('guideLostBreedingRecords.saveRows') ?? [])
 const faqs = computed(() => tm('guideLostBreedingRecords.faqs') ?? [])
 </script>

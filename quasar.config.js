@@ -36,6 +36,7 @@ export default defineConfig((/* ctx */) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+      'public-lang',
       { path: 'initial-page-guard', server: false },
       { path: 'app-check-init', server: false },
       { path: 'auth-init', server: false },

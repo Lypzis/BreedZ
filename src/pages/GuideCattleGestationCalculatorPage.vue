@@ -1,7 +1,8 @@
 <template>
   <AppPageShell>
-    <q-card flat>
-      <q-card-section>
+    <q-card flat tag="article">
+      <q-card-section tag="header">
+        <GuideBreadcrumbs :title="t('guideCattleGestationCalculator.title')" />
         <div class="text-overline text-weight-bold text-primary">{{ t('guideCattleGestationCalculator.overline') }}</div>
         <h1 class="text-h4 text-weight-bold q-mt-sm q-mb-sm">
           {{ t('guideCattleGestationCalculator.title') }}
@@ -9,16 +10,26 @@
         <div class="text-body1 text-grey-7">
           {{ t('guideCattleGestationCalculator.description') }}
         </div>
-        <GuideWrittenDate />
+        <GuideAttribution :published-at="guide.publishedAt" :modified-at="guide.modifiedAt" />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
+        <q-banner rounded class="bg-green-1 text-primary">
+          <template #avatar>
+            <q-icon name="event_available" color="primary" />
+          </template>
+          <span class="text-weight-bold">{{ t('guideCattleGestationCalculator.shortAnswerLabel') }}</span>
+          {{ ` ${t('guideCattleGestationCalculator.shortAnswer')}` }}
+        </q-banner>
+      </q-card-section>
+
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleGestationCalculator.calculatorOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleGestationCalculator.calculatorTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleGestationCalculator.calculatorDescription') }}
         </div>
@@ -40,34 +51,59 @@
               min="250"
               max="310"
               :label="t('guideCattleGestationCalculator.gestationDaysLabel')"
+              :error="!isGestationDaysValid"
+              :error-message="t('guideCattleGestationCalculator.gestationDaysError')"
             />
           </div>
         </div>
 
-        <q-banner rounded class="bg-green-1 text-primary q-mt-md">
-          <template #avatar>
-            <q-icon name="event_available" color="primary" />
-          </template>
-          <div class="column q-gutter-xs">
-            <div>
-              <span class="text-weight-bold">{{ t('guideCattleGestationCalculator.estimatedCalvingDate') }}:</span>
-              {{ estimatedCalvingDateLabel }}
+        <output aria-live="polite">
+          <q-banner rounded class="bg-green-1 text-primary q-mt-md">
+            <template #avatar>
+              <q-icon name="event_available" color="primary" />
+            </template>
+            <div class="column q-gutter-xs">
+              <div>
+                <span class="text-weight-bold">{{ t('guideCattleGestationCalculator.estimatedCalvingDate') }}:</span>
+                {{ estimatedCalvingDateLabel }}
+              </div>
+              <div>
+                <span class="text-weight-bold">{{ t('guideCattleGestationCalculator.watchWindow') }}:</span>
+                {{ watchWindowLabel }}
+              </div>
             </div>
-            <div>
-              <span class="text-weight-bold">{{ t('guideCattleGestationCalculator.watchWindow') }}:</span>
-              {{ watchWindowLabel }}
-            </div>
-          </div>
-        </q-banner>
+          </q-banner>
+        </output>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
+        <div class="text-overline text-weight-bold text-primary">
+          {{ t('guideCattleGestationCalculator.exampleOverline') }}
+        </div>
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+          {{ t('guideCattleGestationCalculator.exampleTitle') }}
+        </h2>
+        <p class="text-body1 text-grey-7">{{ t('guideCattleGestationCalculator.exampleDescription') }}</p>
+        <figure class="q-ma-none q-mt-md">
+          <q-img
+            src="/images/landing/expected-birth.png"
+            :alt="t('guideCattleGestationCalculator.screenshotAlt')"
+            fit="contain"
+            class="rounded-borders bg-grey-1"
+          />
+          <figcaption class="text-caption text-grey-7 q-mt-sm">
+            {{ t('guideCattleGestationCalculator.screenshotCaption') }}
+          </figcaption>
+        </figure>
+      </q-card-section>
+
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleGestationCalculator.howItWorksOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleGestationCalculator.howItWorksTitle') }}
-        </div>
+        </h2>
 
         <q-list>
           <q-item v-for="item in howItWorksItems" :key="item">
@@ -81,13 +117,13 @@
         </q-list>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-primary">
           {{ t('guideCattleGestationCalculator.quickTableOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleGestationCalculator.quickTableTitle') }}
-        </div>
+        </h2>
 
         <q-markup-table flat bordered class="text-left">
           <thead>
@@ -105,13 +141,13 @@
         </q-markup-table>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section tag="section">
         <div class="text-overline text-weight-bold text-accent">
           {{ t('guideCattleGestationCalculator.recordkeepingOverline') }}
         </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
+        <h2 class="text-h6 text-weight-bold q-mt-sm q-mb-md">
           {{ t('guideCattleGestationCalculator.recordkeepingTitle') }}
-        </div>
+        </h2>
         <div class="text-body1 text-grey-7 q-mb-md">
           {{ t('guideCattleGestationCalculator.recordkeepingDescription') }}
         </div>
@@ -151,23 +187,11 @@
         </div>
       </q-card-section>
 
-      <q-card-section>
-        <div class="text-overline text-weight-bold text-accent">
-          {{ t('guideCattleGestationCalculator.faqOverline') }}
-        </div>
-        <div class="text-h6 text-weight-bold q-mt-sm q-mb-md">
-          {{ t('guideCattleGestationCalculator.faqTitle') }}
-        </div>
-
-        <q-list>
-          <q-item v-for="faq in faqs" :key="faq.question">
-            <q-item-section>
-              <q-item-label class="text-weight-bold">{{ faq.question }}</q-item-label>
-              <q-item-label caption class="text-grey-7">{{ faq.answer }}</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
+      <GuideFaqSection
+        :overline="t('guideCattleGestationCalculator.faqOverline')"
+        :title="t('guideCattleGestationCalculator.faqTitle')"
+        :faqs="faqs"
+      />
 
       <GuideSourcesSection :sources="sources" />
 
@@ -175,6 +199,12 @@
         :title="t('guideCowPregnancy.title')"
         :description="t('guideCowPregnancy.description')"
         :to="cowPregnancyGuidePath"
+      />
+
+      <GuideRelatedLink
+        :title="t('guideBreedingDates.title')"
+        :description="t('guideBreedingDates.description')"
+        :to="breedingDatesGuidePath"
       />
 
       <GuideShareSection
@@ -187,17 +217,19 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useMeta } from 'quasar'
 import { useRoute } from 'vue-router'
 import AppPageShell from 'src/components/AppPageShell.vue'
+import GuideAttribution from 'src/components/GuideAttribution.vue'
+import GuideBreadcrumbs from 'src/components/GuideBreadcrumbs.vue'
+import GuideFaqSection from 'src/components/GuideFaqSection.vue'
 import GuideRelatedLink from 'src/components/GuideRelatedLink.vue'
 import GuideShareSection from 'src/components/GuideShareSection.vue'
 import GuideSourcesSection from 'src/components/GuideSourcesSection.vue'
-import GuideWrittenDate from 'src/components/GuideWrittenDate.vue'
+import { useGuideMeta } from 'src/composables/useGuideMeta'
 import { useI18nText } from 'src/i18n'
 import { formatDisplayDate, todayDateString } from 'src/utils/dates'
+import { buildGestationWatchWindow } from 'src/utils/gestation'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
-import { buildPageMeta } from 'src/utils/seo-meta'
 
 const { t, tm } = useI18nText()
 const route = useRoute()
@@ -207,19 +239,16 @@ const routeLocale = computed(() =>
     : localeFromPath(route.path) || 'en',
 )
 
-useMeta(() =>
-  buildPageMeta({
-    title: t('guideCattleGestationCalculator.meta.title'),
-    description: t('guideCattleGestationCalculator.meta.description'),
-    path: buildLocalizedPath(routeLocale.value, '/guides/cattle-gestation-calculator'),
-  }),
-)
+const guide = useGuideMeta('cattleGestationCalculator', t, routeLocale)
 
 const breedingDate = ref(todayDateString())
 const gestationDays = ref(283)
 const dashboardPath = computed(() => '/')
 const cowPregnancyGuidePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/how-long-is-cow-pregnancy'),
+)
+const breedingDatesGuidePath = computed(() =>
+  buildLocalizedPath(routeLocale.value, '/guides/track-cattle-breeding-dates'),
 )
 const sharePath = computed(() =>
   buildLocalizedPath(routeLocale.value, '/guides/cattle-gestation-calculator'),
@@ -250,9 +279,18 @@ const howItWorksItems = computed(() => tm('guideCattleGestationCalculator.howItW
 const quickTableRows = computed(() => tm('guideCattleGestationCalculator.quickTableRows') ?? [])
 const recordkeepingItems = computed(() => tm('guideCattleGestationCalculator.recordkeepingItems') ?? [])
 const faqs = computed(() => tm('guideCattleGestationCalculator.faqs') ?? [])
-const estimatedCalvingDate = computed(() => addDaysToDateString(breedingDate.value, gestationDays.value))
-const watchWindowStart = computed(() => addDaysToDateString(estimatedCalvingDate.value, -7))
-const watchWindowEnd = computed(() => addDaysToDateString(estimatedCalvingDate.value, 7))
+const isGestationDaysValid = computed(() => {
+  const days = Number(gestationDays.value)
+  return Number.isFinite(days) && days >= 250 && days <= 310
+})
+const estimate = computed(() =>
+  isGestationDaysValid.value
+    ? buildGestationWatchWindow(breedingDate.value, Number(gestationDays.value), 7)
+    : { estimatedDate: '', windowStart: '', windowEnd: '' },
+)
+const estimatedCalvingDate = computed(() => estimate.value.estimatedDate)
+const watchWindowStart = computed(() => estimate.value.windowStart)
+const watchWindowEnd = computed(() => estimate.value.windowEnd)
 const estimatedCalvingDateLabel = computed(() =>
   estimatedCalvingDate.value ? formatDisplayDate(estimatedCalvingDate.value) : t('common.dateNotSet'),
 )
@@ -264,29 +302,4 @@ const watchWindowLabel = computed(() => {
   return `${formatDisplayDate(watchWindowStart.value)} - ${formatDisplayDate(watchWindowEnd.value)}`
 })
 
-function addDaysToDateString(value, days) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value ?? ''))) {
-    return ''
-  }
-
-  const [year, month, day] = value.split('-').map(Number)
-  const date = new Date(Date.UTC(year, month - 1, day))
-
-  if (
-    Number.isNaN(date.getTime())
-    || date.getUTCFullYear() !== year
-    || date.getUTCMonth() !== month - 1
-    || date.getUTCDate() !== day
-  ) {
-    return ''
-  }
-
-  date.setUTCDate(date.getUTCDate() + Number(days || 0))
-
-  const resultYear = date.getUTCFullYear()
-  const resultMonth = String(date.getUTCMonth() + 1).padStart(2, '0')
-  const resultDay = String(date.getUTCDate()).padStart(2, '0')
-
-  return `${resultYear}-${resultMonth}-${resultDay}`
-}
 </script>

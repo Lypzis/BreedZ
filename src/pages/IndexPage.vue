@@ -278,7 +278,7 @@ import GuideShareSection from 'src/components/GuideShareSection.vue'
 import logoIcon from 'src/assets/logo-icon.png'
 import { useInstallPrompt } from 'src/composables/useInstallPrompt'
 import { useI18nText } from 'src/i18n'
-import { buildPageMeta } from 'src/utils/seo-meta'
+import { buildPageMeta, buildSiteEntityMeta } from 'src/utils/seo-meta'
 import { buildLocalizedPath, localeFromPath, routeSegmentToLocale } from 'src/utils/localeRouting'
 
 const { t, tm } = useI18nText()
@@ -289,13 +289,21 @@ const routeLocale = computed(() =>
     : localeFromPath(route.path) || 'en',
 )
 
-useMeta(() =>
-  buildPageMeta({
+useMeta(() => {
+  const meta = buildPageMeta({
     title: t('home.meta.title'),
     description: t('home.meta.description'),
     path: buildLocalizedPath(routeLocale.value, '/'),
-  }),
-)
+    locale: routeLocale.value,
+    internalPath: '/',
+    image: '/images/landing/hero-farm.webp',
+  })
+
+  return {
+    ...meta,
+    ...buildSiteEntityMeta({ locale: routeLocale.value }),
+  }
+})
 
 const dashboardPath = computed(() => '/')
 const sharePath = computed(() => buildLocalizedPath(routeLocale.value, '/'))
