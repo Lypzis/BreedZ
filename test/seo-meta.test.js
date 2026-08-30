@@ -16,7 +16,7 @@ test('builds localized alternate URLs from a canonical guide path', () => {
   assert.equal(links.alternateDefault.href, links.alternateEn.href)
 })
 
-test('builds article and breadcrumb structured data with localized canonical details', () => {
+test('builds article, breadcrumb, and optional FAQ structured data with localized canonical details', () => {
   const meta = buildGuideMeta({
     title: 'Gestação da vaca',
     description: 'Uma explicação prática.',
@@ -26,10 +26,17 @@ test('builds article and breadcrumb structured data with localized canonical det
     modifiedAt: '2026-05-12',
     image: '/images/landing/hero-farm.webp',
     guidesLabel: 'Guias',
+    faqs: [
+      {
+        question: 'Quanto dura a gestação?',
+        answer: 'Use cerca de 283 dias como referência, não como garantia.',
+      },
+    ],
   })
   const structuredData = JSON.parse(meta.script.guideStructuredData.innerHTML)
   const article = structuredData['@graph'].find((item) => item['@type'] === 'Article')
   const breadcrumb = structuredData['@graph'].find((item) => item['@type'] === 'BreadcrumbList')
+  const faqPage = structuredData['@graph'].find((item) => item['@type'] === 'FAQPage')
   const author = structuredData['@graph'].find((item) => item['@type'] === 'Person')
 
   assert.equal(meta.meta.ogType.content, 'article')
@@ -40,6 +47,11 @@ test('builds article and breadcrumb structured data with localized canonical det
   assert.equal(article.datePublished, '2026-04-23')
   assert.equal(article.dateModified, '2026-05-12')
   assert.equal(breadcrumb.itemListElement[0].name, 'Guias')
+  assert.equal(faqPage.mainEntity[0].name, 'Quanto dura a gestação?')
+  assert.equal(
+    faqPage.mainEntity[0].acceptedAnswer.text,
+    'Use cerca de 283 dias como referência, não como garantia.',
+  )
   assert.equal(author.name, 'Victor V. Piccoli (Lypzis)')
   assert.equal(author.jobTitle, 'Founder')
 })

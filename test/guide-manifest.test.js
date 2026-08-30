@@ -10,9 +10,9 @@ const projectRoot = fileURLToPath(new URL('../', import.meta.url))
 const sitemap = readFileSync(new URL('../public/sitemap.xml', import.meta.url), 'utf8')
 const locales = ['en', 'pt-BR', 'es']
 
-test('guide manifest defines nine unique guides with valid dates and existing images', () => {
-  assert.equal(GUIDE_ENTRIES.length, 9)
-  assert.equal(new Set(GUIDE_ENTRIES.map((guide) => guide.internalPath)).size, 9)
+test('guide manifest defines ten unique guides with valid dates and existing images', () => {
+  assert.equal(GUIDE_ENTRIES.length, 10)
+  assert.equal(new Set(GUIDE_ENTRIES.map((guide) => guide.internalPath)).size, 10)
 
   for (const guide of GUIDE_ENTRIES) {
     assert.match(guide.publishedAt, /^\d{4}-\d{2}-\d{2}$/)
@@ -40,5 +40,5 @@ test('sitemap contains every localized guide canonical exactly once with its las
     }
   }
 
-  assert.equal(new Set(expectedGuideUrls).size, 27)
+  assert.equal(new Set(expectedGuideUrls).size, 30)
 })

@@ -2,7 +2,7 @@ import { useMeta } from 'quasar'
 import { getGuideManifestEntry } from 'src/utils/guide-manifest'
 import { buildGuideMeta } from 'src/utils/seo-meta'
 
-export function useGuideMeta(guideKey, t, routeLocale) {
+export function useGuideMeta(guideKey, t, routeLocale, options = {}) {
   const guide = getGuideManifestEntry(guideKey)
 
   useMeta(() =>
@@ -15,6 +15,7 @@ export function useGuideMeta(guideKey, t, routeLocale) {
       modifiedAt: guide.modifiedAt,
       image: guide.image,
       guidesLabel: t('guideArticle.guides'),
+      faqs: options.faqs?.value || options.faqs || [],
     }),
   )
 
