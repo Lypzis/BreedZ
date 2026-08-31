@@ -62,6 +62,13 @@ export const GUIDE_MANIFEST = Object.freeze({
     modifiedAt: '2026-06-02',
     image: '/images/landing/breeding-history.png',
   }),
+  avoidMissingCalvingDates: Object.freeze({
+    internalPath: '/guides/how-to-avoid-missing-calving-dates',
+    messageKey: 'guideAvoidMissingCalvingDates',
+    publishedAt: '2026-08-30',
+    modifiedAt: '2026-08-30',
+    image: '/images/guides/avoid-missing-calving-dates.webp',
+  }),
 })
 
 export const GUIDE_ENTRIES = Object.freeze(Object.values(GUIDE_MANIFEST))

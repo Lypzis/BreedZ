@@ -195,6 +195,7 @@ export function buildGuideMeta({
   modifiedAt,
   image,
   guidesLabel,
+  faqs = [],
 }) {
   const path = buildLocalizedPath(locale, internalPath)
   const url = absoluteUrl(path)
@@ -242,6 +243,20 @@ export function buildGuideMeta({
       },
     ],
   }
+  const faqPage = Array.isArray(faqs) && faqs.length
+    ? {
+        '@type': 'FAQPage',
+        '@id': `${url}#faq`,
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      }
+    : null
 
   meta.meta.articlePublishedTime = {
     property: 'article:published_time',
@@ -263,6 +278,7 @@ export function buildGuideMeta({
         '@graph': [
           article,
           breadcrumb,
+          ...(faqPage ? [faqPage] : []),
           buildAuthorSchema(locale),
           buildOrganizationSchema(),
           buildWebsiteSchema(locale),

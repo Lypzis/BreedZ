@@ -170,6 +170,12 @@ const guideGroups = computed(() => [
         icon: 'report_problem',
         to: guidePath('/guides/lost-breeding-records-what-to-do'),
       },
+      {
+        titleKey: 'guideAvoidMissingCalvingDates.title',
+        descriptionKey: 'guidesHub.avoidMissingCalvingDatesDescription',
+        icon: 'event_available',
+        to: guidePath('/guides/how-to-avoid-missing-calving-dates'),
+      },
     ],
   },
 ])

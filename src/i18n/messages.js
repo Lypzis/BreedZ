@@ -315,6 +315,8 @@ export const messages = {
         'See how a breeding management app should connect breeding dates, pregnancy checks, expected births, outcomes, weaning, and lineage follow-up.',
       breedingRecordKeepingSystemDescription:
         'Build a simple cattle breeding recordkeeping system around animal identity, breeding dates, pregnancy follow-up, calving outcomes, offspring, and weaning.',
+      avoidMissingCalvingDatesDescription:
+        'Build a reliable calving window from breeding records, pregnancy follow-up, and a short weekly review routine.',
       openGuide: 'Read guide',
       appCtaTitle: 'Ready to track your own herd?',
       appCtaDescription: 'Open BreedZ to start recording animals, breeding history, expected births, and lineage.',
@@ -1947,6 +1949,134 @@ export const messages = {
         },
       ],
     },
+    guideAvoidMissingCalvingDates: {
+      meta: {
+        title: "How to Avoid Missing a Cow's Calving Date",
+        description:
+          'Avoid missed calving dates by connecting breeding records, pregnancy checks, expected calving windows, weekly reviews, and birth outcomes.',
+      },
+      overline: 'Practical answer',
+      title: "How Do You Avoid Missing a Cow's Calving Date?",
+      description:
+        'The safest system does not depend on remembering one date. It connects the breeding evidence, pregnancy follow-up, a realistic calving window, and the actual outcome for each cow.',
+      imageAlt: 'A cattle farmer reviews herd records on a tablet while watching cows in a pasture.',
+      shortAnswerLabel: 'Short answer:',
+      shortAnswer:
+        'Record breeding evidence the day it happens, confirm pregnancy when appropriate, calculate an expected calving window instead of trusting one exact day, review due cows every week, and close each record with the real birth or pregnancy outcome.',
+      recordsOverline: 'Minimum record',
+      recordsTitle: 'What should you record to prevent a missed calving date?',
+      recordsDescription:
+        'Five connected records are enough to make the next action visible. Each one should point to the same animal ID.',
+      recordItems: [
+        {
+          record: '1. Animal identity',
+          capture: 'Cow or heifer ID, name or tag, and status.',
+          use: 'Prevents a correct date from being attached to the wrong animal.',
+        },
+        {
+          record: '2. Breeding evidence',
+          capture: 'AI date, observed service date, or bull turnout and removal dates.',
+          use: 'Defines the earliest defensible start for the calving estimate.',
+        },
+        {
+          record: '3. Pregnancy follow-up',
+          capture: 'Check date, result, and stage estimate when provided by a qualified professional.',
+          use: 'Separates confirmed pregnancies from exposed or unresolved females.',
+        },
+        {
+          record: '4. Expected calving window',
+          capture: 'A due date or date range, plus a note explaining how it was estimated.',
+          use: 'Creates a review period without pretending birth happens on one guaranteed day.',
+        },
+        {
+          record: '5. Actual outcome',
+          capture: 'Birth, pregnancy loss, failed breeding, or still unresolved, with the real date.',
+          use: 'Closes the old record and improves the next breeding and calving review.',
+        },
+      ],
+      windowOverline: 'Choose the right evidence',
+      windowTitle: 'How do you calculate an expected calving window?',
+      windowDescription:
+        'A cattle gestation estimate often starts near 283 days, but breed, sire, calf, and individual variation affect the actual day. Treat the result as a planning window, not a promise.',
+      windowItems: [
+        {
+          situation: 'Known AI or observed service date',
+          action:
+            'Calculate from that date, then keep several days around the estimate visible for preparation and review.',
+        },
+        {
+          situation: 'Known bull exposure period',
+          action:
+            'Calculate from both the first and last possible breeding dates. The result is a wider calving range, not one exact date.',
+        },
+        {
+          situation: 'Pregnancy confirmed but breeding date uncertain',
+          action:
+            'Record the stage estimate and its source, then use a conservative range. Do not convert an estimate into a false exact date.',
+        },
+        {
+          situation: 'No reliable breeding evidence',
+          action:
+            'Mark the date as unknown, gather records and observations, and ask your veterinarian about appropriate pregnancy assessment.',
+        },
+      ],
+      reviewOverline: 'Weekly routine',
+      reviewTitle: 'What should you review each week?',
+      reviewDescription:
+        'A short repeatable review is more reliable than calculating every date once and forgetting the list.',
+      reviewItems: [
+        'List confirmed pregnancies whose calving windows are approaching.',
+        'Separate heifers, uncertain dates, overdue records, and animals that may need closer attention.',
+        'Check that every recent breeding has a next step: pregnancy follow-up, expected birth, failed breeding, or another decision.',
+        'Update the timeline after a birth, pregnancy loss, or corrected estimate so old reminders do not remain open.',
+        'Keep the list available where the work happens, including when the internet is unavailable.',
+      ],
+      unknownOverline: 'Unknown date',
+      unknownTitle: 'What if you do not know when the cow was bred?',
+      unknownDescription:
+        'Do not invent a precise date. Rebuild the best supportable range from bull exposure, AI records, pregnancy findings, photos, messages, and farm notes. Mark the estimate clearly and use professional guidance when pregnancy timing or animal health matters.',
+      openLostRecordsGuide: 'See how to rebuild lost breeding records',
+      breedzOverline: 'Using BreedZ',
+      breedzTitle: 'How BreedZ keeps calving dates actionable',
+      breedzDescription:
+        'BreedZ connects the record to the cow instead of leaving a date in a separate calendar or note.',
+      breedzItems: [
+        'Record breeding, pregnancy checks, expected births, births, failed breedings, pregnancy loss, and weaning in one animal timeline.',
+        'See expected births due soon, overdue expected births, and unresolved breedings on the dashboard.',
+        'Resolve an expected birth through the real outcome and link the newborn to its dam and sire when known.',
+        'Keep core records available offline, then export a backup or sync eligible account data when online.',
+      ],
+      openApp: 'Start tracking expected births',
+      faqOverline: 'Direct answers',
+      faqTitle: 'Questions farmers ask about calving dates',
+      faqs: [
+        {
+          question: "What is the best way to avoid missing a cow's calving date?",
+          answer:
+            'Connect the cow ID, breeding evidence, pregnancy result, expected calving window, and actual outcome in one record, then review approaching windows every week.',
+        },
+        {
+          question: 'How many days after breeding should a cow calve?',
+          answer:
+            'About 283 days is a common planning estimate, but actual gestation varies by breed, sire, calf, and individual cow. Use a window rather than treating day 283 as guaranteed.',
+        },
+        {
+          question: 'What if the bull stayed with the cows for several weeks?',
+          answer:
+            'Use the first and last possible breeding dates to create a calving range. Pregnancy staging may narrow the plan, but the source and uncertainty should remain recorded.',
+        },
+        {
+          question: 'Can a pregnancy check give the exact calving date?',
+          answer:
+            'It can help estimate pregnancy stage and a likely period, but it should not be presented as proof of one exact future calving day.',
+        },
+        {
+          question: 'What should be recorded after the calf is born?',
+          answer:
+            'Record the actual birth date, calf ID, dam, sire when known, sex, relevant birth notes, and the next follow-up such as weaning.',
+        },
+      ],
+    },
     about: {
       meta: {
         title: 'About BreedZ',
@@ -2435,6 +2565,8 @@ export const messages = {
         'Veja como um app de manejo reprodutivo deve conectar cobertura, diagnóstico de gestação, previsão de parto, resultados, desmame e linhagem.',
       breedingRecordKeepingSystemDescription:
         'Monte um sistema simples de registros reprodutivos do gado com identificação animal, datas de cobertura, acompanhamento de gestação, parto, crias e desmame.',
+      avoidMissingCalvingDatesDescription:
+        'Monte uma janela de parto confiável com registros de cobertura, acompanhamento da gestação e uma revisão semanal curta.',
       openGuide: 'Ler guia',
       appCtaTitle: 'Pronto para acompanhar seu rebanho?',
       appCtaDescription: 'Abra o BreedZ para registrar animais, histórico reprodutivo, partos previstos e linhagem.',
@@ -4070,6 +4202,134 @@ export const messages = {
         },
       ],
     },
+    guideAvoidMissingCalvingDates: {
+      meta: {
+        title: 'Como evitar perder a data de parto de uma vaca',
+        description:
+          'Evite perder datas de parto conectando cobertura, diagnóstico de gestação, janela de parto, revisão semanal e resultado real.',
+      },
+      overline: 'Resposta prática',
+      title: 'Como evitar perder a data de parto de uma vaca?',
+      description:
+        'O sistema mais seguro não depende de lembrar uma única data. Ele conecta a evidência da cobertura, o acompanhamento da gestação, uma janela de parto realista e o resultado de cada vaca.',
+      imageAlt: 'Um produtor consulta registros do rebanho em um tablet enquanto observa vacas no pasto.',
+      shortAnswerLabel: 'Resposta curta:',
+      shortAnswer:
+        'Registre a evidência da cobertura no mesmo dia, confirme a gestação quando for adequado, calcule uma janela de parto em vez de confiar em um único dia, revise semanalmente as vacas próximas do parto e encerre cada registro com o nascimento ou outro resultado real.',
+      recordsOverline: 'Registro mínimo',
+      recordsTitle: 'O que registrar para não perder uma data de parto?',
+      recordsDescription:
+        'Cinco registros conectados bastam para deixar a próxima ação visível. Todos devem apontar para a mesma identificação animal.',
+      recordItems: [
+        {
+          record: '1. Identificação animal',
+          capture: 'ID, nome ou brinco da vaca ou novilha e seu status.',
+          use: 'Evita que uma data correta seja atribuída ao animal errado.',
+        },
+        {
+          record: '2. Evidência da cobertura',
+          capture: 'Data da IA, monta observada ou datas de entrada e saída do touro.',
+          use: 'Define o início mais confiável para a previsão de parto.',
+        },
+        {
+          record: '3. Acompanhamento da gestação',
+          capture: 'Data, resultado e estimativa do estágio quando informada por profissional habilitado.',
+          use: 'Separa gestações confirmadas de fêmeas apenas expostas ou ainda sem conclusão.',
+        },
+        {
+          record: '4. Janela de parto prevista',
+          capture: 'Uma data ou intervalo provável, com nota explicando como foi estimado.',
+          use: 'Cria um período de revisão sem fingir que o parto ocorrerá em um dia garantido.',
+        },
+        {
+          record: '5. Resultado real',
+          capture: 'Nascimento, perda gestacional, falha na cobertura ou caso ainda pendente, com a data real.',
+          use: 'Encerra o registro anterior e melhora a próxima revisão reprodutiva.',
+        },
+      ],
+      windowOverline: 'Use a evidência certa',
+      windowTitle: 'Como calcular uma janela de parto?',
+      windowDescription:
+        'A previsão da gestação bovina costuma começar perto de 283 dias, mas raça, touro, bezerro e variação individual afetam o dia real. Use o resultado como janela de planejamento, não como promessa.',
+      windowItems: [
+        {
+          situation: 'Data conhecida de IA ou monta observada',
+          action:
+            'Calcule a partir dessa data e mantenha visíveis alguns dias ao redor da previsão para preparação e revisão.',
+        },
+        {
+          situation: 'Período conhecido de exposição ao touro',
+          action:
+            'Calcule a partir da primeira e da última data possível de cobertura. O resultado é um intervalo de parto mais amplo, não uma data exata.',
+        },
+        {
+          situation: 'Gestação confirmada, mas cobertura incerta',
+          action:
+            'Registre a estimativa do estágio e sua fonte, depois use um intervalo conservador. Não transforme uma estimativa em uma data exata falsa.',
+        },
+        {
+          situation: 'Sem evidência confiável de cobertura',
+          action:
+            'Marque a data como desconhecida, reúna registros e observações e converse com o veterinário sobre a avaliação adequada da gestação.',
+        },
+      ],
+      reviewOverline: 'Rotina semanal',
+      reviewTitle: 'O que revisar toda semana?',
+      reviewDescription:
+        'Uma revisão curta e repetível é mais confiável do que calcular todas as datas uma vez e esquecer a lista.',
+      reviewItems: [
+        'Liste as gestações confirmadas cujas janelas de parto estão se aproximando.',
+        'Separe novilhas, datas incertas, registros atrasados e animais que podem exigir mais atenção.',
+        'Confira se cada cobertura recente tem um próximo passo: diagnóstico, parto previsto, falha ou outra decisão.',
+        'Atualize a linha do tempo depois de um nascimento, perda gestacional ou correção da previsão para não deixar lembretes antigos em aberto.',
+        'Mantenha a lista disponível onde o trabalho acontece, inclusive sem internet.',
+      ],
+      unknownOverline: 'Data desconhecida',
+      unknownTitle: 'E se você não souber quando a vaca foi coberta?',
+      unknownDescription:
+        'Não invente uma data precisa. Reconstrua o melhor intervalo possível com exposição ao touro, registros de IA, achados da avaliação de gestação, fotos, mensagens e anotações da fazenda. Marque a estimativa claramente e procure orientação profissional quando o estágio da gestação ou a saúde do animal forem importantes.',
+      openLostRecordsGuide: 'Veja como reconstruir registros reprodutivos perdidos',
+      breedzOverline: 'Usando o BreedZ',
+      breedzTitle: 'Como o BreedZ transforma a previsão de parto em ação',
+      breedzDescription:
+        'O BreedZ conecta o registro à vaca em vez de deixar uma data isolada em outro calendário ou anotação.',
+      breedzItems: [
+        'Registre cobertura, diagnóstico de gestação, parto previsto, nascimento, falha reprodutiva, perda gestacional e desmame na mesma linha do tempo animal.',
+        'Veja no painel partos previstos próximos, previsões atrasadas e coberturas ainda sem resolução.',
+        'Resolva um parto previsto com o resultado real e vincule o recém-nascido à mãe e ao pai quando conhecidos.',
+        'Mantenha os registros principais disponíveis offline e depois exporte um backup ou sincronize os dados elegíveis da conta quando estiver online.',
+      ],
+      openApp: 'Começar a acompanhar partos previstos',
+      faqOverline: 'Respostas diretas',
+      faqTitle: 'Dúvidas comuns sobre datas de parto',
+      faqs: [
+        {
+          question: 'Qual é a melhor forma de não perder a data de parto de uma vaca?',
+          answer:
+            'Conecte identificação, evidência da cobertura, resultado do diagnóstico, janela de parto e resultado real no mesmo registro e revise semanalmente as janelas próximas.',
+        },
+        {
+          question: 'Quantos dias depois da cobertura a vaca deve parir?',
+          answer:
+            'Cerca de 283 dias é uma referência comum de planejamento, mas a gestação varia conforme raça, touro, bezerro e indivíduo. Use uma janela, não o dia 283 como garantia.',
+        },
+        {
+          question: 'E se o touro ficou várias semanas com as vacas?',
+          answer:
+            'Use a primeira e a última data possível de cobertura para criar um intervalo de parto. A avaliação da gestação pode estreitar o planejamento, mas a fonte e a incerteza devem continuar registradas.',
+        },
+        {
+          question: 'O diagnóstico de gestação informa a data exata do parto?',
+          answer:
+            'Ele pode ajudar a estimar o estágio da gestação e um período provável, mas não deve ser apresentado como prova de um único dia exato no futuro.',
+        },
+        {
+          question: 'O que registrar depois que o bezerro nascer?',
+          answer:
+            'Registre a data real do nascimento, ID do bezerro, mãe, pai quando conhecido, sexo, observações relevantes do parto e o próximo acompanhamento, como o desmame.',
+        },
+      ],
+    },
     about: {
       meta: {
         title: 'Sobre o BreedZ',
@@ -5172,6 +5432,8 @@ export const messages = {
         'Mira cómo una app de manejo reproductivo debe conectar reproducción, revisión de preñez, parto esperado, resultados, destete y linaje.',
       breedingRecordKeepingSystemDescription:
         'Arma un sistema simple de registros reproductivos del ganado con identidad animal, fechas reproductivas, seguimiento de preñez, parto, crías y destete.',
+      avoidMissingCalvingDatesDescription:
+        'Crea una ventana de parto confiable con registros reproductivos, seguimiento de preñez y una revisión semanal breve.',
       openGuide: 'Leer guía',
       appCtaTitle: '¿Listo para registrar tu rebaño?',
       appCtaDescription: 'Abre BreedZ para registrar animales, historial reproductivo, partos esperados y linaje.',
@@ -6200,6 +6462,134 @@ export const messages = {
           question: '¿Cómo evito que vuelva a pasar?',
           answer:
             'Mantén una línea de tiempo por animal, registra eventos el mismo día y exporta respaldos con regularidad para que los datos no vivan en un solo lugar frágil.',
+        },
+      ],
+    },
+    guideAvoidMissingCalvingDates: {
+      meta: {
+        title: 'Cómo evitar perder la fecha de parto de una vaca',
+        description:
+          'Evita perder fechas de parto conectando registros reproductivos, revisión de preñez, ventana de parto, revisión semanal y resultado real.',
+      },
+      overline: 'Respuesta práctica',
+      title: '¿Cómo evitar perder la fecha de parto de una vaca?',
+      description:
+        'El sistema más seguro no depende de recordar una sola fecha. Conecta la evidencia reproductiva, el seguimiento de preñez, una ventana de parto realista y el resultado de cada vaca.',
+      imageAlt: 'Un productor consulta registros del ganado en una tableta mientras observa vacas en el potrero.',
+      shortAnswerLabel: 'Respuesta corta:',
+      shortAnswer:
+        'Registra la evidencia reproductiva el mismo día, confirma la preñez cuando corresponda, calcula una ventana de parto en vez de confiar en un único día, revisa cada semana las vacas próximas y cierra cada registro con el nacimiento u otro resultado real.',
+      recordsOverline: 'Registro mínimo',
+      recordsTitle: '¿Qué debes registrar para no perder una fecha de parto?',
+      recordsDescription:
+        'Cinco registros conectados bastan para hacer visible la siguiente acción. Todos deben apuntar a la misma identificación animal.',
+      recordItems: [
+        {
+          record: '1. Identificación animal',
+          capture: 'ID, nombre o arete de la vaca o novilla y su estado.',
+          use: 'Evita que una fecha correcta quede asignada al animal equivocado.',
+        },
+        {
+          record: '2. Evidencia reproductiva',
+          capture: 'Fecha de IA, monta observada o fechas de entrada y salida del toro.',
+          use: 'Define el inicio más confiable para estimar el parto.',
+        },
+        {
+          record: '3. Seguimiento de preñez',
+          capture: 'Fecha, resultado y etapa estimada cuando la informe un profesional calificado.',
+          use: 'Separa preñeces confirmadas de hembras solo expuestas o todavía sin resolver.',
+        },
+        {
+          record: '4. Ventana de parto esperada',
+          capture: 'Una fecha o rango probable, con una nota que explique cómo se estimó.',
+          use: 'Crea un período de revisión sin fingir que el parto ocurrirá en un día garantizado.',
+        },
+        {
+          record: '5. Resultado real',
+          capture: 'Nacimiento, pérdida de gestación, reproducción fallida o caso aún pendiente, con la fecha real.',
+          use: 'Cierra el registro anterior y mejora la próxima revisión reproductiva.',
+        },
+      ],
+      windowOverline: 'Usa la evidencia correcta',
+      windowTitle: '¿Cómo se calcula una ventana de parto?',
+      windowDescription:
+        'La estimación de la gestación bovina suele comenzar cerca de 283 días, pero la raza, el toro, la cría y la variación individual afectan el día real. Usa el resultado como ventana de planificación, no como promesa.',
+      windowItems: [
+        {
+          situation: 'Fecha conocida de IA o monta observada',
+          action:
+            'Calcula desde esa fecha y mantén visibles varios días alrededor de la estimación para preparación y revisión.',
+        },
+        {
+          situation: 'Período conocido de exposición al toro',
+          action:
+            'Calcula desde la primera y la última fecha posible de reproducción. El resultado es un rango de parto más amplio, no una fecha exacta.',
+        },
+        {
+          situation: 'Preñez confirmada, pero fecha reproductiva incierta',
+          action:
+            'Registra la etapa estimada y su fuente, luego usa un rango conservador. No conviertas una estimación en una fecha exacta falsa.',
+        },
+        {
+          situation: 'Sin evidencia reproductiva confiable',
+          action:
+            'Marca la fecha como desconocida, reúne registros y observaciones y consulta al veterinario sobre una evaluación adecuada de la preñez.',
+        },
+      ],
+      reviewOverline: 'Rutina semanal',
+      reviewTitle: '¿Qué debes revisar cada semana?',
+      reviewDescription:
+        'Una revisión breve y repetible es más confiable que calcular todas las fechas una vez y olvidar la lista.',
+      reviewItems: [
+        'Lista las preñeces confirmadas cuyas ventanas de parto se acercan.',
+        'Separa novillas, fechas inciertas, registros vencidos y animales que pueden necesitar más atención.',
+        'Comprueba que cada reproducción reciente tenga un siguiente paso: revisión de preñez, parto esperado, reproducción fallida u otra decisión.',
+        'Actualiza la línea de tiempo después de un nacimiento, pérdida de gestación o corrección de la estimación para no dejar recordatorios antiguos abiertos.',
+        'Mantén la lista disponible donde ocurre el trabajo, incluso sin internet.',
+      ],
+      unknownOverline: 'Fecha desconocida',
+      unknownTitle: '¿Qué pasa si no sabes cuándo fue servida la vaca?',
+      unknownDescription:
+        'No inventes una fecha precisa. Reconstruye el mejor rango posible con la exposición al toro, registros de IA, hallazgos de la evaluación de preñez, fotos, mensajes y notas de la finca. Marca claramente la estimación y busca orientación profesional cuando importe la etapa de preñez o la salud del animal.',
+      openLostRecordsGuide: 'Ver cómo reconstruir registros reproductivos perdidos',
+      breedzOverline: 'Usando BreedZ',
+      breedzTitle: 'Cómo BreedZ convierte la fecha de parto en una acción',
+      breedzDescription:
+        'BreedZ conecta el registro con la vaca en vez de dejar una fecha aislada en otro calendario o nota.',
+      breedzItems: [
+        'Registra reproducción, revisión de preñez, parto esperado, nacimiento, reproducción fallida, pérdida de gestación y destete en una misma línea de tiempo animal.',
+        'Consulta en el panel partos esperados próximos, fechas vencidas y reproducciones aún sin resolver.',
+        'Resuelve un parto esperado con el resultado real y vincula la cría con madre y padre cuando se conozcan.',
+        'Mantén los registros principales disponibles offline y luego exporta un respaldo o sincroniza los datos elegibles de la cuenta cuando estés online.',
+      ],
+      openApp: 'Empezar a seguir partos esperados',
+      faqOverline: 'Respuestas directas',
+      faqTitle: 'Preguntas comunes sobre fechas de parto',
+      faqs: [
+        {
+          question: '¿Cuál es la mejor forma de no perder la fecha de parto de una vaca?',
+          answer:
+            'Conecta identificación, evidencia reproductiva, resultado de preñez, ventana de parto y resultado real en un mismo registro, y revisa cada semana las ventanas próximas.',
+        },
+        {
+          question: '¿Cuántos días después de la monta debe parir una vaca?',
+          answer:
+            'Unos 283 días es una referencia común de planificación, pero la gestación varía según raza, toro, cría e individuo. Usa una ventana y no trates el día 283 como garantía.',
+        },
+        {
+          question: '¿Qué pasa si el toro estuvo varias semanas con las vacas?',
+          answer:
+            'Usa la primera y la última fecha posible de reproducción para crear un rango de parto. La evaluación de preñez puede acotar el plan, pero la fuente y la incertidumbre deben quedar registradas.',
+        },
+        {
+          question: '¿Una revisión de preñez da la fecha exacta del parto?',
+          answer:
+            'Puede ayudar a estimar la etapa de preñez y un período probable, pero no debe presentarse como prueba de un único día exacto en el futuro.',
+        },
+        {
+          question: '¿Qué se registra después de que nace la cría?',
+          answer:
+            'Registra la fecha real de nacimiento, ID de la cría, madre, padre cuando se conozca, sexo, notas relevantes del parto y el siguiente seguimiento, como el destete.',
         },
       ],
     },

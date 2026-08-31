@@ -21,6 +21,14 @@ test('localized public paths remain localized', () => {
     buildLocalizedPath('es', '/guides/breeding-management-app'),
     '/es/guias/app-para-manejo-reproductivo-del-ganado',
   )
+  assert.equal(
+    buildLocalizedPath('pt-BR', '/guides/how-to-avoid-missing-calving-dates'),
+    '/pt-br/guias/como-evitar-perder-datas-de-parto',
+  )
+  assert.equal(
+    buildLocalizedPath('es', '/guides/how-to-avoid-missing-calving-dates'),
+    '/es/guias/como-evitar-perder-fechas-de-parto',
+  )
   assert.equal(buildLocalizedPath('pt-BR', '/guides'), '/pt-br/guias')
   assert.equal(buildLocalizedPath('es', '/guides'), '/es/guias')
 })

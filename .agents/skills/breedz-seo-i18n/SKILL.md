@@ -237,6 +237,7 @@ Avoid for now:
 - [ ] Publish `cattle-record-keeping-system`
 - [x] Publish `cattle-breeding-record-keeping-system`
 - [ ] Publish `forgot-cow-breeding-date`
+- [x] Publish `how-to-avoid-missing-calving-dates`
 - [ ] Publish `cattle-app-offline`
 - [ ] Add product screenshots to commercial pages
 - [x] Add Article, breadcrumb, author, and localized alternate metadata to guides
